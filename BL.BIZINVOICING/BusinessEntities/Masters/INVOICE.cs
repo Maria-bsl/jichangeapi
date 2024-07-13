@@ -22,7 +22,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public long Chus_Mas_No { get; set; }
         public String Chus_Name { get; set; }
         public long Com_Mas_Sno { get; set; }
-        public String Cmpny_Name { get; set; }
+        public String Company_Name { get; set; }
 
         public String Inv_Remarks { get; set; }
         public String Remarks { get; set; }
@@ -1087,13 +1087,13 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             {
                 var adetails = (from c in context.invoice_master
                                 join det in context.customer_master  on c.cust_mas_sno equals det.cust_mas_sno
-                                join  cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
+                                join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
                                 where c.comp_mas_sno == cno
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Cmpny_Name= cmp.company_name,
+                                    Company_Name= cmp.company_name,
                                     Inv_Mas_Sno =c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,
@@ -1110,14 +1110,13 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Total = (decimal)c.total_amount,
                                     Total_Vt = (decimal)c.vat_amount,
                                     Total_Without_Vt = (decimal)c.total_without_vat,
-                                    //Vat_Amount= (long)c.vat_amount,
+                                    //Vat_Amount = (long)c.vat_amount,
                                     warrenty= c.warrenty,
                                     goods_status=c.goods_status,
                                     delivery_status=c.delivery_status,
                                     grand_count= (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
-                                    
                                     approval_date = approval_date
 
                                 }).ToList();
@@ -1141,7 +1140,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Cmpny_Name = cmp.company_name,
+                                    Company_Name = cmp.company_name,
                                     Inv_Mas_Sno = c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,
@@ -1189,7 +1188,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Cmpny_Name = cmp.company_name,
+                                    Company_Name = cmp.company_name,
                                     Inv_Mas_Sno = c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,
@@ -1235,7 +1234,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Cmpny_Name = cmp.company_name,
+                                    Company_Name = cmp.company_name,
                                     Inv_Mas_Sno = c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,
@@ -1281,7 +1280,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Cmpny_Name = cmp.company_name,
+                                    Company_Name = cmp.company_name,
                                     Inv_Mas_Sno = c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,
@@ -1327,7 +1326,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Cmpny_Name = cmp.company_name,
+                                    Company_Name = cmp.company_name,
                                     Inv_Mas_Sno = c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,

@@ -246,7 +246,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             {
 
                 var edetails = (from c in context.company_users
-                                    //join c1 in context.company_master on c.co
+                                    join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
                                 where c.username == uname && c.password == pwd /*&& c.emp_status == "Active"*/ && c.log_status == null
                                 select new CompanyUsers
                                 {
@@ -254,6 +254,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     CompuserSno = c.comp_users_sno,
                                     Usertype = c.user_type,
                                     Fullname = c.user_fullname,
+                                    Sno = (long)c1.branch_sno,
                                     Email = c.email_address,
                                     Flogin = c.f_login,
                                     Username = c.username

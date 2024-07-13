@@ -1228,10 +1228,8 @@ D:\Applications\INvoiceProject\BIZINVOICING\obj\Debug\BIZINVOICING.pdb
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\BIZINVOICING.dll.config
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\BIZINVOICING.dll
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\BIZINVOICING.pdb
-D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\csc.exe
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\csc.exe.config
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\csc.rsp
-D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\csi.exe
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\csi.exe.config
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\csi.rsp
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
@@ -1269,10 +1267,8 @@ D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\System.Xml.ReaderWriter.d
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\System.Xml.XmlDocument.dll
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\System.Xml.XPath.dll
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\System.Xml.XPath.XDocument.dll
-D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\vbc.exe
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\vbc.exe.config
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\vbc.rsp
-D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\VBCSCompiler.exe
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\roslyn\VBCSCompiler.exe.config
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\Antlr3.Runtime.dll
 D:\JICHANGE_3_4_24\jichangeapi\BIZINVOICING\bin\BL.BIZINVOICING.dll

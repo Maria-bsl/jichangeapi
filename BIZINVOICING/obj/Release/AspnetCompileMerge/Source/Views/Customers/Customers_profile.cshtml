@@ -1,0 +1,829 @@
+﻿
+@model BL.BIZINVOICING.BusinessEntities.Masters.CustomerMaster
+
+@{
+    ViewBag.Title = "Customers";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+<script type="text/javascript">
+    var glob;
+    rt = true;
+    jQuery(document).ready(function () {
+        bindCustomerDetails();
+        bindRegionDetails();
+        //$('#txtvatno').keypress(function (e) {
+//    var regex = new RegExp("^[a-zA-Z0-9-]+$");
+//    var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
+//    if (regex.test(str)) {
+//        return true;
+//    }
+//    e.preventDefault();
+//    return false;
+//});
+       // bindPlaceddlDetails();
+        jQuery("#btnSubmit").click(function () {
+            opType = jQuery("#hdnEmployee").val();
+            var message = validateCust();
+            if (message.length > 0 && opType != 'D') {
+                notifyMessage(message, 'danger');
+            }
+            else if (doublemob == false || doubleemail==false ||doubleTin==false) {
+               jQuery("#loader").css("display", "none");
+            }
+
+            else {
+
+                if (opType == 'C') {
+                    var x = confirm("Are you sure you want to Save?");
+                    if (x) {
+                        addCust();
+                        return true;
+                    }
+                    else
+                        return false;
+                } else {
+                    var x = confirm("Are you sure you want to Update?");
+                    if (x) {
+                        addCust();
+                        return true;
+                    }
+                    else
+                        return false;
+                } 
+            }
+        })
+        //jQuery("#btnDelete").click(function () {
+        //     ();
+        //});
+
+        $(document).ready(function () {
+            // Add a click event handler to the button
+            $("#usrprofile").click(function () {
+                // Change the current URL to the desired page
+                window.location.href = "Customers/CustomerProfile";
+                //  '@Url.Action("Setup", "Setup")';
+                // '@Url.Action("CustomerProfile","Customer")';
+            });
+        });
+    });
+    function getRegion() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetRegion", "Customers")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+            }
+        })
+
+    }
+
+    function bindCustomerDetails() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCusts", "Customers")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            async: false,
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+                if (data != 0) {
+                    var i = 1;
+                    var rname = '';
+                    var dname = '';
+                    var wname = '';
+                    jQuery.each(data, function (key, value) {
+                        jQuery.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("GetRegion", "Customers")',
+                            data: JSON.stringify({ rn: value.Region_SNO }),
+                                contentType: 'application/json; charset=utf-8',
+                                async: false,
+                                dataType: 'json',
+                            success: function (data) {
+                                    if (data != 0) {
+                                        rname = data.Region_Name;
+                                        }
+                                    else {
+                                        rname='';
+                                    }
+                            }
+                        });
+                        jQuery.ajax({
+                                type: 'POST',
+                            url: '@Url.Action("GetDistrict", "Customers")',
+                            data: JSON.stringify({ dn: value.DistSno }),
+                                contentType: 'application/json; charset=utf-8',
+                                async: false,
+                                dataType: 'json',
+                            success: function (data) {
+                                    if (data != 0) {
+                                        dname = data.District_Name;
+                                        }
+                                    else {
+                                        dname='';
+                                    }
+                            }
+                        });
+                        jQuery.ajax({
+                                type: 'POST',
+                            url: '@Url.Action("GetWard", "Customers")',
+                            data: JSON.stringify({ wn: value.WardSno }),
+                                contentType: 'application/json; charset=utf-8',
+                                async: false,
+                                dataType: 'json',
+                            success: function (data) {
+                                if (data != 0) {
+                                    wname = data.Ward_Name;
+                                        }
+                                    else {
+                                        wname='';
+                                    }
+                            }
+                        });
+                        var row = '<tr>' +
+                            '<td >' + i + '</td>' +
+                            '<td>' + value.Cust_Name + '</td>' +//1
+                            // '<td>' + value.PostboxNo + '</td>' +//2
+                            // '<td>' + value.Address + '</td>' +//3
+                            // '<td class="d-none">' + value.Region_SNO + '</td>' +//4
+
+                            // '<td >' + rname + '</td>' + //5
+                            // '<td class="d-none">' + value.DistSno + '</td>' +//6
+                            // '<td >' + dname + '</td>' +//7
+                            // '<td class="d-none">' + value.WardSno + '</td>' +//8
+                            // '<td>' + wname + '</td>' +//9
+                            // '<td >' + value.TinNo + '</td>' +//10
+                            // '<td>' + value.VatNo + '</td>' +//11
+                            // '<td>' + value.ConPerson + '</td>' +//12
+                            '<td>' + value.Email + '</td>' +//13
+                            '<td>' + value.Phone + '</td>' +//14
+                            '<td class="d-none">' + value.Checker + '</td>' +//15
+                            '<td><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" id = "btn' + value.Cust_Sno + '"  data-sid="' + value.Cust_Sno + '" data-pwd="' + value.Cust_Name + '" value = "Edit" data-bs-target="#modal-smtp" onclick = "showCustModal(this)" ><i class="fa-solid fa-pen"></i></button >&nbsp;&nbsp;<button id = "btn' + value.Cust_Sno + '" data-pwd="' + value.Cust_Name + '"  data-sid="' + value.Cust_Sno + '" value = "Delete" onclick="showCustModal(this)" class="btn btn-outline-danger btn-sm distloc"><i class="fa-solid fa-trash-can"></i></button >&nbsp;&nbsp;<a href="/Customers/CustomerProfile" id = "usrprofile" ' + value.Cust_Sno + '" data-pwd="' + value.Cust_Name + '"  data-sid="' + value.Cust_Sno + '" value = "Delete" onclick="showCustModal(this)" class="btn btn-outline-primary btn-sm distloc"><i class="fa-solid fa-eye"></i></a></td>' +
+                            '</tr>';
+                        i++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+    function addCust() {
+        var message = validateCust(),
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+
+            var params = JSON.stringify(GetCust());//need to be modified
+            //alert(params);
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCustomer", "Customers")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                   hideModal('modal-smtp');
+                    if (opType == 'C' /*&& data*/) {
+                        if (data == true) {
+                            message = jQuery("#txtcusname").val() + ' or ' + jQuery("#txttinno").val() +' Already Exists';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtcusname").val() + '  or ' + jQuery("#txttinno").val() + ' Successfully Created';
+                            type = 'success';
+
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == true) {
+                            message = txtDname.value + ' is in use, cannot be Updated ';
+                            type = 'danger';
+                        }
+                        else if (data == false && jk == true) {
+                            message = jQuery("#txtcusname").val() + ' or ' + jQuery("#txttinno").val() + ' Already Exists';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtcusname").val() + ' or ' + jQuery("#txttinno").val() + ' Successfully Updated';
+                            type = 'success';
+                        }
+
+                    }
+                   notifyMessage(message, type);
+                   bindCustomerDetails();
+                }
+           })
+        }
+    }
+
+
+    function deleteDivision(cid,st) {
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+            var params = JSON.stringify(getDistID(cid));
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteCust", "Customers")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (opType == 'D') {
+                    if (data == true) {
+                        message = st + ' is in use, cannot be deleted';
+                        type = 'danger';
+                    }
+                    else {
+                        message = st + ' Successfully Deleted';
+                        type = 'success';
+                    }
+                }
+                notifyMessage(message, type);
+                bindCustomerDetails();
+            }
+        })
+
+    }
+
+
+    @*function bindPlaceddlDetails() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetPlace", "Customers")',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#txtloc").append(jQuery("<option></option>").val(0).html('--Select--'));
+                if (data != 0) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#txtloc").append(jQuery("<option></option>").val(value.Place_Sno).html(value.Place_Name));
+                    });
+                }
+            }
+        })
+     }*@
+    @*function bindRegionDetails() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetRegionDetails", "Customers")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlreg").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlreg").append(jQuery("<option></option>").val(value.Region_SNO).html(value.Region_Name));
+                    });
+                }
+            }
+        })
+    }*@
+    @*function bindDistDetails(dlreg) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetDistDetails", "Customers")',
+            data: JSON.stringify({ 'Sno': dlreg }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name));
+                    });
+                }
+                jQuery("#ddldist").val(dlreg).change();//ward
+            }
+        })
+    }*@
+
+    @*function bindWardDetails() {
+         jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetWardDetails", "Customers")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlward").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlward").append(jQuery("<option></option>").val(value.SNO).html(value.Ward_Name));
+                    });
+                }
+            }
+        })
+     }*@
+    @*function bindRegionDetails() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetRegionDetails", "Customers")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlreg").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlreg").append(jQuery("<option></option>").val(value.Region_SNO).html(value.Region_Name));
+                    });
+                }
+            }
+        })
+    }
+    jQuery(function () {
+        jQuery("#ddlreg").change(function () {
+             jQuery('#ddldist option').remove();
+            var dlreg = jQuery("#ddlreg > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDistDetails", "Customers")',
+                data: JSON.stringify({ 'Sno': dlreg }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name ));
+                        });
+                    }
+                    else { jQuery("#ddldist").val(0).change(); }
+                    if (txtSname.value != 0) {
+                        jQuery("#ddldist").val(txtSname.value).change();
+                    }
+                }
+            })
+        })
+    })
+    jQuery(function () {
+        jQuery("#ddldist").change(function () {
+            jQuery('#ddlward option').remove();
+            var dldist = jQuery("#ddldist > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetWardDetails", "Customers")',
+                data: JSON.stringify({ 'sno': dldist }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddlward").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddlward").append(jQuery("<option></option>").val(value.SNO).html(value.Ward_Name));
+                        });
+                    }
+                    else {
+                        jQuery("#ddlward").val(0).change();
+                    }
+                    if (txtWname.value != 0) {
+                        jQuery("#ddlward").val(txtWname.value).change();
+                    }
+                }
+            })
+        })
+    })*@
+    function bindDistDetails(dlreg) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetDistDetails", "Company")',
+            data: JSON.stringify({ 'Sno': dlreg }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name));
+                    });
+                }
+                jQuery("#ddldist").val(dlreg).change();//ward
+            }
+        })
+    }
+    function bindRegionDetails() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetRegionDetails", "Company")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlreg").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlreg").append(jQuery("<option></option>").val(value.Region_SNO).html(value.Region_Name));
+                    });
+                }
+            }
+        })
+    }
+    jQuery(function () {
+        jQuery("#ddlreg").change(function () {
+             jQuery('#ddldist option').remove();
+            var dlreg = jQuery("#ddlreg > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDistDetails", "Company")',
+                data: JSON.stringify({ 'Sno': dlreg }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name ));
+                        });
+                    }
+                    else { jQuery("#ddldist").val(0).change(); }
+                    if ((txtSname.value != 'null') && (txtSname.value != 0) ){
+                        jQuery("#ddldist").val(txtSname.value).change();
+                    }
+                }
+            })
+        })
+    })
+    jQuery(function () {
+        jQuery("#ddldist").change(function () {
+            jQuery('#ddlward option').remove();
+            var dldist = jQuery("#ddldist > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetWard", "Company")',
+                data: JSON.stringify({ 'sno': dldist }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddlward").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddlward").append(jQuery("<option></option>").val(value.SNO).html(value.Ward_Name));
+                        });
+                    }
+                    else {
+                        jQuery("#ddlward").val(0).change();
+                    }
+                  //  if (txtSname.value != 0) {
+                 //       jQuery("#ddlward").val(txtSname.value).change();
+                 //   }
+                    if (txtWname.value != 0 && txtWname.value != 'null') {
+                        jQuery("#ddlward").val(txtWname.value).change();
+                    }
+                }
+            })
+        })
+    })
+    @*jQuery(function () {
+        jQuery("#ddldis").change(function () {
+            jQuery('#ddlwd option').remove();
+            var disval = jQuery("#ddldis > option:selected").attr("value");
+            var dlregion = jQuery("#ddlreg > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetWDDetails", "INSTIREG")',
+                data: JSON.stringify({ 'regno': dlregion, 'disno': disval  }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddlwd").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddlwd").append(jQuery("<option></option>").val(value.SNO).html(value.Ward_Name));
+                        });
+                    }
+                    else {
+                        jQuery("#ddlwd").val(0).change();
+                    }
+                    if (txtWID.value != 0) {
+                        jQuery("#ddlwd").val(txtWID.value).change();
+                    }
+                }
+            })
+        })
+    })*@
+    @*jQuery(function () {
+        jQuery("#btnSubmit").click(function () {
+            jQuery.ajax({
+                type: "POST",
+                url: '@Url.Action("sendcode", "Customers")',
+                data: '{name: "' + jQuery("#txtemail").val() + '" }',
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                });
+                });
+});*@
+    function showCustModal(e) {
+        // txtcusname txtpono txtadd ddlreg ddldist ddlward txttinno txtvatno txtcperson txtemail txtmob
+        var txtCusName = document.getElementById('txtcusname');
+        var txtPono = document.getElementById("txtpono");
+        var txtAdd = document.getElementById("txtadd");
+        var txtTinno = document.getElementById("txttinno");
+        var txtVatno = document.getElementById("txtvatno");
+        var txtCperson = document.getElementById("txtcperson");
+        var txtEmail = document.getElementById("txtemail");
+        var txtMob = document.getElementById("txtmob");
+        txtSID = document.getElementById('txtSID');
+        jk = false;
+
+        var tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+
+        if (e.value.indexOf('Edit') > -1) {
+            resetCust();
+            //bindRegionDetails();
+            jQuery("#btnSubmit").html("@ViewData["Update"]");
+            //jQuery('#ddlreg').prop("disabled", true);
+            //jQuery('#ddldist').prop("disabled", true);
+            //jQuery('#ddlward').prop("disabled", true);
+            jk = false, ak = false;
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+                if (row.cells[16].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    //txtName.value = jQuery(e).data('pwd');
+                    txtCusName.value = row.cells[1].innerHTML;
+                    txtPono.value = row.cells[2].innerHTML;
+                    txtAdd.value = row.cells[3].innerHTML;
+                    if (row.cells[4].innerHTML != 'null') {
+                        jQuery("#ddlreg").val(row.cells[4].innerHTML).change();
+                    }
+                    if (row.cells[6].innerHTML != 'null') {
+                        jQuery("#ddldist").val(row.cells[6].innerHTML).change();
+                    }
+                    else { jQuery("#ddldist").val(0).change(); }
+                    // alert(row.cells[6].innerHTML);
+                    if (row.cells[8].innerHTML != 'null') {
+                        jQuery("#ddlward").val(row.cells[8].innerHTML).change();
+                    }
+                    else { jQuery("#ddlward").val(0).change(); }
+                    txtTinno.value = row.cells[10].innerHTML;
+                    txtVatno.value = row.cells[11].innerHTML;
+                    txtCperson.value = row.cells[12].innerHTML;
+                    txtEmail.value = row.cells[13].innerHTML;
+                    txtMob.value = row.cells[14].innerHTML;
+                    //binddist(row.cells[4].innerHTML);
+                    // txtDname.value = row.cells[1].innerHTML;//..................del
+                    txtSname.value = row.cells[6].innerHTML;
+                    txtWname.value = row.cells[8].innerHTML;
+                    jQuery("#lblError").hide();
+                    jQuery("#lblError2").hide();
+                    jQuery("#lblError4").hide();
+                    /*var flag = row.cells[15].innerHTML;
+                    if (flag == 'Yes') {
+                        jQuery("#rbyes").prop("checked", true);
+                        jQuery("#rbno").prop("checked", false);
+                    }
+                    else if (flag == 'No') {
+                        jQuery("#rbyes").prop("checked", false);
+                        jQuery("#rbno").prop("checked", true);
+                    } else {
+                        jQuery("#rbyes").prop("checked", false);
+                        jQuery("#rbno").prop("checked", false);
+                    }*/
+                }
+            }
+            hdnEmployee.value = 'U';
+        }
+        else if (e.value.indexOf('Add') > -1) {
+            jQuery("#comp").prop("disabled", true);;
+            // txtDname.value = '';//.........................
+            jQuery("#btnSubmit").html("@ViewData["Save"]");
+            resetCust();
+            hdnEmployee.value = 'C';
+        }
+        else if (e.value.indexOf('Delete') > -1) {
+            
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+                if (row.cells[16].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    hdnEmployee.value = 'D';
+                    var result = confirm("Are you sure you want to delete?");
+                    if (result) {
+                        var st = row.cells[1].innerHTML;
+                        deleteDivision(txtSID.value, st);
+                    }
+                }
+            }
+        }
+    }
+</script>
+<body data-layout="horizontal" data-topbar="dark" data-sidebar-size="sm">
+<div class="page-content">
+        <div class="main-content">
+           <div class="container-fluid">
+             <div class="row">
+                        <div class="col-12">
+                            <div class="page-title-box d-flex align-items-center justify-content-between">
+                                <h4 class="mb-0">Customer Details</h4>
+
+                                <div class="page-title-right">
+                                    <ol class="breadcrumb m-0">
+                                        <!-- <li class="breadcrumb-item"> <button class="btn btn-primary">Create Invoice</button></li> -->
+                                    </ol>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+           </div>
+</div>
+    <!-- Container-fluid starts-->
+<div class="container-fluid general-widget">
+        @* BODY DETAILS CARD/PANEL *@
+                      
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="card" >
+                                <div class="profile-bd" >
+                                <h5 class="ms-2 mt-2">Customer Details</h5>
+                                <hr>
+                                  <div class="cusD" style="display: block;">
+                                    <span class="ms-2 mt-4 p-2"> Name : Customer Name </span><br>
+                                     <span class="ms-2 mt-4 p-2">Email : jimmy@gmail.com </span><br>
+                                    <span class="ms-2 mt-4 p-2"> Mobile : 255766373833 </span>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card">
+                                <div class="profile-bd" >
+                                <h5 class="ms-2 mt-2">Transactions</h5>
+                                <hr>
+                                   <table class="table-responsive table table-striped">
+                                        <thead>
+                                            <tr>
+                                            <th>Invoice #</th>
+                                            <th>Date</th>
+                                            <th>Item Name</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>INV028</td>
+                                                <td>12 Jun 23</td>
+                                                <td>Malipo</td>
+                                                <td>49,000</td>
+                                                <td> Paid </td>
+                                            </tr>
+                                             <tr>
+                                                <td>INV028</td>
+                                                <td>12 Jun 23</td>
+                                                <td>Malipo</td>
+                                                <td>49,000</td>
+                                                <td> <span class="badge badge-light-success">  Done</span> </td>
+                                            </tr>
+                                             <tr>
+                                                <td>INV028</td>
+                                                <td>12 Jun 23</td>
+                                                <td>Malipo</td>
+                                                <td>49,000</td>
+                                                <td> <span class="badge badge-light-info">  Cancelled</span> </td>
+                                            </tr>
+                                        </tbody>
+                                   </table>
+                            </div>
+                        </div>
+                    </div>
+ </div>
+    <div class="md-overlay"></div>
+
+        <div id="styleSelector">
+
+        </div>
+</div>
+  <!-- Container-fluid Ends-->
+</div>
+
+<!-- [MODALS] -->
+<div class="modal" id="modal-smtp" role="dialog" data-backdrop="static" data-keyboard="false">
+<div class="modal-dialog believerModal" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">@ViewData["custos"] </h5>
+            <button type="button" class="btn btn-outline-primary close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form class="col-12 p-0 mx-auto" action="" method="post">
+                <div class="row">
+
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["custname"]<span class="text-danger">*</span> </label>
+                        <input type="text" class="form-control" id="txtcusname" placeholder="Customer Name" onkeyup="validCust(this)" onkeypress="return alpha(event)" maxlength="100" />
+                        <input type="hidden" class="form-control  hidden" id="txtSID">
+                        <input type="hidden" class="form-control  hidden" id="txtDname">
+
+                    </div>
+
+                    
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["Mno"]<span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="txtmob" placeholder="Mobile Number" maxlength="12" @*onkeydown="validCust(this)"*@ onblur="mobileNumDivisionValiadte(this);" />
+                        <div class="form-group flex_form-group align-items-baseline offset">
+                            <span id="lblError"></span>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["poboxno"]</label>
+                        <input type="text" class="form-control" id="txtpono" placeholder="Post Box No" onblur="return alpha(event)" onkeypress="return isNumber(event)" maxlength="50" />
+
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["addr"]</label>
+                        <textarea type="text" id="txtadd" class="form-control" placeholder="Address" maxlength="100"></textarea>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-6">
+                        <label for="gender" class="f-label_align">@ViewData["Region"]</label>
+                        <select class="form-control" id="ddlreg" name="ddlreg"></select>
+                    </div>
+
+
+                    <div class="form-group flex_form-group align-items-baseline col-md-6">
+                        <label for="gender" class="f-label_align">@ViewData["District"]</label>
+                        <select class="form-control" id="ddldist" name="ddldist"></select>
+                        <input type="hidden" class="form-control  hidden" id="txtSname">
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-6">
+                        <label for="gender" class="f-label_align">@ViewData["Ward"]</label>
+                        <select class="form-control" id="ddlward" name="ddlward"></select>
+                        <input type="hidden" class="form-control  hidden" id="txtWname">
+                    </div>
+
+
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["tino"]</label>
+                        <input type="Text" class="form-control" id="txttinno" placeholder="Tin No" onkeypress="return isNumber(event)" maxlength="9" onkeydown="validCust(this)" onblur="TinValiadte(this);" />
+                        <div class="form-group flex_form-group align-items-baseline offset">
+                            <span id="lblError4"></span>
+                        </div>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["vatno"]</label>
+                        <input type="text" class="form-control" id="txtvatno" placeholder="Vat No" onblur="return alpha(event)" onkeypress="return isNumber(event)" maxlength="20" />
+
+                    </div>
+
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["conctper"]</label>
+                        <input type="text" class="form-control" id="txtcperson" placeholder="Contact Person" onkeypress="return alpha(event)" maxlength="100" />
+
+                    </div> -->
+                    <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                        <label for="gender" class="f-label_align">@ViewData["EID"]</label>
+                        <input type="text" class="form-control" id="txtemail" placeholder="Email" onblur="ValidateEmail(this)" @*onkeyup="validCust(this)"*@ maxlength="100" />
+                        <div class="form-group flex_form-group align-items-baseline offset">
+                            <span id="lblError1"></span>
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline offset">
+                            <span id="lblError2"></span>@*<span id="lblError2"></span>*@
+                        </div>
+                    </div>
+
+                    <div class="d-none">
+                        <label for="gender" class="f-label_align">Checker/Maker<span class="text-danger">*</span></label>
+                        <input type="radio" class="ml-2" name="checker" id="rbyes"
+                           value="Yes">&nbsp;<label for="Male">Yes</label>
+                        &nbsp; <input class="ml-2" type="radio" name="checker" id="rbno"
+                           value="No">&nbsp;<label for="FeMale">No</label>
+                    </div>
+                </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">@ViewData["Close"]</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic" id="btnSubmit">@ViewData["Save"]</button>
+                    </div>
+
+        </form>
+    </div>
+</div>
+</div> 
+                        </div>
+                    </div>
+
+
+</div>
+</div>
+</body>

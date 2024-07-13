@@ -1,0 +1,835 @@
+﻿
+@{
+    ViewBag.Title = "CompanyUsers";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+
+        //getaccess();
+       // bindreassc();
+        BindRole();
+        whitespacevalidation('txtauname');
+        mobileNumValidation('txtmobile');
+        bindchrDetails();
+
+        jQuery("#btnSubmit").click(function () {
+            opType = jQuery("#hdnEmployee").val();
+            var message = validateEmployeech();
+            if (message.length > 0 && opType != 'D') {
+                notifyMessage(message, 'danger');
+            }
+            else {
+                if (opType == 'C') {
+                    var x = confirm("Are you sure you want to Save?");
+                    if (x) {
+                        addch();
+                        //jQuery("#tbl-smtp tbody").empty();
+                        return true;
+                    }
+                    else
+                        return false;
+                } else if (opType == 'U') {
+                    var x = confirm("Are you sure you want to Update?");
+                    if (x) {
+                        addch();
+                        //jQuery("#tbl-smtp tbody").empty();
+                        return true;
+                    }
+                    else
+                        return false;
+                }
+            }
+        })
+
+        jQuery("#btnDelete").click(function () {
+            delchruch();
+        });
+    });
+</script>
+<script type="text/javascript">
+    var delet, edit;
+    var vie = "";
+    var updta = "";
+    function BindRole() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetRolesAct2", "Role")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery('#ddlcouty option').remove();
+                jQuery("#ddlcouty").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        if (value.Description != 'Admin') {
+                            jQuery("#ddlcouty").append(jQuery("<option></option>").val(value.Code).html(value.Description));
+                        }
+                    });
+                }
+            }
+        })
+    }
+    function EditBindRole(ec) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetRolesAct2", "Role")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery('#ddlcouty option').remove();
+                jQuery("#ddlcouty").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlcouty").append(jQuery("<option></option>").val(value.Code).html(value.Description));
+
+                    });
+                }
+
+                if (txtjID.value != 0) {
+                    jQuery("#ddlcouty").val(ec).change();
+                }
+            }
+        })
+    }
+    @*function getaccess() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("Editright", "ARights")',
+            data: JSON.stringify({ 'Sno': '@Session["InstituteID"]', 'usno': '@Session["UserID"]', 'name': 'Institution Users' }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                if (data.Aview == "Y") {
+                    document.getElementById("btnAdd").style.visibility = "Visible";
+                    edit = true;
+                    vie = "view";
+                }
+                else {
+                    document.getElementById("btnAdd").style.visibility = "hidden";
+                    edit = false;
+                }
+                if (data.AAdd == "Y") {
+                    document.getElementById("btnAdd").style.visibility = "visible";
+
+                }
+                else {
+                    document.getElementById('btnAdd').style.visibility = "hidden";
+                }
+
+
+                if (data.AUpdate == "Y") {
+                    edit = true;
+                }
+                else {
+                    edit = false;
+                }
+
+            }
+        });
+    }*@
+
+    @*function bindreassc() {
+        jQuery.ajax({
+            type: "GET",
+            url: '@Url.Action("Getassactions", "Member_Reg")',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                if (data != null) {
+                     jQuery("#ddlra").append(jQuery("<option></option>").val(0).html('Select'));
+                    jQuery.each(data, function (key, value) {
+
+                        jQuery("#ddlra").append(jQuery("<option></option>").val(value.Sno).html(value.ReligiousAssociation));
+                    });
+                }
+            }
+
+
+        })
+
+    }*@
+    function bindchrDetails() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCompanyUserss", "CompanyUsers")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        //if (vie = "view") {
+                        //    var vi = edit == false ?
+                                //}
+                       /* var updta = edit == true ?*/ 
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Username + '</td>' +
+                            '<td>' + value.Usertype + '</td>' +
+                            '<td>' + value.Fullname + '</td>' +
+                            '<td>' + value.Email + '</td>' +
+                            '<td>' + value.Mobile + '</td>' +
+                            '<td><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" id = "btn' + value.CompuserSno + '"  data-sid="' + value.CompuserSno + '" value = "Edit" data-target="#modal-smtp" onclick = "showchModal(this)" ><i class="fa-solid fa-pen"></i></button ></td>' +
+
+                            //'<td><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data - target="#modal-smtp" id = "btn' + value.CompuserSno + '" data-sid="' + value.CompuserSno + '" value = "Edit" onclick = "showchModal(this)" > <i class="fas fa-pen" ></i ></button > </td>' +
+                            //'<td class="d-none">' + bindInsttypeDetails(value.InTtype) + '</td>' +
+                           // '<td >' + updta + "" + vi +'</td>' +
+                            '</tr>';
+
+                        jQuery("#tbl-smtp tbody").append(row);
+                        i++;
+                        //  }
+                    });
+
+
+                }
+                applyDatatable('tbl-smtp');
+
+
+            }
+        })
+    }
+    function bindInsttypeDetails(sno) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetinstDetails", "Institution")',
+            data: JSON.stringify({ 'Sno': sno }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    //   lblmsg.innerHTML = data.Type_Name;
+                }
+
+            }
+        })
+    }
+    var doublecheckemail;
+    var doubleuser;
+
+    function binddupliacteDetails(name) {
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("Checkdupliacte", "CompanyUsers")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doubleuser = false;
+                    //lblError12.innerHTML = " UserName Already exists.";
+                    //jQuery('#lblError12').css('color', 'Red');
+                }
+                else {
+                    doubleuser = true;
+                    lblError12.innerHTML = "";
+
+                }
+
+            }
+        })
+    }
+    function binddupliacteDetailsEmail(name) {
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckdupliacteEmail", "CompanyUsers")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doublecheckemail = false;
+                    //lblError2.innerHTML = "Email Already exists.";
+                    //jQuery('#lblError2').css('color', 'Red');
+                }
+                else {
+                    doublecheckemail = true;
+                    lblError2.innerHTML = "";
+
+                }
+
+            }
+        })
+    }
+
+    function addch() {
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+        var params = JSON.stringify(getSMTPValues());
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("AddCompanyUser", "CompanyUsers")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+                hideModal('modal-smtp');
+                if (opType == 'C' && data) {
+
+                    /*if (data == true) {
+                        message = 'Username' + ' ' + jQuery("#txtauname").val() + ' Already Exists.';
+                    }*/
+                    if (data == "Exist") {
+                        message = jQuery("#txtemail").val() + ' Email Already Exists.';
+                        type = 'danger';
+                    }
+                    else if (data == "UExist") {
+                        message = jQuery("#txtauname").val() + ' Username Already Exists.';
+                        type = 'danger';
+                    }
+                    else {
+                        message = 'Username' + ' ' + jQuery("#txtauname").val() + ' Successfully Created';
+                        type = 'success';
+                    }
+                }
+                else if (opType == 'U' && data) {
+
+                    message = 'Username' + ' ' + jQuery("#txtauname").val() + ' Successfully Updated';
+                    type = 'success';
+                }
+
+
+                notifyMessage(message, type);
+                bindchrDetails();
+            }
+        })
+
+    }
+    function delchruch(e) {
+
+
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            deletech(cid);
+            return true;
+        }
+        else
+            return false;
+    }
+
+
+    function deletech(cid) {
+        //var message = validateEmployeech(),
+        //var message = '',
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+
+        var params = JSON.stringify(getSMTPID(cid));
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteChruch", "CompanyUsers")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == "exist") {
+                    message = jQuery("#ddlchname").val() + 'is in use,Cannot Delete.';
+                    type = 'danger';
+
+                }
+                else if (opType == 'D' && data) {
+                    message = jQuery("#ddlchname").val() + ' Successfully Deleted';
+                    type = 'success';
+
+                }
+                notifyMessage(message, type);
+                bindchrDetails();
+            }
+        })
+    }
+</script>
+
+<div class="block-header">
+    <div class="row clearfix">
+        <div class="col-md-6 col-sm-12">
+            <h2>Company Users</h2>
+        </div>
+        <div class="col-md-6 col-sm-12 text-right">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Setup", "Setup")"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active">Company Users</li>
+            </ul>
+            @* <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a> *@
+            <button type="button" id="btnAdd" value="Add" data-sid="0" 
+                                                          data-toggle="modal" data-target="#modal-smtp" onclick="showCustModal(this)"
+                                                    class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" >
+                                                   <i class="icofont icofont-plus m-r-5"></i>
+                                                    Add Company users
+                                                </button>
+            <input type="hidden" id="hdnEmployee" />
+        </div>
+    </div>
+</div>
+                <!-- Page-header end -->
+                <!-- Page-body start -->
+               <div class="container-fluid">
+    @* BODY DETAILS CARD/PANEL *@
+    <div class="row clearfix">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Company Users<small></small>
+                    </h2>
+                    <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                        <li> <a href="javascript:void(0);" data-toggle="cardloading" data-loading-effect="pulse"><i
+                                    class="icon-refresh"></i></a></li>
+                        <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a>
+                        </li>
+                        @* <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);">Action</a></li>
+                            <li><a href="javascript:void(0);">Another Action</a></li>
+                            <li><a href="javascript:void(0);">Something else</a></li>
+                            </ul>
+                            </li> *@
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table id="tbl-smtp"
+                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Sno</th>
+                                                                    <th>Username</th>
+                                                                    <th>Role</th>
+                                                                    <th>Full Name</th>
+                                                                    <th>Email</th>
+                                                                    <th>Mobile Number</th>
+                                                                    <th data-sort-ignore="true">Actions</th>
+                                </tr>
+                            </thead>
+                          
+                            <tbody>
+                            
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+                        <!--[MODALS] -->
+                        <div class="modal fade" id="modal-smtp" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="believerCreateLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog believerModal" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title offset" id="exampleModalLabel1">Company Users</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+
+                                    <form class="col-12 p-0 mx-auto" action="AddCompanyBank" method="post" name="form1">
+                                        <div class="modal-body">
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+                                                    <label for="gender" class="label-145">Role<span class="red">*</span></label>
+                                                    <select class="ui search dropdown form-control" id="ddlcouty" name="ddlcouty"></select>
+                                                    <input type="hidden" class="form-control  hidden" id="txtSID">
+                                                    <input type="hidden" class="form-control  hidden" id="txtjID">
+
+                                                </div>
+
+                                                <div class="form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+                                                    <label for="gender" class="label-145">User Name<span class="red">*</span></label>
+                                                    <input type="text" class="form-control" id="txtauname" placeholder="User Name"
+                                                           onblur="checkduplicate(this)">
+
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline offset-8">
+                                                    <span id="lblError12"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+                                                    <label for="gender" class="label-145">Full Name<span class="red">*</span></label>
+                                                    <input type="text" class="form-control" id="txtuname" placeholder="Full Name">
+
+                                                </div>
+                                                <div class="input-group form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+
+                                                    <label for="gender" class="label-145">Mobile Number<span class="red">*</span></label>
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="txtMobprefix">255</span>
+                                                    </div>
+                                                    <input type="number" class="form-control" id="txtmobile" maxlength="9"
+                                                           placeholder="1234567890" onfocusout="mobileNumValiadte(this);" /><br />
+                                                    <span id="lblError"></span>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+                                                    <label for="gender" class="label-145">Email Address<span class="red">*</span></label>
+                                                    <input type="email" class="form-control" id="txtemail" placeholder="Email ID"
+                                                           onkeyup="ValidateEmail(this);" onchange="ValidateEmail(this);" />
+                                                </div>
+                                                <span id="lblError2"></span>
+                                                <span id="lblError1"></span>
+                                                <div class="form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+
+                                                    <label for="gender" class="label-145">User Position</label>
+                                                    <input type="text" class="form-control" id="txtposi" maxlength="50"
+                                                           placeholder="User Position" /><br />
+                                                </div>
+                                            </div>
+                                            @*<div class="row">
+                <div class="form-group flex_form-group align-items-baseline col-md-11 col-lg-9 col-xl-6">
+                    <label for="Marital" class="label-145">@ViewData["Relass"]<span class="red">*</span></label>
+                    <br />
+                    <select class="form-control" name="ddlra" id="ddlra"></select>
+                </div>
+            </div>*@
+                                            <!-- Preloader -->
+                                            <div id="loader">
+                                                <div>
+                                                    <div class="lds-dual-ring"></div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success btn-sm btn-biz_logic" id="btnSubmit">Save</button>
+                                            <button type="button" id="btnClose" class="btn btn-secondary btn-sm"
+                                                    data-dismiss="modal">
+                                                Close
+                                            </button>
+                                        </div>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <script type="text/javascript">
+    var doublemail;
+    var doublemob;
+    var cid;
+
+    function checkduplicate(e) {
+
+        var name = document.getElementById('txtauname').value;
+        binddupliacteDetails(name);
+    }
+    function ValidateEmail(e) {
+
+        var email = document.getElementById('txtemail').value;
+        var reg = /^[_a-zA-Z0-9-]+(\.[_a-zA-Z0-9-]+)*@@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,4})$/;
+        if (reg.test(email)) {
+            doublemail = true;
+            lblError1.innerHTML = "";
+        }
+        else {
+            doublemail = false;
+            //lblError1.innerHTML = "Invalid email address.";
+            //jQuery('#lblError1').css('color', 'Red');
+        }
+        binddupliacteDetailsEmail(email);
+    }
+    function mobileNumValiadte() {
+        var mobileNum = jQuery('#txtmobile').val();
+        if (mobileNum.substr(0, 4) != 0000 || mobileNum == '') {
+            var validateMobNum = /^\d*(?:\.\d{1,2})?$/;
+            if (validateMobNum.test(mobileNum) && mobileNum.length == 9) {
+                lblError.innerHTML = "";
+                doublemob = true;
+            }
+            else {
+                doublemob = false;
+                message = "Mobile Number should be 9 digits";
+                lblError.innerHTML = "";
+                //lblError.innerHTML = "Invalid Mobile Number.";
+                //jQuery('#lblError').css('color', 'Red');
+            }
+        }
+        else {
+            doublemob = false;
+            lblError.innerHTML = "Invalid Mobile Number.";
+            message = 'Invalid Mobile Number.';
+            jQuery('#lblError').css('color', 'Red');
+        }
+    }
+    function resetchru() {
+        //var dlch = document.getElementById('ddlcouty');
+        var txtau = document.getElementById('txtauname');
+        var txtregno = document.getElementById('txtmobile');
+        var txtemail = document.getElementById('txtemail');
+        var txtun = document.getElementById('txtuname');
+
+        jQuery('#ddlcouty').val(0).change();
+        jQuery('#txtposi').val('');
+        txtau.value = '';
+        txtregno.value = '';
+       // jQuery("#ddlra").val(0).change();
+        txtemail.value = '';
+        txtun.value = '';
+        jQuery('#ddlchname').prop("disabled", false);
+        jQuery('#txtauname').prop("disabled", false);
+        //jQuery('#ddlbr').attr('readonly', 'true');
+        jQuery('#txtemail').prop("disabled", false);
+        $('.ui.dropdown').removeClass("disabled");
+
+    }
+
+    function showchModal(e) {
+
+        var dlch = document.getElementById('ddlcouty');
+        //  var dlcno = dlch.options[dlch.selectedIndex].value;
+        var txtau = document.getElementById('txtauname');
+        var txtregno = document.getElementById('txtmobile');
+        var txtemail = document.getElementById('txtemail');
+        var txtun = document.getElementById('txtuname');
+        txtSID = document.getElementById('txtSID');
+
+        var tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+
+        if (e.value.indexOf('Edit') > -1) {
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+
+                if (row.cells[6].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("EditCompanyUserss", "CompanyUsers")',
+                        cache: true,
+                        data: JSON.stringify({ 'Sno': jQuery(e).data('sid') }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            if (data != null) {
+                                bindInsttypeDetails(data.InTtype)
+                                //'<td>' + value.Username + '</td>' +
+                                //    '<td>' + value.Usertype + '</td>' +
+                                //    '<td>' + value.Fullname + '</td>' +
+                                //    '<td>' + value.Email + '</td>' +
+                                //    '<td>' + value.Mobile + '</td>' +
+                                jQuery("#ddlcouty").val(data.Usertype).change();
+                               // jQuery("#txtauname").val(data.Username);
+                                jQuery("#txtposi").val(data.Position).change();
+
+                                EditBindRole(data.Usertype);
+                                jQuery("#txtjID").val(data.Usertype);
+                                txtau.value = data.Username;
+                                txtregno.value = data.Mobile.substr(3, 9);//data.Mobile;
+                                txtemail.value = data.Email;
+                                txtun.value = data.Fullname;
+                                $('.ui.dropdown').addClass("disabled");
+                                //jQuery('#ddlcouty').prop("disabled", true);
+                                jQuery('#txtauname').prop("disabled", true);
+                                //jQuery('#ddlbr').attr('readonly', 'true');
+                                jQuery('#txtemail').prop("disabled", true);
+                                jQuery("#loader").css("display", "none");
+                                jQuery("#btnSubmit").prop("show", true).html("Update");
+                            }
+                        }
+                    })
+                }
+            }
+            hdnEmployee.value = 'U';
+        }
+        else if (e.value.indexOf('Add') > -1) {
+            resetchru();
+            hdnEmployee.value = 'C';
+            jQuery("#loader").css("display", "none");
+            jQuery("#btnSubmit").prop("show", true).html("Save");
+            BindRole();
+        }
+
+    }
+
+    function getSMTPValues() {
+
+       // else {
+            jQuery("#loader").css("display", "block");
+            //  jQuery.noConflict();
+            var dlch = document.getElementById('ddlcouty');
+            var dlcno = dlch.options[dlch.selectedIndex].value;
+            var txtau = document.getElementById('txtauname');
+            var txtmob = document.getElementById('txtmobile');
+            var txtemail = document.getElementById('txtemail');
+            var txtun = document.getElementById('txtuname');
+        var txtposi = document.getElementById('txtposi');
+        //var ddlra = document.getElementById('ddlra');
+            txtSID = document.getElementById('txtSID');
+
+            hdnEmployee = document.getElementById('hdnEmployee');
+        var txtmo = document.getElementById("txtMobprefix").innerText + txtmob.value; //14.12.2021
+
+            if (txtSID.value == '') {
+                txtSID.value = '0';
+            }
+
+            //var table = jQuery('#tbl-smtp').DataTable(),
+            //    selectedRow = table.rows('.selected').data();
+
+            if (hdnEmployee.value == "C") {
+                txtSID.value = '0';
+                var data = {
+                    chname: dlcno,
+                    auname: txtau.value.trim(),
+                    mob: txtmo,
+                    mail: txtemail.value.trim(),
+                    uname: txtun.value.trim(),
+                    sno: txtSID.value,
+                    //dsno: ddlra.value,
+                    pos: txtposi.value,
+                    //mob: txtmob.value.trim(),
+
+                }
+
+                return data;
+            }
+            else if (hdnEmployee.value == "U") {
+
+                var data = {
+                    chname: dlcno,
+                    auname: txtau.value.trim(),
+                    mob: txtmo,
+                    mail: txtemail.value.trim(),
+                    uname: txtun.value.trim(),
+                    sno: txtSID.value,
+                    //dsno: ddlra.value,
+                    pos: txtposi.value,
+
+                }
+
+                return data;
+            }
+            else if (hdnEmployee.value == "D") {
+
+                var data = {
+                    employeeId: selectedRow[0][2],
+                    employeeName: selectedRow[0][3],
+                    jobId: 0,
+                    joined: selectedRow[0][5],
+                    salary: selectedRow[0][6],
+                    deptId: 0,
+                    active: 0,
+                    opType: hdnEmployee.value,
+                }
+
+                return data;
+            }
+      //  }
+    }
+
+
+
+    function getSMTPID(glob) {
+        //jQuery.noConflict();
+
+
+        var table = jQuery('#tbl-smtp').DataTable(),
+            selectedRow = table.rows('.selected').data();
+
+        if (hdnEmployee.value == "D") {
+
+            var data = {
+
+                sno: glob,
+
+            }
+
+            return data;
+        }
+    }
+
+    function validateEmployeech() {
+
+        var dlch = document.getElementById('ddlcouty');
+        var txtau = document.getElementById('txtauname');
+        var txtmob = document.getElementById('txtmobile');
+        var txtemail = document.getElementById('txtemail');
+        var txtun = document.getElementById('txtuname');
+        result = '';
+        var chosen = "";
+
+        if (dlch.value == 0) {
+            result += 'Role is Required .<br/>';
+        }
+
+        if (txtau.value.trim().length == 0) {
+            result += 'User name is Required <br/>';
+        } else {
+            var d = alpha(txtau.value.trim());
+            if (d != false) {
+                result += d;
+            }
+        }
+        if (txtun.value.trim().length == 0) {
+            result += 'Full Name is Required.<br/>';
+        } else {
+            var d = alphaFewsymlatest(txtun.value.trim());
+            if (d != false) {
+                result += d;
+            }
+        }
+        if (txtmob.value.trim().length == 0) {
+            result += 'Mobile Number is Required.<br/>';
+        }
+        if (txtemail.value.trim().length == 0) {
+            result += 'Email ID is Required.<br/>';
+        }
+        //if (jQuery("#ddlra").val() == 0) {
+        //    result += 'Religious Assocation is Required.<br/>';
+        //}
+        if (doublemail == false) {
+
+            result += "Invalid Email ID";
+
+        }
+        else if (doublecheckemail == false) {
+            result += "Email Already Exists";
+
+        }
+        else if (doublemob == false) {
+            jQuery("#loader").css("display", "none");
+            result += message;
+
+        }
+        else if (doubleuser == false) {
+            jQuery("#loader").css("display", "none");
+            result += "User Name Already Exists";
+
+        }
+
+        return result;
+    }
+
+
+
+                        </script>
+
+

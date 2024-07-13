@@ -1,0 +1,200 @@
+﻿
+@{
+    ViewBag.Title = "ZReport";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        var today, datepicker;
+        today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        //disablepastdate(today, "txtdate");
+        disablefuturedate(today, "txtdate");
+        $("#btnSubmit").click(function () {
+            AddZReport();
+            //jQuery("#tbl-smtp tbody").empty();
+        })
+        
+    });
+    function disablefuturedate(st, e) {
+
+        jQuery('#' + e).datepicker('destroy');
+        jQuery('#' + e).datepicker({
+            uiLibrary: 'bootstrap4',
+            // minDate: st,
+            maxDate: st,
+            format: "mm/dd/yyyy",
+            iconsLibrary: 'fontawesome',
+        });
+    }
+    
+</script>
+<script type="text/javascript">
+    var glob;
+  //  var $ = jQuery;
+    jQuery(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetRegi", "ZReport")',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $("#ddlCom").append($("<option></option>").val(0).html('--Select--'));
+                if (data != null) {
+
+                    $.each(data, function (key, value) {
+
+                        $("#ddlCom").append($("<option></option>").val(value.CompSno).html(value.CompName));
+      
+                    });
+                }
+            }
+
+
+        })
+
+    }(jQuery));
+
+
+    function validate() {
+
+        var txtAdd = document.getElementById('ddlCom');
+        var txtdate = document.getElementById("txtdate");
+        var result = '';
+        
+        if (txtAdd.value == 0) {
+            result += 'Company is required<br/>';
+        }
+        if (txtdate.value.trim().length == 0) {//
+            result += 'Date is Required .<br/>';
+        }
+        return result;
+    }
+
+    function getValues() {
+
+        //jQuery.noConflict();
+
+        var ddlreg = document.getElementById("ddlCom");
+        var txtdate = document.getElementById("txtdate");
+        var result = ddlCom.options[ddlreg.selectedIndex].value;
+            var data = {
+                csno: result,
+                date: $("#txtdate").val(),
+            }
+
+            return data;
+    }
+    
+    
+
+    function AddZReport() {
+
+        var message = validate(),
+            type = '';
+
+        if (message.length > 0) {
+            notifyMessage(message, 'danger');
+        }
+        else {
+
+            var params = JSON.stringify(getValues());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GenReport", "ZReport")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                        if (data) {
+                                //message = 'Report Generated Successfully';
+                            //type = 'success';
+                            if (data == 'Success')
+                                alert('Report Generated Successfully');
+                            if (data == 'Failed')
+                                alert('Zreport already exists');
+                        }
+                        
+
+                    //notifyMessage(message, type);
+   
+                }
+
+            })
+        }
+    }
+
+
+    
+</script>
+
+<div class="page-body">
+        <div class="container-fluid">
+            <div class="page-title">
+              <div class="row">
+                <div class="col-sm-6">
+                  <h3>ZReport</h3>
+                </div>
+                <div class="col-sm-6">
+                  <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="@Url.Action("Setup", "Setup")"> 
+                       <i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item">Home</li>
+                    <li class="breadcrumb-item active">ZReport Details</li> 
+                    @* <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a> *@
+                    <button type="button" id="btnAdd" value="Add" data-sid="0"
+                            class="btn btn-outline-primary d-inline-block md-trigger ml-4"
+                            onclick="showBranchModal(this);" data-bs-toggle="modal" data-bs-target="#modal-currency">
+                        <i data-feather="plus-circle" class="mr-2"></i>
+                        Add Branch
+                    </button>
+            <input type="hidden" id="hdnEmployee" />
+
+                  </ol>
+                </div>
+              </div>
+            </div>
+          </div>
+        <!-- Container-fluid starts-->
+<div class="container-fluid general-widget">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="lbldst">@ViewData["zrep"]</h5>
+        
+    </div>
+    <div class="modal-body">
+        <form class="col-12 p-0 mx-auto" action="#" method="post">
+            <div class="row">
+                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                    <label for="ddlComid" class="f-label_align">@ViewData["comp"]<span class="red">*</span></label>
+                    <select id="ddlCom" class="form-control" name="ddCom"></select>
+                </div>
+                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                    <label for="gender" class="inst-label_align">ZReport Date<span class="red">*</span></label>
+                    <input type="text" class="form-control" id="txtdate" autocomplete="off" placeholder="dd/MM/yyyy" onkeypress="return false" />
+                </div>
+
+                
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-info  btn-sm btn-biz_logic" id="btnSubmit">Generate ZReport</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</div>
+
+</div>
+</div>
+
+
+  <!-- Container-fluid Ends-->
+</div>

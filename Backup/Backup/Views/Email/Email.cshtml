@@ -1,0 +1,319 @@
+﻿
+@{
+    ViewBag.Title = "Email";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+        Getcolumnslang_Email();
+        bindEmail_Email();
+        $("#btnSubmit").click(function () {
+            addEmail_Email();
+            //jQuery("#tbl-smtp tbody").empty();
+        })
+        $("#btnDelete").click(function () {
+            delEmail_Email();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var glob;
+    function binddata_Email(val) {
+        var name = '';
+        if (val == 1) {
+            name = "On Registration";
+        }
+        else if (val == 2) {
+            name = "On Approve";
+        }
+        else if (val == 3) {
+            name = "On Return";
+        }
+        else if (val == 5) {
+            name = "OTP Activation";
+        }
+    }
+    function Getcolumnslang_Email() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "Email")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    function bindEmail_Email() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetEmailDetails", "Email")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+
+                    var count = 1;
+                    jQuery.each(data, function (key, value) {
+                        var name = '';
+                        if (value.Flow_Id == 1) {
+                            name = "On Registration";
+                        }
+                        else if (value.Flow_Id == 2) {
+                            name = "User Registratio";
+                        }
+                        else if (value.Flow_Id == 3) {
+                            name = "On Approve";
+                        }
+                        else if (value.Flow_Id == 4) {
+                            name = "On Return";
+                        }
+                        else if (value.Flow_Id == 5) {
+                            name = "OTP Activation";
+                        }
+                        var row = '<tr>' +
+                            '<td>' + count + '</td>' +
+                            '<td>' + name + '</td>' +
+                            '<td class="d-none">' + value.Flow_Id + '</td>' +
+                            '<td>' + value.Subject + '</td>' +
+                            '<td>' + value.Local_subject + '</td>' +
+                            '<td>' + value.Email_Text + '</td>' +
+                            '<td>' + value.Local_Text + '</td>' +
+
+                            '<td><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" id = "btn' + value.SNO + '"  data-sid="' + value.SNO + '" value = "Edit" data-target="#modal-smtp" onclick = "showSMTPModal_Email(this)" ><i class="fas fa-pen"></i></button >&nbsp;&nbsp;<button id = "btn' + value.SNO + '"  data-sid="' + value.SNO + '" value = "Delete" onclick="showSMTPModal_Email(this)" class="btn btn-outline-dark btn-sm distloc"><i class="fas fa-trash" aria-hidden="true"></i></button ></td > ' +
+                        '</tr>';
+                        count++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+               applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+
+    function addEmail_Email() {
+
+        var message = validateEmployee_Email(),
+        //var message = '',
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getSMTPValues_Email());
+           // alert(params);
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddEmail", "Email")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    hideModal('modal-smtp');
+                    var ddlflow = document.getElementById('ddlflow');
+                    var text = ddlflow.options[ddlflow.selectedIndex].text;
+                    if (opType == 'C' && data) {
+                        if (data == true) {
+                            message = text + ' Already Exist.';
+                            type = 'danger';
+                        }
+                        else
+                        {
+                            message = text + ' Flow Successfully Created';
+                            type = 'success';
+                            //addRowForEmployeeGrid(data);
+                        }
+                    }
+                    else if (opType == 'U' && data ) {
+                        // var jk = true;
+                            message = text + ' Flow Successfully Updated';
+                            type = 'success';
+                            //bindSMTPDetails();
+                            //updateRowForEmployeeGrid(data);
+
+                    }
+
+                    notifyMessage(message, type);
+                    bindEmail_Email();
+                }
+            })
+        }
+    }
+
+
+    function deletebranch_Email(cid,st) {
+        //var message = validateEmployee(),
+        //var message = '',
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        var ddlflow = document.getElementById('ddlflow');
+            var params = JSON.stringify(getSMTPID_Email(cid));
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("DeleteEmail", "Email")',
+                data: JSON.stringify({ 'Sno': txtSID.value, 'name': ddlflow.value }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    if (opType == 'D') {
+                        if (data == true) {
+
+                            message = st + ' is in use Cannot be Deleted.';
+                            type = 'danger';
+
+                        } else {
+                            message = st + ' Flow Successfully Deleted';
+                            type = 'success';
+                        }
+                    }
+                    notifyMessage(message, type);
+                    bindEmail();
+                }
+            })
+
+    }
+</script>
+
+<style>
+    /* Solve email issue on th & td white-space no-wrap */
+    .email-table td:nth-last-of-type(2),
+    .email-table td:nth-last-of-type(3) {
+        white-space: normal;
+        min-width: 75vw;
+    }
+
+    @@media(min-width:48em) {
+
+        .email-table td:nth-last-of-type(2),
+        .email-table td:nth-last-of-type(3) {
+            white-space: normal;
+            min-width: 500px;
+        }
+    }
+</style>
+
+
+
+<div class="card-body">
+    <h5 class="card-title" id="lblem">Email Text</h5>
+
+    <div class="form-group d-flex">
+        <button type="button" id="btnAdd" value="Add" data-sid="0" class="btn ml-auto mr-1 btn-sm btn-success btn-biz_logic"
+                data-toggle="modal" data-target="#modal-smtp" onclick="showSMTPModal_Email(this);">
+            Create
+        </button>
+        <input type="hidden" id="hdnEmployee" />
+    </div>
+
+    <div class="table-responsive">
+        <table id="tbl-smtp" class="table table-bordered table-sm rounded email-table display">
+            <thead class="thead-light">
+                <tr>
+                    <th class="sno-th">Sno</th>
+                    <th>Flow Id]</th>
+                    <th class="d-none">Flow ID </th>
+                    <th>Subject English</th>
+                    <th>Subject Swahili </th>
+                    <th width="70%">Email Text</th>
+                    <th width="70%">Email Text Swahili</th>
+                    <th class="sno-th" data-sort-ignore="true">Actions</th>
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+
+<!-- [MODALS] -->
+<div class="modal fade" id="modal-smtp" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog believerModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lblem1">Email Text</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="col-12 p-0 mx-auto" action="" method="post">
+                    <div class="row">
+
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtditid" class="f-label_align">Flow ID<span class="red">*</span></label>
+                            <select id="ddlflow" class="form-control input-sm">
+                                <option value="0">Select</option>
+                                <option value="1">On Registration</option>
+                                <option value="2">User Registration</option>
+                                <option value="3">On Approve</option>
+                                <option value="4">On Return</option>
+                                <option value="5">OTP Activation</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtditid" class="f-label_align">Subject English<span class="red">*</span></label>
+
+                            <input type="text" class="form-control input-sm" id="txtsub" placeholder="Subject English">
+
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtditid" class="f-label_align">Subject Swahili </label>
+
+                            <input type="text" class="form-control input-sm" id="txtsubloc" placeholder="Subject Swahili">
+
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtditid" class="f-label_align">Email Text<span class="red">*</span> </label>
+                            <textarea id="txtEtext" style="height:250px;" class="form-control input-sm" cols="50"></textarea>
+                            <input type="hidden" class="form-control  hidden" id="txtSID">
+
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtditid" class="f-label_align"> Email Text Swahili</label>
+                            <textarea id="txtloctext" style="height:250px;" class="form-control input-sm" cols="50"> </textarea>
+
+
+                        </div>
+
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success btn-sm btn-biz_logic" id="btnSubmit">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    
+
+</script>
+

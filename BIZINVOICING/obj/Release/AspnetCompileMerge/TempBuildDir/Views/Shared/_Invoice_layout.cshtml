@@ -1,0 +1,1284 @@
+﻿@{
+var user = Session["admin1"] as string;
+var flogin = Session["flogin"] as string;
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="#">
+    <meta name="keywords" content="">
+    <meta name="author" content="#">
+    <!-- Favicon icon -->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/style.css">
+
+    <link rel="icon" href="//assets_new/images/jichange.png" type="image/x-icon">
+    <link rel="icon" href="//assets_new/images/jichange.png" type="image/x-icon">
+
+    <!-- Bootstrap Css -->
+    <link href="/assets_new/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css" />
+    <!-- Icons Css -->
+    <link href="/assets_new/css/icons.min.css" rel="stylesheet" type="text/css" />
+    <!-- App Css-->
+    <link href="/assets_new/css/app.min.css" id="app-style" rel="stylesheet" type="text/css" />
+
+    @* <!-- Google font-->
+        <link href="~/../../../../css.css?family=Mada:300,400,500,600,700" rel="stylesheet"> *@
+
+    <!-- <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/font-awesome.css"> -->
+    <!-- ico-font-->
+    <!-- <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/icofont.css"> -->
+    <!-- Themify icon-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/themify.css">
+    <!-- Flag icon-->
+    <!-- <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/flag-icon.css"> -->
+    <!-- Feather icon-->
+    <!--<link rel="stylesheet" type="text/css" href="/assetss/css/vendors/feather-icon.css"> -->
+    <!-- Plugins css start-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/scrollbar.css">
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/date-picker.css">
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/owlcarousel.css">
+    <!-- <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/prism.css"> -->
+    <!-- <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/whether-icon.css"> -->
+    <!-- Plugins css Ends-->
+    <!-- Bootstrap css-->
+    <!-- <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/bootstrap.min.css">  -->
+    <!-- App css-->
+    <link id="color" rel="stylesheet" href="/assetss/css/color-1.css" media="screen">
+    <!-- Responsive css-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/responsive.css">
+
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/datatable-extension.css">
+
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/datatables.css">
+    <link id="color" rel="stylesheet" href="/assetss/css/color-1.css" media="screen">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="js/css/select2.min.css">
+    <!-- DataTables -->
+    <link href="/assetss/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+    <link href="/assetss/libs/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- Responsive datatable examples -->
+    <link href="/assetss/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- VENDOR CSS -->
+    @*
+        <link rel="stylesheet" href="/asset/vendor/bootstrap/css/bootstrap.min.css"> *@
+    <!-- <link rel="stylesheet" href="/asset/vendor/font-awesome/css/font-awesome.min.css"> -->
+    @*
+        <link rel="stylesheet" href="/asset/vendor/charts-c3/plugin.css" /> *@
+    @*
+        <link rel="stylesheet" href="/asset/vendor/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"> *@
+    @*
+        <link rel="stylesheet" href="/asset/vendor/chartist/css/chartist.min.css"> *@
+    @*
+        <link rel="stylesheet" href="/asset/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css"> *@
+
+    @*
+        <link rel="stylesheet" type="text/css" href="//assets_new/pages/advance-elements/css/bootstrap-datetimepicker.css">
+        <!-- Date-range picker css  -->
+        <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap-daterangepicker/css/daterangepicker.css">
+        <!-- Date-Dropper css -->
+        <link rel="stylesheet" type="text/css" href="/bower_components/datedropper/css/datedropper.min.css">
+    *@
+    <!-- DATATABLE CSS -->
+    @*
+        <link rel="stylesheet" href="/asset/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="/asset/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
+        <link rel="stylesheet" href="/asset/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
+    *@
+
+
+
+    <link rel="stylesheet" href="/asset/vendor/sweetalert/sweetalert.css" />
+
+    <!-- MAIN CSS -->
+    <!-- <link rel="stylesheet" href="/asset/css/main.css"> -->
+    <link rel="stylesheet" href="/asset/css/color_skins.css">
+
+    <link rel="stylesheet" href="/asset/vendor/toastr/toastr.min.css">
+    <link rel="stylesheet" href="//assets_new/css/jquery.mCustomScrollbar.css">
+    @*
+        <script src="/js/jquery.min.js"></script> *@
+
+    <!-- latest jquery-->
+    @*
+
+        <script src="/assetss/js/jquery-3.6.0.min.js"></script> *@
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    @*
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    *@
+
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <script src="/assets_new/libs/select2/js/select2.min.js"></script>
+
+    <script src="//cdn.rawgit.com/rainabba/jquery-table2excel/1.1.0/dist/jquery.table2excel.min.js"></script>
+
+    <!-- JAVASCRIPT -->
+    <script src="/assets_new/libs/jquery/jquery.min.js"></script>
+    <script src="/assets_new/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/assets_new/libs/metismenu/metisMenu.min.js"></script>
+    <script src="/assets_new/libs/simplebar/simplebar.min.js"></script>
+    <script src="/assets_new/libs/node-waves/waves.min.js"></script>
+    <script src="/assets_new/libs/waypoints/lib/jquery.waypoints.min.js"></script>
+    <script src="/assets_new/libs/jquery.counterup/jquery.counterup.min.js"></script>
+
+    <!-- apexcharts -->
+    <script src="/assets_new/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="/assets_new/js/pages/dashboard.init.js"></script>
+
+    <!-- App js -->
+    <script src="/assets_new/js/app.js"></script>
+
+    <!-- Bootstrap js-->
+    <!-- <script src="/assetss/js/bootstrap/bootstrap.bundle.min.js"></script> -->
+    @*
+        <script src="/asset/bundles/libscripts.bundle.js"></script> *@
+    @*
+        <script src="/asset/bundles/vendorscripts.bundle.js"></script> *@
+    <script src="/asset/vendor/toastr/toastr.js"></script>
+    <script src="/Script/bootstrap-notify.min.js"></script>
+
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css"
+          integrity="sha512-RvQxwf+3zJuNwl4e0sZjQeX7kUa3o82bDETpgVCH2RiwYSZVDdFJ7N/woNigN/ldyOOoKw8584jM4plQdt8bhA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="/js/jspdf.debug.js"></script>
+    <script src="https://unpkg.com/jspdf-autotable@2.3.2"></script>
+    <script src="/js/popper.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+
+    <script src="https://kit.fontawesome.com/a708a171db.js" crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
+
+
+    <script src="/js/script.js"></script>
+    <script src="/js/validations.js?ver=1.0"></script>
+    <script src="/js/Count.js"></script>
+    <script src="/js/Employeee.js"></script>
+    <script src="/js/Invoice.js"></script>
+    <script src="/js/Region.js"></script>
+    <script src="/js/District.js"></script>
+    <script src="/js/Ward.js"></script>
+    <script src="/js/Company.js"></script>
+    <script src="/js/CustomerMaster.js"></script>
+    <script src="/js/designation.js"></script>
+    <script src="/js/currency.js"></script>
+    <script src="/js/Smtp.js"></script>
+    <script src="/js/email.js"></script>
+    <script src="/js/ques.js"></script>
+    <script src="/js/branch.js"></script>
+    <script src="/js/SuspenseA.js?ver=1.0"></script>
+    <script src="/js/DepositA.js?ver=1.0"></script>
+    @*
+        <script src="/js/cloneData.js"></script> *@
+
+</head>
+
+    <body>
+    <!-- tap on top starts-->
+    <div class="tap-top"><i data-feather="chevrons-up"></i></div>
+    <!-- tap on tap ends-->
+    <!-- Loader starts-->
+    <div class="loader-wrapper">
+        <div class="loader"></div>
+    </div>
+    <!-- Loader ends-->
+    <!-- page-wrapper Start-->
+
+    <div class="page-wrapper horizontal-wrapper" id="pageWrapper">
+
+        @if (user == "Bank" && flogin == "true")
+        {
+
+ 
+            <!-- Begin page -->  
+
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                           <button type="button"
+                            class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
+                            data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+                        <div class="navbar-brand-box">
+                            <a href="/Setup/Setup" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="/assets_new/images/jichangelogo.png" alt="" height="120"  >
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="/assets_new/images/jichange.png" alt=""  height="100">
+                                </span>
+                            </a>
+
+                            <a href="Setup/Setup" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="/assets_new/images/jichangelogo.png" alt=""  height="120" >
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="/assets_new/images/jichange.png" alt="" height="100">
+                                </span>
+                            </a>
+                        </div>
+
+                        @* <button type="button"
+                            class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
+                            data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button> *@
+                    <!-- 
+                        App Search
+                        <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="uil-search"></span>
+                            </div>
+                        </form> -->
+                    </div>
+
+                    <div class="d-flex">
+
+                        <div class="dropdown d-inline-block d-lg-none ms-2">
+                            @* <button type="button" class="btn header-item noti-icon waves-effect"
+                                id="page-header-search-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="uil-search"></i>
+                            </button> *@
+                            @* <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                aria-labelledby="page-header-search-dropdown">
+
+                                <form class="p-3">
+                                    <div class="m-0">
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" placeholder="Search ..."
+                                                aria-label="Recipient's username">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" type="submit"><i
+                                                        class="mdi mdi-magnify"></i></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div> *@
+                        </div>
+
+
+                        <button type="button" class="btn header-item noti-icon waves-effect"
+                            data-bs-toggle="fullscreen">
+                            <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                data-pwd="BNK" onclick="Getlangeg1(this)">
+                                <img class="" src="/assets_new/images/flags/us.jpg" alt="Header Language" height="16">
+                                Eng
+                            </a>
+                        </button>
+                        <button type="button" class="btn header-item noti-icon waves-effect"
+                            data-bs-toggle="fullscreen">
+
+                            <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                data-pwd="BNK" onclick="Getlangsw1(this)">
+                                <img class="" src="/assets_new/images/flags/tanzania.png" alt="Header Language"
+                                    height="16">
+                                Sw
+                            </a>
+                        </button>
+
+                        @* <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item noti-icon waves-effect"
+                                data-bs-toggle="fullscreen">
+                                <i class="uil-book"></i>
+                            </button>
+                        </div> *@
+
+                        @* <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon waves-effect"
+                                id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="uil-bell"></i>
+                                <span class="badge bg-danger rounded-pill">3</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="m-0 font-size-16"> Notifications </h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="javascript:void(0);" class="small"> Mark all as read</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="init" style="max-height: 230px;">
+                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                        <div class="simplebar-height-auto-observer-wrapper">
+                                            <div class="simplebar-height-auto-observer"></div>
+                                        </div>
+                                        <div class="simplebar-mask">
+                                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                <div class="simplebar-content-wrapper"
+                                                    style="height: auto; overflow: hidden; padding-right: 0px; padding-bottom: 0px;">
+                                                    <div class="simplebar-content" style="padding: 0px;">
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span
+                                                                            class="avatar-title bg-primary rounded-circle font-size-16">
+                                                                            <i class="uil-shopping-basket"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">Your order is placed</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">If several languages coalesce
+                                                                            the grammar</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 3 min
+                                                                            ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <img src="assets_new/images/users/avatar-3.jpg"
+                                                                        class="rounded-circle avatar-xs" alt="user-pic">
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">James Lemire</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">It will seem like simplified
+                                                                            English.</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 1
+                                                                            hours ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span
+                                                                            class="avatar-title bg-success rounded-circle font-size-16">
+                                                                            <i class="uil-truck"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">Your item is shipped</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">If several languages coalesce
+                                                                            the grammar</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 3 min
+                                                                            ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <img src="/assets_new/images/users/avatar-4.jpg"
+                                                                        class="rounded-circle avatar-xs" alt="user-pic">
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">Salena Layfield</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">As a skeptical Cambridge friend
+                                                                            of mine occidental.</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 1
+                                                                            hours ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                        <div class="simplebar-scrollbar"
+                                            style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                        <div class="simplebar-scrollbar"
+                                            style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 border-top">
+                                    <div class="d-grid">
+                                        <a class="btn btn-sm btn-link font-size-14 text-center"
+                                            href="javascript:void(0)">
+                                            <i class="uil-arrow-circle-right me-1"></i> View More..
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> *@
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="/assetss/images/user/user.png"
+                                    alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">@Session["UfullName"]
+                                </span>
+                                <i class="uil-angle-down d-none d-xl-inline-block font-size-15"> </i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="#"><i
+                                        class="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i> <span
+                                        class="align-middle">Role : @Session["admin1"] </span></a>
+                                <a href="@Url.Action("Logout","Loginnew")" class="dropdown-item"><i
+                                        class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i>
+                                    <span class="align-middle">Sign out</span></a>
+                            </div>
+                        </div>
+                        
+                        @* <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon right-bar-toggle waves-effect">
+                                <i class="uil-cog"></i>
+                            </button>
+                        </div> *@
+
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="topnav">
+
+                        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+                            <div class="collapse navbar-collapse" id="topnav-menu-content">
+                                <ul class="navbar-nav active">
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Setup/Setup">
+                                            <i class="uil-home-alt me-2"></i> @ViewData["dash"]
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout"
+                                            role="button">
+                                            <i class="uil-setting me-2"></i>@ViewData["setup"] <div class="arrow-down">
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="topnav-layout">
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/Country/Country"
+                                               id="topnav-layout-verti" role="button">
+                                                @ViewData["cout"]
+                                            </a>
+
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/Region/Region"
+                                               id="topnav-layout-hori" role="button">
+                                                @ViewData["Region"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/District/District" id="topnav-layout-hori" role="button">
+                                                @ViewData["District"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/Ward/Ward"
+                                               id="topnav-layout-hori" role="button">
+                                                @ViewData["Ward"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/Currency/Currency" id="topnav-layout-hori" role="button">
+                                                @ViewData["curr"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/Desgination/Designation" id="topnav-layout-hori" role="button">
+                                                @ViewData["Desg"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/Branch/Branch"
+                                               id="topnav-layout-hori" role="button">
+                                                Branch
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/Question/Question" id="topnav-layout-hori" role="button">
+                                                @ViewData["Sques"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/SMTP/SMTP"
+                                               id="topnav-layout-hori" role="button">
+                                                @ViewData["smtp"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/Email/Email"
+                                               id="topnav-layout-hori" role="button">
+                                                @ViewData["et"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/EMPLOYDET/EMPLOYDET" id="topnav-layout-hori" role="button">
+                                                @ViewData["BU"]
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/SuspenseA/SuspenseA" id="topnav-layout-hori" role="button">
+                                                Suspense Account
+                                            </a>
+                                            <a class="dropdown-item dropdown-toggle arrow-none"
+                                               href="/DepositA/DepositA" id="topnav-layout-hori" role="button">
+                                                Deposit Account
+                                            </a>
+
+                                        </div>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Company/Company">
+                                            <i class="uil-home-alt me-2"></i> @ViewData["comp"]
+                                        </a>
+
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/CompanyInbox/CompanyInbox">
+                                            <i data-feather="box"></i> Inbox 
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item" >
+                                        <a class="nav-link"  href="/Language/Language">
+                                            <i data-feather="globe"> </i> @ViewData["lang"]
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/AuditTrail/AuditTrail">
+                                            <i data-feather="list"> </i> @ViewData["Atra"]
+                                        </a>
+                                    </li>
+
+                                    <!-- <li class="nav-item">
+                                        <a class="nav-link" href="/AuditTrail/AuditTrail">
+                                            <i data-feather="file"> </i> @ViewData["Brep"]
+                                        </a>
+                                    </li> -->
+                                       <li class="nav-item dropdown">
+                                        <a class="nav-link dropdown-toggle arrow-none" href="#" id="topnav-layout"
+                                            role="button">
+                                            <i data-feather="file"></i> @ViewData["Brep"] <div class="arrow-down">
+                                            </div>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="topnav-layout">
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/InvoiceRep/InvoiceRep"
+                                                id="topnav-layout-verti" role="button">
+                                               <span>@ViewData["invdet"]
+                                            </a>
+
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/RepCustomer/RepCustomer"
+                                                id="topnav-layout-hori" role="button">
+                                               @ViewData["custdetrep"]
+                                            </a>
+                                            <!-- <a class="dropdown-item dropdown-toggle arrow-none"
+                                                href="/District/District" id="topnav-layout-hori" role="button">
+                                                @ViewData["noninvrep"] 
+                                            </a> -->
+                                            <a class="dropdown-item dropdown-toggle arrow-none" href="/Userlog/Userlog"
+                                                id="topnav-layout-hori" role="button">
+                                                @ViewData["uselog"]
+                                            </a>
+                  
+                                        </div>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </header>
+
+            <!-- END layout-wrapper -->
+
+
+            <!-- Right bar overlay-->
+            <svg id="SvgjsSvg1254" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1"
+                xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs"
+                style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;">
+                <defs id="SvgjsDefs1255"></defs>
+                <polyline id="SvgjsPolyline1256" points="0,0"></polyline>
+                <path id="SvgjsPath1257"
+                    d="M-1 262.2L-1 262.2C-1 262.2 61.028700657894746 262.2 61.028700657894746 262.2C61.028700657894746 262.2 116.1513980263158 262.2 116.1513980263158 262.2C116.1513980263158 262.2 177.18009868421055 262.2 177.18009868421055 262.2C177.18009868421055 262.2 236.2401315789474 262.2 236.2401315789474 262.2C236.2401315789474 262.2 297.2688322368421 262.2 297.2688322368421 262.2C297.2688322368421 262.2 356.328865131579 262.2 356.328865131579 262.2C356.328865131579 262.2 417.3575657894737 262.2 417.3575657894737 262.2C417.3575657894737 262.2 478.3862664473685 262.2 478.3862664473685 262.2C478.3862664473685 262.2 537.4462993421054 262.2 537.4462993421054 262.2C537.4462993421054 262.2 598.475 262.2 598.475 262.2C598.475 262.2 598.475 262.2 598.475 262.2 ">
+                </path>
+            </svg>
+         <!-- Page Sidebar Ends-->
+        @RenderBody()
+        <!-- footer start-->
+        
+
+        }
+        else if (user == "Companys" && flogin == "true")
+        {
+            <!-- Begin page -->
+
+            <header id="page-topbar">
+                <div class="navbar-header">
+                    <div class="d-flex">
+                        <!-- LOGO -->
+                         <button type="button"
+                            class="btn btn-sm px-3 font-size-16 d-lg-none header-item waves-effect waves-light"
+                            data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                            <i class="fa fa-fw fa-bars"></i>
+                        </button>
+                        <div class="navbar-brand-box" style="margin-left: -30px; margin-right: 10px">
+                            <a href="/Setup/Setup" class="logo logo-dark">
+                                <span class="logo-sm">
+                                    <img src="/assets_new/images/jichangelogo.png" alt="" height="120"  >
+                                </span>
+                                <span class="logo-lg" id="main-img">
+                                    <img src="/assets_new/images/jichange.png" alt=""  height="100">
+                                </span>
+                                     
+                             </a>
+
+                            <a href="Setup/Setup" class="logo logo-light">
+                                <span class="logo-sm">
+                                    <img src="/assets_new/images/jichangelogo.png" alt=""  height="120" >
+                                </span>
+                                <span class="logo-lg">
+                                    <img src="/assets_new/images/jichange.png" alt="" height="100">
+                                </span>
+                            </a>
+                        </div>
+
+                       
+
+                        <!-- App Search-->
+                        <!-- <form class="app-search d-none d-lg-block">
+                            <div class="position-relative">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="uil-search"></span>
+                            </div>
+                        </form> -->
+                    </div>
+
+                    <div class="d-flex">
+                        <button type="button" class="btn header-item noti-icon waves-effect"
+                            data-bs-toggle="fullscreen">
+                            <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                data-pwd="BNK" onclick="Getlangeg1(this)">
+                                <img class="" src="/assets_new/images/flags/us.jpg" alt="Header Language" height="16">
+                                <!-- Eng -->
+                            </a>
+                        </button>
+                        <button type="button" class="btn header-item noti-icon waves-effect"
+                            data-bs-toggle="fullscreen">
+
+                            <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                data-pwd="BNK" onclick="Getlangsw1(this)">
+                                <img class="" src="/assets_new/images/flags/tanzania.png" alt="Header Language"
+                                    height="16">
+                                <!-- Sw -->
+                            </a>
+                        </button>
+
+                        <div class="dropdown d-none d-lg-inline-block ms-1">
+                            <button type="button" class="btn header-item noti-icon waves-effect"
+                                data-bs-toggle="fullscreen">
+                                <i class="uil-book"></i>
+                            </button>
+                        </div>
+
+                        <!-- <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item noti-icon waves-effect"
+                                id="page-header-notifications-dropdown" data-bs-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                                <i class="uil-bell"></i>
+                                <span class="badge bg-danger rounded-pill">3</span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0"
+                                aria-labelledby="page-header-notifications-dropdown">
+                                <div class="p-3">
+                                    <div class="row align-items-center">
+                                        <div class="col">
+                                            <h5 class="m-0 font-size-16"> Notifications </h5>
+                                        </div>
+                                        <div class="col-auto">
+                                            <a href="javascript:void(0);" class="small"> Mark all as read</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div data-simplebar="init" style="max-height: 230px;">
+                                    <div class="simplebar-wrapper" style="margin: 0px;">
+                                        <div class="simplebar-height-auto-observer-wrapper">
+                                            <div class="simplebar-height-auto-observer"></div>
+                                        </div>
+                                        <div class="simplebar-mask">
+                                            <div class="simplebar-offset" style="right: 0px; bottom: 0px;">
+                                                <div class="simplebar-content-wrapper"
+                                                    style="height: auto; overflow: hidden; padding-right: 0px; padding-bottom: 0px;">
+                                                    <div class="simplebar-content" style="padding: 0px;">
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span
+                                                                            class="avatar-title bg-primary rounded-circle font-size-16">
+                                                                            <i class="uil-shopping-basket"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">Your order is placed</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">If several languages coalesce
+                                                                            the grammar</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 3 min
+                                                                            ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <img src="assets_new/images/users/avatar-3.jpg"
+                                                                        class="rounded-circle avatar-xs" alt="user-pic">
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">James Lemire</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">It will seem like simplified
+                                                                            English.</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 1
+                                                                            hours ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <div class="avatar-xs">
+                                                                        <span
+                                                                            class="avatar-title bg-success rounded-circle font-size-16">
+                                                                            <i class="uil-truck"></i>
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">Your item is shipped</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">If several languages coalesce
+                                                                            the grammar</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 3 min
+                                                                            ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+
+                                                        <a href="javascript:void(0);"
+                                                            class="text-reset notification-item">
+                                                            <div class="d-flex align-items-start">
+                                                                <div class="flex-shrink-0 me-3">
+                                                                    <img src="/assets_new/images/users/avatar-4.jpg"
+                                                                        class="rounded-circle avatar-xs" alt="user-pic">
+                                                                </div>
+                                                                <div class="flex-grow-1">
+                                                                    <h6 class="mb-1">Salena Layfield</h6>
+                                                                    <div class="font-size-12 text-muted">
+                                                                        <p class="mb-1">As a skeptical Cambridge friend
+                                                                            of mine occidental.</p>
+                                                                        <p class="mb-0"><i
+                                                                                class="mdi mdi-clock-outline"></i> 1
+                                                                            hours ago</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="simplebar-placeholder" style="width: 0px; height: 0px;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-horizontal" style="visibility: hidden;">
+                                        <div class="simplebar-scrollbar"
+                                            style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+                                    </div>
+                                    <div class="simplebar-track simplebar-vertical" style="visibility: hidden;">
+                                        <div class="simplebar-scrollbar"
+                                            style="transform: translate3d(0px, 0px, 0px); display: none;"></div>
+                                    </div>
+                                </div>
+                                <div class="p-2 border-top">
+                                    <div class="d-grid">
+                                        <a class="btn btn-sm btn-link font-size-14 text-center"
+                                            href="javascript:void(0)">
+                                            <i class="uil-arrow-circle-right me-1"></i> View More..
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+
+                        <div class="dropdown d-inline-block">
+                            <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="rounded-circle header-profile-user" src="/assetss/images/user/user.png"
+                                    alt="Header Avatar">
+                                <span class="d-none d-xl-inline-block ms-1 fw-medium font-size-15">@Session["UfullName"]
+                                </span>
+                                <i class="uil-angle-down d-none d-xl-inline-block font-size-15"> </i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                                <!-- item-->
+                                <a class="dropdown-item" href="#"><i
+                                        class="uil uil-user-circle font-size-18 align-middle text-muted me-1"></i> <span
+                                        class="align-middle">Role : @Session["admin1"] </span>
+                                </a>
+                                <a href="@Url.Action("Logout","Loginnew")" class="dropdown-item"><i
+                                        class="uil uil-sign-out-alt font-size-18 align-middle me-1 text-muted"></i>
+                                    <span class="align-middle">Sign out</span>
+                                </a>
+                            </div>
+                        </div>
+
+                         
+
+                    </div>
+                </div>
+                <div class="container-fluid">
+                    <div class="topnav">
+                        <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+                            <div class="collapse navbar-collapse" id="topnav-menu-content">
+                                <ul class="navbar-nav active">
+
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="/Setup/Setup">
+                                            <i class="fa fa-solid fa-home"></i>Dashboard
+                                            <!-- @ViewData["dash"] -->
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Customers/Customers">
+                                            <i class="fa fa-solid fa-users"></i> @ViewData["custos"]
+                                        </a>
+
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/CompanyUsers/CompanyUsers">
+                                            <i class="fa fa-solid fa-building" ></i> @ViewData["compus"]
+                                        </a>
+
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Invoice/Invoice">
+                                            <i class="fa fa-solid fa-file"></i> @ViewData["invdet"]
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Invoice/Generatedinvoices">
+                                            <i class="fa fa-solid fa-file-lines"></i> @ViewData["Geninv"]
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="/Langc/Langc">
+                                            <i class="fa fa-solid fa-building"></i> @ViewData["Blang"]
+                                        </a>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </header> 
+             
+            <!-- END layout-wrapper -->
+
+            <!-- Right bar overlay-->
+            <svg id="SvgjsSvg1254" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1"
+                xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs"
+                style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;">
+                <defs id="SvgjsDefs1255"></defs>
+                <polyline id="SvgjsPolyline1256" points="0,0"></polyline>
+                <path id="SvgjsPath1257"
+                    d="M-1 262.2L-1 262.2C-1 262.2 61.028700657894746 262.2 61.028700657894746 262.2C61.028700657894746 262.2 116.1513980263158 262.2 116.1513980263158 262.2C116.1513980263158 262.2 177.18009868421055 262.2 177.18009868421055 262.2C177.18009868421055 262.2 236.2401315789474 262.2 236.2401315789474 262.2C236.2401315789474 262.2 297.2688322368421 262.2 297.2688322368421 262.2C297.2688322368421 262.2 356.328865131579 262.2 356.328865131579 262.2C356.328865131579 262.2 417.3575657894737 262.2 417.3575657894737 262.2C417.3575657894737 262.2 478.3862664473685 262.2 478.3862664473685 262.2C478.3862664473685 262.2 537.4462993421054 262.2 537.4462993421054 262.2C537.4462993421054 262.2 598.475 262.2 598.475 262.2C598.475 262.2 598.475 262.2 598.475 262.2 ">
+                </path>
+            </svg>
+         <!-- Page Sidebar Ends-->
+           @RenderBody()
+        }
+        else if (flogin == "false")
+        {
+        <!-- Page Header Start-->
+        <div class="page-header">
+            <div class="header-wrapper row m-0">
+
+                <div class="header-logo-wrapper col-auto p-0">
+                    <div class="logo-wrapper"><a href=""><img class="img-fluid" src="/assetss/images/logo/login.png"
+                                alt=""></a></div>
+                    <div class="toggle-sidebar"><i class="status_toggle middle sidebar-toggle"
+                            data-feather="align-center"></i></div>
+                </div>
+
+                <div class="nav-right col-8 pull-right right-header p-0">
+                    <ul class="nav-menus">
+                        <li class="onhover-dropdown">
+                            <div class="notification-box"><i class="fa fa-bell-o"> </i><span
+                                    class="badge rounded-pill badge-primary">4 </span></div>
+                            <ul class="notification-dropdown onhover-show-div">
+                                <li><i data-feather="bell"> </i>
+                                    <h6 class="f-18 mb-0">Notifications</h6>
+                                </li>
+                                <li><a href="email_read.html">
+                                        <p><i class="fa fa-circle-o me-3 font-primary"> </i>Delivery processing <span
+                                                class="pull-right">10 min.</span></p>
+                                    </a></li>
+                                <li><a href="email_read.html">
+                                        <p><i class="fa fa-circle-o me-3 font-success"></i>Order Complete<span
+                                                class="pull-right">1 hr</span></p>
+                                    </a></li>
+                                <li><a href="email_read.html">
+                                        <p><i class="fa fa-circle-o me-3 font-info"></i>Tickets Generated<span
+                                                class="pull-right">3 hr</span></p>
+                                    </a></li>
+                                <li><a href="email_read.html">
+                                        <p><i class="fa fa-circle-o me-3 font-danger"></i>Delivery Complete<span
+                                                class="pull-right">6 hr</span></p>
+                                    </a></li>
+                                <li><a class="btn btn-primary" href="email_read.html">Check all notification</a></li>
+                            </ul>
+                        </li>
+
+                        <li class="profile-nav onhover-dropdown p-0 me-0">
+                            <div class="d-flex profile-media"><img class="b-r-50"
+                                    src="..//assets_new/images/dashboard/profile.jpg" alt="">
+                                <div class="flex-grow-1"><span>@Session["UfullName"] | <small>
+
+                                        </small></span>
+                                    <p class="mb-0 font-roboto"> Role : @Session["admin1"] <i
+                                            class="middle fa fa-angle-down"></i></p>
+                                </div>
+                            </div>
+                            <ul class="profile-dropdown onhover-show-div">
+
+                                <li><a href="@Url.Action(" Logout","Loginnew")"><i data-feather="log-out"> </i><span>Log
+                                            Out</span></a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Page Header Ends   -->
+
+        <!-- Page Sidebar Ends-->
+        @RenderBody()
+             @* <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                    <div class="col-md-6 p-0 footer-left">
+                        <p class="mb-0">Copyright © 2023.</p>
+                    </div>
+                    <div class="col-md-6 p-0 footer-right">
+                        <p> Designed & Developed by
+                        <a class="links" href="http://bizlogicsolutions.com/"
+                        target="_blank">Biz-Logic
+                        Solutions Ltd.</a></p>
+                    </div>
+                    </div>
+                </div>
+            </footer> *@
+
+        }
+    </div>
+
+    <!-- latest jquery-->
+    <!-- <script src="/assetss/js/jquery-3.6.0.min.js"></script>  -->
+
+
+
+    <!-- feather icon js-->
+    <script src="/assetss/js/icons/feather-icon/feather.min.js"></script>
+    <script src="/assetss/js/icons/feather-icon/feather-icon.js"></script>
+    <!-- scrollbar js-->
+    <script src="/assetss/js/scrollbar/simplebar.js"></script>
+    <script src="/assetss/js/scrollbar/custom.js"></script>
+    <!-- Sidebar jquery-->
+    <script src="/assetss/js/config.js"></script>
+    <!-- Plugins JS start-->
+    <script src="/assetss/js/sidebar-menu.js"></script>
+    <script src="/assetss/js/prism/prism.min.js"></script>
+    <script src="/assetss/js/clipboard/clipboard.min.js"></script>
+    <script src="/assetss/js/counter/jquery.waypoints.min.js"></script>
+    <script src="/assetss/js/counter/jquery.counterup.min.js"></script>
+    <script src="/assetss/js/counter/counter-custom.js"></script>
+    <script src="/assetss/js/custom-card/custom-card.js"></script>
+    <script src="/assetss/js/datepicker/date-picker/datepicker.js"></script>
+    <script src="/assetss/js/datepicker/date-picker/datepicker.en.js"></script>
+    <script src="/assetss/js/datepicker/date-picker/datepicker.custom.js"></script>
+    <script src="/assetss/js/owlcarousel/owl.carousel.js"></script>
+    <script src="/assetss/js/general-widget.js"></script>
+    <script src="/assetss/js/height-equal.js"></script>
+    <script src="/assetss/js/tooltip-init.js"></script>
+    <!-- Plugins JS Ends-->
+
+    <script src="/assetss/js/datatable/datatables/jquery.dataTables.min.js"></script>
+
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.buttons.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/jszip.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/buttons.colVis.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/pdfmake.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/vfs_fonts.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.autoFill.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.select.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/buttons.bootstrap4.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/buttons.html5.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/buttons.print.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.bootstrap4.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.responsive.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/responsive.bootstrap4.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.keyTable.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.colReorder.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.fixedHeader.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.rowReorder.min.js"></script>
+    <script src="/assetss/js/datatable/datatable-extension/dataTables.scroller.min.js"></script>
+    <script src="/assetss/js/datatable/datatables/datatable.custom.js"></script>
+    <script src="js/select2/js/select2.min.js"></script>
+    <!-- Theme js-->
+           <!-- Required datatable js -->
+        <script src="/assets_new/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+        <script src="/assets_new/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+        <!-- Buttons examples -->
+        <script src="/assets_new/libs/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
+        <script src="/assets_new/libs/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+        <script src="/assets_new/libs/jszip/jszip.min.js"></script>
+        <script src="/assets_new/libs/pdfmake/build/pdfmake.min.js"></script>
+        <script src="/assets_new/libs/pdfmake/build/vfs_fonts.js"></script>
+        <script src="/assets_new/libs/datatables.net-buttons/js/buttons.html5.min.js"></script>
+        <script src="/assets_new/libs/datatables.net-buttons/js/buttons.print.min.js"></script>
+        <script src="/assets_new/libs/datatables.net-buttons/js/buttons.colVis.min.js"></script>
+        
+        <!-- Responsive examples -->
+        <script src="/assets_new/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+        <script src="/assets_new/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+
+        <!-- Datatable init js -->
+        <script src="/assets_new/js/pages/datatables.init.js"></script>
+    <script src="/assetss/js/script.js"></script>
+    @*
+    <script src="/assetss/js/theme-customizer/customizer.js"></script> *@
+    <!-- login js-->
+    <!-- Plugin used-->
+
+
+
+    <script type="text/javascript" src="/bower_components/bootstrap-daterangepicker/js/daterangepicker.js"></script>
+    <script type="text/javascript" src="//assets_new/pages/advance-elements/moment-with-locales.min.js"></script>
+
+    <!-- <script type="text/javascript" src="/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script> -->
+    <script type="text/javascript" src="//assets_new/pages/advance-elements/bootstrap-datetimepicker.min.js"></script>
+    <!-- Date-range picker js -->
+
+    <!-- Date-dropper js -->
+
+    <script type="text/javascript" src="/bower_components/datedropper/js/datedropper.min.js"></script>
+
+    <!-- Javascript -->
+
+    <script src="/asset/bundles/fullcalendarscripts.bundle.js"></script>
+    <script src="/asset/bundles/c3.bundle.js"></script>
+    @*
+    <script src="/asset/bundles/chartist.bundle.js"></script>
+    <script src="/asset/bundles/datatablescripts.bundle.js"></script>
+    <script src="/asset/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+    <script src="/asset/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+    <script src="/asset/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+    <script src="/asset/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+    <script src="/asset/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>*@
+    @*
+    <script src="/asset/vendor/sweetalert/sweetalert.min.js"></script> *@
+
+    <!-- SweetAlert Plugin Js -->
+
+    @*
+    <script src="/asset/bundles/mainscripts.bundle.js"></script> *@
+    @*
+    <script src="/asset/js/pages/tables/jquery-datatable.js"></script> *@
+    @*
+    <script src="/asset/js/index.js"></script> *@
+    <script src="//assets_new/js/jquery.mCustomScrollbar.concat.min.js"></script>
+    @RenderSection("scripts", required: false)
+
+     <footer class="footer">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-6 p-0 footer-left">
+              <p class="mb-0">Copyright © 2023.</p>
+            </div>
+            <div class="col-md-6 p-0 footer-right">
+              <p> Designed & Developed by
+                <a class="links" href="http://bizlogicsolutions.com/" target="_blank">Biz-Logic
+                  Solutions Ltd.</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+</body>
+ 
+</html>
+}
+
+<script type="text/javascript">
+    // alert("jshdhs");
+    function Getlangeg(e) {
+        // alert("ghghgh");
+        //alert();
+        var pt = jQuery(e).data('pwd');
+        // alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Language")',
+                data: JSON.stringify({ 'name': 'English' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //alert(data.name);
+                    if (data != null) {
+                        location.reload();
+                    }
+                }
+            });
+
+        }
+    }
+    function Getlangsw(e) {
+        // alert("ghghgh");
+        var pt = jQuery(e).data('pwd');
+        // alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Language")',
+                data: JSON.stringify({ 'name': 'Swahili' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        // alert();
+                        location.reload();
+                    }
+                }
+            });
+
+        }
+    }
+    function Getlangeg1(e) {
+        // alert("ghghgh");
+        var pt = jQuery(e).data('pwd');
+        // alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Langc")',
+                data: JSON.stringify({ 'name': 'English' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+
+                        location.reload();
+
+
+                    }
+                }
+            });
+
+        }
+    }
+    function Getlangsw1(e) {
+        // alert("ghghgh");
+        var pt = jQuery(e).data('pwd');
+        //alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Langc")',
+                data: JSON.stringify({ 'name': 'Swahili' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //alert(data);
+                    if (data != null) {
+
+                        location.reload();
+
+
+                    }
+                }
+            });
+
+        }
+    }
+    </script>
+
+    @*else {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("Update", "Instituteuser")',
+            data: JSON.stringify({ 'name': e.value }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    // Getcolumnslang();
+                    location.reload();
+                }
+            }
+
+        });
+
+    }* @
+
+        (function ($) {
+            $(window).on("load", function () {
+                $(".content").mCustomScrollbar();
+            });
+        })(jQuery);
+
+
+</script>
+*@

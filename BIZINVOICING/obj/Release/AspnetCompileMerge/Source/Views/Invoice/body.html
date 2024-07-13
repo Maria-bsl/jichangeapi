@@ -1,0 +1,57 @@
+<table id="tblCustomers" class="table table-bordered rounded e-de-table-center-alignment text-center display no-wrap" align="center" cellpadding="0" cellspacing="0">
+    <thead>
+        <tr>
+            @*<th data-orderable="false">Sno</th>*@
+            <th data-orderable="false">@ViewData["vatdesc"]</th>
+            <th data-orderable="false" >@ViewData["quant"]</th>
+            @*<th data-orderable="false">@ViewData["vatcat"]</th>*@
+            <th data-orderable="false">@ViewData["unipri"] </th>
+
+            @*<th data-orderable="false">@ViewData["vatper"]</th>*@
+            <th data-orderable="false">@ViewData["totamt"]</th>
+            @*<th data-orderable="false">@ViewData["vatamt"]</th>*@
+            @*<th data-orderable="false">@ViewData["withoutvat"]</th>
+    <th data-orderable="false">@ViewData["cate"]</th>*@
+            <th data-orderable="false">@ViewData["remar"]</th>
+            <th data-orderable="false">@ViewData["Actions"]</th>
+           
+        </tr>
+    </thead>
+    <tbody></tbody>
+    <tfoot>
+        <tr>
+            <td>
+                <textarea type="text" class="form-control fit" placeholder="Description" id="txtDescri"></textarea>
+            </td>
+            <td ><input type="number" class="form-unp" placeholder="Qty" id="txtQty" /></td>
+             
+            <td><input type="number" class="form-unp" placeholder="Unit Price" id="txtUnitPrc" /></td>
+
+            @*<td><input type="number" class="form-control" placeholder="Vat Per" id="txtVatPer" /></td>*@
+
+            @*<td>
+        <select id="ddlVatPer" class="form-control form-Vat" name="ddlVatPer"></select>
+    </td>*@
+
+            <td><input type="number" class="form-control fit" placeholder="Total Amount" id="txtTotal" readonly /></td>
+            @*<td><input type="number" class="form-control fit" placeholder="Vat Amount" id="txtVatAmnt" readonly /></td>*@
+            @*<td><input type="number" class="form-control fit" placeholder="without VAT" id="txtWithoutVAT" readonly /></td>
+    <td><input type="text" class="form-control fit" id="txtCat" readonly /></td>*@
+            <td>
+                <textarea type="text" class="form-control fit textarea" placeholder="Remarks" id="txtRemarks"></textarea>
+            </td>
+
+            <td class="actions">
+                <button type="button" class="btn btn-outline-info btn-sm" value="AddNewrow" id="btnAddinvc">
+                    <i  data-feather="plus"></i>
+                    <!-- @ViewData["addnewr"] -->
+                </button>
+
+                <button class="btn  btn-outline-danger btn-sm ms-2" id="btnRemovecell"><i  data-feather="delete"></i>
+                <!-- @ViewData["remove"] -->
+                </button>
+
+            </td>
+        </tr>
+    </tfoot>
+</table>

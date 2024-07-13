@@ -1,0 +1,364 @@
+﻿@{
+ViewBag.Title = "Designation";
+Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        avoidEnter('txtdesg');
+        Getcolumnslang_Desg();
+        GetCurrency_Desg();
+        $("#btnSubmit").click(function () {
+            adddesg_Desg();
+        })
+        $("#btnDelete").click(function () {
+            deldesig_Desg();
+        });
+    });
+
+
+    function Getcolumnslang_Desg() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "Currency")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    var glob;
+    function GetCurrency_Desg() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetdesDetails", "Desgination")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Desg_Name + '</td>' +
+                            '<td ><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-desg" id="btn' + value.Desg_Id + '" data-sid="' + value.Desg_Id + '" value="Edit" onclick="showdesgModal_Desg(this)"><i class="fa-solid fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-danger btn-sm" data-sid="' + value.Desg_Id + '" data-pwd="' + value.Desg_Name + '" id="btnDelete" data-rec="0" onclick="deldesig_Desg(this)"><i class="fa-solid fa-trash-can"></i></button></td>' +
+                            '</tr>';
+                        i++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+
+
+
+    function bindemployeeId_Desg() {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetNextEmployeeId", "Employee")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#txtEmployeeId").val(data);
+            }
+        })
+    }
+    function deldesig_Desg(e) {
+
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            var pt = jQuery(e).data('pwd');
+            deletedesg_Desg(cid, pt);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    function adddesg_Desg() {
+
+        var message = validateEmployeedesg_Desg(),
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getDesigValues_Desg());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Adddesg", "Desgination")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-desg');
+
+                    if (opType == 'C') {
+
+                        if (data == true) {
+                            message = jQuery("#txtdesg").val() + ' Desgination Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtdesg").val() + ' Desgination Successfully Created';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == false && jk == true) {
+                            message = jQuery("#txtdesg").val() + ' Desgination Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtdesg").val() + ' Desgination Successfully Updated';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'D' && data) {
+                        message = jQuery("#txtdesg").val() + ' Desgination details deleted successfully.';
+                        type = 'success';
+                    }
+
+                    GetCurrency_Desg();
+                    notifyMessage(message, type);
+
+                }
+            })
+        }
+    }
+
+    function deletedesg_Desg(cid, pt) {
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+        var params = JSON.stringify(getSMTPID_Desg(cid));
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletedesg", "Desgination")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                hideModal('modal-desg');
+                if (data == true) {
+                    message = pt + ' Desgination is in Use,Cannot be Deleted.';
+                    type = 'danger';
+                }
+                else if (opType == 'D' && data) {
+                    message = pt + ' Desgination Successfully Deleted';
+                    type = 'success';
+
+                    //deletecurGrid();
+                }
+                notifyMessage(message, type);
+                GetCurrency_Desg();
+            }
+        })
+
+    }
+    function showdesgModal_Desg(e) {
+
+        var txtdesg = document.getElementById('txtdesg');
+        tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+        jk = false;
+        if (e.value.indexOf('Edit') > -1) {
+            jQuery("#btnSubmit").html("@ViewData["Update"]");
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+
+                if (row.cells[2].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    txtdesg.value = row.cells[1].innerHTML;
+
+                    if (row.cells[1].innerHTML == "Administrator") {
+                        $("#txtdesg").attr('disabled', true);
+                    }
+                    else {
+                        $("#txtdesg").attr('disabled', false);
+                    }
+                    break;
+                }
+            }
+
+            hdnEmployee.value = 'U';
+        }
+        else if (e.value.indexOf('Add') > -1) {
+            resetRegion_Desg();
+            $("#txtdesg").attr('disabled', false);
+            jQuery("#btnSubmit").html("@ViewData["Save"]");
+            hdnEmployee.value = 'C';
+        }
+
+    }
+</script>
+
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+
+    <div class="main-content">
+        <div class="page-content">
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="page-title">
+                
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0">@ViewData["Desg"]</h4>
+                        <div class="page-title-right">
+                            <ol class="breadcrumb m-0">
+                                <li>
+                                    <button type="button" id="btnAdd" value="Add" data-sid="0"
+                            class="btn btn-outline-primary waves-effect waves-light f-right d-inline-block md-trigger ml-4"
+                            data-modal="modal-13" onclick="showdesgModal_Desg(this);" data-bs-toggle="modal"
+                            data-bs-target="#modal-desg">
+                            <i data-feather="plus-circle" class="mr-2"></i>
+                            @ViewData["addDesg"]
+                        </button>
+                                </li>
+                            </ol>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container-fluid general-widget">
+        @* BODY DETAILS CARD/PANEL *@
+        <div class="row ">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="tbl-smtp"
+                                class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                                <thead>
+                                    <tr>
+                                        <th class="sno-th">@ViewData["Sno"]</th>
+                                        <th>@ViewData["Desg"]</th>
+                                        <th class="sno-th">@ViewData["Actions"]</th>
+                                    </tr>
+                                </thead>
+                                @* <tfoot>
+                                    <tr>
+                                        <th class="sno-th">Sno</th>
+                                        <th>Designation</th>
+                                        <th class="sno-th">Actions</th>
+                                    </tr>
+                                </tfoot> *@
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @* <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer> *@
+        <div class="md-overlay"></div>
+
+        <div id="styleSelector">
+
+        </div>
+    </div>
+
+</div>
+
+<!-- Container-fluid Ends-->
+</div>
+
+<!-- [MODALS] -->
+<div class="modal" id="modal-desg" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+    aria-labelledby="believerCreateLabel" aria-hidden="true">
+    <div class="modal-dialog believerModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="hddesg">@ViewData["Desg"]</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="col-12 p-0 mx-auto" action="Adddesg" method="post">
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="gender" class="f-label_align" id="hddesg1">@ViewData["Desg"]<span
+                                    class="red">*</span></label>
+                            <input type="text" class="form-control" id="txtdesg" placeholder="Enter Designation"
+                                maxlength="200" onkeyup="valid(this)">
+                            <input type="hidden" class="form-control hidden" id="txtSID">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">
+                            @ViewData["Close"]
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic" id="btnSubmit">
+                            @ViewData["Save"]
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="md-overlay"></div>
+<!-- Add Contact Ends Model-->
+</div>
+
+<!-- Container-fluid ends -->
+</div>
+<!-- Page-body end -->
+</div>
+</div>
+<!-- Warning Section Starts -->
+
+<div id="styleSelector">
+
+</div>
+</div>
+</div>
+</div>
+</body>

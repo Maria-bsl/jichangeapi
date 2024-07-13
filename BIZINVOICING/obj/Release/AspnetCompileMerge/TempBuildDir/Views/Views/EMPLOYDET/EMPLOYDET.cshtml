@@ -1,0 +1,535 @@
+﻿@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        whitespacevalidation('txtuname');
+        whitespacevalidation('txtempid');
+        mobileNumValidation('txtMobile');
+        bindempDetails_Buser();
+        binddesgyDetails_Buser();
+        //bindbrayDetails_Buser();
+        $("#btnSubmit").click(function () {
+            addch_Buser();
+        })
+
+        $("#btnDelete").click(function () {
+            delchruch_Buser();
+        });
+    });
+    var glob;
+    function bindempDetails_Buser() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetEMPDetails", "EMPLOYDET")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Emp_Id_No + '</td>' +
+                            '<td>' + value.Full_Name + '</td>' +
+                            '<td>' + value.Desg_name + '</td>' +
+                            '<td>' + value.Email_Address + '</td>' +
+                            '<td>' + value.Emp_Status + '</td>' +
+                            '<td ><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal-ch" id="btn' + value.Detail_Id + '" data-sid="' + value.Detail_Id + '" value="Edit" onclick="showchModalemp_Buser(this)"><i class="fa-solid fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-dark btn-sm" data-sid="' + value.Detail_Id + '" data-pwd="' + value.Emp_Id_No + '" id="btnDelete" data-rec="0" onclick="delchruchemp_Buser(this)"><i class="fa-solid fa-trash-can"></i></button></td>' +
+                            '</tr>';
+
+                        jQuery("#tbl-smtp tbody").append(row);
+                        i++;
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+    function binddesgyDetails_Buser() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetdesgDetails", "EMPLOYDET")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                $("#ddldesg").append($("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    $.each(data, function (key, value) {
+                        $("#ddldesg").append($("<option></option>").val(value.Desg_Id).html(value.Desg_Name));
+                    });
+                }
+            }
+        })
+    }
+
+    var doublecheckemail = true;
+    var doubleuser;
+
+    function binddupliacteDetailsEmailemp_Buser(name) {
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckdupliacteEmail", "Instituteuser")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doublecheckemail = false;
+                }
+                else {
+                    doublecheckemail = true;
+                }
+
+            }
+        })
+    }
+
+    function binddupliacteDetailsemp_Buser(name) {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Checkdupliacte", "EMPLOYDET")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doubleuser = false;
+                }
+                else {
+                    doubleuser = true;
+                    lblError1.innerHTML = "";
+                }
+            }
+        })
+    }
+    function delchruchemp_Buser(e) {
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            var eid = jQuery(e).data('sid');
+            deletechemp_Buser(cid, eid);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    function addch_Buser() {
+
+        var message = validateEmployeechemp_Buser(),
+            //var message = '',
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getSMTPValues_Buser());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddEmp", "EMPLOYDET")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-ch');
+                    if (opType == 'C' && data) {
+
+                        if (data == true) {
+                            message = jQuery("#txtempid").val() + ' Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtempid").val() + ' Successfully Created.';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U' && data) {
+                        message = jQuery("#txtempid").val() + ' Successfully Updated';
+                        type = 'success';
+                    }
+                    else if (opType == 'D' && data) {
+                        message = jQuery("#txtchname").val() + ' details deleted Successfully.';
+                        type = 'success';
+
+                        deleteRowForEmployeeGrid_Buser();
+                    }
+
+                    notifyMessage(message, type);
+                    bindempDetails_Buser();
+                }
+            })
+        }
+    }
+
+
+    function deletechemp_Buser(cid, eid) {
+        //var message = validateEmployeech(),
+        //var message = '',
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteEmp", "EMPLOYDET")',
+            data: JSON.stringify({ 'id': eid, 'sno': cid }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    message = data + ' Successfully Deleted';
+                    type = 'success';
+
+                }
+                notifyMessage(message, type);
+                bindempDetails_Buser();
+            }
+        })
+
+    }
+
+
+
+</script>
+
+
+<div class="block-header">
+    <div class="row clearfix">
+        <div class="col-md-6 col-sm-12">
+            <h2>User</h2>
+        </div>
+        <div class="col-md-6 col-sm-12 text-right">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Setup", "Setup")"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active">Users Details</li>
+            </ul>
+            @* <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a> *@
+            <button type="button" id="btnAdd" value="Add" data-sid="0"
+                class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger" data-toggle="modal"
+                data-target="#modal-ch" onclick="showchModalemp_Buser(this);"> <i
+                    class="icofont icofont-plus m-r-5"></i>
+                Add User
+            </button>
+            <input type="hidden" id="hdnEmployee" />
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    @* BODY DETAILS CARD/PANEL *@
+    <div class="row clearfix">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Users Details <small></small>
+                    </h2>
+                    <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                        <li> <a href="javascript:void(0);" data-toggle="cardloading" data-loading-effect="pulse"><i
+                                    class="icon-refresh"></i></a></li>
+                        <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a>
+                        </li>
+                        @* <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);">Action</a></li>
+                            <li><a href="javascript:void(0);">Another Action</a></li>
+                            <li><a href="javascript:void(0);">Something else</a></li>
+                            </ul>
+                            </li> *@
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table id="tbl-smtp"
+                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                            <thead>
+                                <tr>
+                                    <th class="sno-th">Sno</th>
+                                    <th>Employee ID</th>
+                                    <th>Full Name</th>
+                                    <th>Designation</th>
+                                    <th>Email Id</th>
+                                    <th class="sno-th">Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            @* <tfoot>
+                                <tr>
+                                    <th class="sno-th">Sno</th>
+                                    <th>Employee ID</th>
+                                    <th>Full Name</th>
+                                    <th>Designation</th>
+                                    <th>Email Id</th>
+                                    <th class="sno-th">Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot> *@
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+    <div class="md-overlay"></div>
+
+    <div id="styleSelector">
+
+    </div>
+</div>
+                        <!-- [MODALS] -->
+                        <div class="modal fade" id="modal-ch" role="dialog" data-backdrop="static"
+                            data-keyboard="false">
+                            <div class="modal-dialog believerModal" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="lblbu1">User</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="col-12 p-0 mx-auto" action="Brnch/AddBrnch" method="post">
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdEmployee" class="f-label_align">Employee ID<span
+                                                            class="red">*</span></label>
+                                                    <input type="text" class="form-control input-sm" id="txtempid"
+                                                        placeholder="Employee ID" onkeyup="validemp_Buser(this)">
+                                                    <input type="text" class="form-control input-sm d-none" id="txtSID">
+                                                </div>
+
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdMiddle" class="f-label_align">First Name<span
+                                                            class="red">*</span></label>
+
+                                                    <input type="text" class="form-control input-sm" id="txtfirstname"
+                                                        placeholder="First Name">
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdLast" class="f-label_align">Middle Name</label>
+
+                                                    <input type="text" class="form-control input-sm" id="txtmiddle"
+                                                        placeholder="Middle Name">
+
+                                                </div>
+
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdDesignation" class="f-label_align">Last Name<span
+                                                            class="red">*</span></label>
+                                                    <input type="text" class="form-control input-sm" id="txtlast"
+                                                        placeholder="Last Name">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdDesignation" class="f-label_align">Username<span
+                                                            class="red">*</span></label>
+                                                    <input type="text" class="form-control input-sm" id="txtuname"
+                                                        onfocusout="checkduplicateemp_Buser(this.value)"
+                                                        placeholder="Username">
+                                                </div>
+
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdDesignation" class="f-label_align">
+                                                        Designation<span class="red">*</span>
+                                                    </label>
+                                                    <select id="ddldesg" class="form-control" name="ddldesg"></select>
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline offset-2">
+                                                    <label id="lblError1"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdEmail" class="f-label_align">Email Id<span
+                                                            class="red">*</span></label>
+
+                                                    <input type="text" class="form-control input-sm" id="txtEmail"
+                                                        placeholder="Email ID"
+                                                        onfocusout="ValidateEmailemp_Buser(this.value);">
+
+                                                </div>
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdMobile" class="f-label_align">Mobile No<span
+                                                            class="red">*</span></label>
+
+                                                    <input type="number" class="form-control input-sm" id="txtMobile"
+                                                        placeholder="255123456789" maxlength="12"
+                                                        onfocusout="mobileNumValiadteemp_Buser(this.value);">
+
+                                                </div>
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-2 offset-8 ">
+                                                    <label id="lblError2"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-6 mt-1">
+                                                    <label for="inputStatus" class="f-label_align"> Status<span
+                                                            class="red">*</span></label>
+                                                    &nbsp;<input type="radio" name="gender" id="rbtrue"
+                                                        value="Active">&nbsp;<label for="Male">Active</label>
+                                                    &nbsp; <input class="ml-2" type="radio" name="gender" id="rbfalse"
+                                                        value="InActive">&nbsp;<label for="FeMale">InActive</label>
+                                                </div>
+                                            </div>
+                                            <div id="loader"
+                                                style="position: fixed; top:0; display:none; left:0; width:100%; height: 100%;   background: url('/images/Loading.gif');background-repeat: no-repeat;  background-attachment: fixed;  background-position: center; ">
+                                                @*// <img src="~/images/Loading.gif" id="img1" />*@
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary btn-sm"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-biz_logic"
+                                                    id="btnSubmit">Save</button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md-overlay"></div>
+                        <!-- Container-fluid ends -->
+                    </div>
+                    <!-- Page-body end -->
+                </div>
+
+
+
+            </div>
+            <!-- Warning Section Starts -->
+
+            <div id="styleSelector">
+
+            </div>
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+    function showchModalemp_Buser(e) {
+        var txtempid = document.getElementById('txtempid');
+        var txtf = document.getElementById('txtfirstname');
+        var txtm = document.getElementById('txtmiddle');
+        var txtl = document.getElementById('txtlast');
+        var ddesg = document.getElementById('ddldesg');
+
+        var txtemail = document.getElementById('txtEmail');
+        var txtmo = document.getElementById('txtMobile');
+        var txtunsr = document.getElementById('txtuname');
+        txtSID = document.getElementById('txtSID');
+        rblGender = jQuery("input[name='gender']:checked");
+        var tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+        if (e.value.indexOf('Edit') > -1) {
+            jQuery("#btnSubmit").html("Update");
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+                if (row.cells[6].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetEmpindivi", "EMPLOYDET")',
+                        cache: true,
+                        data: JSON.stringify({ 'Sno': jQuery(e).data('sid') }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            jQuery("#loader").css("display", "none");
+                            if (data != null) {
+                                txtempid.value = data.Emp_Id_No;
+                                txtf.value = data.First_Name;
+                                txtm.value = data.Middle_name;
+                                txtl.value = data.Last_name;
+                                txtunsr.value = data.User_name;
+                                txtemail.value = data.Email_Address;
+                                ddesg.value = data.Desg_Id;
+                              //  bindbran(data.Branch_Sno);
+                                txtmo.value = data.Mobile_No;
+                                jQuery('#txtempid').prop("disabled", true);
+                                jQuery('#txtuname').prop("disabled", true);
+                                var flag = data.Emp_Status;
+                                if (flag == 'Active') {
+                                    jQuery("#rbtrue").prop("checked", true);
+                                    jQuery("#rbfalse").prop("checked", false);
+                                }
+                                else if (flag == 'InActive') {
+                                    jQuery("#rbtrue").prop("checked", false);
+                                    jQuery("#rbfalse").prop("checked", true);
+                                }
+                                else {
+                                    jQuery("#rbtrue").prop("checked", false);
+                                    jQuery("#rbfalse").prop("checked", false);
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+            hdnEmployee.value = 'U';
+        }
+        else if (e.value.indexOf('Add') > -1) {
+
+            resetchru_Buser();
+            jQuery("#btnSubmit").html("Save");
+            jQuery("#rbtrue").prop("checked", true);
+            hdnEmployee.value = 'C';
+            jQuery('#txtempid').prop("disabled", false);
+            jQuery('#txtuname').prop("disabled", false);
+            //showModal('modal-ch');
+            jQuery("#loader").css("display", "none");
+        }
+
+    }
+
+</script>
+

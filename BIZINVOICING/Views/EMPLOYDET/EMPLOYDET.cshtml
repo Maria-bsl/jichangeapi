@@ -1,0 +1,568 @@
+﻿@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        whitespacevalidation('txtuname');
+        whitespacevalidation('txtempid');
+        mobileNumValidation('txtMobile');
+        bindempDetails_Buser();
+        binddesgyDetails_Buser();
+        bindBranches();
+        //bindbrayDetails_Buser();
+        $("#btnSubmit").click(function () {
+            addch_Buser();
+        })
+
+        $("#btnDelete").click(function () {
+            delchruch_Buser();
+        });
+    });
+    var glob;
+    function bindempDetails_Buser() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetEMPDetails", "EMPLOYDET")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Emp_Id_No + '</td>' +
+                            '<td>' + value.Full_Name + '</td>' +
+                            '<td>' + value.Desg_name + '</td>' +
+                            '<td>' + value.Email_Address + '</td>' +
+                            '<td>' + value.Emp_Status + '</td>' +
+                            '<td ><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ch" id="btn' + value.Detail_Id + '" data-sid="' + value.Detail_Id + '" value="Edit" onclick="showchModalemp_Buser(this)"><i class="fa-solid fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-danger btn-sm" data-sid="' + value.Detail_Id + '" data-pwd="' + value.Emp_Id_No + '" id="btnDelete" data-rec="0" onclick="delchruchemp_Buser(this)"><i class="fa-solid fa-trash-can"></i></button></td>' +
+                            '</tr>';
+
+                        jQuery("#tbl-smtp tbody").append(row);
+                        i++;
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+    function binddesgyDetails_Buser() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetdesgDetails", "EMPLOYDET")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                $("#ddldesg").append($("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    $.each(data, function (key, value) {
+                        $("#ddldesg").append($("<option></option>").val(value.Desg_Id).html(value.Desg_Name));
+                    });
+                }
+            }
+        })
+    }
+    function bindBranches() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetBranchDetails", "EMPLOYDET")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                $("#ddlbra").append($("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    $.each(data, function (key, value) {
+                        $("#ddlbra").append($("<option></option>").val(value.Sno).html(value.Name));
+                    });
+                }
+            }
+        })
+    }
+
+    var doublecheckemail = true;
+    var doubleuser;
+
+    function binddupliacteDetailsEmailemp_Buser(name) {
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckdupliacteEmail", "Instituteuser")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doublecheckemail = false;
+                }
+                else {
+                    doublecheckemail = true;
+                }
+
+            }
+        })
+    }
+
+    function binddupliacteDetailsemp_Buser(name) {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Checkdupliacte", "EMPLOYDET")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doubleuser = false;
+                }
+                else {
+                    doubleuser = true;
+                    lblError1.innerHTML = "";
+                }
+            }
+        })
+    }
+    function delchruchemp_Buser(e) {
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            var eid = jQuery(e).data('sid');
+            deletechemp_Buser(cid, eid);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    function addch_Buser() {
+
+        var message = validateEmployeechemp_Buser(),
+            //var message = '',
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getSMTPValues_Buser());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddEmp", "EMPLOYDET")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-ch');
+                    if (opType == 'C' && data) {
+
+                        if (data == true) {
+                            message = jQuery("#txtempid").val() + ' Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtempid").val() + ' Successfully Created.';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U' && data) {
+                        message = jQuery("#txtempid").val() + ' Successfully Updated';
+                        type = 'success';
+                    }
+                    else if (opType == 'D' && data) {
+                        message = jQuery("#txtchname").val() + ' details deleted Successfully.';
+                        type = 'success';
+
+                        deleteRowForEmployeeGrid_Buser();
+                    }
+
+                    notifyMessage(message, type);
+                    bindempDetails_Buser();
+                }
+            })
+        }
+    }
+
+
+    function deletechemp_Buser(cid, eid) {
+        //var message = validateEmployeech(),
+        //var message = '',
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteEmp", "EMPLOYDET")',
+            data: JSON.stringify({ 'id': eid, 'sno': cid }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+                    message = data + ' Successfully Deleted';
+                    type = 'success';
+
+                }
+                notifyMessage(message, type);
+                bindempDetails_Buser();
+            }
+        })
+
+    }
+
+
+
+</script>
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+    <!-- Start right Content here -->
+    <div class="page-content">
+        <div class="main-content">
+    <div class="container-fluid">
+
+<div class="page-title">
+     
+    <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">@ViewData["userdets"]</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+ <button type="button" id="btnAdd" value="Add" data-sid="0"
+                    class="btn btn-outline-primary waves-effect waves-light f-right d-inline-block md-trigger ml-4" data-bs-toggle="modal"
+                    data-bs-target="#modal-ch" onclick="showchModalemp_Buser(this);">
+                <i data-feather="plus-circle" class="mr-2"></i>
+                        @ViewData["adduser"]
+            </button>
+            <input type="hidden" id="hdnEmployee" />
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+</div>
+</div>
+
+<div class="container-fluid general-widget">
+            @* BODY DETAILS CARD/PANEL *@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+              
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tbl-smtp"
+                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                            <thead>
+                                <tr>
+                                    <th class="sno-th">Sno</th>
+                                    <th>@ViewData["empid"]</th>
+                                    <th>@ViewData["fname"]</th>
+                                    <th>@ViewData["Desg"]</th>
+                                    <th>@ViewData["EID"]</th>
+                                    <th class="sno-th">@ViewData["Status"]</th>
+                                    <th>@ViewData["Actions"]</th>
+                                </tr>
+                            </thead>
+                                    @* <tfoot>
+                                <tr>
+                                    <th class="sno-th">Sno</th>
+                                    <th>Employee ID</th>
+                                    <th>Full Name</th>
+                                    <th>Designation</th>
+                                    <th>Email Id</th>
+                                    <th class="sno-th">Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot> *@
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer> *@
+    <div class="md-overlay"></div>
+
+    <div id="styleSelector">
+
+    </div>
+</div>
+
+</div>
+                        <!-- [MODALS] -->
+                        <div class="modal" id="modal-ch" role="dialog" data-backdrop="static"
+                            data-keyboard="false">
+                            <div class="modal-dialog believerModal" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="lblbu1">@ViewData["userdets"]</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="col-12 p-0 mx-auto" action="Brnch/AddBrnch" method="post">
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdEmployee" class="f-label_align">
+                                        @ViewData["empid"]<span class="red">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control input-sm" id="txtempid"
+                                                           placeholder="Employee ID" onkeyup="validemp_Buser(this)">
+                                                    <input type="text" class="form-control input-sm d-none" id="txtSID">
+                                                </div>
+
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdMiddle" class="f-label_align">
+                                        @ViewData["ffname"]<span class="red">*</span>
+                                                    </label>
+
+                                                    <input type="text" class="form-control input-sm" id="txtfirstname"
+                                                           placeholder="First Name">
+
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdLast" class="f-label_align">@ViewData["mname"]</label>
+
+                                                    <input type="text" class="form-control input-sm" id="txtmiddle"
+                                                           placeholder="Middle Name">
+
+                                                </div>
+
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdDesignation" class="f-label_align">
+                                        @ViewData["lname"]<span class="red">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control input-sm" id="txtlast"
+                                                           placeholder="Last Name">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdDesignation" class="f-label_align">
+                                        @ViewData["Un"]<span class="red">*</span>
+                                                    </label>
+                                                    <input type="text" class="form-control input-sm" id="txtuname"
+                                                           onfocusout="checkduplicateemp_Buser(this.value)"
+                                                           placeholder="Username">
+                                                </div>
+
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdDesignation" class="f-label_align">
+                                        @ViewData["Desg"]<span class="red">*</span>
+                                                    </label>
+                                                    <select id="ddldesg" class="form-control" name="ddldesg"></select>
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline offset-2">
+                                                    <label id="lblError1"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtbranch" class="f-label_align">
+                                                        Branch<span class="red">*</span>
+                                                    </label>
+                                                    <select id="ddlbra" class="form-control" name="ddlbra"></select>
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline offset-2">
+                                                    <label id="lblError1"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdEmail" class="f-label_align">
+                                        @ViewData["EID"]<span class="red">*</span>
+                                                    </label>
+
+                                                    <input type="text" class="form-control input-sm" id="txtEmail"
+                                                           placeholder="Email ID"
+                                                           onfocusout="ValidateEmailemp_Buser(this.value);">
+
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for=" txtdMobile" class="f-label_align">
+                                        @ViewData["Mno"]<span class="red">*</span>
+                                                    </label>
+
+                                                    <input type="number" class="form-control input-sm" id="txtMobile"
+                                                           placeholder="255123456789" maxlength="12"
+                                                           onfocusout="mobileNumValiadteemp_Buser(this.value);">
+
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline col-md-2 offset-8 ">
+                                                    <label id="lblError2"></label>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-6 mt-1">
+                                                    <label for="inputStatus" class="f-label_align">
+                                        @ViewData["Status"]<span class="red">*</span>
+                                                    </label>
+                                                    &nbsp;<input type="radio" name="gender" id="rbtrue"
+                                                                 value="Active">&nbsp;<label for="Male">Active</label>
+                                                    &nbsp; <input class="ml-2" type="radio" name="gender" id="rbfalse"
+                                                                  value="InActive">&nbsp;<label for="FeMale">InActive</label>
+                                                </div>
+                                            </div>
+                                            <div id="loader"
+                                                 style="position: fixed; top:0; display:none; left:0; width:100%; height: 100%;   background: url('/images/Loading.gif');background-repeat: no-repeat;  background-attachment: fixed;  background-position: center; ">
+                                @*// <img src="~/images/Loading.gif" id="img1" />*@
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-info btn-sm"
+                                                        data-bs-dismiss="modal">
+                                    @ViewData["Close"]
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic"
+                                                        id="btnSubmit">
+                                    @ViewData["Save"]
+                                                </button>
+                                            </div>
+
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md-overlay"></div>
+                        <!-- Container-fluid ends -->
+                    </div>
+                    <!-- Page-body end -->
+                </div>
+
+
+
+            </div>
+            <!-- Warning Section Starts -->
+
+            <div id="styleSelector">
+
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    </body>
+
+
+<script type="text/javascript">
+    function showchModalemp_Buser(e) {
+        var txtempid = document.getElementById('txtempid');
+        var txtf = document.getElementById('txtfirstname');
+        var txtm = document.getElementById('txtmiddle');
+        var txtl = document.getElementById('txtlast');
+        var ddesg = document.getElementById('ddldesg');
+        var dbra = document.getElementById('ddlbra');
+        var txtemail = document.getElementById('txtEmail');
+        var txtmo = document.getElementById('txtMobile');
+        var txtunsr = document.getElementById('txtuname');
+        txtSID = document.getElementById('txtSID');
+        rblGender = jQuery("input[name='gender']:checked");
+        var tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+        if (e.value.indexOf('Edit') > -1) {
+            jQuery("#btnSubmit").html("@ViewData["Update"]");
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+                if (row.cells[6].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetEmpindivi", "EMPLOYDET")',
+                        cache: true,
+                        data: JSON.stringify({ 'Sno': jQuery(e).data('sid') }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+                            jQuery("#loader").css("display", "none");
+                            if (data != null) {
+                                txtempid.value = data.Emp_Id_No;
+                                txtf.value = data.First_Name;
+                                txtm.value = data.Middle_name;
+                                txtl.value = data.Last_name;
+                                txtunsr.value = data.User_name;
+                                txtemail.value = data.Email_Address;
+                                ddesg.value = data.Desg_Id;
+                                if (data.Branch_Sno != null) {
+                                    dbra.value = data.Branch_Sno;
+                                }
+                                else {
+                                    dbra.selectedIndex = 0;
+                                }
+                              //  bindbran(data.Branch_Sno);
+                                txtmo.value = data.Mobile_No;
+                                jQuery('#txtempid').prop("disabled", true);
+                                jQuery('#txtuname').prop("disabled", true);
+                                var flag = data.Emp_Status;
+                                if (flag == 'Active') {
+                                    jQuery("#rbtrue").prop("checked", true);
+                                    jQuery("#rbfalse").prop("checked", false);
+                                }
+                                else if (flag == 'InActive') {
+                                    jQuery("#rbtrue").prop("checked", false);
+                                    jQuery("#rbfalse").prop("checked", true);
+                                }
+                                else {
+                                    jQuery("#rbtrue").prop("checked", false);
+                                    jQuery("#rbfalse").prop("checked", false);
+                                }
+                            }
+                        }
+                    })
+                }
+            }
+            hdnEmployee.value = 'U';
+        }
+        else if (e.value.indexOf('Add') > -1) {
+
+            resetchru_Buser();
+            jQuery("#btnSubmit").html("@ViewData["Save"]");
+            jQuery("#rbtrue").prop("checked", true);
+            hdnEmployee.value = 'C';
+            jQuery('#txtempid').prop("disabled", false);
+            jQuery('#txtuname').prop("disabled", false);
+            //showModal('modal-ch');
+            jQuery("#loader").css("display", "none");
+        }
+
+    }
+
+</script>
+

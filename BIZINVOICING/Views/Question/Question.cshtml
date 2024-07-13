@@ -1,0 +1,392 @@
+﻿@{
+    ViewBag.Title = "Question";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+        Getcolumnslang_Ques();
+        bindques_Ques();
+
+        $("#btnSubmit").click(function () {
+
+            Addques_Ques();
+            //jQuery("#tbl-smtp tbody").empty();
+        })
+
+        $("#btnDelete").click(function () {
+            Delques_Ques();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var glob;
+    function Getcolumnslang_Ques() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "Currency")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    //  var $ = jQuery;
+    function bindques_Ques() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetQues", "Question")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var count = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + count + '</td>' +
+                            '<td>' + value.Q_Name + '</td>' +
+                            '<td>' + value.Q_Status + '</td>' +
+                            '<td><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" id = "btn' + value.SNO + '"  data-sid="' + value.SNO + '" value = "Edit" data-bs-target="#modal-smtp" onclick = "showSMTPModal_Ques(this)" ><i class="fa-solid fa-pen"></i></button >&nbsp;&nbsp;<button id = "btn' + value.SNO + '"  data-sid="' + value.SNO + '" value = "Delete" onclick="showSMTPModal_Ques(this)" class="btn btn-outline-danger btn-sm distloc"><i class="fa-solid fa-trash-can"></i></button ></td > ' +
+                            '</tr>';
+                        count++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+            }
+        })
+    }
+
+    function Delques_Ques() {
+
+        var table = jQuery('#tbl-smtp').DataTable(),
+            selectedRows = table.rows('.selected').data().length,
+            selectedRow = table.rows('.selected').data();
+        //data = {};
+
+        jQuery('#hdnEmployee').val('D');
+
+        if (selectedRows == 0) {
+            notifyMessage('Please select a record(s).', 'warning');
+        }
+        else {
+
+            //glob = rData;
+            deleteques_Ques(cid);
+        }
+    }
+
+    function Addques_Ques() {
+
+        var message = validateEmployee_Ques(),
+            //var message = '',
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+
+            var params = JSON.stringify(GetCount_Ques());
+            //   alert(params);
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddQues", "Question")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-smtp');
+                    if (opType == 'C' && data) {
+                        if (data == true) {
+                            message = jQuery("#txtname").val() + ' Question Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+
+                            message = jQuery("#txtname").val() + ' Questions Successfully Created';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == false && jk == true) {
+
+                            message = jQuery("#txtname").val() + ' Question Already Exists.';
+                            type = 'danger';
+                        } else {
+                            message = jQuery("#txtname").val() + ' Questions Successfully Updated';
+                            type = 'success';
+                        }
+                    }
+                    notifyMessage(message, type);
+                    bindques_Ques();
+                }
+            })
+        }
+    }
+
+
+    function deleteques_Ques(cid, st) {
+        //var message = validateEmployee(),
+        //var message = '',
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        var params = JSON.stringify(getques_Ques(cid));
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteQues", "Question")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                hideModal('modal-smtp');
+                //alert(data);
+                if (opType == 'D') {
+                    if (data == true) {
+                        message = st + ' Question is in Use,Cannot be Deleted.';
+                        type = 'danger';
+                    }
+                    else {
+                        message = st + ' Question Successfully Deleted';
+                        type = 'success';
+                    }
+                    notifyMessage(message, type);
+                    bindques_Ques();
+                }
+
+            }
+        })
+    }
+    function showSMTPModal_Ques(e) {
+
+        var txtEmail = document.getElementById('txtname'),
+            txtsts = document.getElementById('txtsts'),
+
+            txtSID = document.getElementById('txtdid');
+        var tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+        jk = false;
+        if (e.value.indexOf('Edit') > -1) {
+            jQuery("#btnSubmit").html("@ViewData["Update"]");
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+
+                if (row.cells[3].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    txtEmail.value = row.cells[1].innerHTML;
+
+                    var flag = row.cells[2].innerHTML;
+                    if (flag == 'Active') {
+                        jQuery("#rbtrue").prop("checked", true);
+                        jQuery("#rbfalse").prop("checked", false);
+                    }
+                    else if (flag == 'InActive') {
+                        jQuery("#rbtrue").prop("checked", false);
+                        jQuery("#rbfalse").prop("checked", true);
+                    } else {
+                        jQuery("#rbtrue").prop("checked", false);
+                        jQuery("#rbfalse").prop("checked", false);
+                    }
+
+
+                    break;
+                }
+            }
+
+            hdnEmployee.value = 'U';
+        }
+        else if (e.value.indexOf('Add') > -1) {
+            resetSMTP_Ques();
+            jQuery("#btnSubmit").html("@ViewData["Save"]");
+
+
+
+            hdnEmployee.value = 'C';
+        }
+        else if (e.value.indexOf('Delete') > -1) {
+
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+
+                if (row.cells[3].innerHTML.indexOf(e.id) > -1) {
+
+                    txtSID.value = jQuery(e).data('sid');
+
+
+                    hdnEmployee.value = 'D';
+                    var result = confirm("Are you sure you want to delete?");
+                    if (result) {
+                        var st = row.cells[1].innerHTML;
+                        deleteques_Ques(txtSID.value, st);
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+
+    <div class="main-content">
+        <div class="page-content">
+        <div class="container-fluid">
+<div class="page-title">
+    
+    <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">@ViewData["Sques"]</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+<button type="button" id="btnAdd" value="Add" data-sid="0"
+                        class="btn btn-outline-primary waves-effect waves-light f-right d-inline-block ml-4" data-bs-toggle="modal"
+                        data-bs-target="#modal-smtp" onclick="showSMTPModal_Ques(this);">
+                    <i data-feather="plus" class="mr-2"></i>
+                    @ViewData["addSques"]
+                </button>
+                <input type="hidden" id="hdnEmployee" />
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+</div>
+ </div>
+        <!-- Container-fluid starts-->
+<div class="container-fluid general-widget">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                @* <div class="header">
+                    <h2>
+                        @ViewData["Squesdets"] <small></small>
+                    </h2>
+                    <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                        <li> <a href="javascript:void(0);" data-bs-toggle="cardloading" data-loading-effect="pulse"><i
+                                    class="icon-refresh"></i></a></li>
+                        <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a>
+                        </li>
+                    </ul>
+                </div> *@
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tbl-smtp"
+                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                            <thead>
+                                <tr>
+                                    <th>@ViewData["Sno"]</th>
+                                    <th>@ViewData["Sques"]</th>
+                                    <th>@ViewData["Status"]</th>
+                                    <th>@ViewData["Actions"]</th>
+
+                                </tr>
+                            </thead>
+                            @* <tfoot>
+                                <tr>
+                                    <th>@ViewData["Sno"]</th>
+                                    <th>@ViewData["Sques"]</th>
+                                    <th>@ViewData["Status"]</th>
+                                    <th>@ViewData["Actions"]</th>
+
+                                </tr>
+                            </tfoot> *@
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    @* <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer> *@
+    <div id="styleSelector">
+
+    </div>
+</div>
+  <!-- Container-fluid Ends-->
+</div>
+                        <!-- Add Security Question Modal -->
+                             
+                        <div class="modal" id="modal-smtp" role="dialog" data-backdrop="static" data-keyboard="false">
+                            <div class="modal-dialog " role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="lblsq1">@ViewData["Sques"]</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="col-12 p-0 mx-auto" action="" method="post">
+                                            <div class="row">
+                                                <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for="txtdQuestion" class="f-label_align">@ViewData["Sques"]<span class="red">*</span></label>
+                                                    <input type="text" class="form-control input-sm" id="txtname" placeholder="Enter Question Name" maxlength="500" onkeyup="valid_Ques(this)" autocomplete="off">
+                                                    <input type="text" class="form-control input-sm d-none" id="txtdid">
+                                                </div>
+                                                <div class="form-group flex_form-group align-items-baseline col-md-6 mt-1">
+                                                    <label for="inputStatus" class="f-label_align"> @ViewData["Status"]<span class="red">*</span></label>
+                                                    &nbsp;<input type="radio" name="gender" id="rbtrue" value="Active">&nbsp;<label for="Male">Active</label>
+                                                    &nbsp; <input type="radio" name="gender" id="rbfalse" value="InActive">&nbsp;<label for="FeMale">InActive</label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">@ViewData["Close"]</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic" id="btnSubmit">@ViewData["Save"]</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md-overlay"></div>
+                        <!-- Add Contact Ends Model-->
+                    </div>
+
+                    <!-- Container-fluid ends -->
+                </div>
+                <!-- Page-body end -->
+            </div>
+        </div>
+        <!-- Warning Section Starts -->
+
+        <div id="styleSelector">
+
+        </div>
+    </div>
+</div>
+</div>
+</body>

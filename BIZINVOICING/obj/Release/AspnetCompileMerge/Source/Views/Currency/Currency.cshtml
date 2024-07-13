@@ -1,0 +1,335 @@
+﻿@{
+ViewBag.Title = "Currency";
+Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+<style>
+    .upper-case {
+        text-transform: uppercase
+    }
+</style>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Getcolumnslang();
+        GetCurrency();
+
+        $("#btnSubmit").click(function () {
+            addcur();
+        })
+
+        $("#btnDelete").click(function () {
+            delcurrrency();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var glob;
+    function Getcolumnslang() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "Currency")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    function GetCurrency() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetCurrencyDetails", "Currency")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Currency_Code + '</td>' +
+                            '<td>' + value.Currency_Name + '</td>' +
+                            '<td ><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-currency" id="btn' + value.Currency_Code + '" data-sid="' + value.Currency_Code + '" value="Edit" onclick="showcurrencyModal(this)"><i class="fa-solid fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-danger btn-sm" data-sid="' + value.Currency_Code + '" id="btnDelete" data-rec="0" onclick="delcurrrency(this)"><i class="fa-solid fa-trash-can"></i></button></td>' +
+                            '</tr>';
+                        i++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+    function bindemployeeId() {
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetNextEmployeeId", "Employee")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#txtEmployeeId").val(data);
+            }
+        })
+    }
+    function delcurrrency(e) {
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            deleteCurrency(cid);
+            return true;
+        }
+        else
+            return false;
+
+    }
+
+    function addcur() {
+
+        var message = validateEmployeecur(),
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getCurrencyValues());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCurrency", "Currency")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-currency');
+
+                    if (opType == 'C' && data) {
+
+                        if (data != 0) {
+
+                            message = jQuery("#txtname").val() + ' Currency already exists';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtname").val() + ' Currency Successfully Created';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == false && jk == true) {
+                            message = jQuery("#txtname").val() + ' Currency Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtname").val() + ' Currency Successfully Updated';
+                            type = 'success';
+                        }
+                    }
+                    notifyMessage(message, type);
+                    GetCurrency();
+                }
+            })
+        }
+    }
+
+    function deleteCurrency(cid) {
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+        var params = JSON.stringify(getcurrencyID(cid));
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletecurrency", "Currency")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                hideModal('modal-currency');
+                if (data == true) {
+                    message = cid + 'Currency code is in Use,Cannot be Deleted';
+                    type = 'danger';
+                }
+                else if (opType == 'D' && data) {
+                    message = cid + ' Currency code & name Successfully Deleted';
+                    type = 'success';
+
+                }
+                notifyMessage(message, type);
+                GetCurrency();
+            }
+        })
+
+    }
+</script>
+
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+
+    <div class="main-content">
+        <div class="page-content">
+            <div class="page-body">
+                <div class="container-fluid">
+                    <div class="page-title">
+              
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">@ViewData["cout"]</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li>
+                                                <button type="button" id="btnAdd" value="Add" data-sid="0"
+                                                class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger ml-4"
+                                                onclick="showcurrencyModal(this);" data-bs-toggle="modal"
+                                                data-bs-target="#modal-currency">
+                                                <i data-feather="plus-circle" class="mr-2"></i>
+                                                @ViewData["addcurre"]
+                                            </button>
+                                            </li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Container-fluid starts-->
+                <div class="container-fluid general-widget">
+                    @* BODY DETAILS CARD/PANEL *@
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="tbl-smtp"
+                                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sno-th">Sno</th>
+                                                    <th>@ViewData["currcod"]</th>
+                                                    <th>@ViewData["currname"]</th>
+                                                    <th class="sno-th">@ViewData["Actions"]</th>
+                                                </tr>
+                                            </thead>
+                                            @* <tfoot>
+                                                <tr>
+                                                    <th class="sno-th">Sno</th>
+                                                    <th>@ViewData["currcod"]</th>
+                                                    <th>@ViewData["currname"]</th>
+                                                    <th class="sno-th">@ViewData["Actions"]</th>
+                                                </tr>
+                                            </tfoot> *@
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid px-4">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                                <div>
+                                    <a href="#">Privacy Policy</a>
+                                    &middot;
+                                    <a href="#">Terms &amp; Conditions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer> *@
+                    <div class="md-overlay"></div>
+
+                    <div id="styleSelector">
+
+                    </div>
+                </div>
+
+                <!-- Container-fluid Ends-->
+            </div>
+
+            <!-- [MODALS] -->
+            <div class="modal" id="modal-currency" tabindex="-1" role="dialog" data-backdrop="static"
+                data-keyboard="false" aria-labelledby="believerCreateLabel" aria-hidden="true">
+                <div class="modal-dialog believerModal" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="lblcur1">@ViewData["curr"]</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="col-12 p-0 mx-auto" action="AddCurrency" method="post">
+                                <div class="row">
+                                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                        <label for="gender" class="f-label_align">
+                                            @ViewData["currcod"]<span class="red">*</span>
+                                        </label>
+                                        <input type="text" class="form-control upper-case" id="txtcode"
+                                            placeholder="Enter Currency Code" maxlength="10">
+                                        <input type="hidden" class="form-control hidden" id="txtSID">
+                                    </div>
+                                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                        <label for="gender" class="f-label_align">
+                                            @ViewData["currname"]<span class="red">*</span>
+                                        </label>
+                                        <input type="text" class="form-control" id="txtname" maxlength="100"
+                                            placeholder="Enter Currency Name" onkeyup="valid(this)">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">
+                                        @ViewData["Close"]
+                                    </button>
+                                    <button type="button" class="btn btn-otline-primary btn-sm btn-biz_logic"
+                                        id="btnSubmit">
+                                        @ViewData["Save"]
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="md-overlay"></div>
+            <!-- Add Contact Ends Model-->
+        </div>
+
+        <!-- Container-fluid ends -->
+    </div>
+    <!-- Page-body end -->
+    </div>
+    </div>
+    <!-- Warning Section Starts -->
+
+    <div id="styleSelector">
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>

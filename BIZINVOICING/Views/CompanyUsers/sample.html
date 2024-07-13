@@ -1,0 +1,43 @@
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <label for="gender" class="inst-label_align">@ViewData["invno"]<span class="red">*</span></label>
+        <input type="text" class="form-control" id="txtchname" maxlength="200" placeholder="Invoice No"
+            onkeyup="InvoiceValiadte(this);">
+        <input type="hidden" class="form-control  hidden" id="txtSID">
+        <div class="offset">
+            <span id="lblInvError"></span>
+        </div>
+    </div>
+    <div class="col-md-8 col-lg-6">
+        <label for="gender" class="inst-label_align">@ViewData["invdate"]<span class="red">*</span></label>
+        <input type="text" class="form-control" id="txtdate" autocomplete="off" placeholder="dd/MM/yyyy"
+            onkeypress="return true" />
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <label for="gender" class="inst-label_align">Due Date</label>
+        <input type="text" class="form-control" id="txtedate" autocomplete="off" placeholder="dd/MM/yyyy"
+            onkeypress="return true" />
+    </div>
+    <div class="col-md-8 col-lg-6">
+        <label for="gender" class="inst-label_align">Invoice Expired Date<span class="red">*</span></label>
+        <input type="text" class="form-control" id="txtiedate" autocomplete="off" placeholder="dd/MM/yyyy"
+            onkeypress="return true" />
+    </div>
+
+</div>
+<div class="row">
+    <div class="col-md-8 col-lg-6">
+        <label for="gender" class="inst-label_align">@ViewData["compa"]<span class="red">*</span></label>
+        @*<select id="ddlcpny" class="ui search dropdown form-control" name="ddltype"></select>*@
+        <input type="text" class="form-control" id="ddlcpny" maxlength="18" placeholder="Company" disabled />
+        <input type="hidden" class="form-control  hidden" id="txtcpny">
+    </div>
+    <div class="col-md-8 col-lg-6">
+        <label for="gender" class="inst-label_align">@ViewData["custos"]<span class="red">*</span></label>
+        <select id="ddlcid" class="ui search dropdown form-control" name="ddltype"></select>
+        <input type="hidden" class="form-control  hidden" id="txtcid">
+    </div>
+</div>

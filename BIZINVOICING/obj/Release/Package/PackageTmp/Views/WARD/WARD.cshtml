@@ -1,0 +1,545 @@
+﻿@{
+ViewBag.Title = "WARD";
+Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    jQuery(document).ready(function () {
+        Getcolumnslang();
+        bindDistrict();
+        bindWardDetails();
+        jQuery("#ints").val("");
+        jQuery("#btnSubmit").click(function () {
+            Addwards();
+        })
+        jQuery("#btnDelete").click(function () {
+            delWards();
+        });
+    });
+</script>
+<script type="text/javascript">
+    var glob;
+
+    function Getcolumnslang() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "Currency")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    function bindDistrict() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetWard", "WARD")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var count = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + count + '</td>' +
+                            '<td class="d-none">' + value.Region_Id + '</td>' +
+                            '<td>' + value.Region_Name + '</td>' +
+                            '<td class="d-none">' + value.District_Sno + '</td>' +
+                            '<td>' + value.District_Name + '</td>' +
+                            '<td>' + value.Ward_Name + '</td>' +
+                            '<td>' + value.Ward_Status + '</td>' +
+                            '<td><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" id = "btn' + value.SNO + '"  data-sid="' + value.SNO + '" value = "Edit" data-bs-target="#modal-smtp" onclick = "showSMTPModalward(this)" ><i class="fa-solid fa-pen"></i></button >&nbsp;&nbsp;<button id = "btn' + value.SNO + '"  data-sid="' + value.SNO + '" value = "Delete" onclick="showSMTPModalward(this)" class="btn btn-outline-danger btn-sm distloc"><i class="fa-solid fa-trash-can"></i></button ></td > ' +
+
+                            '</tr>';
+                        count++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+
+    function bindWardDetails() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetRegi", "WARD")',
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $("#ddlreg").append($("<option></option>").val(0).html('--Select--'));
+
+
+                if (data != null) {
+
+                    $.each(data, function (key, value) {
+
+                        $("#ddlreg").append($("<option></option>").val(value.Region_SNO).html(value.Region_Name));
+                        //    $("#ddlreg").append($("<option></option>").val(Text.Region_Name).html(value.Region_Id));
+
+                    });
+                }
+            }
+
+
+        })
+
+    }
+    function binddist(val) {
+        jQuery('#ddldno option').remove();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetDist", "WARD")',
+            data: JSON.stringify({ 'sno': val }),
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+                $("#ddldno").append($("<option></option>").val(0).html('--Select--'));
+                if (data != 0) {
+
+                    $.each(data, function (key, value) {
+
+                        $("#ddldno").append($("<option></option>").val(value.SNO).html(value.District_Name));
+
+                    });
+                    if (txtsdno.value != 0) {
+                        jQuery("#ints").val("");
+                        jQuery("#ddldno").val(txtsdno.value).change();
+                        document.getElementById("ints").value = "Initail";
+
+                    }
+
+                }
+            }
+
+
+        })
+    }
+    jQuery(function () {
+
+        jQuery("#ddlreg").change(function () {
+
+            jQuery('#ddldno option').remove();
+            var disval = jQuery("#ddlreg > option:selected").attr("value");
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetDist", "WARD")',
+                data: JSON.stringify({ 'sno': disval }),
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (data) {
+                    $("#ddldno").append($("<option></option>").val(0).html('--Select--'));
+                    if (data != 0) {
+
+                        $.each(data, function (key, value) {
+
+                            $("#ddldno").append($("<option></option>").val(value.SNO).html(value.District_Name));
+
+
+                        });
+                        if (txtsdno.value != 0) {
+                            jQuery("#ddldno").val(txtsdno.value).change();
+                            //  jQuery("#int").val("Initial");
+                            document.getElementById("ints").value = "Initail";
+
+                        }
+                    }
+                }
+
+
+            })
+        })
+    })
+
+    function delWards() {
+
+        var table = jQuery('#tbl-smtp').DataTable(),
+            selectedRows = table.rows('.selected').data().length,
+            selectedRow = table.rows('.selected').data();
+        //data = {};
+
+        jQuery('#hdnEmployee').val('D');
+
+        if (selectedRows == 0) {
+            notifyMessage('Please select a record(s).', 'warning');
+        }
+        else {
+
+            //glob = rData;
+            deleteWards(cid);
+        }
+    }
+
+    function Addwards() {
+
+        var message = validateEmployeeward(),
+
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+
+            var params = JSON.stringify(getDistValuesward());
+            //  alert(params);
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Addward", "WARD")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-smtp');
+
+                    if (opType == 'C' && data) {
+
+                        if (data == true) {
+                            message = jQuery("#txtname").val() + ' Ward Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtname").val() + ' Ward Successfully Created';
+                            type = 'success';
+
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == false && jk == true) {
+                            message = jQuery("#txtname").val() + ' Ward Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            bindDistrict();
+                            message = jQuery("#txtname").val() + ' Ward Successfully Updated.';
+                            type = 'success';
+                        }
+                    }
+
+
+                    notifyMessage(message, type);
+                    bindDistrict();
+
+                }
+            })
+        }
+    }
+
+
+    function deleteWards(cid, st) {
+        //var message = validateEmployee(),
+        //  var message = '',
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        var params = JSON.stringify(getwardIDward(cid));
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteWard", "WARD")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                hideModal('modal-smtp');
+                if (opType == 'D' && data) {
+                    if (data == true) {
+                        message = st + ' Ward is in Use,Cannot be Deleted.';
+                        type = 'danger';
+                    }
+                    else {
+                        message = st + ' Ward Successfully Deleted.';
+                        type = 'success';
+                    }
+                    notifyMessage(message, type);
+                    bindDistrict();
+                }
+
+            }
+        })
+
+    }
+    function showSMTPModalward(e) {
+        var txtward = document.getElementById('txtname'),
+            txtSID = document.getElementById('txtdid'),
+            ddlreg = document.getElementById('ddlreg'),
+            ddldist = document.getElementById('ddldno');
+        //var rsno = ddlreg.options[ddlreg.selectedIndex].value;
+        //var dsno = ddldist.options[ddldist.selectedIndex].value;
+        //  var result = ddlreg.options[ddlreg.selectedIndex].value;
+        rblGender = jQuery("input[name='gender']:checked");
+        var tblemployee = document.getElementById('tbl-smtp'),
+            rows = tblemployee.rows,
+            hdnEmployee = document.getElementById('hdnEmployee');
+        jk = false;
+        ak = false;
+        if (e.value.indexOf('Edit') > -1) {
+            jQuery("#btnSubmit").html("@ViewData["Update"]");
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+
+                if (row.cells[7].innerHTML.indexOf(e.id) > -1) {
+
+                    txtSID.value = jQuery(e).data('sid');
+                    ddlreg.value = row.cells[1].innerHTML;
+                    txtward.value = row.cells[5].innerHTML;
+                    binddist(row.cells[1].innerHTML);
+                    txtsdno.value = row.cells[3].innerHTML;
+
+                    var flag = row.cells[6].innerHTML;
+                    if (flag == 'Active') {
+                        jQuery("#rbtrue").prop("checked", true);
+                        jQuery("#rbfalse").prop("checked", false);
+                    }
+                    else if (flag == 'InActive') {
+                        jQuery("#rbtrue").prop("checked", false);
+                        jQuery("#rbfalse").prop("checked", true);
+                    } else {
+                        jQuery("#rbtrue").prop("checked", false);
+                        jQuery("#rbfalse").prop("checked", false);
+                    }
+                    break;
+                }
+            }
+            hdnEmployee.value = 'U';
+        }
+
+        else if (e.value.indexOf('Add') > -1) {
+            resetSMTPward();
+            jQuery("#btnSubmit").html("@ViewData["Save"]");
+            txtsdno.value = 0;
+            hdnEmployee.value = 'C';
+        }
+        else if (e.value.indexOf('Delete') > -1) {
+            for (var i = 0, row = null; i < rows.length; i++) {
+                row = rows[i];
+                if (row.cells[7].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    hdnEmployee.value = 'D';
+                    var result = confirm("Are you sure you want to delete?");
+                    if (result) {
+                        var st = row.cells[5].innerHTML;
+                        deleteWards(txtSID.value, st);
+                    }
+                }
+            }
+        }
+    }
+</script>
+
+
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+
+    <div class="main-content">
+        <div class="page-content">
+            <div class="page-body">
+                <div class="container-fluid">
+                    <div class="page-title">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">@ViewData["cout"]</h4>
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li>
+                                                <button type="button" id="btnAdd" value="Add" data-sid="0"
+                                                        class="btn btn-outline-primary waves-effect waves-light f-right d-inline-block md-trigger ml-4"
+                                                        data-bs-toggle="modal" data-bs-target="#modal-smtp"
+                                                        onclick="showSMTPModalward(this);">
+                                                    <i data-feather="plus-circle" class="mr-2"></i>
+                                                    @ViewData["addWard"]
+                                                </button>
+                                                <input type="hidden" id="hdnEmployee" />
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Container-fluid starts-->
+                <div class="container-fluid general-widget">
+                    @* BODY DETAILS CARD/PANEL *@
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card">
+                                @* <div class="header">
+                                    <h2>
+                                        @ViewData["Warddets"] <small></small>
+                                    </h2>
+                                    <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                                        <li> <a href="javascript:void(0);" data-bs-toggle="cardloading"
+                                                data-loading-effect="pulse"><i class="icon-refresh"></i></a></li>
+                                        <li><a href="javascript:void(0);" class="full-screen"><i
+                                                    class="icon-size-fullscreen"></i></a>
+                                        </li>
+                                        <li class="dropdown">
+                                            <a href="javascript:void(0);" class="dropdown-toggle"
+                                                data-bs-toggle="dropdown" role="button" aria-haspopup="true"
+                                                aria-expanded="false"></a>
+                                            <ul class="dropdown-menu">
+                                                <li><a href="javascript:void(0);">Action</a></li>
+                                                <li><a href="javascript:void(0);">Another Action</a></li>
+                                                <li><a href="javascript:void(0);">Something else</a></li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div> *@
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table id="tbl-smtp"
+                                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                                            <thead>
+                                                <tr>
+                                                    <th class="sno-th">Sno</th>
+                                                    <th class="d-none">Region Id</th>
+                                                    <th>@ViewData["Region"]</th>
+                                                    <th class="d-none">District Sno</th>
+                                                    <th>@ViewData["District"]</th>
+                                                    <th>@ViewData["Ward"]</th>
+                                                    <th class="sno-th">@ViewData["Status"]</th>
+                                                    @* <th class="setup_actions">#</th>*@
+                                                    <th class="sno-th" data-sort-ignore="true">@ViewData["Actions"]</th>
+                                                </tr>
+                                            </thead>
+                                            <tfoot>
+                                                
+                                            </tfoot>
+                                            <tbody>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @* <footer class="py-4 bg-light mt-auto">
+                        <div class="container-fluid px-4">
+                            <div class="d-flex align-items-center justify-content-between small">
+                                <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                                <div>
+                                    <a href="#">Privacy Policy</a>
+                                    &middot;
+                                    <a href="#">Terms &amp; Conditions</a>
+                                </div>
+                            </div>
+                        </div>
+                    </footer> *@
+                    <div class="md-overlay"></div>
+
+                    <div id="styleSelector">
+
+                    </div>
+                </div>
+
+                <!-- Container-fluid Ends-->
+            </div>
+            <!-- [MODALS] -->
+            <div class="modal" id="modal-smtp" role="dialog" data-backdrop="static" data-keyboard="false">
+                <div class="modal-dialog believerModal" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="lblwd1">@ViewData["Ward"]</h5>
+                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="col-12 p-0 mx-auto" action="" method="post">
+                                <div class="row">
+                                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                        <label for="ddlRegid" class="f-label_align">
+                                            @ViewData["Region"]<span class="red">*</span>
+                                        </label>
+                                        <select id="ddlreg" class="form-control" name="ddlreg"
+                                            onchange="values1(this)"></select>
+                                    </div>
+                                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                        <label for="txtditid" class="f-label_align">
+                                            @ViewData["District"]<span class="red">*</span>
+                                        </label>
+                                        <select id="ddldno" class="form-control" name="ddldno"
+                                            onchange="valuesward(this)"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+
+                                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                        <label for="txtditid" class="f-label_align">
+                                            @ViewData["Ward"]<span class="red">*</span>
+                                        </label>
+
+                                        <input type="text" class="form-control input-sm" id="txtname"
+                                            placeholder="Enter Ward Name" maxlength="200" onkeyup="validward(this)">
+                                        <input type="text" class="form-control input-sm d-none" id="txtdid">
+                                        <input type="text" class="form-control input-sm d-none" id="txtsdno">
+                                        <input type="text" class="form-control input-sm d-none" id="ints">
+                                    </div>
+                                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                        <label for="inputEmail" class="f-label_align">
+                                            @ViewData["Status"]<span class="red">*</span>
+                                        </label>
+                                        &nbsp;
+
+                                        <input type="radio" class="form-control input-sm d-none" name="gender"
+                                            id="rbtrue" value="Active">&nbsp;<label for="Male">Active</label>
+                                        &nbsp; <input class="ml-2" type="radio" name="gender" id="rbfalse"
+                                            value="InActive">&nbsp;<label for="FeMale">InActive</label>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">
+                                        @ViewData["Close"]
+                                    </button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic"
+                                        id="btnSubmit">
+                                        @ViewData["Save"]
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="md-overlay"></div>
+            <!-- Add Contact Ends Model-->
+        </div>
+
+        <!-- Container-fluid ends -->
+    </div>
+    <!-- Page-body end -->
+    </div>
+    </div>
+    <!-- Warning Section Starts -->
+
+    <div id="styleSelector">
+
+    </div>
+    </div>
+    </div>
+    </div>
+    </div>
+</body>

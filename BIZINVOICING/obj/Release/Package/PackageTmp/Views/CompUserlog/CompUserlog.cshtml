@@ -1,0 +1,571 @@
+﻿
+@{
+    ViewBag.Title = "CompUserlog";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+
+<script type="text/javascript">
+    var cnd, end;
+    $(document).ready(function () {
+
+        $("#btn").click(function () {
+            adddesg();
+            total = 0;
+
+        });
+        $("#btnPdf").click(function () {
+            addpdf();
+
+        });
+        $("#btnExcel").click(function () {
+            addexcel();
+
+        });
+    });
+</script>
+
+
+
+<div class="page-body">
+        <div class="container-fluid">
+            <div class="page-title">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <h2>@ViewData["uslog"]</h2>
+        </div>
+        <div class="col-md-6 col-sm-12 text-right">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Setup", "Setup")"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">@ViewData["uslog"]</li>
+                @* <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a> *@
+                @* <button type="button" id="btnAdd" value="Add" data-sid="0"
+                    class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+                    onclick="showcurrencyModal(this);" data-toggle="modal" data-target="#modal-currency"> <i
+                    class="icofont icofont-plus m-r-5"></i>
+                    Add Currency
+                    </button> *@
+                <input type="hidden" id="hdnEmployee" />
+            </ol>
+        </div>
+    </div>
+</div>
+        </div>
+
+<div class="container-fluid general-widget">
+    @* BODY DETAILS CARD/PANEL *@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="header">
+                    <h2>
+                        @*@ViewData["uslog"] <small></small>*@
+                    </h2>
+
+                    <div class="card-block">
+
+                        @*<div class="row">
+                                <div class="form-group flex_form-group align-items-baseline col-xl-6">
+                                    <label for="ddluserid" class="label-130">Customer</label>
+                                    <select id="ddluser" class="form-control" name="ddluser"></select>
+                                </div>
+                            </div>*@
+                        @*<div class="row">
+                                <div class="form-group flex_form-group align-items-baseline col-xl-6">
+                                    <label for="ddluserid" class="label-130">Company</label>
+                                    <select id="ddlcomp" class="form-control" name="ddlcomp"></select>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <div class="form-group flex_form-group align-items-baseline col-md-6">
+                                <label for="txtditid" class="label-130">@ViewData["sdate"]</label>
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       id="startdate"
+                                       onchange="validatedate();"
+                                       autocomplete="off"
+                                       name="Startdate"
+                                       placeholder="dd/mm/yyyy" />
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-6">
+                                <label for="txtditid" class="label-130">@ViewData["edate"]</label>
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       id="enddate"
+                                       name="Enddate"
+                                       autocomplete="off"
+                                       placeholder="dd/mm/yyyy" />
+                            </div>
+                            <div class="d-flex justify-content-end col-12 my-2">
+
+                                <input type="submit" value="@ViewData["Sub"]" id="btn" class="btn btn-primary btn-sm btn-biz_logic" />
+                                <input type="submit" value="@ViewData["PDF"]" id="btnPdf" class="btn btn-secondary btn-sm btn-biz_logic ml-1" />
+                                <input type="submit" value="@ViewData["Excel"]" id="btnExcel" class="btn btn-primary btn-sm btn-biz_logic ml-1" />
+                            </div>
+                        </div>
+                        <div class="card-block">
+                            <div class="table-content">
+                                <div class="dt-responsive table-responsive">
+                                    <table id="tbl-smtp" class="table table-stripped table-bordered nowrap">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th class="sno-th">Sno</th>
+                                                <th>@ViewData["Un"]</th>
+                                                <th>@ViewData["ipaddr"]</th>
+                                                <th>@ViewData["usegrp"]</th>
+                                                <th>@ViewData["logtym"]</th>
+                                                <th>@ViewData["logouttym"]</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody></tbody>
+                                        <tfoot>
+
+                                        </tfoot>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- <div class="table-responsive"> -->
+                        @*<div id="invoicereportlispartail" class="table-responsive">
+                                @Html.Partial("_Invoicelistpartial", Model)
+                            </div>*@
+                        <!-- </div> -->
+                    </div>
+
+                </div>
+
+                
+                @*<div class="card-body">
+                        <h4 class="card-title" id="lblinvrep">UserLogs </h4>
+
+                        <div class="row">
+                            <div class="form-group flex_form-group align-items-baseline col-md-6">
+                                <label for="txtditid" class="label-130">Start Date</label>
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       id="startdate"
+                                       onchange="validatedate();"
+                                       autocomplete="off"
+                                       name="Startdate"
+                                       placeholder="dd/mm/yyyy" />
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-6">
+                                <label for="txtditid" class="label-130">End Date</label>
+                                <input type="text"
+                                       class="form-control input-sm"
+                                       id="enddate"
+                                       name="Enddate"
+                                       autocomplete="off"
+                                       placeholder="dd/mm/yyyy" />
+                            </div>
+                            <div class="d-flex justify-content-end col-12 my-2">
+
+
+                                <input type="submit" value="@ViewData["Sub"]" id="btn" class="btn btn-success btn-sm btn-biz_logic" />
+                                <input type="submit" value="@ViewData["PDF"]" id="btnPdf" class="btn btn-success btn-sm btn-biz_logic ml-1" />
+                                <input type="submit" value="@ViewData["Excel"]" id="btnExcel" class="btn btn-success btn-sm btn-biz_logic ml-1" />
+                            </div>
+                        </div>
+                        <div class="table-responsive" id="tblmemberlist">
+                            <table id="tbl-smtp" class="table table-bordered  table-sm rounded display">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="sno-th">@ViewData["Sno"]</th>
+                                        <th>@ViewData["Un"]</th>
+                                        <th>@ViewData["uipadd"]</th>
+                                        <th>@ViewData["ugrps"]</th>
+                                        <th>@ViewData["logintym"]</th>
+                                        <th>@ViewData["logouttym"]</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody></tbody>
+                                <tfoot>
+
+                                </tfoot>
+                            </table>
+                        </div>
+
+
+                    </div>*@
+
+            </div>
+                <script>
+
+
+                    function disablebetweendates(st, e) {
+                        var today, datepicker;
+                        today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+                        $(document).ready(function () {
+                            jQuery('#' + e).datepicker('destroy');
+                            $('#' + e).datepicker({
+                                uiLibrary: 'bootstrap4',
+                                format: "dd/mm/yyyy",
+                                minDate: st,
+                                maxDate: today,
+                                iconsLibrary: 'fontawesome',
+                                weekStartDay: 1,
+                            });
+                        })
+                    }
+                    function validatedate() {
+                        var startDate = $("#startdate").val();
+                        //disablebetweendates(startDate, "enddate");
+                    }
+                    //notallowtyping("startdate");
+                    //notallowtyping("enddate");
+                    //disablefuturedate("startdate");
+                    var instvalue = $("#ddluser").val();
+
+                </script>
+                <script type="text/javascript">
+    var total = 0;
+    var amnt = 0;
+    var bd = " ";
+    var curr;
+    function adddesg() {
+        var startDate = $("#startdate").val();
+        var endDate = $("#enddate").val();
+
+
+        if (startDate != "" && endDate == "") {
+            alert("End date is mandatory");
+            jQuery("#tbl-smtp tbody").empty();
+            jQuery("#tbl-smtp tfoot").empty();
+            jQuery('#tbl-smtp').DataTable().clear().destroy();
+
+        } else if (startDate == "" && endDate != "") {
+            alert("Start date is mandatory");
+            jQuery("#tbl-smtp tbody").empty();
+            jQuery("#tbl-smtp").hide();
+        }
+        else if (startDate == "" && endDate == ""){
+            alert("Start date and End date is mandatory");
+        }
+        else if (
+
+            (startDate != "" && endDate != "")
+        )
+        {
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("logtimeRep", "CompUserlog")',
+                data: JSON.stringify({ 'stdate': startDate, 'enddate': endDate}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    jQuery("#tbl-smtp tbody").empty();
+                    jQuery("#tbl-smtp tfoot").empty();
+                    if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    }
+                    if (data != 0) {
+
+                        var i = 1;
+                        var len = data.length;
+                        for (var d = 0; d < len; d++) {
+                           var logdate = data[d].Login_Time;
+                            var date = new Date(parseInt(logdate.substr(6)));
+                            //var d1 = date.getHours();
+                            //var dd1 = d1 + 12
+                            var formatted = ("0" + date.getDate()).slice(-2) + "-" +
+                                ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                                date.getFullYear() + " " + date.getHours() + ":" +
+                                date.getMinutes();
+                            //alert(date.ToString("HH:mm"));
+
+                            var logoutdate = data[d].Logout_Time;
+                            if (logoutdate == null) {
+                                var formatted1 = data[d].Logout_Time == null ? '' : '';
+                            } else {
+                                var logoutdate1 = data[d].Logout_Time;
+                                var date1 = new Date(parseInt(logoutdate1.substr(6)));
+                                //var d = date1.getHours();
+                                //var dd=d+12
+                                var formatted1 = ("0" + date1.getDate()).slice(-2) + "-" +
+                                    ("0" + (date1.getMonth() + 1)).slice(-2) + "-" +
+                                    date1.getFullYear() + " " + date1.getHours() + ":" +
+                                    date1.getMinutes();
+                               // alert(date1.ToString("HH:mm"));
+                            }
+
+
+
+                            var row = '<tr>' +
+                                '<td>' + i + '</td>' +
+                                '<td>' + data[d].Full_Name + '</td>' +
+                                '<td>' + data[d].Ipadd + '</td>' +
+                                '<td>' + data[d].Description + '</td>' +
+                                '<td>' + formatted + '</td>' +
+                                '<td>' + formatted1 + '</td>' +
+                                '</tr>';
+                            jQuery("#tbl-smtp tbody").append(row);
+                            i++;
+
+                        }
+                    }
+                        applyDatatable('tbl-smtp');
+                },
+            });
+        } else {
+            return false;
+            jQuery("#tbl-smtp tbody").empty();
+        }
+    }
+    function addpdf() {
+        var startDate = $("#startdate").val();
+        var endDate = $("#enddate").val();
+
+        if (startDate != "" && endDate == "") {
+            alert("End date is mandatory");
+            jQuery("#tbl-smtp tbody").empty();
+            jQuery("#tbl-smtp").hide();
+        }
+        else if (startDate == "" && endDate != "") {
+            alert("Start date is mandatory");
+            jQuery("#tbl-smtp tbody").empty();
+            jQuery("#tbl-smtp").hide();
+        }
+        else if (startDate == "" && endDate == "") {
+            alert("Start date and End date is mandatory");
+        }
+        else if (
+            (startDate == "" && endDate == "") ||
+            (startDate != "" && endDate != "")
+        ) {
+
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("logtimeRep", "CompUserlog")',
+                data: JSON.stringify({  'stdate': startDate, 'enddate': endDate}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    jQuery("#tbl-smtp tbody").empty();
+                    jQuery("#tbl-smtp tfoot").empty();
+                    if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    }
+                    if (data != null) {
+                        var i = 1;
+                        var len = data.length;
+                        for (var d = 0; d < len; d++) {
+
+                            var logdate = data[d].Login_Time;
+                            var date = new Date(parseInt(logdate.substr(6)));
+                            var formatted = ("0" + date.getDate()).slice(-2) + "-" +
+                                ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                                date.getFullYear() + " " + date.getHours() + ":" +
+                                date.getMinutes();
+
+                            var logoutdate = data[d].Logout_Time;
+                            if (logoutdate == null) {
+                                var formatted1 = data[d].Logout_Time == null ? '' : '';
+                            } else {
+                                var logoutdate1 = data[d].Logout_Time;
+                                var date1 = new Date(parseInt(logoutdate1.substr(6)));
+                                var formatted1 = ("0" + date1.getDate()).slice(-2) + "-" +
+                                    ("0" + (date1.getMonth() + 1)).slice(-2) + "-" +
+                                    date1.getFullYear() + " " + date1.getHours() + ":" +
+                                    date1.getMinutes();
+
+                            }
+                            var row = '<tr>' +
+                                '<td>' + i + '</td>' +
+                                '<td>' + data[d].Full_Name + '</td>' +
+                                '<td>' + data[d].Ipadd + '</td>' +
+                                '<td>' + data[d].Description + '</td>' +
+                                '<td>' + formatted + '</td>' +
+                                '<td>' + formatted1 + '</td>' +
+                                '</tr>';
+                            jQuery("#tbl-smtp tbody").append(row);
+                            i++;
+
+                        }
+
+                        var doc = new jsPDF("l", "pt", "a4");
+                        doc.text(350, 30, "Invoice Report ");
+                        doc.setFontSize(13);
+                        if (startDate != "" && endDate != "") {
+                            doc.text(40, 50, "Start Date:" + "" + startDate);
+                            doc.text(650, 50, "End Date:" + "" + endDate);
+                        } else {
+                            doc.text(40, 50, "Start Date:" + "" + cnd);
+                            doc.text(650, 50, "End Date:" + "" + end);
+                        }
+                        var res = doc.autoTableHtmlToJson(
+                            document.getElementById("tbl-smtp")
+                        );
+                        doc.autoTable(res.columns, res.data, {
+                            margin: { top: 60 },
+                            columnStyles: {
+                                0: {
+                                    columnWidth: 40,
+                                },
+
+
+                            }
+                        });
+                        //alert(res.data.Church_Reg_Sno);
+                        var header = function (data) {
+                            doc.setFontSize(8);
+                            doc.setTextColor(40);
+                            doc.setFontStyle("normal");
+                        };
+                        var options = {
+                            addPageContent: header,
+                            startY: doc.autoTableEndPosY() + 20,
+                            styles: { overflow: "linebreak" },
+
+                            createdCell: function (cell, opts) {
+                                if (cell.text[0].indexOf("da") > -1) {
+                                    // count startrs from 0
+                                    // cell.raw contains the cell data
+                                    cell.styles.fillColor = [216, 78, 75]; // random color
+                                    cell.styles.textColor = [58, 121, 152];
+                                    cell.styles.fontStyle = "bold";
+                                    cell.styles.fontSize = "10";
+                                }
+                            },
+
+                            tableWidth: "auto",
+                        };
+
+                        // doc.autoTable(res.columns, res.data, options);
+
+                        doc.save("Logintime.pdf");
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                        jQuery("#tbl-smtp tfoot").empty();
+                        //jQuery("#invoicereportlispartail").hide();
+                    }
+                },
+            });
+        } else {
+            //return false;
+            jQuery("#tbl-smtp tbody").empty();
+        }
+    }
+    function tableToJson(table) {
+        var data = [];
+
+        // first row needs to be headers
+        var headers = [];
+        for (var i = 0; i < table.rows[0].cells.length; i++) {
+            headers[i] = table.rows[0].cells[i].innerHTML
+                .toLowerCase()
+                .replace(/ /gi, "");
+        }
+
+        // go through cells
+        for (var i = 0; i < table.rows.length; i++) {
+            var tableRow = table.rows[i];
+            var rowData = {};
+
+            for (var j = 0; j < tableRow.cells.length; j++) {
+                rowData[headers[j]] = tableRow.cells[j].innerHTML;
+            }
+
+            data.push(rowData);
+        }
+
+        return data;
+    }
+
+    function addexcel() {
+        var startDate = $("#startdate").val();
+        var endDate = $("#enddate").val();
+
+        if (startDate != "" && endDate == "") {
+            alert("End date is mandatory");
+            jQuery("#tbl-smtp tbody").empty();
+            jQuery("#tbl-smtp").hide();
+        } else if (startDate == "" && endDate != "") {
+            alert("Start date is mandatory");
+            jQuery("#tbl-smtp tbody").empty();
+            jQuery("#tbl-smtp").hide();
+        }
+        else if (startDate == "" && endDate == "") {
+            alert("Start date and End date is mandatory");
+        }
+        else if (
+            (startDate == "" && endDate == "") ||
+            (startDate != "" && endDate != "")
+        ) {
+
+            $.ajax({
+                 type: 'POST',
+                url: '@Url.Action("logtimeRep", "CompUserlog")',
+                data: JSON.stringify({ 'stdate': startDate, 'enddate': endDate }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    jQuery("#tbl-smtp tbody").empty();
+                    jQuery("#tbl-smtp tfoot").empty();
+                    if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    }
+                    if (data != null) {
+                        var i = 1;
+                        var len = data.length;
+                        for (var d = 0; d < len; d++) {
+                            var logdate = data[d].Login_Time;
+                            var date = new Date(parseInt(logdate.substr(6)));
+                            var formatted = ("0" + date.getDate()).slice(-2) + "-" +
+                                ("0" + (date.getMonth() + 1)).slice(-2) + "-" +
+                                date.getFullYear() + " " + date.getHours() + ":" +
+                                date.getMinutes();
+
+                            var logoutdate = data[d].Logout_Time;
+                            if (logoutdate == null) {
+                                var formatted1 = data[d].Logout_Time == null ? '' : '';
+                            } else {
+                                var logoutdate1 = data[d].Logout_Time;
+                                var date1 = new Date(parseInt(logoutdate1.substr(6)));
+                                var formatted1 = ("0" + date1.getDate()).slice(-2) + "-" +
+                                    ("0" + (date1.getMonth() + 1)).slice(-2) + "-" +
+                                    date1.getFullYear() + " " + date1.getHours() + ":" +
+                                    date1.getMinutes();
+
+                            }
+                            var row = '<tr>' +
+                                '<td>' + i + '</td>' +
+                                '<td>' + data[d].Full_Name + '</td>' +
+                                '<td>' + data[d].Ipadd + '</td>' +
+                                '<td>' + data[d].Description + '</td>' +
+                                '<td>' + formatted + '</td>' +
+                                '<td>' + formatted1 + '</td>' +
+                                '</tr>';
+                            jQuery("#tbl-smtp tbody").append(row);
+                            i++;
+
+
+                        }
+
+                    }
+                    $("#tbl-smtp").table2excel({
+                        filename: "Logintime.xls",
+                    });
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    jQuery("#tbl-smtp tfoot").empty();
+                },
+            });
+        } else {
+            return false;
+            jQuery("#tbl-smtp tbody").empty();
+        }
+    }
+                </script>
+
+
+
+
+
+

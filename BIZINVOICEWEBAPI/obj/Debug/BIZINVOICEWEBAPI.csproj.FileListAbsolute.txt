@@ -1,0 +1,573 @@
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csprojAssemblyReference.cache
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Madhu\TestFolder\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csprojAssemblyReference.cache
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Madhu\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csprojAssemblyReference.cache
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Madhusudhan\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csprojAssemblyReference.cache
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csprojAssemblyReference.cache
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll.config
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\BIZINVOICEWEBAPI.pdb
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.exe.config
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csc.rsp
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.exe.config
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\csi.rsp
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.CSharp.Scripting.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.Scripting.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.CSharp.Core.targets
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.amd64.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.DiaSymReader.Native.x86.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.Managed.Core.targets
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\Microsoft.VisualBasic.Core.targets
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.AppContext.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Collections.Immutable.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Console.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.FileVersionInfo.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Diagnostics.StackTrace.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Compression.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.FileSystem.Primitives.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.AccessControl.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.IO.Pipes.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Reflection.Metadata.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.AccessControl.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Claims.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Algorithms.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Encoding.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.Primitives.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Cryptography.X509Certificates.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Security.Principal.Windows.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Text.Encoding.CodePages.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.ValueTuple.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.ReaderWriter.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XmlDocument.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\System.Xml.XPath.XDocument.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.exe.config
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\vbc.rsp
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\roslyn\VBCSCompiler.exe.config
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.Web.Infrastructure.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\WebGrease.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Newtonsoft.Json.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Net.Http.Formatting.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Helpers.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Http.WebHost.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Mvc.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Optimization.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.Razor.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Deployment.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\System.Web.WebPages.Razor.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Antlr3.Runtime.pdb
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csprojAssemblyReference.cache
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CoreCompileInputs.cache
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.csproj.CopyComplete
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.dll
+D:\Applications\INvoiceProject\BIZINVOICEWEBAPI\obj\Debug\BIZINVOICEWEBAPI.pdb

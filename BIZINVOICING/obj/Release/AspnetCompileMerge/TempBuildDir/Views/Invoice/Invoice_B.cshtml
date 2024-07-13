@@ -1,0 +1,1975 @@
+﻿@{
+ViewBag.Title = "Invoice";
+Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<style type="text/css">
+    #tblchruch tr td {
+        text-align: left;
+     }
+
+    .tbl-smtp1 thead {
+        visibility: collapse;
+    }
+
+    table td {
+        box-sizing: border-box !important;
+    }
+
+    .fit {
+        width: fit-content;
+    }
+
+    .modal {
+        padding-right: 0;
+    }
+
+    .textarea {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        height: 40px;
+    }
+
+    .form-controlNEw {
+        display: block;
+        width: 90%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 0.9em;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        width: fit-content;
+
+    }
+
+    .form-Vat {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        @* /* font-size: 1rem; */ *@
+        font-weight: 400;
+        line-height: 1.5;
+         color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+         border-radius: .25rem;
+
+    }
+
+    .form-unp {
+        display: block;
+        width: 120px;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 0.9em;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        /* width: fit-content; */
+    }
+
+    .form-unp-qty {
+        display: block;
+        width: 80px;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 0.9em;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+        /* width: fit-content; */
+    }
+
+    .actions {
+        display: flex;
+        margin-top: 10px;
+        padding: 0;
+    }
+ table.dataTable tfoot th, table.dataTable tfoot td {
+    padding: 1px 4px 4px 4px;
+}
+
+}
+table.dataTable.table thead th.sorting, table.dataTable.table thead th.sorting_asc, table.dataTable.table thead th.sorting_desc, table.dataTable.table thead td.sorting, table.dataTable.table thead td.sorting_asc, table.dataTable.table thead td.sorting_desc {
+    padding-right: 25px;
+}
+</style>
+
+<script type="text/javascript">
+    $(function () {
+        $('#datepicker').datepicker();
+    });
+    var array = [], dupicaterow = true, rt = true;
+
+    jQuery(document).ready(function () {
+        /*var url_string = window.location.href;
+        var url = new URL(url_string);
+        var check = url.searchParams.get("rst");
+        var check1 = url.searchParams.get("rst1");
+        //var thisOne = getQueryString('rst');
+        if (check != null) {
+            if (check1 == "8") {
+                alert("Device Blocked - "+check);
+            }
+            if (check1 == "18") {
+                alert("Device TAX Category Changed - " + check);
+            }
+            if (check1 == "7") {
+                alert("Device Unblocked - " + check);
+            }
+            //alert(check);
+        }*/
+
+        jQuery("#hdnsno").val(0);
+        BindCompany();
+        BindCustomer();
+        BindCurrency();
+        bindchruchDetails();
+        BindVatPer();
+        var today, datepicker;
+        today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        disablepastdate(today, "txtdate");
+        //disablefuturedate(today, "txtdate");
+        disablepastdate(today, "txtedate");
+        //disablefuturedate(today, "txtedate");
+        disablepastdate(today, "txtiedate");
+        //disablefuturedate(today, "txtiedate");
+        var tRows = document.getElementById('tblCustomers');
+        jQuery("#tblCustomers  TBODY").children().remove();
+
+        jQuery("#btnDelete").click(function () {
+            delchruch();
+        });
+
+    });
+
+    function bindchruchDetails() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetchDetails", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+                if (data != 0) {
+
+                    console.log(data);
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Invoice_No + '</td>' +
+                            '<td>' + convertDate(value.Invoice_Date) + '</td>' +
+                            '<td>' + value.Chus_Name + '</td>' +
+                            // '<td>' + value.Currency_Code + '</td>' +
+                            '<td style="text-align:right">' + Comma(value.Total) + '</td>' +
+                            '<td>' + value.Remarks + '</td>' +
+                            '<td ><button title="View Invoice" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" value="Edit" onclick="showchModal(this)"><i class="fa-solid fa-pen" ></i ></button>&nbsp;&nbsp;&nbsp; </td>' +
+                            //'<td ><button title="Amend Invoice" class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" value="Edit" onclick="showchModal(this)"><i class="fa-solid fa-pen" ></i ></button>&nbsp;&nbsp;&nbsp; <button title="Approve Invoice" class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" value="Approve" onclick="showchModal(this)"><i class="fa fa-check"></i></button >&nbsp;&nbsp;&nbsp; <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" title="Cancel Invoice" data-rec="0" value="Edit" onclick="showchModal(this)"><i class="fas fa-trash" aria-hidden="true" ></i ></button >&nbsp;&nbsp;&nbsp;</td>' +
+                            //'<td align="right"><a class="btn btn-outline-secondary btn-sm"  href="/InvoiceDownload/InvoiceDownload?Id=' + value.Inv_Mas_Sno + '" );"><i class="fa-solid fa-file-arrow-down"></i></a> &nbsp;&nbsp;&nbsp;</td>'+
+                            // '<td ><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" value="Approve" onclick="showchModal(this)"><i class="fa-solid fa-file-arrow-down" ></i ></button >&nbsp;&nbsp;&nbsp;</td>' +
+                            '</tr>';
+                        //<button class="btn btn-outline-danger btn-sm" data-sid="' + value.Church_Reg_Sno + '" data-pwd="' + value.Chruch_Name + '" id="btnDelete" data-rec="0" onclick="delchruch(this)"><i class="fas fa-trash" aria-hidden="true"></i></button>
+                        jQuery("#tbl-smtp tbody").append(row);
+                        i++;
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+    function BindCompany() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetcompanyS", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+                //jQuery("#ddlcpny").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    $("#ddlcpny").val(data.Company_Name);
+                    /*jQuery.each(data, function (key, value) {
+                        jQuery("#ddlcpny").append(jQuery("<option></option>").val(value.Comp_Mas_Sno).html(value.Company_Name));
+                    });*/
+                }
+            }
+        })
+    }
+    function BindCustomer() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetCustomersS", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlcid").append(jQuery("<option></option>").val("").html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlcid").append(jQuery("<option></option>").val(value.Customer_Name).html(value.Customer_Name));
+                    });
+                }
+            }
+        })
+    }
+
+    function BindCurrency() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetCurrency", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlccy").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlccy").append(jQuery("<option></option>").val(value.Currency_Code).html(value.Currency_Name));
+                    });
+                }
+            }
+        })
+    }
+    function convertDate(e) {
+        var date = new Date(parseInt(e.substr(6)));
+        date = (date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+        return date;
+    }
+
+    function pdf(e) {
+        //debugger;
+
+        var pt = jQuery(e).data('sid');
+        window.location = "/InvoiceDownload/InvoiceDownload";
+
+    }
+
+
+
+    function BindVatPer() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetVatPer", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                //jQuery("#ddlVatPer").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlVatPer").append(jQuery("<option></option>").val(value.Vat_Category).html(value.vat_percentageValue));
+                    });
+                }
+            }
+        })
+    }
+</script>
+
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+ 
+ <div class="main-content">
+    <div class="page-content">
+
+        <div class="container-fluid">
+            <!-- start page title -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="page-title-box d-flex align-items-center justify-content-between">
+                        <h4 class="mb-0">@ViewData["invoice"]</h4>
+
+                       
+
+                    </div>
+                </div>
+            </div>
+            <!-- end page title -->
+                 @* BODY DETAILS CARD/PANEL *@
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tbl-smtp"
+                                        class="table table-centered table-bordered table-nowrap mb-0 table-hover js-basic-example dataTable">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th class="sno-th">Sno</th>
+                                                <th class="sno-th">@ViewData["invno"]</th>
+                                                <th class="sno-th">@ViewData["invdate"]</th>
+                                                <th> @ViewData["custname"] </th>
+                                                <!-- <th class="sno-th">@ViewData["curren"]</th> -->
+                                                <th class="sno-th">@ViewData["totamt"]</th>
+                                                <th class="sno-th">@ViewData["remar"]</th>
+                                                <th class="sno-th">@ViewData["Actions"]</th>
+                                                <!-- <th class="sno-th">@ViewData["invpdf"]</th> -->
+                                            </tr>
+                                        </thead>
+                                        @* <tfoot>
+                                            <tr>
+                                                <th class="sno-th">Sno</th>
+                                                <th class="sno-th">Invoice No</th>
+                                                <th class="sno-th">Invoice Date</th>
+                                                <th> Customer Name </th>
+                                                <th class="sno-th">Currency Name</th>
+                                                <th class="sno-th">Total Amount</th>
+                                                <th class="sno-th">Remarks</th>
+                                                <th class="sno-th">Actions</th>
+                                                <th class="sno-th">Invoice PDF</th>
+                                            </tr>
+                                        </tfoot> *@
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+         </div>
+    </div>
+
+    <!-- [MODALS] -->
+    <div class="modal fade" id="modal-ch" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+        aria-labelledby="believerCreateLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    @*<h5 class="modal-title " id="exampleModalLabel1"><label id="lblmsg"></label> Registration</h5>*@
+                    <h5 class="modal-title " id="exampleModalLabel">@ViewData["invoice"]</h5>
+                    <button type="button" class="btn btn-outline-primary close" data-bs-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @*<form class="col-12 p-0 mx-auto" action="AddInvoice" method="post" name="form1">*@
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">@ViewData["invno"]<span
+                                        class="red">*</span></label>
+                                <input type="text" class="form-control" id="txtchname" maxlength="200"
+                                    placeholder="Invoice No" onkeyup="InvoiceValiadte(this);">
+                                <input type="hidden" class="form-control  hidden" id="txtSID">
+                                <div class="form-group flex_form-group align-items-baseline offset">
+                                    <span id="lblInvError"></span>
+                                </div>
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">@ViewData["invdate"]<span
+                                        class="red">*</span></label>
+                                <input type="text" class="form-control" id="txtdate" autocomplete="off"
+                                    placeholder="DD/MM/YYYY" onkeypress="return true" />
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">Due Date</label>
+                                <input type="text" class="form-control" id="txtedate" autocomplete="off"
+                                    placeholder="DD/MM/YYYY" onkeypress="return true" />
+                            </div>
+                        </div>
+                        <div class="row">
+
+
+                        </div>
+                        <div class="row">
+                            <!-- <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["compa"]<span class="red">*</span></label>
+                         <input type="text" class="form-control" id="ddlcpny" maxlength="18" placeholder="Company" disabled />
+                        <input type="hidden" class="form-control  hidden" id="txtcpny">
+                    </div>   -->
+
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">Invoice Expired Date<span
+                                        class="red">*</span></label>
+                                <input type="text" class="form-control" id="txtiedate" autocomplete="off" placeholder="DD/MM/YYYY"
+                                    onkeypress="return true" />
+                            </div>
+
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">@ViewData["totamt"]<span
+                                        class="red">*</span></label>
+                                <input type="text" class="form-control" id="txtttvat" maxlength="18"
+                                    placeholder="Total Amount" disabled />
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">@ViewData["custos"]<span
+                                        class="red">*</span></label>
+                                <input list="ddlcid" value="" class="form-control">
+                                <datalist id="ddlcid" name="ddltype">
+                                </datalist>
+                                <input type="hidden" class="form-control  hidden" id="txtcid">
+                            </div>
+                        </div>
+ 
+                        <div class="row">
+                            @*<div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                <label for="gender" class="inst-label_align">@ViewData["vatamt"]<span
+                                        class="red">*</span></label>
+                                <input type="text" class="form-control" id="txtvat" maxlength="18"
+                                    placeholder="Vat Amount" disabled />
+                            </div>*@
+                            <!-- <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["totamt"]<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtttvat" maxlength="18" placeholder="Total Amount" disabled />
+                    </div> -->
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">Payment Type<span
+                                        class="red">*</span>
+                                    </label>
+                                <select id="ddlptype" class="ui search dropdown form-control" name="ddlptype">
+                                    <option value="Flexible"> Flexible </option>
+                                    <option value="Fixed"> Fixed </option>
+                                </select>
+                                <input type="hidden" class="form-control  hidden" id="txtctype">
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <!-- <label for="gender" class="inst-label_align">@ViewData["remar"]<span class="red">*</span></label>
+                        <textarea type="text" class="form-control" id="txtinr" maxlength="300" placeholder="Remarks"> </textarea> -->
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-4">
+                                <label for="gender" class="inst-label_align">@ViewData["remar"]<span
+                                        class="red">*</span></label>
+                                <textarea type="text" class="form-control textarea" id="txtinr" maxlength="300"
+                                    placeholder="Remarks"> </textarea>
+
+                            </div>
+                        </div>
+                        <div class="row">
+
+                            @*<div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                <label for="gender" class="inst-label_align">@ViewData["warren"] </label>
+                                <textarea type="text" class="form-control" id="txtwarrenty" maxlength="300"
+                                    placeholder="warrenty"> </textarea>
+                            </div>*@
+
+                        </div>
+                        @*<div class="row">
+                            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                <label for="gender" class="inst-label_align">@ViewData["goodssts"]</label>
+                                <textarea type="text" class="form-control" id="txtGsstatus" maxlength="300"
+                                    placeholder="Goods Status"> </textarea>
+                            </div>
+                            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                <label for="gender" class="inst-label_align">@ViewData["delsta"]</label>
+                                <textarea type="text" class="form-control" id="txtDstatus" maxlength="300"
+                                    placeholder="Delivery Status"> </textarea>
+                            </div>
+
+                        </div>*@
+                        @*<div class="row">
+                            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                <label for="gender" class="inst-label_align">@ViewData["vrnsta"]</label>
+                                <input type="text" class="form-control" id="vrnstatus" value="@ViewBag.VRN"
+                                    maxlength="300" placeholder="VRN Status" disabled />
+                            </div>
+                        </div>*@
+                        <div class="row"></div>
+                        <hr>
+                        <div class="row mx-0">
+                            <h5 class="card-title">@ViewData["itmdets"]</h5>
+                            <div class="table-responsive">
+                                <table id="tblCustomers"
+                                    class="table table-bordered table-hover js-basic-example dataTable  table-nowrap mb-0"
+                                    align="center" cellpadding="0" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            @*<th data-orderable="false">Sno</th>*@
+                                            <th class="smallcell" data-orderable="false">@ViewData["vatdesc"]</th>
+                                            <th data-orderable="false">@ViewData["quant"]</th>
+                                            @*<th data-orderable="false">@ViewData["vatcat"]</th>*@
+                                            <th data-orderable="false">@ViewData["unipri"] </th>
+                                            @*<th data-orderable="false">@ViewData["vatper"]</th>*@
+                                            <th data-orderable="false">@ViewData["totamt"]</th>
+                                            @*<th data-orderable="false">@ViewData["vatamt"]</th>*@
+                                            @*<th data-orderable="false">@ViewData["withoutvat"]</th>
+                                            <th data-orderable="false">@ViewData["cate"]</th>*@
+                                            <th data-orderable="false">@ViewData["remar"]</th>
+                                            <th data-orderable="false">@ViewData["Actions"]</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td>
+                                                <textarea type="text" class="form-control fit textarea"
+                                                    placeholder="Description" id="txtDescri"></textarea>
+
+                                            </td>
+                                            <td><input type="number" class="form-unp-qty" placeholder="Qty"
+                                                    id="txtQty" />
+                                            </td>
+                                            @*<td>
+                                                <select id="ddlCategory" class="form-controlNEw" name="ddlVatcategory">
+                                                    <option value="Inclusive" selected>Inclusive</option>
+                                                    <option value="Exclusive">Exclusive</option>
+                                                </select>
+                                            </td>*@
+                                            <td><input type="number" class="form-unp" placeholder="Unit Price"
+                                                    id="txtUnitPrc" /></td>
+
+                                            @*<td><input type="number" class="form-control" placeholder="Vat Per"
+                                                    id="txtVatPer" /></td>*@
+
+                                            @*<td>
+                                                <select id="ddlVatPer" class="form-control form-Vat"
+                                                    name="ddlVatPer"></select>
+                                            </td>*@
+
+                                            <td><input type="number" class="form-unp" placeholder="Total Amount"
+                                                    id="txtTotal" readonly /></td>
+                                            @*<td><input type="number" class="form-control fit" placeholder="Vat Amount"
+                                                    id="txtVatAmnt" readonly /></td>*@
+                                            @*<td><input type="number" class="form-control fit"
+                                                    placeholder="without VAT" id="txtWithoutVAT" readonly /></td>
+                                            <td><input type="text" class="form-control fit" id="txtCat" readonly /></td>
+                                            *@
+                                            <td>
+                                                <textarea type="text" class="form-unp fit textarea"
+                                                    placeholder="Remarks" id="txtRemarks"></textarea>
+                                            </td>
+
+                                            <td class="actions">
+                                                @* <button type="button" class="btn btn-outline-info btn-sm"
+                                                    value="AddNewrow" id="btnAddinvc">
+                                                    <i data-feather="plus"></i>
+                                                    <!-- @ViewData["addnewr"] -->
+                                                </button> *@
+                                              <button  class="btn btn-outline-secondary btn-sm" id="btnAddinvc"><i class="fa-solid fa-add"></i></button>&nbsp;&nbsp;&nbsp;
+                                                @* <button class="btn  btn-outline-danger btn-sm ms-2"
+                                                    id="btnRemovecell"><i data-feather="delete"></i>
+                                                    <!-- @ViewData["remove"] -->
+                                                </button> *@
+                                                <button  class="btn btn-outline-danger btn-sm" id="btnRemovecell"><i class="fa fa-trash"></i></button>&nbsp;&nbsp;&nbsp;
+
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                                <br />
+
+
+                            </div>
+                            <div class="row"></div>
+
+                            <div id="loader1"
+                                style="position: fixed; top:0; display:none;  left:0; width:100%; height: 100%; background:  url('/images/Loading.gif');background-repeat: no-repeat; background-attachment: fixed; background-position: center; ">
+                            </div>
+                            <div id="loader"
+                                style="position: fixed; top:0; display:none; left:0; width:100%; height: 100%; background: url('/images/Loading.gif');background-repeat: no-repeat; background-attachment: fixed; background-position: center; ">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                             <button type="button" class="btn btn-outline-info btn-sm"
+                                data-bs-dismiss="modal">@ViewData["Close"]</button>  
+                           
+                        </div>
+                    </div>
+                    @*
+                </form>*@
+
+            </div>
+        </div>
+    </div>
+ <!-- [MODALS] -->
+<div class="modal" id="modal-chs" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="believerCreateLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<h5 class="modal-title " id="exampleModalLabel1"><label id="lblmsg"></label> Registration</h5>*@
+                <h5 class="modal-title " id="exampleModalLabel">@ViewData["invoice"]</h5>
+                <button type="button" class="btn btn-outline-primary close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            @*<form class="col-12 p-0 mx-auto" action="AddInvoice" method="post" name="form1">*@
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["invno"]<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtchname" maxlength="200" placeholder="Invoice No" onkeyup="InvoiceValiadte(this);" disabled >
+                        <input type="hidden" class="form-control  hidden" id="txtSID">
+                        <div class="form-group flex_form-group align-items-baseline offset">
+                            <span id="lblInvError"></span>
+                        </div>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["invdate"]<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtdate" autocomplete="off" placeholder="dd/MM/yyyy" onkeypress="return true" disabled />
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Due Date</label>
+                        <input type="text" class="form-control" id="txtedate" autocomplete="off" placeholder="dd/MM/yyyy" onkeypress="return true" />
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Invoice Expired Date<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtiedate" autocomplete="off" placeholder="dd/MM/yyyy" onkeypress="return true" disabled />
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["compa"]<span class="red">*</span></label>
+                        @*<select id="ddlcpny" class="ui search dropdown form-control" name="ddltype"></select>*@
+                        <input type="text" class="form-control" id="ddlcpny" maxlength="18" placeholder="Company" disabled />
+                        <input type="hidden" class="form-control  hidden" id="txtcpny">
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["custos"]<span class="red">*</span></label>
+                        <select id="ddlcid" class="ui search dropdown form-control" name="ddltype" disabled></select>
+                        <input type="hidden" class="form-control  hidden" id="txtcid">
+                    </div>
+                </div>
+                @*<div class="row">
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["custidtyp"]<span class="red">*</span></label>
+                <select id="ddlctype" class="ui search dropdown form-control" name="ddlctype">
+                    <option value="0" selected>--Select--</option>
+                    <option value="TIN">TIN</option>
+                    <option value="Driving License">Driving License</option>
+                    <option value="Voters Number">Voters Number</option>
+                    <option value="Passport">Passport</option>
+                    <option value="NID (National Identity)">NID (National Identity)</option>
+                    <option value="NIL">NIL</option>
+                </select>
+                <input type="hidden" class="form-control  hidden" id="txtctype">
+
+            </div>
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["custidno"]<span class="red">*</span></label>
+                <input type="text" class="form-control" id="txtcidno" maxlength="20" placeholder="Customer ID No" />
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["curren"]<span class="red">*</span></label>
+                <select id="ddlccy" class="ui search dropdown form-control" name="ddltype"></select>
+                <input type="hidden" class="form-control  hidden" id="txtccy">
+
+            </div>
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["totwithoutvat"]<span class="red">*</span></label>
+                <input type="text" class="form-control" id="txttwvat" maxlength="18" placeholder="Total Without Vat" disabled />
+            </div>
+        </div>*@
+                <div class="row">
+                    @*<div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+            <label for="gender" class="inst-label_align">@ViewData["vatamt"]<span class="red">*</span></label>
+            <input type="text" class="form-control" id="txtvat" maxlength="18" placeholder="Vat Amount" disabled />
+        </div>*@
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["totamt"]<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtttvat" maxlength="18" placeholder="Total Amount" disabled />
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Payment Type<span class="red">*</span></label>
+                        <select id="ddlptype" class="ui search dropdown form-control" name="ddlptype" disabled>
+                            <option value="Flexible">Flexible</option>
+                            <option value="Fixed">Fixed</option>
+                        </select>
+                        <input type="hidden" class="form-control  hidden" id="txtctype">
+
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">@ViewData["remar"]</label>
+                        <textarea type="text" class="form-control" id="txtinr" maxlength="300" placeholder="Remarks" disabled> </textarea>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="amend" class="inst-label_align">@*@ViewData["warren"]*@ Reason <span class="red">*</span> </label>
+                        <textarea type="text" class="form-control" id="txtamend" maxlength="300" placeholder="Reason for amend"> </textarea>
+                        </div>
+                        @*<div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["warren"] </label>
+                <textarea type="text" class="form-control" id="txtwarrenty" maxlength="300" placeholder="warrenty"> </textarea>
+            </div>*@
+
+                    </div>
+                    @*<div class="row">
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["goodssts"]</label>
+                <textarea type="text" class="form-control" id="txtGsstatus" maxlength="300" placeholder="Goods Status"> </textarea>
+            </div>
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["delsta"]</label>
+                <textarea type="text" class="form-control" id="txtDstatus" maxlength="300" placeholder="Delivery Status"> </textarea>
+            </div>
+
+        </div>*@
+                    @*<div class="row">
+            <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                <label for="gender" class="inst-label_align">@ViewData["vrnsta"]</label>
+                <input type="text" class="form-control" id="vrnstatus" value="@ViewBag.VRN" maxlength="300" placeholder="VRN Status" disabled />
+            </div>
+
+
+        </div>*@
+                    <div class="row"></div>
+                    <hr>
+                    <div class="row mx-0">
+                        <h5 class="card-title">@ViewData["itmdets"]</h5>
+                        <div class="dt-responsive table-responsive ">
+
+                            <table id="tblCustomers" class="table table-bordered rounded e-de-table-center-alignment text-center display no-wrap" align="center" cellpadding="0" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        @*<th data-orderable="false">Sno</th>*@
+                                        <th data-orderable="false">@ViewData["vatdesc"]</th>
+                                        <th data-orderable="false">@ViewData["quant"]</th>
+                                        @*<th data-orderable="false">@ViewData["vatcat"]</th>*@
+                                        <th data-orderable="false">@ViewData["unipri"] </th>
+
+                                        @*<th data-orderable="false">@ViewData["vatper"]</th>*@
+                                        <th data-orderable="false">@ViewData["totamt"]</th>
+                                        @*<th data-orderable="false">@ViewData["vatamt"]</th>*@
+                                        @*<th data-orderable="false">@ViewData["withoutvat"]</th>
+                            <th data-orderable="false">@ViewData["cate"]</th>*@
+                                        <th data-orderable="false">@ViewData["remar"]</th>
+                                        <!-- <th data-orderable="false">@ViewData["Actions"]</th>
+                                        <th></th> -->
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td>
+                                            <textarea type="text" class="form-control fit" placeholder="Description" id="txtDescri"></textarea>
+                                        </td>
+                                        <td><input type="number" class="form-unp" placeholder="Qty" id="txtQty" disabled /></td>
+                                        @*<td>
+                                <select id="ddlCategory" class="form-controlNEw" name="ddlVatcategory">
+                                    <option value="Inclusive" selected>Inclusive</option>
+                                    <option value="Exclusive">Exclusive</option>
+                                </select>
+                            </td>*@
+                                        <td><input type="number" class="form-unp" placeholder="Unit Price" id="txtUnitPrc" disabled /></td>
+
+                                        @*<td><input type="number" class="form-control" placeholder="Vat Per" id="txtVatPer" /></td>*@
+
+                                        @*<td>
+                                <select id="ddlVatPer" class="form-control form-Vat" name="ddlVatPer"></select>
+                            </td>*@
+
+                                        <td><input type="number" class="form-control fit" placeholder="Total Amount" id="txtTotal" disabled /></td>
+                                        @*<td><input type="number" class="form-control fit" placeholder="Vat Amount" id="txtVatAmnt" readonly /></td>*@
+                                        @*<td><input type="number" class="form-control fit" placeholder="without VAT" id="txtWithoutVAT" readonly /></td>
+                            <td><input type="text" class="form-control fit" id="txtCat" readonly /></td>*@
+                                        <td>
+                                            <textarea type="text" class="form-control fit textarea" placeholder="Remarks" id="txtRemarks" disabled></textarea>
+                                        </td>
+
+                                        <td>
+                                            @*<button type="button"  class="btn btn-outline-info btn-sm" value="AddNewrow" id="btnAddinvc">
+                                                <i class="icofont icofont-plus"></i>@ViewData["addnewr"]
+                                            </button>
+
+                                            <button class="btn  btn-outline-danger btn-sm" id="btnRemovecell"><i class="icofont icofont-ui-delete"></i>@ViewData["remove"]</button>*@
+
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            <br />
+
+
+                        </div>
+                        <div class="row"></div>
+
+                        <div id="loader1" style="position: fixed; top:0; display:none;  left:0; width:100%; height: 100%; background:  url('/images/Loading.gif');background-repeat: no-repeat; background-attachment: fixed; background-position: center; ">
+                        </div>
+                        <div id="loader" style="position: fixed; top:0; display:none; left:0; width:100%; height: 100%; background: url('/images/Loading.gif');background-repeat: no-repeat; background-attachment: fixed; background-position: center; ">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">@ViewData["Close"]</button>
+                        <div id="btnsubmit">
+                            <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic" id="btnSubmit">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            @* </form>*@
+
+        </div>
+    </div>
+</div>
+     <script>
+        $("body").on("click", "#btnRemovecell", function () {
+            //debugger;
+            var txtDescri = $("#txtDescri");
+            var txtQty = $("#txtQty");
+            var txtUnitPrc = $("#txtUnitPrc");
+            //var txtVatPer = $("#ddlVatPer");
+            var txtTotal = $("#txtTotal");
+            //var txtVatAmnt = $("#txtVatAmnt");
+            //var txtWithoutVAT = $("#txtWithoutVAT");
+            var txtRemarks = $("#txtRemarks");
+            //var ddlVatPer = $("#ddlVatPer");
+            //var Cat = $("#txtCat");
+            if (txtDescri.val() != '' && $("#txtTotal").val() != '') {
+
+                var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+                //var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+                //var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+                //parseFloat(txtQty)
+
+                //var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                //var totvat = $("#txtvat").val().replaceAll(",", "");
+                var tot = $("#txtttvat").val().replaceAll(",", "");
+
+                //$("#txttwvat").val(Comma(parseFloat(totwithoutvat) - parseFloat(Withutvat)));
+                //$("#txtvat").val(Comma(parseFloat(totvat) - parseFloat(VatAmnt)));
+                $("#txtttvat").val(Comma(parseFloat(tot) - parseFloat(totalAmnt)));
+
+            }
+
+
+
+            //Clear the TextBoxes.
+            txtDescri.val("");
+            txtQty.val("");
+            txtUnitPrc.val("");
+            //txtVatPer.val("");
+            txtTotal.val("");
+            //txtVatAmnt.val("");
+            //txtWithoutVAT.val("");
+            txtRemarks.val("");
+            //Cat.val("");
+        });
+    /*$(function () {
+            $("#ddlctype").change(function () {
+                $("#txtcidno").val("");
+                var cctype = $('option:selected', this).text();
+                var ddlcid = document.getElementById("ddlcid");
+                var ddlcustid = ddlcid.options[ddlcid.selectedIndex].value;
+                if (ddlcustid > 0) {
+                    if (cctype == "TIN") {
+                        var data = {
+                            sno: ddlcustid,
+                        }
+                        //alert(cctype);
+                        $.ajax({
+                            type: "POST",
+                            url: "/Customers/GetTIN",
+                            data: JSON.stringify(data),
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (r) {
+                                $("#txtcidno").val(r);
+                            }
+    
+    
+                        })
+                    }
+                }
+            });
+        });
+        $(function () {
+            $("#ddlcid").change(function () {
+                $("#txtcidno").val("");
+                jQuery("#ddlctype").val(0).change()
+                
+            });      
+        });*/
+    </script>
+
+
+    <script type="text/javascript">
+        $("body").on("click", "#btnAddinvc", function () {
+
+            //debugger
+            //Reference the Name and Country TextBoxes.
+            var txtDescri = $("#txtDescri");
+            var txtQty = $("#txtQty");
+            var txtUnitPrc = $("#txtUnitPrc");
+            //var txtVatPer = $("#ddlVatPer");
+            var txtTotal = $("#txtTotal");
+            //var txtVatAmnt = $("#txtVatAmnt");
+            //var txtWithoutVAT = $("#txtWithoutVAT");
+            var txtRemarks = $("#txtRemarks");
+            //var ddlVatPer = $("#ddlVatPer");
+            //var Category = $("#ddlCategory");
+            //var Cat = $("#txtCat");
+            //var ddlreg = document.getElementById("ddlVatPer");
+
+            //var result = ddlreg.options[ddlreg.selectedIndex].value;
+            //var result1 = ddlreg.options[ddlreg.selectedIndex].text;
+            var sum = 0;
+            if (txtDescri.val() != '' && txtQty.val() != '' && txtUnitPrc.val()) {
+
+
+                temp = 8937894;
+                temp1 = 8937894;
+                temp2 = 8937894;
+                //Get the reference of the Table's TBODY element.
+                var tBody = $("#tblCustomers > TBODY")[0];
+
+                //Add Row.
+                var row = tBody.insertRow(-1);
+                //Add Name cell.
+                var cell = $(row.insertCell(-1));
+                cell.html(txtDescri.val());
+                //var t1 = document.createElement("textarea");
+                //t1.id = "txtbankname1";
+                //t1.t = txtDescri.val() == undefined ? '' : txtDescri.val();
+                //t1.className = "form-control col-4";
+                //cell.html(t1);
+
+
+                //Add Country cell.
+                cell = $(row.insertCell(-1));
+                cell.html(txtQty.val());
+
+                /*cell = $(row.insertCell(-1));
+                cell.html(Category.val());*/
+
+                cell = $(row.insertCell(-1));
+                cell.html(Comma(txtUnitPrc.val()));
+
+
+
+                /*cell = $(row.insertCell(-1));
+                    //cell.html(txtVatPer.val());
+                    cell.html(result1);*/
+
+                cell = $(row.insertCell(-1));
+                cell.html(Comma(txtTotal.val()));
+
+                /*cell = $(row.insertCell(-1));
+                cell.html(Comma( txtVatAmnt.val()));
+        
+                cell = $(row.insertCell(-1));
+                cell.html(Comma(txtWithoutVAT.val()));*/
+
+                /* cell = $(row.insertCell(-1));
+                 cell.html(result);*/
+
+                cell = $(row.insertCell(-1));
+                cell.html(txtRemarks.val());
+                //alert(vCat.val());
+
+
+                //Add Button cell.
+                cell = $(row.insertCell(-1));
+
+
+                var btnRemove = $('<button class="btn  btn-outline-danger btn-sm" onclick="Remove(this);" ><i data-feather="close"></i>Remove</button>');
+                cell.append(btnRemove);
+                /*$('<input>').attr({
+                    type: 'hidden',
+                    id: 'vCat',
+                    name: 'vCat'
+                }).appendTo(cell)
+                var vCat = $("#vCat");
+                vCat.val(result);
+                alert(vCat.val());*/
+                //Clear the TextBoxes.
+                txtDescri.val("");
+                txtQty.val("");
+                txtUnitPrc.val("");
+                //txtVatPer.val("");
+                txtTotal.val("");
+                //txtVatAmnt.val("");
+                //txtWithoutVAT.val("");
+                txtRemarks.val("");
+                //Cat.val("");
+
+            }
+            else {
+
+                message = 'Required Details are missing.';
+                type = 'danger';
+                notifyMessage(message, type);
+            }
+        });
+
+        function Remove(button) {
+            //debugger;
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+                //Get the reference of the Table.
+                var table = $("#tblCustomers")[0];
+
+                var totalAmnt = $("TD", row).eq(3).html().replaceAll(",", "");
+                // var VatAmnt = $("TD", row).eq(6).html().replaceAll(",", "");
+                //var Withutvat = $("TD", row).eq(7).html().replaceAll(",", "");
+                //parseFloat(txtQty)
+
+                //var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                //var totvat = $("#txtvat").val().replaceAll(",", "");
+                var tot = $("#txtttvat").val().replaceAll(",", "");
+                //var wvamount = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                //var vamount = parseFloat(totvat) - parseFloat(VatAmnt);
+                var tamount = parseFloat(tot) - parseFloat(totalAmnt);
+                //$("#txttwvat").val(Comma(wvamount.toFixed(2)));
+                //$("#txtvat").val(Comma(vamount.toFixed(2)));
+                $("#txtttvat").val(Comma(tamount.toFixed(2)));
+                /*$("#txttwvat").val(parseFloat(totwithoutvat) - parseFloat(Withutvat) );
+                $("#txtvat").val(parseFloat(totvat) - parseFloat(VatAmnt) );
+                $("#txtttvat").val(parseFloat(tot) - parseFloat(totalAmnt));
+                $("#txtttvat").val(Comma(sum.toFixed(2)));*/
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+
+
+            }
+        };
+        function waitSeconds(iMilliSeconds) {
+            var counter = 0, start = new Date().getTime(), end = 0;
+            while (counter < iMilliSeconds) {
+                end = new Date().getTime();
+                counter = end - start;
+            }
+        }
+        $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+            //debugger
+            //alert("hello");
+            var details = new Array();
+            $("#tblCustomers TBODY TR").each(function () {
+                var row = $(this);
+                var detail = {};
+                detail.item_description = row.find("TD").eq(0).html();
+                detail.item_qty = row.find("TD").eq(1).html();
+                detail.item_unit_price = parseFloat(row.find("TD").eq(2).html().replaceAll(",", ""));
+                //detail.vat_category = row.find("TD").eq(2).html();
+                //detail.vat_percentage = row.find("TD").eq(4).html();
+                detail.item_total_amount = parseFloat(row.find("TD").eq(3).html().replaceAll(",", ""));
+                //detail.vat_amount = parseFloat(row.find("TD").eq(6).html().replaceAll(",", ""));
+                //detail.item_without_vat = parseFloat(row.find("TD").eq(7).html().replaceAll(",", ""));
+                //detail.Vat_Type = row.find("TD").eq(8).html();
+                detail.remarks = row.find("TD").eq(4).html();
+                details.push(detail);
+
+
+                // details.push(detail);
+            });
+            if ($("#txtDescri").val() != '') {
+                var detailNew = {};
+                //var ddlreg = document.getElementById("ddlVatPer");
+
+                //var result = ddlreg.options[ddlreg.selectedIndex].value;
+                //var result1 = ddlreg.options[ddlreg.selectedIndex].text;
+                detailNew.item_description = $("#txtDescri").val();
+                detailNew.item_qty = $("#txtQty").val();
+                detailNew.item_unit_price = $("#txtUnitPrc").val();
+                //detailNew.vat_category = $("#ddlCategory").val();
+                //detailNew.vat_percentage = result1;
+                detailNew.item_total_amount = $("#txtTotal").val();
+                //detailNew.vat_amount = $("#txtVatAmnt").val();
+                //detailNew.item_without_vat = $("#txtWithoutVAT").val();
+                //detailNew.Vat_Type = $("#txtCat").val();
+                detailNew.remarks = $("#txtRemarks").val();
+                details.push(detailNew);
+            }
+
+            // alert(customers[0].Descri);
+
+            var ddlcpny = document.getElementById("ddlcpny");
+            //var ddlcmpnyId = ddlcpny.options[ddlcpny.selectedIndex].value;
+            var ddlcid = document.getElementById("ddlcid");
+            var ddlcustid = ddlcid.options[ddlcid.selectedIndex].value;
+            //var ddlcurrency = document.getElementById("ddlccy");
+            //var ddlcurrence = ddlcurrency.options[ddlcurrency.selectedIndex].value;
+
+            //var cust = document.getElementById("ddlctype");
+            //var custid = cust.options[cust.selectedIndex].value;
+
+            var ddlptype = document.getElementById("ddlptype");
+            var ddlptypeid = ddlptype.options[ddlptype.selectedIndex].value;
+
+            var message = validateInvoiceBank();
+            type = '',
+                opType = jQuery("#hdnEmployee").val();
+
+
+            var data = {
+                invno: $("#txtchname").val(),
+                auname: $("#txtttvat").val(),
+                date: $("#txtdate").val(),
+                edate: $("#txtedate").val(),
+                iedate: $("#txtiedate").val(),
+                ptype: ddlptypeid,
+                chus: ddlcustid,
+                comno: 0,
+                ccode: "TZS",//ddlcurrence,
+                ctype: "0",//custid,
+                cino: "0",//$("#txtcidno").val(),
+                twvat: 0,
+                vtamou: 0,
+                total: $("#txtttvat").val(),
+                Inv_remark: $("#txtinr").val(),
+                lastrow: 0,
+                details: details,
+                sno: jQuery("#hdnsno").val() == "" ? '0' : jQuery("#hdnsno").val(),
+                warrenty: '',//$("#txtwarrenty").val(),
+                goods_status: opType,// $("#txtGsstatus").val(),
+                delivery_status: '',//$("#txtDstatus").val(),
+
+            }
+            //debugger;
+
+            if (message.length > 0 && opType != 'D') {
+                //document.getElementById("loader").style.display = "block";
+                //jQuery("#loader").css("display", "block");
+                //waitSeconds(5000);
+                //document.getElementById("loader").style.display = "block";
+                //jQuery("#loader").css("display", "block");
+                notifyMessage(message, 'danger');
+            }
+
+            else {
+                var sMess = "Successfully Created";
+                var text = "Are you sure you want to Save Changes ?";
+                var sno = jQuery("#hdnsno").val() == "" ? '0' : jQuery("#hdnsno").val();
+                if (sno != 0 && opType == 'Approve') {
+                    text = "Are you sure you want to Approve ?";
+                    sMess = "Successfully Approved";
+                }
+                else if (sno != 0) {
+                    text = "Are you sure you want to Update Changes ?";
+                    sMess = "Successfully Updated";
+                }
+
+                var x = confirm(text);
+                if (x) {
+                    jQuery("#loader1").css("display", "block");
+                    jQuery("#btnSubmit").prop('disabled', true);
+                    //Send the JSON array to Controller using AJAX.
+                    $.ajax({
+                        type: "POST",
+                        url: "/Invoice/AddInvoice",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {
+                            //alert(r + " record(s) inserted.");
+                            hideModal('modal-ch');
+                            //message = ' record(s)  Successfully Created';
+                            message = sMess;
+                            type = 'success';
+                            notifyMessage(message, type);
+                            jQuery("#loader").css("display", "none");
+                            jQuery("#btnSubmit").prop('disabled', false);
+                            bindchruchDetails();
+
+                        }
+
+
+                    });
+                    jQuery("#loader1").css("display", "none");
+                    jQuery("#btnSubmit").prop('disabled', false);
+                }
+                else {
+
+                    return false;
+                }
+            }
+            jQuery("#loader1").css("display", "none");
+            jQuery("#btnSubmit").prop('disabled', false);
+        });
+        var temp = 0;
+        var temp1 = 0;
+        var temp2 = 0;
+        $(document).on('keyup mouseup', '#txtUnitPrc', function () {
+            var totalRowCount = $("[id*=tblCustomers] tr").length;
+            var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+            var txtDescri = $("#txtDescri").val();
+            var txtQty = $("#txtQty").val();
+            var txtUnitPrc = $("#txtUnitPrc").val();
+            //var txtVatPer = $("#txtVatPer").val();
+            //var txtcategory = $("#ddlCategory");
+
+            var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+            $("#txtTotal").val(total.toFixed(2));
+            //$("#txtWithoutVAT").val('');
+
+            multiu();
+
+
+        });
+        $(document).on('keyup mouseup', '#txtQty', function () {
+            var totalRowCount = $("[id*=tblCustomers] tr").length;
+            var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+            var txtDescri = $("#txtDescri").val();
+            var txtQty = $("#txtQty").val();
+            var txtUnitPrc = $("#txtUnitPrc").val();
+            //var txtVatPer = $("#txtVatPer").val();
+            //var txtcategory = $("#ddlCategory");
+
+            var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+            $("#txtTotal").val(total.toFixed(2));
+            //$("#txtWithoutVAT").val('');
+
+            multiu();
+
+
+        });
+
+        //vat per chnage event
+
+
+
+
+
+        function InvoiceValiadte(e) {
+            // alert($("#txtchname").val());
+            jQuery.ajax({
+                type: 'GET',
+                url: '@Url.Action("GetInvNo", "Invoice")',
+                data: {
+                    invno: $("#txtchname").val(),
+                    invmasno: jQuery("#hdnsno").val() == "" ? '0' : jQuery("#hdnsno").val(),
+                },
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        message = 'Invoice No Already exist.';
+                        type = 'danger';
+                        notifyMessage(message, type);
+                        $("#txtchname").val('');
+                    }
+                }
+            })
+        }
+        function validateInvoiceBank() {
+            //debugger
+
+            var invoiceno = document.getElementById('txtchname');
+            var txtdate = document.getElementById("txtdate");
+            var txtedate = document.getElementById("txtedate");
+            var txtiedate = document.getElementById("txtiedate");
+            //var txttwithoutvat = document.getElementById("txttwvat");
+            //var txtvat = document.getElementById("txtvat");
+            var txttotalvat = document.getElementById("txtttvat");
+
+            var txtinremarks = document.getElementById("txtinr");
+            //var txtwarrenty = document.getElementById("txtwarrenty");
+            //var txtGsstatus = document.getElementById("txtGsstatus");
+            //var txtDstatus = document.getElementById("txtDstatus");
+
+            var ddlcpny = document.getElementById("ddlcpny");
+            //var ddlcmpnyId = ddlcpny.options[ddlcpny.selectedIndex].value;
+            var ddlcid = document.getElementById("ddlcid");
+            var ddlcustid = ddlcid.options[ddlcid.selectedIndex].value;
+            //var ddlcurrency = document.getElementById("ddlccy");
+            //var ddlcurrence = ddlcurrency.options[ddlcurrency.selectedIndex].value;
+
+            //var cust = document.getElementById("ddlctype");
+            //var custid = cust.options[cust.selectedIndex].value;
+
+            //var cidno = document.getElementById("txtcidno");
+
+            result = '';
+            if (invoiceno.value.trim().length == 0) {
+                result += 'Invoiceno Name is Required .<br/>';
+            }
+            if (txtdate.value.trim().length == 0) {//
+                result += 'Date is Required .<br/>';
+            }
+            /*if (txtedate.value.trim().length == 0) {//
+                result += 'Due Date is Required .<br/>';
+            }*/
+            if (txtiedate.value.trim().length == 0) {//
+                result += 'Invoice Expired Date is Required .<br/>';
+            }
+
+
+            /*if (ddlcmpnyId == "0") {
+                result += 'Company is Required<br/>';
+            }*/
+            if (ddlcustid == "0") {
+                result += 'Customer is Required<br/>';
+            }
+
+            /*if (custid == "0") {
+                result += 'Customer ID Type is Required<br/>';
+            }
+            if (custid == "NIL") {
+            }
+            else {
+                if (cidno.value.trim().length == 0) {
+                    result += 'Customer ID no  is Required .<br/>';
+                }
+            }
+            if (ddlcurrence == "0") {
+                result += 'Currency is Required<br/>';
+            }
+            /*if (txttwithoutvat.value.trim().length == 0) {
+                result += 'Total Without Vat  is Required .<br/>';
+            }
+            if (txtvat.value.trim().length == 0) {
+                result += 'Vat Amount is Required .<br/>';
+            }*/
+            if (txttotalvat.value.trim().length == 0) {
+                result += 'Total Amount is Required .<br/>';
+            }
+            if (txtinremarks.value.trim().length == 0) {
+                result += 'Remarks is Required .<br/>';
+            }
+
+            /*if (txtwarrenty.value.trim().length == 0) {
+                result += 'warrenty  is Required .<br/>';
+            }
+            if (txtGsstatus.value.trim().length == 0) {
+                result += 'Goods Status is Required .<br/>';
+            }*/
+            var Desc = jQuery("#txtDescri").val();
+            var Qty = jQuery("#txtQty").val();
+            var txtUnitPrc = jQuery("#txtUnitPrc").val();
+            //var ddlVatPer = jQuery("#ddlVatPer").val();
+            var hd = $("#tblchruch tr:last").is(":visible");
+            if (hd == true) {
+                if (Desc == '' || Qty == '' || txtUnitPrc == '') {
+                    result += 'Required Details are missing.';
+                }
+            }
+            var table = "#tblchruch tr";
+            var count = jQuery(table).not("thead tr").length;
+            for (var i = 1; i <= count; i++) {
+                var bn = jQuery(table).eq(i).find('td:eq(1) input').val();
+                var bb = jQuery(table).eq(i).find('td:eq(2) input').val();
+                var ac = jQuery(table).eq(i).find('td:eq(3) input').val();
+                var sc = jQuery(table).eq(i).find('td:eq(4) input').val();
+                if (bn == '' || bb == '' || ac == '' || sc == '') {
+                    //result += 'Required Details are missing.';
+                }
+            }
+            return result;
+        }
+    </script>
+    <script>
+        function showchModal(e) {
+            //resetchruInvoi();
+            // jQuery("#loader").css("display", "block");
+            jQuery("#tblCustomers  TBODY").children().not(":last").remove();
+
+            txtSID = document.getElementById('txtSID');
+            var tblemployee = document.getElementById('tblCustomers');
+            // rows = tblemployee.rows;
+            var rows = $(this);
+            hdnEmployee = document.getElementById('hdnEmployee');
+
+            if (e.value.indexOf('Edit') > -1) {
+                var pt = jQuery(e).data('sid');
+
+                jQuery("#hdnsno").val(pt);
+                temp = 8937894;
+                temp1 = 8937894;
+                temp2 = 8937894;
+                $("#btnSubmit").html('Save');
+                //$("#input").prop('disabled', false); 
+                //jQuery("#txtac").val('');
+                //jQuery("#dlstatus").val(0).change();
+                for (var i = 0, row = null; i < rows.length; i++) {
+                    row = rows[i];
+
+                    //if (row.cells[7].innerHTML.indexOf(e.id) > -1) {
+                    txtSID.value = jQuery(e).data('sid');
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetInvoiceDetailsbyid", "Invoice")',
+                        cache: true,
+                        data: JSON.stringify({ 'invid': jQuery(e).data('sid') }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            if (data != null) {
+
+                                if (data.approval_status == "2") {
+                                    $("#btnsubmit").hide();
+                                }
+                                //console.log(moment(data.Invoice_Date.toString()).format('MM/DD/YYYY'));
+
+                                $("#txtchname").val(data.Invoice_No);
+                                //$("#txtdate").val(moment(data.Invoice_Date.toString()).format('dd/MM/YYYY'));//ConvertJsonDateToDate(value.Invoice_Date)
+                                $("#txtdate").val(ConvertJsonDateToDate(data.Invoice_Date));//ConvertJsonDateToDate(value.Invoice_Date)
+                                if (data.Due_Date != null) {
+                                    $("#txtedate").val(ConvertJsonDateToDate(data.Due_Date));
+                                }
+                                if (data.Invoice_Expired_Date != null) {
+                                    $("#txtiedate").val(ConvertJsonDateToDate(data.Invoice_Expired_Date));
+                                }
+                                if (data.Payment_Type != null) {
+                                    jQuery("#ddlptype").val(data.Payment_Type).change()
+                                }
+                                else {
+
+                                }
+
+                                jQuery("#ddlcid").val(data.Chus_Mas_No).change()
+                                $("#txtttvat").val(Comma(data.Total.toFixed(2)));
+                                $("#txtinr").val(data.Remarks);
+                                //$("#txtwarrenty").val(data.warrenty);
+                                //$("#txtGsstatus").val(data.goods_status);
+                                //$("#txtDstatus").val(data.delivery_status);
+                                //jQuery("#ddlctype").val(data.Customer_ID_Type).change()
+                                //$("#txtcidno").val(data.Customer_ID_No);
+                                //var cidno = document.getElementById("txtcidno");
+                                $("#txtchname").removeAttr("disabled");
+                                $("#txtdate").removeAttr("disabled");
+                                $("#txtedate").removeAttr("disabled");
+                                $("#txtiedate").removeAttr("disabled");
+                                $("#ddlptype").removeAttr("disabled");
+                                $("#ddlcid").removeAttr("disabled");
+                                $("#txtinr").removeAttr("disabled");
+
+                                $("#btnAddinvc").show();
+                                $("#btnRemovecell").show();
+
+                            }
+                            jQuery("#loader").css("display", "none");
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("GetInvoiceInvoicedetails", "Invoice")',
+                                data: JSON.stringify({ 'invid': jQuery(e).data('sid') }),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                cache: false,
+                                success: function (data) {
+
+
+                                    var txtDescri = $("#txtDescri");
+                                    var txtQty = $("#txtQty");
+                                    var txtUnitPrc = $("#txtUnitPrc");
+                                    //var txtVatPer = $("#ddlVatPer");
+                                    var txtTotal = $("#txtTotal");
+                                    //var txtVatAmnt = $("#txtVatAmnt");
+                                    //var txtWithoutVAT = $("#txtWithoutVAT");
+                                    var txtRemarks = $("#txtRemarks");
+                                    //var Cat = $("#txtCat");
+                                    //  $("#txttwvat").val("");
+
+                                    //Clear the TextBoxes.
+                                    txtDescri.val("");
+                                    txtQty.val("");
+                                    txtUnitPrc.val("");
+                                    //txtVatPer.val("");
+                                    txtTotal.val("");
+                                    //txtVatAmnt.val("");
+                                    //txtWithoutVAT.val("");
+                                    txtRemarks.val("");
+                                    //Cat.val("");
+                                    //var dtcount = data.length;
+                                    jQuery("#tblCustomers  TBODY").children().remove();
+                                    jQuery.each(data, function (key, value) {
+                                        //debugger
+                                        // var tBody = jQuery("#tblCustomers  TBODY")[0];
+                                        //Get the reference of the Table's TBODY element.
+                                        var tBody = $("#tblCustomers > TBODY")[0];
+                                        var row = tBody.insertRow(-1);
+
+                                        //Add Name cell.
+                                        var cell = $(row.insertCell(-1));
+                                        cell.html(value.Item_Description);
+
+                                        //Add Country cell.
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(value.Item_Qty);
+                                        //cell = $(row.insertCell(-1));
+                                        //cell.html(value.vat_category);
+
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(Comma(value.Item_Unit_Price));
+
+                                        //cell = $(row.insertCell(-1));
+                                        //cell.html(Comma( value.Vat_Percentage));
+
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(Comma(value.Item_Total_Amount));
+
+                                        /*cell = $(row.insertCell(-1));
+                                        cell.html(Comma( value.Vat_Amount));
+    
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(Comma(value.Item_Without_vat));
+    
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(value.Vat_Type);*/
+
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(value.Remarks);
+
+
+                                        //Add Button cell.
+                                        cell = $(row.insertCell(-1));
+
+
+                                        var btnRemove = $('<button class="btn  btn-outline-danger btn-sm" onclick="Remove(this);" ><i data-feather="x"></i>Remove</button>');
+
+                                        cell.append(btnRemove);
+
+                                        //i++;
+                                    })
+                                    //var tRows = document.getElementById('tblCustomers');
+                                    //var rows = tRows.rows;
+                                    //for (var Index = 1, row = null; Index < rows.length; Index++) {
+                                    //    row = rows[Index];
+                                    //    row.cells[0].innerHTML = Index;
+                                    //}
+                                    //$('#tblchruch tr:last').show();
+                                }
+                            })
+                        }
+                    })
+                    //}
+                }
+                hdnEmployee.value = 'U';
+            }
+            else if (e.value.indexOf('Approve') > -1) {
+                var pt = jQuery(e).data('sid');
+
+                jQuery("#hdnsno").val(pt);
+                temp = 8937894;
+                temp1 = 8937894;
+                temp2 = 8937894;
+                $("#btnSubmit").html('Approve');
+                $("#input").prop('disabled', true);
+                for (var i = 0, row = null; i < rows.length; i++) {
+                    row = rows[i];
+
+                    txtSID.value = jQuery(e).data('sid');
+                    jQuery.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("GetInvoiceDetailsbyid", "Invoice")',
+                        cache: true,
+                        data: JSON.stringify({ 'invid': jQuery(e).data('sid') }),
+                        contentType: 'application/json; charset=utf-8',
+                        dataType: 'json',
+                        success: function (data) {
+
+                            if (data != null) {
+
+                                if (data.approval_status == "2") {
+                                    $("#btnsubmit").hide();
+                                }
+                                //console.log(moment(data.Invoice_Date.toString()).format('MM/DD/YYYY'));
+
+                                $("#txtchname").val(data.Invoice_No);
+                                $("#txtdate").val(moment(data.Invoice_Date.toString()).format('MM/DD/YYYY'));
+                                if (data.Due_Date != null) {
+                                    $("#txtedate").val(moment(data.Due_Date.toString()).format('MM/DD/YYYY'));
+                                }
+                                if (data.Invoice_Expired_Date != null) {
+                                    $("#txtiedate").val(moment(data.Invoice_Expired_Date.toString()).format('MM/DD/YYYY'));
+                                }
+                                if (data.Payment_Type != null) {
+                                    jQuery("#ddlptype").val(data.Payment_Type).change()
+                                }
+                                else {
+
+                                }
+
+                                //jQuery("#ddlcpny").val(data.Com_Mas_Sno).change()
+                                jQuery("#ddlcid").val(data.Chus_Mas_No).change()
+                                //jQuery("#ddlccy").val(data.Currency_Code).change()
+
+                                //$("#txttwvat").val(Comma(data.Total_Without_Vt.toFixed(2)));
+                                //$("#txtvat").val(Comma(data.Total_Vt.toFixed(2)));
+                                $("#txtttvat").val(Comma(data.Total.toFixed(2)));
+                                $("#txtinr").val(data.Remarks);
+                                //$("#txtwarrenty").val(data.warrenty);
+                                //$("#txtGsstatus").val(data.goods_status);
+                                //$("#txtDstatus").val(data.delivery_status);
+                                //jQuery("#ddlctype").val(data.Customer_ID_Type).change()
+                                //$("#txtcidno").val(data.Customer_ID_No);
+                                //var cidno = document.getElementById("txtcidno");
+
+                                $("#txtchname").attr("disabled", "disabled");
+                                $("#txtdate").attr("disabled", "disabled");
+                                $("#txtedate").attr("disabled", "disabled");
+                                $("#txtiedate").attr("disabled", "disabled");
+                                $("#ddlptype").attr("disabled", "disabled");
+                                $("#ddlcid").attr("disabled", "disabled");
+                                $("#txtinr").attr("disabled", "disabled");
+
+                                $("#btnAddinvc").hide();
+                                $("#btnRemovecell").hide();
+
+                            }
+                            jQuery("#loader").css("display", "none");
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("GetInvoiceInvoicedetails", "Invoice")',
+                                data: JSON.stringify({ 'invid': jQuery(e).data('sid') }),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                cache: false,
+                                success: function (data) {
+
+
+                                    var txtDescri = $("#txtDescri");
+                                    var txtQty = $("#txtQty");
+                                    var txtUnitPrc = $("#txtUnitPrc");
+                                    var txtTotal = $("#txtTotal");
+                                    var txtRemarks = $("#txtRemarks");
+
+                                    //Clear the TextBoxes.
+                                    txtDescri.val("");
+                                    txtQty.val("");
+                                    txtUnitPrc.val("");
+                                    txtTotal.val("");
+                                    txtRemarks.val("");
+                                    jQuery("#tblCustomers  TBODY").children().remove();
+                                    jQuery.each(data, function (key, value) {
+                                        var tBody = $("#tblCustomers > TBODY")[0];
+                                        var row = tBody.insertRow(-1);
+
+                                        //Add Name cell.
+                                        var cell = $(row.insertCell(-1));
+                                        cell.html(value.Item_Description);
+
+                                        //Add Country cell.
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(value.Item_Qty);
+                                        //cell = $(row.insertCell(-1));
+                                        //cell.html(value.vat_category);
+
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(Comma(value.Item_Unit_Price));
+
+                                        //cell = $(row.insertCell(-1));
+                                        //cell.html(Comma( value.Vat_Percentage));
+
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(Comma(value.Item_Total_Amount));
+
+                                        /*cell = $(row.insertCell(-1));
+                                        cell.html(Comma( value.Vat_Amount));
+    
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(Comma(value.Item_Without_vat));
+    
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(value.Vat_Type);*/
+
+                                        cell = $(row.insertCell(-1));
+                                        cell.html(value.Remarks);
+
+
+                                        //Add Button cell.
+                                        cell = $(row.insertCell(-1));
+
+
+                                        var btnRemove = $('<button class="btn  btn-outline-danger btn-sm" onclick="Remove(this);" ><i data-feather="x"></i>Remove</button>');
+
+                                        //cell.append(btnRemove);
+
+                                        //i++;
+                                    })
+                                    //var tRows = document.getElementById('tblCustomers');
+                                    //var rows = tRows.rows;
+                                    //for (var Index = 1, row = null; Index < rows.length; Index++) {
+                                    //    row = rows[Index];
+                                    //    row.cells[0].innerHTML = Index;
+                                    //}
+                                    //$('#tblchruch tr:last').show();
+                                }
+                            })
+                        }
+                    })
+                    //}
+                }
+                hdnEmployee.value = 'Approve';
+            }
+            else if (e.value.indexOf('Add') > -1) {
+
+                $("#btnsubmit").show();
+                $("#btnSubmit").html('Save');
+                jQuery("#hdnsno").val(0);
+                var txtDescri = $("#txtDescri");
+                var txtQty = $("#txtQty");
+                var txtUnitPrc = $("#txtUnitPrc");
+                //var txtVatPer = $("#ddlVatPer");
+                var txtTotal = $("#txtTotal");
+                //var txtVatAmnt = $("#txtVatAmnt");
+                //var txtWithoutVAT = $("#txtWithoutVAT");
+                var txtRemarks = $("#txtRemarks");
+                //var Cat = $("#txtCat");
+                //$("#txttwvat").val("");
+
+                //Clear the TextBoxes.
+                txtDescri.val("");
+                txtQty.val("");
+                txtUnitPrc.val("");
+                //txtVatPer.val("");
+                txtTotal.val("");
+                //txtVatAmnt.val("");
+                //txtWithoutVAT.val("");
+                txtRemarks.val("");
+                //Cat.val("");
+                $("#txtchname").removeAttr("disabled");
+                $("#txtdate").removeAttr("disabled");
+                $("#txtedate").removeAttr("disabled");
+                $("#txtiedate").removeAttr("disabled");
+                $("#ddlptype").removeAttr("disabled");
+                $("#ddlcid").removeAttr("disabled");
+                $("#txtinr").removeAttr("disabled");
+
+                $("#btnAddinvc").show();
+                $("#btnRemovecell").show();
+                jQuery("#tblCustomers  TBODY").children().remove();
+
+                resetchruInvoi();
+                //txtcpny.value = 0;
+                //txtcid.value = 0;
+                //txtccy.value = 0;
+                //jQuery("#btnSubmit").show();
+                //jQuery("#btnSubmit").html("Save");
+                //hdnEmployee.value = 'C';
+                //jQuery("#loader").css("display", "none");
+                var tRows = document.getElementById('tblCustomers');
+                //    var rows = $(this);
+                //    for (var Index = 1, row = null; Index < rows.length - 1; Index++) {
+                //    row = rows[Index];
+                //    row.cells[0].innerHTML = Index;
+                //}
+            }
+            jQuery("#loader").css("display", "none");
+        }
+
+
+        function resetchruInvoi() {
+
+
+            jQuery("#ddlcid").dropdown('clear')
+            jQuery("#ddlcid").val(0).change();
+            jQuery("#txtchname").val("");
+            jQuery("#txtdate").val("");
+            jQuery("#txtedate").val("");
+            jQuery("#txtiedate").val("");
+            jQuery("#txtinr").val("");
+            //jQuery("#txtvat").val("");
+            jQuery("#txtttvat").val("");
+
+            $("#txttwvat").val("");
+            /*jQuery("#txtwarrenty").val("");
+            jQuery("#txtGsstatus").val("");
+            jQuery("#txtDstatus").val("");*/
+
+
+
+
+            jQuery("#tblCustomers  TBODY").children().remove();
+            //var tRows = document.getElementById('tblCustomers');
+            //var rows = $(this);
+            //for (var Index = 1, row = null; Index < rows.length; Index++) {
+            //    row = rows[Index];
+            //    row.cells[0].innerHTML = Index;
+            //}
+
+        }
+    </script>
+    <script>
+        function multiu() {
+            var txtDescri = $("#txtDescri");
+            var txtQty = $("#txtQty");
+            var txtUnitPrc = $("#txtUnitPrc");
+            //var txtVatPer = $("#ddlVatPer");
+            var txtTotal = $("#txtTotal");
+            //var txtVatAmnt = $("#txtVatAmnt");
+            //var txtWithoutVAT = $("#txtWithoutVAT");
+            var txtRemarks = $("#txtRemarks");
+            //var txtcategory = $("#ddlCategory");
+            //var vrnstatus = $("#vrnstatus");
+            //var Cat = $("#txtCat");
+            //var ddlreg = document.getElementById("ddlVatPer");
+            //alert(ddlreg.options[ddlreg.selectedIndex].value);
+            /*var result = ddlreg.options[ddlreg.selectedIndex].value;
+            var result1 = ddlreg.options[ddlreg.selectedIndex].text;
+            if (result == 0) {
+                result = "";
+            }*/
+            var sum = 0;
+
+            //$("#txtCat").val(result);
+
+
+            /*if (txtVatPer.val() == '') {
+                txtVatPer.val("0");
+            }*/
+
+            if (txtQty.val() != '' && txtUnitPrc.val() != '') {
+                //alert(txtQty.val() + ": " + txtUnitPrc.val());    
+                //alert($('option:selected', this).text());
+                var totalRowCount = $("[id*=tblCustomers] tr").length;
+                var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+                //if (txtcategory.val() == 'Inclusive') {
+
+                var txtQty = $("#txtQty").val();
+                if (txtQty == '') {
+                    txtQty = "0";
+
+                }
+                var txtUnitPrc = $("#txtUnitPrc").val();
+                if (txtUnitPrc == '') {
+                    txtUnitPrc = "0";
+                }
+                //var txtVatPer = $('option:selected', this).text();
+
+                var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                $("#txtTotal").val(total.toFixed(2));
+                //alert("sk");
+
+
+
+
+                var existing = $("#txtttvat").val().toString().replaceAll(",", "");
+
+                //var txttwvat = $("#txttwvat").val().toString().replaceAll(",", "");
+                //var txtvat = $("#txtvat").val().toString().replaceAll(",", "");
+                //alert(existing);
+                if (existing != '') {
+                    var total = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+
+                    if (temp > 0 && temp != 8937894) {
+                        if (temp == 9999999) {
+                            temp = 0;
+                        }
+
+                        existing = parseFloat(existing) - temp;
+                        temp = 1;
+                    }
+                    sum = parseFloat(existing) + parseFloat(total);
+                    $("#txtttvat").val(Comma(sum.toFixed(2)));
+                }
+                else {
+
+                    $("#txtttvat").val(Comma(txtTotal.val()));
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+
+                }
+
+
+
+
+                if (temp == 1 || temp == 8937894) {
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    if (temp == 0) {
+                        temp = 9999999;
+                    }
+                }
+
+                //}
+
+
+
+
+
+                //add total amoun to values to file
+
+            }
+            else {
+                var txtDescri = $("#txtDescri");
+                var txtQty = $("#txtQty");
+                var txtUnitPrc = $("#txtUnitPrc");
+                //var txtVatPer = $("#ddlVatPer");
+                var txtTotal = $("#txtTotal");
+                //var txtVatAmnt = $("#txtVatAmnt");
+                //var txtWithoutVAT = $("#txtWithoutVAT");
+                var txtRemarks = $("#txtRemarks");
+                //var Cat = $("#txtCat");
+                //var ddlVatPer = $("#ddlVatPer");
+                var totalRowCount = $("[id*=tblCustomers] tr").length;
+                var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+                if (rowCount > 1) {
+
+                    if (txtDescri.val() != '' && $("#txtTotal").val() != '') {
+
+                        var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+                        //var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+                        //var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+                        //parseFloat(txtQty)
+
+                        // var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                        //var totvat = $("#txtvat").val().replaceAll(",", "");
+                        var tot = $("#txtttvat").val().replaceAll(",", "");
+                        //var tott1 = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                        //var tott2 = parseFloat(totvat) - parseFloat(VatAmnt);
+                        var tott3 = parseFloat(tot) - parseFloat(totalAmnt)
+                        //$("#txttwvat").val(Comma(tott1));
+                        //$("#txtvat").val(Comma(tott2));
+                        $("#txtttvat").val(Comma(tott3));
+
+                    }
+
+                    //Clear the TextBoxes.
+                    //txtDescri.val("");
+                    //txtQty.val("");
+                    //txtUnitPrc.val("");
+                    //txtTotal.val("");
+                    //txtRemarks.val("");
+                    //Cat.val("");
+                }
+                else {
+
+                    $("#txtttvat").val('');
+
+                    //txtUnitPrc.val("");
+                    //txtTotal.val("");
+
+                    //txtRemarks.val("");
+                }
+                message = 'Required Details are missing.';
+                type = 'danger';
+                //notifyMessage(message, type);
+            }
+        }
+
+
+        function disablefuturedate(st, e) {
+
+            jQuery('#' + e).datepicker('destroy');
+            jQuery('#' + e).datepicker({
+                uiLibrary: 'bootstrap5',
+                // minDate: st,
+                maxDate: st,
+                format: "dd/mm/yyyy",
+                iconsLibrary: 'fontawesome',
+            });
+            @* //$('#ui-datepicker-div').css('clip', 'auto');  *@
+    }
+
+    </body>
+
+
+    

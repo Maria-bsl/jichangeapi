@@ -1,0 +1,521 @@
+﻿
+@{
+    ViewBag.Title = "RepCompCustomer";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+
+<script type="text/javascript">
+    var cnd, end;
+    var total = 0;
+    var tot1 = 0;
+    var tot2 = 0;
+    var tot3 = 0;
+    var tot4 = 0;
+    $(document).ready(function () {
+        //Getod();
+        bindRegionDetails();
+        bindCompDetails();
+        $("#btn").click(function () {
+            adddesg();
+            total = 0;
+
+        });
+        $("#btnPdf").click(function () {
+            addpdf();
+
+        });
+        $("#btnExcel").click(function () {
+            addexcel();
+
+        });
+    });
+</script>
+
+
+
+
+
+<div class="page-body">
+        <div class="container-fluid">
+<div class="page-title">
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            <h2>@ViewData["custdetrep"]</h2>
+        </div>
+        <div class="col-md-6 col-sm-12 text-right">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Setup", "Setup")"><i data-feather="home"></i></a></li>
+                    <li class="breadcrumb-item">Home</li>
+                <li class="breadcrumb-item active">@ViewData["custdetrep"]</li>
+            @* <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a> *@
+            @* <button type="button" id="btnAdd" value="Add" data-sid="0"
+                class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+                onclick="showcurrencyModal(this);" data-bs-toggle="modal" data-bs-target="#modal-currency"> <i
+                class="icofont icofont-plus m-r-5"></i>
+                Add Currency
+                </button> *@
+            <input type="hidden" id="hdnEmployee" />
+            </ol>
+        </div>
+    </div>
+</div>
+ </div>
+        <!-- Container-fluid starts-->
+<div class="container-fluid general-widget">
+    @* BODY DETAILS CARD/PANEL *@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    @* <h2>
+                        @ViewData["custdetrep"] <small></small>
+                    </h2> *@
+
+                    <div class="card-block">
+
+                        <div class="row">
+                            <div class="form-group flex_form-group align-items-baseline col-xl-6">
+                                <label for="ddluserid" class="label-130">@ViewData["compa"]</label>
+                                <select id="ddlcomp" class="form-control" name="ddluser" disabled></select>
+                            </div>
+                        </div>
+                            <div class="row">
+                                <div class="form-group flex_form-group align-items-baseline col-xl-6">
+                                    <label for="ddluserid" class="label-130">@ViewData["Region"]</label>
+                                    <select id="ddlreg" class="form-control" name="ddlreg"></select>
+                                </div>
+                                <div class="form-group flex_form-group align-items-baseline col-xl-6">
+                                    <label for="ddluserid" class="label-130">@ViewData["District"]</label>
+                                    <select id="ddldist" class="form-control" name="ddluser"></select>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-end col-12 my-2">
+
+
+                                <input type="submit" value="@ViewData["Sub"]" id="btn" class="btn btn-outline-primary btn-sm btn-biz_logic" />
+                                <input type="submit" value="@ViewData["PDF"]" id="btnPdf" class="btn btn-outline-info btn-sm btn-biz_logic ml-1" />
+                                <input type="submit" value="@ViewData["Excel"]" id="btnExcel" class="btn btn-outline-primary btn-sm btn-biz_logic ml-1" />
+                            </div>
+
+                            <div class="card-block">
+                                <div class="table-content">
+                                    <div class="dt-responsive table-responsive">
+                                        <table id="tbl-smtp" class="table table-stripped table-bordered nowrap">
+                                            <thead class="thead-light">
+                                                <tr>
+                                                    <th class="sno-th">Sno</th>
+                                                    <th>@ViewData["custname"]</th>
+                                                    <th>@ViewData["poboxno"]</th>
+                                                    <th>@ViewData["addr"]</th>
+                                                    <th>@ViewData["conctper"]</th>
+                                                    <th>@ViewData["EID"]</th>
+                                                    <th>@ViewData["Mno"]</th>
+
+                                                </tr>
+                                            </thead>
+
+                                            <tbody></tbody>
+                                            <tfoot>
+
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="table-responsive"> -->
+                            @*<div id="invoicereportlispartail" class="table-responsive">
+                @Html.Partial("_Invoicelistpartial", Model)
+            </div>*@
+                            <!-- </div> -->
+                        </div>
+
+
+                   
+  <!-- Container-fluid Ends-->
+</div>     
+
+
+<script>
+      function disablebetweendates(st, e) {
+          var today, datepicker;
+          today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+          $(document).ready(function () {
+              jQuery('#' + e).datepicker('destroy');
+              $('#' + e).datepicker({
+                  uiLibrary: 'bootstrap4',
+                  format: "dd/mm/yyyy",
+                  minDate: st,
+                  maxDate: today,
+                  iconsLibrary: 'fontawesome',
+                  weekStartDay: 1,
+              });
+          })
+      }
+
+
+                        jQuery("#tbl-smtp").hide();
+
+                        function bindCompDetails() {
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("CompList", "RepCompCustomer")',
+                                data: '{}',
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                success: function (data) {
+                                   // jQuery("#ddlcomp").append(jQuery("<option></option>").val(0).html('ALL'));
+                                    //jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('All'));
+                                    if (data != null) {
+                                        //jQuery.each(data, function (key, value) {
+                                            jQuery("#ddlcomp").append(jQuery("<option></option>").val(data[0].CompSno).html(data[0].CompName));
+                                        //});
+                                    }
+                                }
+                            })
+                            }
+                            function bindRegionDetails() {
+                            jQuery.ajax({
+                                type: 'GET',
+                                url: '@Url.Action("GetRegionDetails", "Customers")',
+                                data: '{}',
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                success: function (data) {
+                                    jQuery("#ddlreg").append(jQuery("<option></option>").val(0).html('ALL'));
+                                    jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('All'));
+                                    if (data != null) {
+                                        jQuery.each(data, function (key, value) {
+                                            jQuery("#ddlreg").append(jQuery("<option></option>").val(value.Region_SNO).html(value.Region_Name));
+                                        });
+                                    }
+                                }
+                            })
+                        }
+                        function bindDistDetails(dlreg) {
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("GetDistDetails", "Customers")',
+                                data: JSON.stringify({ 'Sno': dlreg }),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                success: function (data) {
+                                    jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('ALL'));
+                                    if (data != null) {
+                                        jQuery.each(data, function (key, value) {
+                                            jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name));
+                                        });
+                                    }
+                                    jQuery("#ddldist").val(dlreg).change();//ward
+                                }
+                            })
+                        }
+    jQuery(function () {
+        jQuery("#ddlreg").change(function () {
+             jQuery('#ddldist option').remove();
+            var dlreg = jQuery("#ddlreg > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDistDetails", "Customers")',
+                data: JSON.stringify({ 'Sno': dlreg }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('All'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name));
+                        });
+                    }
+                    if (jQuery("#ddldist").val() == undefined) {
+                        jQuery("#ddldist").val(0).change();
+                    }
+                    //else { jQuery("#ddldist").val(0).change(); }
+                    //if (txtSname.value != 0) {
+                    //    jQuery("#ddldist").val(txtSname.value).change();
+                    //}
+                }
+            })
+        })
+    })
+
+</script>
+<script type="text/javascript">
+
+    var bd = " ";
+    var curr;
+                        function adddesg() {
+                            var i = 0;
+
+                            var inst = $("#ddlreg").val();
+                            var cust = $("#ddldist").val();
+                            var comp = $("#ddlcomp").val();
+                            
+                            var dltext = $('#ddlcurrency option:selected')
+                                .toArray().map(item => item.text).join();
+                            var dlvalue = $('#ddlcurrency option:selected')
+                                .toArray().map(item => item.value).join();
+                            jQuery.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("GetcustDetReport", "RepCompCustomer")',
+                                data: JSON.stringify({'Comp':comp, 'reg': inst, 'dist': cust }),
+                                contentType: 'application/json; charset=utf-8',
+                                dataType: 'json',
+                                async: false,
+                                success: function (data) {
+                                    jQuery("#tbl-smtp").show();
+                                    jQuery("#tbl-smtp tbody").empty();
+                                    jQuery("#tbl-smtp tfoot").empty();
+                                    if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                                    }
+                                    if (data != 0) {
+                                        total = 0;
+                                        tot1 = 0;
+                                        tot2 = 0;
+                                        tot3 = 0;
+                                        tot4 = 0;
+                                        i = 1;
+                                        jQuery.each(data, function (key, value) {
+                                            //<th class="sno-th">Sno</th>
+                                            //    <th>Customer Name</th>
+                                            //    <th>Post Box No</th>
+                                            //    <th>Address</th>
+                                            //    <th>Contact Person</th>
+                                            //    <th>Email</th>
+                                            //    <th>Mobile</th>
+
+                                            var row = '<tr>' +
+                                                '<td>' + i + '</td>' +
+                                                '<td>' + value.Cust_Name + '</td>' +
+                                                '<td>' + value.PostboxNo + '</td>' +
+                                                '<td >' + value.Address + '</td>' +
+                                                '<td >' + value.ConPerson + '</td>' +
+                                                '<td >' + value.Email + '</td>' +
+                                                '<td >' + value.Phone + '</td>' +
+
+                                                '</tr>';
+                                            jQuery("#tbl-smtp tbody").append(row);
+                                            i++;
+
+                                        });
+                                        //var rows = '<tr>' +
+                                        //    '<td>' + bd + '</td>' +
+                                        //    '<td>' + bd + '</td>' +
+                                        //    '<td  align="right">Total </td>' +
+                                        //    '<td align="right">' + Comma(total) + '</td>' +
+                                        //    '<td align="right">' + Comma(tot1) + '</td>' +
+                                        //    '<td align="right">' + Comma(tot2) + '</td>' +
+                                        //    '<td align="right">' + Comma(tot3) + '</td>' +
+                                        //    '<td align="right">' + Comma(tot4) + '</td>' +
+                                        //    '</tr>';
+                                        //jQuery("#tbl-smtp tfoot").append(rows);
+
+
+
+
+                                        applyDatatable('tbl-smtp');
+                                    }
+                                    else {
+                                        jQuery("#tbl-smtp tfoot").empty();
+                                        //applyDatatable('tbl-smtp');
+                                        jQuery("#tbl-smtp").hide();
+                                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                                        alert("No records found.")
+                                    }
+                                },
+                            });
+                            //} else {
+                            //    return false;
+                            //    jQuery("#tbl-smtp tbody").empty();
+                            //   // jQuery("#tbl-smtp tfoot").empty();
+                            //}
+                        }
+        function addpdf() {
+        var i = 0;
+            var inst = $("#ddlreg").val();
+            var cust = $("#ddldist").val();
+            var comp = $("#ddlcomp").val();
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetcustDetReport", "RepCompCustomer")',
+                data: JSON.stringify({ 'Comp': comp, 'reg': inst, 'dist': cust}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    jQuery("#tbl-smtp").show();
+                    jQuery("#tbl-smtp tbody").empty();
+                    jQuery("#tbl-smtp tfoot").empty();
+                    if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    }
+                    if (data != 0) {
+
+                        i = 1;
+                        jQuery.each(data, function (key, value) {
+
+                            //cname = data[d].Currency_Name;
+                            var row = '<tr>' +
+                                '<td>' + i + '</td>' +
+                                '<td>' + value.Cust_Name + '</td>' +
+                                '<td>' + value.PostboxNo + '</td>' +
+                                '<td >' + value.Address + '</td>' +
+                                '<td >' + value.ConPerson + '</td>' +
+                                '<td >' + value.Email + '</td>' +
+                                '<td >' + value.Phone + '</td>' +
+
+                                '</tr>';
+                            jQuery("#tbl-smtp tbody").append(row);
+                            i++;
+
+                        });
+
+                        if (i > 0) {
+                            var doc = new jsPDF("l", "pt", "a4");
+                            doc.text(350, 30, "Customer Report ");
+                            doc.setFontSize(13);
+
+                            var res = doc.autoTableHtmlToJson(
+                                document.getElementById("tbl-smtp")
+                            );
+                            doc.autoTable(res.columns, res.data, {
+                                margin: { top: 60 },
+                                columnStyles: {
+                                    7: {
+                                        halign: 'right',
+                                    },
+                                }
+                            });
+                            //alert(res.data.Church_Reg_Sno);
+                            var header = function (data) {
+                                doc.setFontSize(8);
+                                doc.setTextColor(40);
+                                doc.setFontStyle("normal");
+                            };
+                            var options = {
+                                addPageContent: header,
+                                startY: doc.autoTableEndPosY() + 20,
+                                styles: { overflow: "linebreak" },
+
+                                createdCell: function (cell, opts) {
+                                    if (cell.text[0].indexOf("da") > -1) {
+                                        // count startrs from 0
+                                        // cell.raw contains the cell data
+                                        cell.styles.fillColor = [216, 78, 75]; // random color
+                                        cell.styles.textColor = [58, 121, 152];
+                                        cell.styles.fontStyle = "bold";
+                                        cell.styles.fontSize = "10";
+                                    }
+                                },
+
+                                tableWidth: "auto",
+                            };
+
+                            // doc.autoTable(res.columns, res.data, options);
+
+                            doc.save("Customer.pdf");
+                        }
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                        jQuery("#tbl-smtp tfoot").empty();
+                        jQuery("#tbl-smtp").hide();
+                    }
+                    else {
+                        alert("No records found");
+                        jQuery("#tbl-smtp tbody").empty();
+                        jQuery("#tbl-smtp tfoot").empty();
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                        jQuery("#tbl-smtp").hide();
+                    }
+                },
+            });
+        //} else {
+        //    //return false;
+        //    jQuery("#tbl-smtp tbody").empty();
+        //}
+    }
+    function tableToJson(table) {
+        var data = [];
+
+        // first row needs to be headers
+        var headers = [];
+        for (var i = 0; i < table.rows[0].cells.length; i++) {
+            headers[i] = table.rows[0].cells[i].innerHTML
+                .toLowerCase()
+                .replace(/ /gi, "");
+        }
+
+        // go through cells
+        for (var i = 0; i < table.rows.length; i++) {
+            var tableRow = table.rows[i];
+            var rowData = {};
+
+            for (var j = 0; j < tableRow.cells.length; j++) {
+                rowData[headers[j]] = tableRow.cells[j].innerHTML;
+            }
+
+            data.push(rowData);
+        }
+
+        return data;
+    }
+
+        function addexcel() {
+        var i = 0;
+
+            var inst = $("#ddlreg").val();
+            var cust = $("#ddldist").val();
+            var comp = $("#ddlcomp").val();
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetcustDetReport", "RepCompCustomer")',
+                data: JSON.stringify({ 'Comp': comp,'reg': inst, 'dist': cust}),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                async: false,
+                success: function (data) {
+                    jQuery("#tbl-smtp").show();
+                    jQuery("#tbl-smtp tbody").empty();
+                    jQuery("#tbl-smtp tfoot").empty();
+                    if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                        jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    }
+                    if (data != 0) {
+
+                        var i = 1;
+                        jQuery.each(data, function (key, value) {
+
+                            var row = '<tr>' +
+                                '<td>' + i + '</td>' +
+                                '<td>' + value.Cust_Name + '</td>' +
+                                '<td>' + value.PostboxNo + '</td>' +
+                                '<td >' + value.Address + '</td>' +
+                                '<td >' + value.ConPerson + '</td>' +
+                                '<td >' + value.Email + '</td>' +
+                                '<td >' + value.Phone + '</td>' +
+
+                                '</tr>';
+                            jQuery("#tbl-smtp tbody").append(row);
+                            i++;
+
+                        });
+                    }
+                    if (i > 0) {
+                        $("#tbl-smtp").table2excel({
+                            filename: "Customer.xls",
+                        });
+                    }
+                    else {
+                        alert("No records found");
+                    }
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                    jQuery("#tbl-smtp tfoot").empty();
+                    jQuery("#tbl-smtp").hide();
+                },
+            });
+
+    }
+</script>
+

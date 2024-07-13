@@ -1,0 +1,2099 @@
+﻿
+@{
+    ViewBag.Title = "Invoice";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<style type="text/css">
+    #tblchruch tr td {
+        text-align: left;
+    }
+
+    .tbl-smtp1 thead {
+        visibility: collapse;
+    }
+
+    table td {
+        box-sizing: border-box !important;
+    }
+
+    .modal {
+        padding-right: 0;
+    }
+
+    .textarea {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        height: 40px;
+    }
+
+    .form-controlNEw {
+        display: block;
+        width: 119%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+
+    .form-Vat {
+        display: block;
+        width: 88%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+    .form-unp {
+        display: block;
+        width: 131%;
+        height: calc(1.5em + .75rem + 2px);
+        padding: .375rem .75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #495057;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #ced4da;
+        border-radius: .25rem;
+    }
+</style>
+<script type="text/javascript">
+    var array = [], dupicaterow = true,rt = true;
+
+    jQuery(document).ready(function () {
+        jQuery("#hdnsno").val(0);
+        BindCompany();
+        BindCustomer();
+        BindCurrency();
+        bindchruchDetails();
+        BindVatPer();
+        var today, datepicker;
+        today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
+        disablepastdate(today, "txtdate");
+        disablefuturedate(today,"txtdate");
+        var tRows = document.getElementById('tblCustomers');
+        jQuery("#tblCustomers  TBODY").children().remove();
+
+
+
+        jQuery("#btnDelete").click(function () {
+            delchruch();
+        });
+
+
+    });
+    
+    function bindchruchDetails() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetchDetails", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                debugger
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>'+i+'</td>' +
+                            '<td>' + value.Invoice_No + '</td>' +
+                            '<td>' + convertDate(value.Invoice_Date) + '</td>' +
+                            '<td>' + value.Chus_Name + '</td>' +
+                            '<td>' + value.Currency_Code + '</td>' +
+                            '<td>' + Comma(value.Total) + '</td>' +
+                            '<td>' + value.Remarks + '</td>' +
+                            '<td ><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" value="Edit" onclick="showchModal(this)"><i class="fas fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;</td>' +
+                            //'<td ><button class="btn btn-outline-secondary btn-sm"  id="btn' + value.invoice_no + '" data-sid="' + value.invoice_no + '" value="Edit" onclick="pdf(this)"><i class="fa fa-file" ></i ></button >&nbsp;&nbsp;&nbsp;</td>' +
+                            '<td align="right"><a class="btn btn-outline-secondary btn-sm"  href="/InvoiceDownload/InvoiceDownload?Id=' + value.Inv_Mas_Sno + '" );"><span class="badge bg-orange"><i class="fa fa-file"></i></span></a> &nbsp;&nbsp;&nbsp;</td>'+
+                            '</tr>';
+                        //<button class="btn btn-outline-dark btn-sm" data-sid="' + value.Church_Reg_Sno + '" data-pwd="' + value.Chruch_Name + '" id="btnDelete" data-rec="0" onclick="delchruch(this)"><i class="fas fa-trash" aria-hidden="true"></i></button>
+                        jQuery("#tbl-smtp tbody").append(row);
+                        i++;
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+    function BindCompany() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("Getcompany", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlcpny").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlcpny").append(jQuery("<option></option>").val(value.Comp_Mas_Sno).html(value.Company_Name));
+                    });
+                }
+            }
+        })
+    }
+   function BindCustomer() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetCustomers", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlcid").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlcid").append(jQuery("<option></option>").val(value.Cus_Mas_Sno).html(value.Customer_Name));
+                    });
+                }
+            }
+        })
+    }
+      function BindCurrency() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetCurrency", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlccy").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlccy").append(jQuery("<option></option>").val(value.Currency_Code).html(value.Currency_Name));
+                    });
+                }
+            }
+        })
+    }
+    function convertDate(e) {
+        var date = new Date(parseInt(e.substr(6)));
+        date = (date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+        return date;
+    }
+
+    function pdf(e) {
+        debugger;
+
+        var pt = jQuery(e).data('sid');
+        window.location ="/InvoiceDownload/InvoiceDownload";
+
+    }
+
+
+
+     function BindVatPer() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetVatPer", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                //jQuery("#ddlVatPer").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlVatPer").append(jQuery("<option></option>").val(value.Vat_Category).html(value.vat_percentageValue));
+                    });
+                }
+            }
+        })
+    }
+</script>
+
+
+
+
+<div class="card-body">
+    <h5 class="card-title" id="lblins">Invoice</h5>
+
+    <div class="form-group d-flex">
+        <button type="button" id="btnAdd" value="Add" data-sid="0" class="btn ml-auto mr-1 btn-sm btn-success btn-biz_logic" onclick="showchModal(this);"
+                data-toggle="modal" data-target="#modal-ch">
+            Create
+        </button>
+        <input type="hidden" id="hdnEmployee" />
+        <input type="hidden" id="hdnsno" />
+    </div>
+
+    <div class="table-responsive">
+        <table id="tbl-smtp" class="table table-bordered table-sm rounded display">
+            <thead class="thead-light">
+                <tr>
+                    <th class="sno-th">Sno</th>
+                    <th class="sno-th">Invoice No</th>
+                    <th class="sno-th">Invoice Date</th>
+                    <th>Customer Name</th>
+                    <th class="sno-th">Currency Name</th>
+                    <th class="sno-th">Total Amount</th>
+                    <th class="sno-th">Remarks</th>
+                    <th class="sno-th">Actions</th>
+                    <th class="sno-th">Invoice PDF</th>
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+
+        </table>
+    </div>
+
+</div>
+
+
+<!-- [MODALS] -->
+<div class="modal fade" id="modal-ch" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="believerCreateLabel"
+     aria-hidden="true">
+    <div class="modal-dialog believerModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                @*<h5 class="modal-title " id="exampleModalLabel1"><label id="lblmsg"></label> Registration</h5>*@
+                <h5 class="modal-title " id="exampleModalLabel">Invoice</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+            </div>
+            @*<form class="col-12 p-0 mx-auto" action="AddInvoice" method="post" name="form1">*@
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Invoice No<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtchname" maxlength="200" placeholder="Invoice No" onkeyup="InvoiceValiadte(this);">
+                        <input type="hidden" class="form-control  hidden" id="txtSID">
+                        <div class="form-group flex_form-group align-items-baseline offset">
+                            <span id="lblInvError"></span>
+                        </div>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Invoice Date<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtdate" autocomplete="off" placeholder="dd/MM/yyyy" onkeypress="return false" />
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Company<span class="red">*</span></label>
+                        <select id="ddlcpny" class="ui search dropdown form-control" name="ddltype"></select>
+                        <input type="hidden" class="form-control  hidden" id="txtcpny">
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Customers<span class="red">*</span></label>
+                        <select id="ddlcid" class="ui search dropdown form-control" name="ddltype"></select>
+                        <input type="hidden" class="form-control  hidden" id="txtcid">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Customer ID Type<span class="red">*</span></label>
+                        <select id="ddlctype" class="ui search dropdown form-control" name="ddlctype">
+                            <option value="0" selected>--Select--</option>
+                            <option value="TIN">TIN</option>
+                            <option value="Driving License">Driving License</option>
+                            <option value="Voters Number">Voters Number</option>
+                            <option value="Passport">Passport</option>
+                            <option value="NID (National Identity)">NID (National Identity)</option>
+                            <option value="NIL">NIL</option>
+                        </select>
+                        <input type="hidden" class="form-control  hidden" id="txtctype">
+
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Customer ID No<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtcidno" maxlength="20" placeholder="Customer ID No" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Currency<span class="red">*</span></label>
+                        <select id="ddlccy" class="ui search dropdown form-control" name="ddltype"></select>
+                        <input type="hidden" class="form-control  hidden" id="txtccy">
+
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Total Without Vat<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txttwvat" maxlength="18" placeholder="Total Without Vat" disabled />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Vat Amount<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtvat" maxlength="18" placeholder="Vat Amount" disabled />
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Total Amount<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtttvat" maxlength="18" placeholder="Total Amount" disabled />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Remarks</label>
+                        <textarea type="text" class="form-control" id="txtinr" maxlength="300" placeholder="Remarks"> </textarea>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">warrenty</label>
+                        <textarea type="text" class="form-control" id="txtwarrenty" maxlength="300" placeholder="warrenty"> </textarea>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Goods Status</label>
+                        <textarea type="text" class="form-control" id="txtGsstatus" maxlength="300" placeholder="Goods Status"> </textarea>
+                    </div>
+                    <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                        <label for="gender" class="inst-label_align">Delivery Status</label>
+                        <textarea type="text" class="form-control" id="txtDstatus" maxlength="300" placeholder="Delivery Status"> </textarea>
+                    </div>
+
+                </div>
+                <div class="row"></div>
+                <hr>
+                <div class="row mx-0">
+                    <h5 class="card-title">Item Details</h5>
+                    <div class="table-responsive">
+
+                        <table id="tblCustomers" class="table" cellpadding="0" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    @*<th data-orderable="false">Sno</th>*@
+                                    <th data-orderable="false">Description</th>
+                                    <th data-orderable="false">Quantity</th>
+                                    <th data-orderable="false">Vat Category</th>
+                                    <th data-orderable="false">Unit Price</th>
+
+                                    <th data-orderable="false">Vat Percentage</th>
+                                    <th data-orderable="false">Total Amount</th>
+                                    <th data-orderable="false">Vat Amount</th>
+                                    <th data-orderable="false">Without Vat</th>
+                                    <th data-orderable="false">Category</th>
+                                    <th data-orderable="false">Remarks</th>
+                                    <th data-orderable="false">Actions</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                            <tfoot>
+                                <tr>
+                                    <td>
+                                        <textarea type="text" class="form-control" placeholder="Description" id="txtDescri"></textarea>
+
+                                    </td>
+                                    <td><input type="number" class="form-unp" placeholder="Qty" id="txtQty" /></td>
+                                    <td>
+                                        <select id="ddlCategory" class="form-controlNEw" name="ddlVatcategory">
+                                            <option value="Inclusive" selected>Inclusive</option>
+                                            <option value="Exclusive">Exclusive</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="number" class="form-unp" placeholder="Unit Price" id="txtUnitPrc" /></td>
+
+                                    @*<td><input type="number" class="form-control" placeholder="Vat Per" id="txtVatPer" /></td>*@
+
+                                    <td>
+                                        <select id="ddlVatPer" class="form-Vat" name="ddlVatPer"></select>
+
+                                    </td>
+
+
+                                    <td><input type="number" class="form-control" placeholder="Total Amount" id="txtTotal" readonly /></td>
+                                    <td><input type="number" class="form-control" placeholder="Vat Amount" id="txtVatAmnt" readonly /></td>
+                                    <td><input type="number" class="form-control" placeholder="without VAT" id="txtWithoutVAT" readonly /></td>
+                                    <td><input type="text" class="form-control" id="txtCat" readonly /></td>
+                                    <td>
+                                        <textarea type="text" class="form-control textarea" placeholder="Remarks" id="txtRemarks"></textarea>
+
+                                    </td>
+
+                                    <td>
+                                        <input type="button" id="btnAddinvc" class="btn btn-success btn-sm btn-biz_logic" value="AddNewrow" />
+                                        &nbsp;&nbsp;
+                                        <input type="button" id="btnRemovecell" class="btn btn-success btn-sm btn-biz_logic fas fa-trash" value="Remove" />
+
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                        <br />
+
+
+                    </div>
+                    <div class="row"></div>
+
+                    <div id="loader1" style="position: fixed; top:0; display:none;  left:0; width:100%; height: 100%; background:  url('/images/Loading.gif');background-repeat: no-repeat; background-attachment: fixed; background-position: center; ">
+                    </div>
+                    <div id="loader" style="position: fixed; top:0; display:none; left:0; width:100%; height: 100%; background: url('/images/Loading.gif');background-repeat: no-repeat; background-attachment: fixed; background-position: center; ">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                    <div id="btnsubmit">
+                        <button type="button" class="btn btn-success btn-sm btn-biz_logic" id="btnSubmit">Save</button>
+                    </div>
+                </div>
+            </div>
+            @* </form>*@
+
+        </div>
+    </div>
+</div>
+<script>
+    $("body").on("click", "#btnRemovecell", function () {
+        debugger;
+        var txtDescri = $("#txtDescri");
+        var txtQty = $("#txtQty");
+        var txtUnitPrc = $("#txtUnitPrc");
+        var txtVatPer = $("#ddlVatPer");
+        var txtTotal = $("#txtTotal");
+        var txtVatAmnt = $("#txtVatAmnt");
+        var txtWithoutVAT = $("#txtWithoutVAT");
+        var txtRemarks = $("#txtRemarks");
+        var ddlVatPer = $("#ddlVatPer");
+        var Cat = $("#txtCat");
+        if (txtDescri.val() != '' && $("#txtTotal").val() != '' && $("#txtVatAmnt").val() != '' && $("#txtWithoutVAT").val() != '') {
+
+            var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+            var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+            var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+            //parseFloat(txtQty)
+
+            var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+            var totvat = $("#txtvat").val().replaceAll(",", "");
+            var tot = $("#txtttvat").val().replaceAll(",", "");
+
+            $("#txttwvat").val(Comma(parseFloat(totwithoutvat) - parseFloat(Withutvat)));
+            $("#txtvat").val(Comma(parseFloat(totvat) - parseFloat(VatAmnt)));
+            $("#txtttvat").val(Comma(parseFloat(tot) - parseFloat(totalAmnt)));
+
+        }
+
+
+
+        //Clear the TextBoxes.
+        txtDescri.val("");
+        txtQty.val("");
+        txtUnitPrc.val("");
+        txtVatPer.val("");
+        txtTotal.val("");
+        txtVatAmnt.val("");
+        txtWithoutVAT.val("");
+        txtRemarks.val("");
+        Cat.val("");
+    });
+    $(function () {
+        $("#ddlctype").change(function () {
+            $("#txtcidno").val("");
+            var cctype = $('option:selected', this).text();
+            var ddlcid = document.getElementById("ddlcid");
+            var ddlcustid = ddlcid.options[ddlcid.selectedIndex].value;
+            if (ddlcustid > 0) {
+                if (cctype == "TIN") {
+                    var data = {
+                        sno: ddlcustid,
+                    }
+                    //alert(cctype);
+                    $.ajax({
+                        type: "POST",
+                        url: "/Customers/GetTIN",
+                        data: JSON.stringify(data),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (r) {
+                            $("#txtcidno").val(r);
+                        }
+
+
+                    })
+                }
+            }
+        });
+    });
+    $(function () {
+        $("#ddlcid").change(function () {
+            $("#txtcidno").val("");
+            jQuery("#ddlctype").val(0).change()
+            
+        });      
+    });
+</script>
+
+
+<script type="text/javascript">
+    $("body").on("click", "#btnAddinvc", function () {
+
+       debugger
+        //Reference the Name and Country TextBoxes.
+        var txtDescri = $("#txtDescri");
+        var txtQty = $("#txtQty");
+        var txtUnitPrc = $("#txtUnitPrc");
+        var txtVatPer = $("#ddlVatPer");
+        var txtTotal = $("#txtTotal");
+        var txtVatAmnt = $("#txtVatAmnt");
+        var txtWithoutVAT = $("#txtWithoutVAT");
+        var txtRemarks = $("#txtRemarks");
+        var ddlVatPer = $("#ddlVatPer");
+        var Category = $("#ddlCategory");
+        var Cat = $("#txtCat");
+        var ddlreg = document.getElementById("ddlVatPer");
+        
+        var result = ddlreg.options[ddlreg.selectedIndex].value;
+        var result1 = ddlreg.options[ddlreg.selectedIndex].text;
+        var sum = 0;
+        if (txtDescri.val() != '' && txtQty.val() != '' && txtUnitPrc.val() != '' && ddlVatPer.val()!=0 ) {
+
+
+            temp = 8937894;
+            temp1 = 8937894;
+            temp2 = 8937894;
+            //Get the reference of the Table's TBODY element.
+            var tBody = $("#tblCustomers > TBODY")[0];
+
+            //Add Row.
+            var row = tBody.insertRow(-1);
+            //Add Name cell.
+            var cell = $(row.insertCell(-1));
+            cell.html(txtDescri.val());
+            //var t1 = document.createElement("textarea");
+            //t1.id = "txtbankname1";
+            //t1.t = txtDescri.val() == undefined ? '' : txtDescri.val();
+            //t1.className = "form-control col-4";
+            //cell.html(t1);
+
+
+            //Add Country cell.
+             cell = $(row.insertCell(-1));
+            cell.html(txtQty.val());
+
+            cell = $(row.insertCell(-1));
+            cell.html(Category.val());
+
+         cell = $(row.insertCell(-1));
+            cell.html(Comma(txtUnitPrc.val()));
+
+             
+
+        cell = $(row.insertCell(-1));
+            //cell.html(txtVatPer.val());
+            cell.html(result1);
+
+        cell = $(row.insertCell(-1));
+        cell.html(Comma( txtTotal.val()));
+
+        cell = $(row.insertCell(-1));
+        cell.html(Comma( txtVatAmnt.val()));
+
+        cell = $(row.insertCell(-1));
+        cell.html(Comma(txtWithoutVAT.val()));
+
+            cell = $(row.insertCell(-1));
+            cell.html(result);
+
+        cell = $(row.insertCell(-1));
+        cell.html(txtRemarks.val());
+            //alert(vCat.val());
+
+
+            //Add Button cell.
+            cell = $(row.insertCell(-1));
+            var btnRemove = $("<input />");
+            btnRemove.attr("type", "button");
+        btnRemove.attr("onclick", "Remove(this);");
+        btnRemove.attr("class", "btn btn-success btn-sm btn-biz_logic;");
+
+             btnRemove.val("Remove");
+            cell.append(btnRemove);
+            /*$('<input>').attr({
+                type: 'hidden',
+                id: 'vCat',
+                name: 'vCat'
+            }).appendTo(cell)
+            var vCat = $("#vCat");
+            vCat.val(result);
+            alert(vCat.val());*/
+            //Clear the TextBoxes.
+            txtDescri.val("");
+            txtQty.val("");
+            txtUnitPrc.val("");
+            txtVatPer.val("");
+            txtTotal.val("");
+            txtVatAmnt.val("");
+            txtWithoutVAT.val("");
+            txtRemarks.val("");
+            Cat.val("");
+
+        }
+        else {
+
+            message = 'Required Details are missing.';
+            type = 'danger';
+            notifyMessage(message, type);
+        }
+        });
+
+    function Remove(button) {
+        debugger;
+            //Determine the reference of the Row using the Button.
+            var row = $(button).closest("TR");
+            var name = $("TD", row).eq(0).html();
+            if (confirm("Do you want to delete: " + name)) {
+                //Get the reference of the Table.
+                var table = $("#tblCustomers")[0];
+
+                var totalAmnt = $("TD", row).eq(5).html().replaceAll(",", "");
+                var VatAmnt = $("TD", row).eq(6).html().replaceAll(",", "");
+                var Withutvat = $("TD", row).eq(7).html().replaceAll(",", "");
+                //parseFloat(txtQty)
+
+                var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                var totvat = $("#txtvat").val().replaceAll(",", "");
+                var tot = $("#txtttvat").val().replaceAll(",", "");
+                var wvamount = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                var vamount = parseFloat(totvat) - parseFloat(VatAmnt);
+                var tamount = parseFloat(tot) - parseFloat(totalAmnt);
+                $("#txttwvat").val(Comma(wvamount.toFixed(2)));
+                $("#txtvat").val(Comma(vamount.toFixed(2)));
+                $("#txtttvat").val(Comma(tamount.toFixed(2)));
+                /*$("#txttwvat").val(parseFloat(totwithoutvat) - parseFloat(Withutvat) );
+                $("#txtvat").val(parseFloat(totvat) - parseFloat(VatAmnt) );
+                $("#txtttvat").val(parseFloat(tot) - parseFloat(totalAmnt));
+                $("#txtttvat").val(Comma(sum.toFixed(2)));*/
+                //Delete the Table row using it's Index.
+                table.deleteRow(row[0].rowIndex);
+
+
+            }
+        };
+    function waitSeconds(iMilliSeconds) {
+        var counter = 0, start = new Date().getTime(), end = 0;
+        while (counter < iMilliSeconds) {
+            end = new Date().getTime();
+            counter = end - start;
+        }
+    }
+    $("body").on("click", "#btnSubmit", function () {
+            //Loop through the Table rows and build a JSON array.
+        debugger
+        var details = new Array();
+            $("#tblCustomers TBODY TR").each(function () {
+                var row = $(this);
+                var detail = {};
+                detail.item_description = row.find("TD").eq(0).html();
+                detail.item_qty = row.find("TD").eq(1).html();
+                detail.item_unit_price = parseFloat(row.find("TD").eq(3).html().replaceAll(",", ""));
+                detail.vat_category = row.find("TD").eq(2).html();
+                detail.vat_percentage = row.find("TD").eq(4).html();
+                detail.item_total_amount = parseFloat(row.find("TD").eq(5).html().replaceAll(",", ""));
+                detail.vat_amount = parseFloat(row.find("TD").eq(6).html().replaceAll(",", ""));
+                detail.item_without_vat = parseFloat(row.find("TD").eq(7).html().replaceAll(",", ""));
+                detail.Vat_Type = row.find("TD").eq(8).html();
+                detail.remarks = row.find("TD").eq(9).html();
+                details.push(detail);
+
+
+               // details.push(detail);
+            });
+        if ($("#txtDescri").val() != '') {
+            var detailNew = {};
+            var ddlreg = document.getElementById("ddlVatPer");
+
+            var result = ddlreg.options[ddlreg.selectedIndex].value;
+            var result1 = ddlreg.options[ddlreg.selectedIndex].text;
+            detailNew.item_description = $("#txtDescri").val();
+            detailNew.item_qty = $("#txtQty").val();
+            detailNew.item_unit_price = $("#txtUnitPrc").val();
+            detailNew.vat_category = $("#ddlCategory").val();
+            detailNew.vat_percentage = result1;
+            detailNew.item_total_amount = $("#txtTotal").val();
+            detailNew.vat_amount = $("#txtVatAmnt").val();
+            detailNew.item_without_vat = $("#txtWithoutVAT").val();
+            detailNew.Vat_Type = $("#txtCat").val();
+            detailNew.remarks = $("#txtRemarks").val();
+            details.push(detailNew);
+        }
+
+       // alert(customers[0].Descri);
+
+        var  ddlcpny = document.getElementById("ddlcpny");
+        var ddlcmpnyId = ddlcpny.options[ddlcpny.selectedIndex].value;
+        var   ddlcid = document.getElementById("ddlcid");
+        var ddlcustid = ddlcid.options[ddlcid.selectedIndex].value;
+        var ddlcurrency = document.getElementById("ddlccy");
+        var ddlcurrence = ddlcurrency.options[ddlcurrency.selectedIndex].value;
+
+        var cust = document.getElementById("ddlctype");
+        var custid = cust.options[cust.selectedIndex].value;
+
+        
+
+        var data = {
+            invno   :  $("#txtchname").val() ,
+            auname  :   $("#txtttvat").val(),
+            date: $("#txtdate").val(),
+            chus:ddlcustid,
+            comno: ddlcmpnyId,
+            ccode: ddlcurrence,
+            ctype: custid,
+            cino: $("#txtcidno").val(),
+            twvat: $("#txttwvat").val(),
+            vtamou: $("#txtvat").val(),
+            total: $("#txtttvat").val(),
+            Inv_remark: $("#txtinr").val(),
+            lastrow: 0,
+            details: details,
+            sno: jQuery("#hdnsno").val() == ""?  '0': jQuery("#hdnsno").val(),
+            warrenty: $("#txtwarrenty").val(),
+            goods_status: $("#txtGsstatus").val(),
+            delivery_status: $("#txtDstatus").val(),
+
+        }
+        debugger;
+        var message = validateInvoiceBank();
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+        if (message.length > 0 && opType != 'D') {
+            //document.getElementById("loader").style.display = "block";
+            //jQuery("#loader").css("display", "block");
+            //waitSeconds(5000);
+            //document.getElementById("loader").style.display = "block";
+            //jQuery("#loader").css("display", "block");
+            notifyMessage(message, 'danger');
+        }
+
+        else {
+            var text = "Are you sure you want to Save Chnages ?";
+            var sno = jQuery("#hdnsno").val() == "" ? '0' : jQuery("#hdnsno").val();
+            if (sno != 0) {
+                text = "Are you sure you want to Update Chnages ?";
+            }
+
+            var x = confirm(text);
+            if (x) {
+                jQuery("#loader1").css("display", "block");
+                jQuery("#btnSubmit").prop('disabled', true);
+                //Send the JSON array to Controller using AJAX.
+                $.ajax({
+                    type: "POST",
+                    url: "/Invoice/AddInvoice",
+                    data: JSON.stringify(data),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    success: function (r) {
+                        //alert(r + " record(s) inserted.");
+                        hideModal('modal-ch');
+                        message = ' record(s)  Successfully Created';
+                        type = 'success';
+                        notifyMessage(message, type);
+                        jQuery("#loader").css("display", "none");
+                        jQuery("#btnSubmit").prop('disabled', false);
+                        bindchruchDetails();
+
+                    }
+
+
+                });
+                jQuery("#loader1").css("display", "none");
+                jQuery("#btnSubmit").prop('disabled', false);
+            }
+            else {
+
+                return false;
+            }
+        }
+        jQuery("#loader1").css("display", "none");
+        jQuery("#btnSubmit").prop('disabled', false);
+    });
+    var temp = 0;
+    var temp1 = 0;
+    var temp2 = 0;
+    $(document).on('keyup mouseup', '#txtUnitPrc', function () {
+         var totalRowCount = $("[id*=tblCustomers] tr").length;
+        var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+        var txtDescri = $("#txtDescri").val();
+        var txtQty = $("#txtQty").val();
+        var txtUnitPrc = $("#txtUnitPrc").val();
+        var txtVatPer = $("#txtVatPer").val();
+        var txtcategory = $("#ddlCategory");
+
+        if (txtcategory.val() == 'Inclusive') {
+            var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+            $("#txtTotal").val(total.toFixed(2));
+            $("#txtWithoutVAT").val('');
+        }
+        else {
+            $("#txtTotal").val('');
+            var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+            $("#txtTotal").val(total.toFixed(2));
+            $("#txtWithoutVAT").val(total.toFixed(2));
+        }
+        multiu();
+        
+
+    });
+    $(document).on('keyup mouseup', '#txtQty', function () {
+        var totalRowCount = $("[id*=tblCustomers] tr").length;
+        var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+        var txtDescri = $("#txtDescri").val();
+        var txtQty = $("#txtQty").val();
+        var txtUnitPrc = $("#txtUnitPrc").val();
+        var txtVatPer = $("#txtVatPer").val();
+        var txtcategory = $("#ddlCategory");
+
+        if (txtcategory.val() == 'Inclusive') {
+            var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+            $("#txtTotal").val(total.toFixed(2));
+            $("#txtWithoutVAT").val('');
+        }
+        else {
+            $("#txtTotal").val('');
+            var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+            $("#txtTotal").val(total.toFixed(2));
+            $("#txtWithoutVAT").val(total.toFixed(2));
+        }
+        multiu();
+
+
+    });
+    
+    //vat per chnage event
+    $("#ddlVatPer").change(function () {
+        debugger;
+        //Reference the Name and Country TextBoxes.
+        var txtDescri = $("#txtDescri");
+        var txtQty = $("#txtQty");
+        var txtUnitPrc = $("#txtUnitPrc");
+        var txtVatPer = $("#ddlVatPer");
+        var txtTotal = $("#txtTotal");
+        var txtVatAmnt = $("#txtVatAmnt");
+        var txtWithoutVAT = $("#txtWithoutVAT");
+        var txtRemarks = $("#txtRemarks");
+        var txtcategory = $("#ddlCategory");
+        var Cat = $("#txtCat");
+        var ddlreg = document.getElementById("ddlVatPer");
+        txtQty = $("#txtQty").val();
+        if (txtQty == '') {
+            txtQty = "0";
+
+        }
+        txtUnitPrc = $("#txtUnitPrc").val();
+        if (txtUnitPrc == '') {
+            txtUnitPrc = "0";
+        }
+        var result = ddlreg.options[ddlreg.selectedIndex].value;
+        if (result == 0) {
+            result = "";
+        }
+        var sum = 0;
+        
+        $("#txtCat").val(result);
+        //alert(result);
+            if (txtQty.val != 0 && txtUnitPrc != 0 && txtVatPer.val() != 0) {
+
+            //alert($('option:selected', this).text());
+            var totalRowCount = $("[id*=tblCustomers] tr").length;
+            var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+                if (txtcategory.val() == 'Inclusive') {
+                    var txtQty = $("#txtQty").val();
+                    var txtUnitPrc = $("#txtUnitPrc").val();
+                    var txtVatPer = $('option:selected', this).text();
+                    var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                    var vatper = (parseFloat(txtVatPer) / 100) + parseFloat(1);
+                    var vatper1 = total / vatper;
+                    var withotvat = total - vatper1;
+                    $("#txtVatAmnt").val(withotvat.toFixed(2));
+                    
+            
+                    $("#txtWithoutVAT").val(vatper1.toFixed(2));
+                    /*if (temp == 1) {
+                        temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    }
+                    if (temp1 == 1) {
+                        temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    }
+                    if (temp2 == 1) {
+                        temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    }*/
+
+
+                    debugger
+                    var existing = $("#txtttvat").val().toString().replaceAll(",", "");
+                    
+                    var txttwvat = $("#txttwvat").val().toString().replaceAll(",", "");
+                    var txtvat = $("#txtvat").val().toString().replaceAll(",", "");
+                    if (existing != '') {
+                        var total = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                        if (temp > 0 && temp != 8937894) {
+                            if (temp == 9999999) {
+                                temp = 0;
+                            }
+                            existing = parseFloat(existing) - temp;
+                            temp = 1;
+                        }
+                        sum = parseFloat(existing) + parseFloat(total);
+                        $("#txtttvat").val(Comma(sum.toFixed(2)));
+                    }
+                    else {
+
+                        $("#txtttvat").val(Comma(txtTotal.val()));
+                        temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+
+                    }
+
+                    //tax with out vat
+                    if (txttwvat != '') {
+                        var totalwvat2 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                        if (temp1 > 0 && temp1 != 8937894) {
+                            if (temp1 == 9999999) {
+                                temp1 = 0;
+                            }
+                            txttwvat = parseFloat(txttwvat) - temp1;
+                            temp1 = 1;
+                        }
+                        var sumtotalwvat = parseFloat(txttwvat) + parseFloat(totalwvat2);
+                        $("#txttwvat").val(Comma(sumtotalwvat.toFixed(2)));
+                    }
+                    else {
+                        $("#txttwvat").val(Comma(txtWithoutVAT.val()));
+                        temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    }
+                    //tax vat
+                    if (txtvat != '') {
+                        var txtvat2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                        if (temp2 > 0 && temp2 != 8937894) {
+                            if (temp2 == 9999999) {
+                                temp2 = 0;
+                            }
+                            txtvat = parseFloat(txtvat) - temp2;
+                            temp2 = 1;
+                        }
+                        var sumtotalvat = parseFloat(txtvat) + parseFloat(txtvat2);
+                        $("#txtvat").val(Comma(sumtotalvat.toFixed(2)));
+                    }
+                    else {
+                        $("#txtvat").val(Comma(txtVatAmnt.val()));
+                        temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    }
+
+                    if (temp == 1 || temp == 8937894) {
+                        temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                        if (temp == 0) {
+                            temp = 9999999;
+                        }
+                    }
+                    if (temp1 == 1 || temp1 == 8937894) {
+                        temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                        if (temp1 == 0) {
+                            temp1 = 9999999;
+                        }
+                    }
+                    if (temp2 == 1 || temp2 == 8937894) {
+                        temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                        if (temp2 == 0) {
+                            temp2 = 9999999;
+                        }
+                    }
+                }
+                else {
+
+                    //vat amount = without * vatpercent
+
+                    //total  amoin = without vat + vat amount
+                    //txtVatPer.val("");
+                    var txtQty = $("#txtQty").val();
+                    var txtUnitPrc = $("#txtUnitPrc").val();
+                    var txtVatPer = $('option:selected', this).text();
+
+                    var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                    $("#txtWithoutVAT").val(total.toFixed(2));
+                    var vatper = (parseFloat(txtVatPer) / 100) * total;
+                    $("#txtVatAmnt").val(vatper.toFixed(2));
+                    var etotal = parseFloat(total) + parseFloat(vatper);
+
+                    $("#txtTotal").val(etotal.toFixed(2));
+
+
+
+                    debugger
+                    var existing = $("#txtttvat").val().toString().replaceAll(",", "");
+                    var txttwvat = $("#txttwvat").val().toString().replaceAll(",", "");
+                    var txtvat = $("#txtvat").val().toString().replaceAll(",", "");
+
+                    if (existing != '') {
+                        var total = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                        if (temp > 0 && temp != 8937894) {
+                            if (temp == 9999999) {
+                                temp = 0;
+                            }
+                            existing = parseFloat(existing) - temp;
+                            temp = 1;
+                        }
+                        sum = parseFloat(existing) + parseFloat(total);
+                        $("#txtttvat").val(Comma(sum.toFixed(2)));
+                    }
+                    else {
+
+                        $("#txtttvat").val(Comma(txtTotal.val()));
+                        temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+
+                    }
+
+                    //tax with out vat
+                    if (txttwvat != '') {
+                        var totalwvat2 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                        if (temp1 > 0 && temp1 != 8937894) {
+                            if (temp1 == 9999999) {
+                                temp1 = 0;
+                            }
+                            txttwvat = parseFloat(txttwvat) - temp1;
+                            temp1 = 1;
+                        }
+                        var sumtotalwvat = parseFloat(txttwvat) + parseFloat(totalwvat2);
+                        $("#txttwvat").val(Comma(sumtotalwvat.toFixed(2)));
+                    }
+                    else {
+                        $("#txttwvat").val(Comma(txtWithoutVAT.val()));
+                        temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    }
+                    //tax vat
+                    if (txtvat != '') {
+                        var txtvat2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                        if (temp2 > 0 && temp2 != 8937894) {
+                            if (temp2 == 9999999) {
+                                temp2 = 0;
+                            }
+                            txtvat = parseFloat(txtvat) - temp2;
+                            temp2 = 1;
+                        }
+                        var sumtotalvat = parseFloat(txtvat) + parseFloat(txtvat2);
+                        $("#txtvat").val(Comma(sumtotalvat.toFixed(2)));
+                    }
+                    else {
+                        $("#txtvat").val(Comma(txtVatAmnt.val()));
+                        temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    }
+
+                    if (temp == 1 || temp == 8937894) {
+                        temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                        if (temp == 0) {
+                            temp = 9999999;
+                        }
+                    }
+                    if (temp1 == 1 || temp1 == 8937894) {
+                        temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                        if (temp1 == 0) {
+                            temp1 = 9999999;
+                        }
+                    }
+                    if (temp2 == 1 || temp2 == 8937894) {
+                        temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                        if (temp2 == 0) {
+                            temp2 = 9999999;
+                        }
+                    }
+                }
+
+
+
+
+            //add total amoun to values to file
+        
+
+
+        }
+            else {
+                debugger
+                var txtDescri = $("#txtDescri");
+                var txtQty = $("#txtQty");
+                var txtUnitPrc = $("#txtUnitPrc");
+                var txtVatPer = $("#ddlVatPer");
+                var txtTotal = $("#txtTotal");
+                var txtVatAmnt = $("#txtVatAmnt");
+                var txtWithoutVAT = $("#txtWithoutVAT");
+                var txtRemarks = $("#txtRemarks");
+                var Cat = $("#txtCat");
+                var ddlVatPer = $("#ddlVatPer");
+                   var totalRowCount = $("[id*=tblCustomers] tr").length;
+                var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+                if (rowCount > 1) {
+
+                  
+
+                    if (txtDescri.val() != '' && $("#txtTotal").val() != '' && $("#txtVatAmnt").val() != '' && $("#txtWithoutVAT").val() != '') {
+
+                        var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+                        var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+                        var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+                        //parseFloat(txtQty)
+
+                        var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                        var totvat = $("#txtvat").val().replaceAll(",", "");
+                        var tot = $("#txtttvat").val().replaceAll(",", "");
+                        var tott1 = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                        var tott2 = parseFloat(totvat) - parseFloat(VatAmnt);
+                        var tott3 = parseFloat(tot) - parseFloat(totalAmnt)
+                        $("#txttwvat").val(Comma(tott1));
+                        $("#txtvat").val(Comma(tott2));
+                        $("#txtttvat").val(Comma(tott3));
+
+                    }
+
+
+
+                    //Clear the TextBoxes.
+                    //txtDescri.val("");
+                    //txtQty.val("");
+                    txtUnitPrc.val("");
+                    txtVatPer.val("");
+                    txtTotal.val("");
+                    txtVatAmnt.val("");
+                    txtWithoutVAT.val("");
+                    txtRemarks.val("");
+                    Cat.val("");
+                }
+                else {
+                
+                $("#txtvat").val('');
+                    $("#txtttvat").val('');
+
+                    txtUnitPrc.val("");
+                    txtVatPer.val("");
+                    txtTotal.val("");
+                    txtVatAmnt.val("");
+                    if (txtcategory.val() == 'Inclusive') {
+                        txtWithoutVAT.val("");
+                        $("#txttwvat").val('');
+                        $("#txtVatAmnt").val('');
+                        
+                    }
+                    txtRemarks.val("");
+                }
+            message = 'Required Details are missing.';
+            type = 'danger';
+            notifyMessage(message, type);
+        }
+
+
+           
+    });
+
+    $("#ddlCategory").change(function () {
+        //Reference the Name and Country TextBoxes.
+       /* var txtDescri = $("#txtDescri");
+        var txtQty = $("#txtQty");
+        var txtUnitPrc = $("#txtUnitPrc");
+        var txtVatPer = $("#ddlVatPer");
+        var txtTotal = $("#txtTotal");
+        var txtVatAmnt = $("#txtVatAmnt");
+        var txtWithoutVAT = $("#txtWithoutVAT");
+        var txtRemarks = $("#txtRemarks");
+        var Cat = $("#txtCat");
+        var txtcategory = $("#ddlCategory");
+        var sum = 0;
+        txtVatPer.val("");
+        txtUnitPrc.val("");
+
+        if (txtQty.val != 0 && txtUnitPrc != 0) {
+
+             debugger
+            if (txtcategory.val() == 'Inclusive') {
+                var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+                if (rowCount > 1) {
+
+                    var txtDescri = $("#txtDescri");
+                    var txtQty = $("#txtQty");
+                    var txtUnitPrc = $("#txtUnitPrc");
+                    var txtVatPer = $("#ddlVatPer");
+                    var txtTotal = $("#txtTotal");
+                    var txtVatAmnt = $("#txtVatAmnt");
+                    var txtWithoutVAT = $("#txtWithoutVAT");
+                    var txtRemarks = $("#txtRemarks");
+                    var ddlVatPer = $("#ddlVatPer");
+
+                    if (txtDescri.val() != '' && $("#txtTotal").val() != '' && $("#txtVatAmnt").val() != '' && $("#txtWithoutVAT").val() != '') {
+
+                        var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+                        var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+                        var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+                        //parseFloat(txtQty)
+
+                        var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                        var totvat = $("#txtvat").val().replaceAll(",", "");
+                        var tot = $("#txtttvat").val().replaceAll(",", "");
+
+                        var tott1 = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                        var tott2 = parseFloat(totvat) - parseFloat(VatAmnt);
+                        var tott3 = parseFloat(tot) - parseFloat(totalAmnt)
+
+                        $("#txttwvat").val(Comma(tott1));
+                        $("#txtvat").val(Comma(tott2));
+                        $("#txtttvat").val(Comma(tott3));
+
+                    }
+
+
+
+                    //Clear the TextBoxes.
+                    //txtDescri.val("");
+                    //txtQty.val("");
+                    txtUnitPrc.val("");
+                    txtVatPer.val("");
+                    txtTotal.val("");
+                    txtVatAmnt.val("");
+                    txtWithoutVAT.val("");
+                    txtRemarks.val("");
+                    Cat.val("");
+                }
+                else {
+                    $("#txttwvat").val('');
+                    $("#txtvat").val('');
+                    $("#txtttvat").val('');
+                }
+
+                var txtQty = $("#txtQty").val();
+                var txtUnitPrc = $("#txtUnitPrc").val();
+                var txtVatPer = $('option:selected', this).text();
+                var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                var vatper = (parseFloat(txtVatPer) / 100) + parseFloat(1);
+                var vatper1 = total / vatper;
+                //alert(vatper + ":" + vatper1);
+                var withotvat = total - vatper1;
+                $("#txtVatAmnt").val(withotvat.toFixed(2));
+
+
+                $("#txtWithoutVAT").val(vatper1.toFixed(2));
+            }
+            else {
+
+                var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+                if (rowCount > 1) {
+
+                    var txtDescri = $("#txtDescri");
+                    var txtQty = $("#txtQty");
+                    var txtUnitPrc = $("#txtUnitPrc");
+                    var txtVatPer = $("#ddlVatPer");
+                    var txtTotal = $("#txtTotal");
+                    var txtVatAmnt = $("#txtVatAmnt");
+                    var txtWithoutVAT = $("#txtWithoutVAT");
+                    var txtRemarks = $("#txtRemarks");
+                    var ddlVatPer = $("#ddlVatPer");
+
+                    if (txtDescri.val() != '' && $("#txtTotal").val() != '' && $("#txtVatAmnt").val() != '' && $("#txtWithoutVAT").val() != '') {
+
+                        var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+                        var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+                        var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+                        //parseFloat(txtQty)
+
+                        var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                        var totvat = $("#txtvat").val().replaceAll(",", "");
+                        var tot = $("#txtttvat").val().replaceAll(",", "");
+
+                        var tott1 = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                        var tott2 = parseFloat(totvat) - parseFloat(VatAmnt);
+                        var tott3 = parseFloat(tot) - parseFloat(totalAmnt)
+
+                        $("#txttwvat").val(Comma(tott1));
+                        $("#txtvat").val(Comma(tott2));
+                        $("#txtttvat").val(Comma(tott3));
+
+                        
+
+                    }
+
+
+
+                    //Clear the TextBoxes.
+                    //txtDescri.val("");
+                    //txtQty.val("");
+                    txtUnitPrc.val("");
+                    txtVatPer.val("");
+                    txtTotal.val("");
+                    txtVatAmnt.val("");
+                    txtWithoutVAT.val("");
+                    txtRemarks.val("");
+                    Cat.val("");
+                }
+                else {
+                    $("#txttwvat").val('');
+                    $("#txtvat").val('');
+                    $("#txtttvat").val('');
+                }
+                //vat amount = without * vatpercent
+
+                //total  amoin = without vat + vat amount
+
+                var txtQty = $("#txtQty").val();
+                var txtUnitPrc = $("#txtUnitPrc").val();
+                var txtVatPer = $('option:selected', this).text();
+
+                var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                $("#txtWithoutVAT").val(total.toFixed(2));
+
+                //var vatper = (parseFloat(txtVatPer) / 100) * total;
+                //$("#txtVatAmnt").val(vatper.toFixed(2));
+                $("#txtTotal").val('');
+
+                //$("#txtTotal").val(parseFloat(total) + parseFloat(vatper));
+
+            }
+
+
+
+
+
+                
+
+
+            }
+            else {
+                $("#txttwvat").val('');
+                $("#txtvat").val('');
+                $("#txtttvat").val('');
+                message = 'Required Details are missing.';
+                type = 'danger';
+                notifyMessage(message, type);
+            }*/
+
+        multiu();
+      
+
+    });
+   
+
+    function InvoiceValiadte(e) {
+       // alert($("#txtchname").val());
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetInvNo", "Invoice")',
+            data: {
+                invno: $("#txtchname").val(),
+                invmasno: jQuery("#hdnsno").val() == "" ? '0' : jQuery("#hdnsno").val(),
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                 if (data != null) {
+                     message = 'Invoice No Already exist.';
+                     type = 'danger';
+                     notifyMessage(message, type);
+                     $("#txtchname").val('');
+                }
+            }
+        })
+    }
+    function validateInvoiceBank() {
+        debugger
+        var invoiceno = document.getElementById('txtchname');
+        var txtdate = document.getElementById("txtdate");
+        var txttwithoutvat = document.getElementById("txttwvat");
+        var txtvat = document.getElementById("txtvat");
+        var txttotalvat = document.getElementById("txtttvat");
+
+        var txtinremarks = document.getElementById("txtinr");
+        var txtwarrenty = document.getElementById("txtwarrenty");
+        var txtGsstatus = document.getElementById("txtGsstatus");
+        var txtDstatus = document.getElementById("txtDstatus");
+
+        var ddlcpny = document.getElementById("ddlcpny");
+        var ddlcmpnyId = ddlcpny.options[ddlcpny.selectedIndex].value;
+        var ddlcid = document.getElementById("ddlcid");
+        var ddlcustid = ddlcid.options[ddlcid.selectedIndex].value;
+        var ddlcurrency = document.getElementById("ddlccy");
+        var ddlcurrence = ddlcurrency.options[ddlcurrency.selectedIndex].value;
+
+        var cust = document.getElementById("ddlctype");
+        var custid = cust.options[cust.selectedIndex].value;
+
+        var cidno = document.getElementById("txtcidno");
+
+        result = '';
+        if (invoiceno.value.trim().length == 0) {
+            result += 'Invoiceno Name is Required .<br/>';
+        }
+        if (txtdate.value.trim().length == 0) {//
+            result += 'Date is Required .<br/>';
+        }
+
+
+
+        if (ddlcmpnyId == "0") {
+            result += 'Company is Required<br/>';
+        }
+        if (ddlcustid == "0") {
+            result += 'Customer is Required<br/>';
+        }
+        
+        if (custid == "0") {
+            result += 'Customer ID Type is Required<br/>';
+        }
+        if (custid == "NIL") {
+        }
+        else {
+            if (cidno.value.trim().length == 0) {
+                result += 'Customer ID no  is Required .<br/>';
+            }
+        }
+        if (ddlcurrence == "0") {
+            result += 'Currency is Required<br/>';
+        }
+        if (txttwithoutvat.value.trim().length == 0) {
+            result += 'Total Without Vat  is Required .<br/>';
+        }
+        if (txtvat.value.trim().length == 0) {
+            result += 'Vat Amount is Required .<br/>';
+        }
+        if (txttotalvat.value.trim().length == 0) {
+            result += 'Total Amount is Required .<br/>';
+        }
+        if (txtinremarks.value.trim().length == 0) {
+            result += 'Remarks is Required .<br/>';
+        }
+
+        if (txtwarrenty.value.trim().length == 0) {
+            result += 'warrenty  is Required .<br/>';
+        }
+        if (txtGsstatus.value.trim().length == 0) {
+            result += 'Goods Status is Required .<br/>';
+        }
+        var Desc = jQuery("#txtDescri").val();
+        var Qty = jQuery("#txtQty").val();
+        var txtUnitPrc = jQuery("#txtUnitPrc").val();
+        var ddlVatPer = jQuery("#ddlVatPer").val();
+        var hd = $("#tblchruch tr:last").is(":visible");
+        if (hd == true) {
+            if (Desc == '' || Qty == '' || txtUnitPrc == '' || ddlVatPer == '0') {
+                result += 'Required Details are missing.';
+            }
+        }
+        var table = "#tblchruch tr";
+        var count = jQuery(table).not("thead tr").length;
+        for (var i = 1; i <= count; i++) {
+            var bn = jQuery(table).eq(i).find('td:eq(1) input').val();
+            var bb = jQuery(table).eq(i).find('td:eq(2) input').val();
+            var ac = jQuery(table).eq(i).find('td:eq(3) input').val();
+            var sc = jQuery(table).eq(i).find('td:eq(4) input').val();
+            if (bn == '' || bb == '' || ac == '' || sc == '') {
+                //result += 'Required Details are missing.';
+            }
+        }
+        return result;
+    }
+</script>
+<script>
+    function showchModal(e) {
+        jQuery("#loader").css("display", "block");
+        jQuery("#tblCustomers  TBODY").children().not(":last").remove();
+
+    debugger;
+    txtSID = document.getElementById('txtSID');
+        var tblemployee = document.getElementById('tblCustomers');
+       // rows = tblemployee.rows;
+        var rows = $(this);
+            hdnEmployee = document.getElementById('hdnEmployee');
+
+        if (e.value.indexOf('Edit') > -1) {
+            var pt = jQuery(e).data('sid');
+
+            jQuery("#hdnsno").val(pt);
+            temp = 8937894;
+            temp1 = 8937894;
+            temp2 = 8937894;
+        //jQuery("#txtac").val('');
+        //jQuery("#dlstatus").val(0).change();
+        for (var i = 0, row = null; i < rows.length; i++) {
+            row = rows[i];
+
+            //if (row.cells[7].innerHTML.indexOf(e.id) > -1) {
+                txtSID.value = jQuery(e).data('sid');
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("GetInvoiceDetailsbyid", "Invoice")',
+                    cache: true,
+                    data: JSON.stringify({ 'invid': jQuery(e).data('sid') }),
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        if (data != null) {
+
+                            if (data.approval_status == "2")
+                            {
+                            $("#btnsubmit").hide();
+                            }
+                            console.log(moment(data.Invoice_Date.toString()).format('MM/DD/YYYY'));
+
+
+
+                            $("#txtchname").val(data.Invoice_No);
+                            $("#txtdate").val(moment(data.Invoice_Date.toString()).format('MM/DD/YYYY'));
+                             jQuery("#ddlcpny").val(data.Com_Mas_Sno).change()
+                             jQuery("#ddlcid").val(data.Chus_Mas_No).change()
+                             jQuery("#ddlccy").val(data.Currency_Code).change()
+
+                            $("#txttwvat").val(Comma(data.Total_Without_Vt.toFixed(2)));
+                            $("#txtvat").val(Comma(data.Total_Vt.toFixed(2)));
+                            $("#txtttvat").val(Comma(data.Total.toFixed(2)));
+                            $("#txtinr").val(data.Remarks);
+                            $("#txtwarrenty").val(data.warrenty);
+                            $("#txtGsstatus").val(data.goods_status);
+                            $("#txtDstatus").val(data.delivery_status);
+                            jQuery("#ddlctype").val(data.Customer_ID_Type).change()
+                            $("#txtcidno").val(data.Customer_ID_No);
+                            var cidno = document.getElementById("txtcidno");
+
+
+
+                        }
+                        jQuery("#loader").css("display", "none");
+                        jQuery.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("GetInvoiceInvoicedetails", "Invoice")',
+                            data: JSON.stringify({ 'invid': jQuery(e).data('sid') }),
+                            contentType: 'application/json; charset=utf-8',
+                            dataType: 'json',
+                            cache: false,
+                            success: function (data) {
+
+
+                                var txtDescri = $("#txtDescri");
+                                var txtQty = $("#txtQty");
+                                var txtUnitPrc = $("#txtUnitPrc");
+                                var txtVatPer = $("#ddlVatPer");
+                                var txtTotal = $("#txtTotal");
+                                var txtVatAmnt = $("#txtVatAmnt");
+                                var txtWithoutVAT = $("#txtWithoutVAT");
+                                var txtRemarks = $("#txtRemarks");
+                                var Cat = $("#txtCat");
+                              //  $("#txttwvat").val("");
+
+                                //Clear the TextBoxes.
+                                txtDescri.val("");
+                                txtQty.val("");
+                                txtUnitPrc.val("");
+                                txtVatPer.val("");
+                                txtTotal.val("");
+                                txtVatAmnt.val("");
+                                txtWithoutVAT.val("");
+                                txtRemarks.val("");
+                                Cat.val("");
+                                //var dtcount = data.length;
+                                jQuery("#tblCustomers  TBODY").children().remove();
+                                jQuery.each(data, function (key, value) {
+                                    debugger
+                                   // var tBody = jQuery("#tblCustomers  TBODY")[0];
+                                    //Get the reference of the Table's TBODY element.
+                                    var tBody = $("#tblCustomers > TBODY")[0];
+                                    var row = tBody.insertRow(-1);
+
+                                    //Add Name cell.
+                                    var cell = $(row.insertCell(-1));
+                                    cell.html(value.Item_Description);
+
+                                    //Add Country cell.
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(value.Item_Qty);
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(value.vat_category);
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(Comma(value.Item_Unit_Price));
+
+                                  
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(Comma( value.Vat_Percentage));
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(Comma( value.Item_Total_Amount));
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(Comma( value.Vat_Amount));
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(Comma(value.Item_Without_vat));
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(value.Vat_Type);
+
+                                    cell = $(row.insertCell(-1));
+                                    cell.html(value.Remarks);
+
+
+
+                                    //Add Button cell.
+                                    cell = $(row.insertCell(-1));
+                                    var btnRemove = $("<input />");
+                                    btnRemove.attr("type", "button");
+                                    btnRemove.attr("onclick", "Remove(this);");
+                                    btnRemove.attr("class", "btn btn-success btn-sm btn-biz_logic;");
+
+                                    btnRemove.val("Remove");
+                                    cell.append(btnRemove);
+
+
+
+
+                                    //i++;
+                                })
+                                //var tRows = document.getElementById('tblCustomers');
+                                //var rows = tRows.rows;
+                                //for (var Index = 1, row = null; Index < rows.length; Index++) {
+                                //    row = rows[Index];
+                                //    row.cells[0].innerHTML = Index;
+                                //}
+                                //$('#tblchruch tr:last').show();
+                            }
+                        })
+                    }
+                })
+            //}
+        }
+        hdnEmployee.value = 'U';
+        }
+
+        else if (e.value.indexOf('Add') > -1) {
+            debugger
+            $("#btnsubmit").show();
+            jQuery("#hdnsno").val(0);
+            var txtDescri = $("#txtDescri");
+            var txtQty = $("#txtQty");
+            var txtUnitPrc = $("#txtUnitPrc");
+            var txtVatPer = $("#ddlVatPer");
+            var txtTotal = $("#txtTotal");
+            var txtVatAmnt = $("#txtVatAmnt");
+            var txtWithoutVAT = $("#txtWithoutVAT");
+            var txtRemarks = $("#txtRemarks");
+            var Cat = $("#txtCat");
+            $("#txttwvat").val("");
+
+            //Clear the TextBoxes.
+            txtDescri.val("");
+            txtQty.val("");
+            txtUnitPrc.val("");
+            txtVatPer.val("");
+            txtTotal.val("");
+            txtVatAmnt.val("");
+            txtWithoutVAT.val("");
+            txtRemarks.val("");
+            Cat.val("");
+            jQuery("#tblCustomers  TBODY").children().remove();
+
+        resetchruInvoi();
+        //txtcpny.value = 0;
+        //txtcid.value = 0;
+        //txtccy.value = 0;
+        //jQuery("#btnSubmit").show();
+        //jQuery("#btnSubmit").html("Save");
+        //hdnEmployee.value = 'C';
+        //jQuery("#loader").css("display", "none");
+            var tRows = document.getElementById('tblCustomers');
+        //    var rows = $(this);
+        //    for (var Index = 1, row = null; Index < rows.length - 1; Index++) {
+        //    row = rows[Index];
+        //    row.cells[0].innerHTML = Index;
+        //}
+    }
+        jQuery("#loader").css("display", "none");
+    }
+
+
+    function resetchruInvoi() {
+        debugger
+
+        jQuery("#ddlcpny").dropdown('clear')
+        jQuery("#ddlcid").dropdown('clear')
+        jQuery("#ddlccy").dropdown('clear')
+        jQuery("#ddlcpny").val(0).change();
+        jQuery("#ddlcid").val(0).change();
+        jQuery("#ddlccy").val(0).change();
+        jQuery("#txtchname").val("");
+        jQuery("#txtdate").val("");
+        jQuery("#txtvat").val("");
+        jQuery("#txtttvat").val("");
+        jQuery("#txtinr").val("");
+        $("#txttwvat").val("");
+        jQuery("#txtwarrenty").val("");
+        jQuery("#txtGsstatus").val("");
+        jQuery("#txtDstatus").val("");
+
+
+
+
+        jQuery("#tblCustomers  TBODY").children().remove();
+        //var tRows = document.getElementById('tblCustomers');
+        //var rows = $(this);
+        //for (var Index = 1, row = null; Index < rows.length; Index++) {
+        //    row = rows[Index];
+        //    row.cells[0].innerHTML = Index;
+        //}
+
+    }
+</script>
+<script>
+    function multiu() {
+        var txtDescri = $("#txtDescri");
+        var txtQty = $("#txtQty");
+        var txtUnitPrc = $("#txtUnitPrc");
+        var txtVatPer = $("#ddlVatPer");
+        var txtTotal = $("#txtTotal");
+        var txtVatAmnt = $("#txtVatAmnt");
+        var txtWithoutVAT = $("#txtWithoutVAT");
+        var txtRemarks = $("#txtRemarks");
+        var txtcategory = $("#ddlCategory");
+        var Cat = $("#txtCat");
+        var ddlreg = document.getElementById("ddlVatPer");
+        //alert(ddlreg.options[ddlreg.selectedIndex].value);
+        var result = ddlreg.options[ddlreg.selectedIndex].value;
+        var result1 = ddlreg.options[ddlreg.selectedIndex].text;
+        if (result == 0) {
+            result = "";
+        }
+        var sum = 0;
+
+        $("#txtCat").val(result);
+        
+        
+        /*if (txtVatPer.val() == '') {
+            txtVatPer.val("0");
+        }*/
+        //alert(txtQty.val() + ": " + txtQty.val() + ": " + txtVatPer.val());
+        if (txtQty.val != 0 && txtUnitPrc.val != 0 && txtVatPer.val() != 0) {
+            
+            //alert($('option:selected', this).text());
+            var totalRowCount = $("[id*=tblCustomers] tr").length;
+            var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+
+            if (txtcategory.val() == 'Inclusive') {
+                
+                var txtQty = $("#txtQty").val();
+                if (txtQty == '') {
+                    txtQty = "0";
+                    
+                }
+                var txtUnitPrc = $("#txtUnitPrc").val();
+                if (txtUnitPrc == '') {
+                    txtUnitPrc = "0";
+                }
+                //var txtVatPer = $('option:selected', this).text();
+                var txtVatPer = result1;
+                
+                var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                var vatper = (parseFloat(txtVatPer) / 100) + parseFloat(1);
+                var vatper1 = total / vatper;
+                //alert(temp);
+                var withotvat = total - vatper1;
+                $("#txtVatAmnt").val(withotvat.toFixed(2));
+                
+                $("#txtTotal").val(total.toFixed(2));
+                $("#txtWithoutVAT").val(vatper1.toFixed(2));
+                
+                /*if (temp == 1) {
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                }
+                if (temp1 == 1) {
+                    temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                }
+                if (temp2 == 1) {
+                    temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                }*/
+
+
+                
+                var existing = $("#txtttvat").val().toString().replaceAll(",", "");
+
+                var txttwvat = $("#txttwvat").val().toString().replaceAll(",", "");
+                var txtvat = $("#txtvat").val().toString().replaceAll(",", "");
+                
+                if (existing != '') {
+                    var total = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    if (temp > 0 && temp != 8937894) {
+                        if (temp == 9999999) {
+                            temp = 0;
+                        }
+                        existing = parseFloat(existing) - temp;
+                        temp = 1;
+                    }
+                    sum = parseFloat(existing) + parseFloat(total);
+                    $("#txtttvat").val(Comma(sum.toFixed(2)));
+                }
+                else {
+                    
+                    $("#txtttvat").val(Comma(txtTotal.val()));
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    
+                }
+                
+                //tax with out vat
+                if (txttwvat != '') {
+                    var totalwvat2 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    if (temp1 > 0 && temp1 != 8937894) {
+                        if (temp1 == 9999999) {
+                            temp1 = 0;
+                        }
+                        txttwvat = parseFloat(txttwvat) - temp1;
+                        temp1 = 1;
+                    }
+                    var sumtotalwvat = parseFloat(txttwvat) + parseFloat(totalwvat2);
+                    $("#txttwvat").val(Comma(sumtotalwvat.toFixed(2)));
+                }
+                else {
+                    $("#txttwvat").val(Comma(txtWithoutVAT.val()));
+                    temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                }
+                //tax vat
+                if (txtvat != '') {
+                    var txtvat2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    if (temp2 > 0 && temp2 != 8937894) {
+                        if (temp2 == 9999999) {
+                            temp2 = 0;
+                        }
+                        txtvat = parseFloat(txtvat) - temp2;
+                        temp2 = 1;
+                    }
+                    var sumtotalvat = parseFloat(txtvat) + parseFloat(txtvat2);
+                    $("#txtvat").val(Comma(sumtotalvat.toFixed(2)));
+                }
+                else {
+                    $("#txtvat").val(Comma(txtVatAmnt.val()));
+                    temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                }
+                
+                if (temp == 1 || temp == 8937894) {
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    if (temp == 0) {
+                        temp = 9999999;
+                    }
+                }
+                if (temp1 == 1 || temp1 == 8937894) {
+                    temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    if (temp1 == 0) {
+                        temp1 = 9999999;
+                    }
+                }
+                if (temp2 == 1 || temp2 == 8937894) {
+                    temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    if (temp2 == 0) {
+                        temp2 = 9999999;
+                    }
+                }
+            }
+            else {
+
+                //vat amount = without * vatpercent
+
+                //total  amoin = without vat + vat amount
+                //txtVatPer.val("");
+                var txtQty = $("#txtQty").val();
+                if (txtQty == '') {
+                    txtQty = "0";
+
+                }
+                var txtUnitPrc = $("#txtUnitPrc").val();
+                if (txtUnitPrc == '') {
+                    txtUnitPrc = "0";
+                }
+                //var txtVatPer = $('option:selected', this).text();
+                var txtVatPer = result1;
+                var total = parseFloat(txtQty) * parseFloat(txtUnitPrc);
+                $("#txtWithoutVAT").val(total.toFixed(2));
+                var vatper = (parseFloat(txtVatPer) / 100) * total;
+                $("#txtVatAmnt").val(vatper.toFixed(2));
+                var etotal = parseFloat(total) + parseFloat(vatper);
+
+                $("#txtTotal").val(etotal.toFixed(2));
+
+
+
+                
+                var existing = $("#txtttvat").val().toString().replaceAll(",", "");
+                var txttwvat = $("#txttwvat").val().toString().replaceAll(",", "");
+                var txtvat = $("#txtvat").val().toString().replaceAll(",", "");
+                if (existing != '') {
+                    var total = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    if (temp > 0 && temp != 8937894) {
+                        if (temp == 9999999) {
+                            temp = 0;
+                        }
+                        existing = parseFloat(existing) - temp;
+                        temp = 1;
+                    }
+                    sum = parseFloat(existing) + parseFloat(total);
+                    $("#txtttvat").val(Comma(sum.toFixed(2)));
+                }
+                else {
+
+                    $("#txtttvat").val(Comma(txtTotal.val()));
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+
+                }
+                
+                //tax with out vat
+                if (txttwvat != '') {
+                    var totalwvat2 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    if (temp1 > 0 && temp1 != 8937894) {
+                        if (temp1 == 9999999) {
+                            temp1 = 0;
+                        }
+                        txttwvat = parseFloat(txttwvat) - temp1;
+                        temp1 = 1;
+                    }
+                    var sumtotalwvat = parseFloat(txttwvat) + parseFloat(totalwvat2);
+                    $("#txttwvat").val(Comma(sumtotalwvat.toFixed(2)));
+                }
+                else {
+                    $("#txttwvat").val(Comma(txtWithoutVAT.val()));
+                    temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                }
+                //tax vat
+                if (txtvat != '') {
+                    var txtvat2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    if (temp2 > 0 && temp2 != 8937894) {
+                        if (temp2 == 9999999) {
+                            temp2 = 0;
+                        }
+                        txtvat = parseFloat(txtvat) - temp2;
+                        temp2 = 1;
+                    }
+                    var sumtotalvat = parseFloat(txtvat) + parseFloat(txtvat2);
+                    $("#txtvat").val(Comma(sumtotalvat.toFixed(2)));
+                }
+                else {
+                    $("#txtvat").val(Comma(txtVatAmnt.val()));
+                    temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                }
+
+                if (temp == 1 || temp == 8937894) {
+                    temp = parseFloat(txtTotal.val().toString().replaceAll(",", ""));
+                    if (temp == 0) {
+                        temp = 9999999;
+                    }
+                }
+                if (temp1 == 1 || temp1 == 8937894) {
+                    temp1 = parseFloat(txtWithoutVAT.val().toString().replaceAll(",", ""));
+                    if (temp1 == 0) {
+                        temp1 = 9999999;
+                    }
+                }
+                if (temp2 == 1 || temp2 == 8937894) {
+                    temp2 = parseFloat(txtVatAmnt.val().toString().replaceAll(",", ""));
+                    if (temp2 == 0) {
+                        temp2 = 9999999;
+                    }
+                }
+            }
+
+
+
+
+            //add total amoun to values to file
+
+
+
+        }
+        else {
+            var txtDescri = $("#txtDescri");
+            var txtQty = $("#txtQty");
+            var txtUnitPrc = $("#txtUnitPrc");
+            var txtVatPer = $("#ddlVatPer");
+            var txtTotal = $("#txtTotal");
+            var txtVatAmnt = $("#txtVatAmnt");
+            var txtWithoutVAT = $("#txtWithoutVAT");
+            var txtRemarks = $("#txtRemarks");
+            var Cat = $("#txtCat");
+            var ddlVatPer = $("#ddlVatPer");
+            var totalRowCount = $("[id*=tblCustomers] tr").length;
+            var rowCount = $("[id*=tblCustomers] td").closest("tr").length;
+            if (rowCount > 1) {
+
+
+
+                if (txtDescri.val() != '' && $("#txtTotal").val() != '' && $("#txtVatAmnt").val() != '' && $("#txtWithoutVAT").val() != '') {
+
+                    var totalAmnt = $("#txtTotal").val().replaceAll(",", "");
+                    var VatAmnt = $("#txtVatAmnt").val().replaceAll(",", "");
+                    var Withutvat = $("#txtWithoutVAT").val().replaceAll(",", "");
+                    //parseFloat(txtQty)
+
+                    var totwithoutvat = $("#txttwvat").val().replaceAll(",", "");
+                    var totvat = $("#txtvat").val().replaceAll(",", "");
+                    var tot = $("#txtttvat").val().replaceAll(",", "");
+                    var tott1 = parseFloat(totwithoutvat) - parseFloat(Withutvat);
+                    var tott2 = parseFloat(totvat) - parseFloat(VatAmnt);
+                    var tott3 = parseFloat(tot) - parseFloat(totalAmnt)
+                    $("#txttwvat").val(Comma(tott1));
+                    $("#txtvat").val(Comma(tott2));
+                    $("#txtttvat").val(Comma(tott3));
+
+                }
+
+
+
+                //Clear the TextBoxes.
+                //txtDescri.val("");
+                //txtQty.val("");
+                txtUnitPrc.val("");
+                txtVatPer.val("");
+                txtTotal.val("");
+                txtVatAmnt.val("");
+                txtWithoutVAT.val("");
+                txtRemarks.val("");
+                Cat.val("");
+            }
+            else {
+
+                $("#txtvat").val('');
+                $("#txtttvat").val('');
+
+                txtUnitPrc.val("");
+                txtVatPer.val("");
+                txtTotal.val("");
+                txtVatAmnt.val("");
+                if (txtcategory.val() == 'Inclusive') {
+                    txtWithoutVAT.val("");
+                    $("#txttwvat").val('');
+                    $("#txtVatAmnt").val('');
+
+                }
+                txtRemarks.val("");
+            }
+            message = 'Required Details are missing.';
+            type = 'danger';
+            notifyMessage(message, type);
+        }
+    }
+
+
+    function disablefuturedate(st, e) {
+
+        jQuery('#' + e).datepicker('destroy');
+        jQuery('#' + e).datepicker({
+            uiLibrary: 'bootstrap4',
+            // minDate: st,
+            maxDate: st,
+            format: "dd/mm/yyyy",
+            iconsLibrary: 'fontawesome',
+        });
+    }
+</script>

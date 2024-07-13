@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewBag.Title = "Generatedinvoices";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+
+<style type="text/css">
+    #tblchruch tr td {
+        text-align: left;
+    }
+
+    .tbl-smtp1 thead {
+        visibility: collapse;
+    }
+
+    table td {
+        box-sizing: border-box !important;
+    }
+
+    .modal {
+        padding-right: 0;
+    }
+
+    .textarea {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        height: 40px;
+    }
+</style>
+<script type="text/javascript">
+    var array = [], dupicaterow = true,rt = true;
+
+    jQuery(document).ready(function () {
+        jQuery("#hdnsno").val(0);
+        
+        bindchruchDetails();
+        
+
+
+    });
+
+    function bindchruchDetails() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetSignedDetails", "Invoice")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                debugger
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>'+i+'</td>' +
+                            '<td>' + value.Invoice_No + '</td>' +
+                            '<td>' + value.Chus_Name + '</td>' +
+                            '<td>' + value.Currency_Code + '</td>' +
+                            '<td>' + Comma(value.Total) + '</td>' +
+                            '<td>' + value.Remarks + '</td>' +
+
+
+                            //'<td ><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal-ch" id="btn' + value.Inv_Mas_Sno + '" data-sid="' + value.Inv_Mas_Sno + '" value="Edit" onclick="showchModal(this)"><i class="fas fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;</td>' +
+                            //'<td ><button class="btn btn-outline-secondary btn-sm"  id="btn' + value.invoice_no + '" data-sid="' + value.invoice_no + '" value="Edit" onclick="pdf(this)"><i class="fa fa-file" ></i ></button >&nbsp;&nbsp;&nbsp;</td>' +
+                            '<td align="right"><a class="btn btn-outline-secondary btn-sm"  href="/InvoiceDownload/InvoiceSignDownload?Id=' + value.Inv_Mas_Sno + '" );"><span class="badge bg-orange"><i class="fa fa-file"></i></span></a> &nbsp;&nbsp;&nbsp;</td>'+
+                            '</tr>';
+                        //<button class="btn btn-outline-dark btn-sm" data-sid="' + value.Church_Reg_Sno + '" data-pwd="' + value.Chruch_Name + '" id="btnDelete" data-rec="0" onclick="delchruch(this)"><i class="fas fa-trash" aria-hidden="true"></i></button>
+                        jQuery("#tbl-smtp tbody").append(row);
+                        i++;
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+   
+</script>
+
+
+
+
+<div class="card-body">
+    <h5 class="card-title" id="lblins">Invoice</h5>
+
+    <div class="form-group d-flex">
+        @*<button type="button" id="btnAdd" value="Add" data-sid="0" class="btn ml-auto mr-1 btn-sm btn-success btn-biz_logic" onclick="showchModal(this);"
+                data-toggle="modal" data-target="#modal-ch">
+            Create
+        </button>*@
+        <input type="hidden" id="hdnEmployee" />
+        <input type="hidden" id="hdnsno" />
+    </div>
+
+    <div class="table-responsive">
+        <table id="tbl-smtp" class="table table-bordered table-sm rounded display">
+            <thead class="thead-light">
+                <tr>
+                    <th class="sno-th">Sno</th>
+                    <th class="sno-th">Invoice No</th>
+                    <th>Customer Name</th>
+                    <th class="sno-th">Currency Name</th>
+                    <th class="sno-th">Total Amount</th>
+                    <th class="sno-th">Remarks</th>
+                    @*<th class="sno-th">Actions</th>*@
+                    <th class="sno-th">Download Invoice </th>
+
+                </tr>
+            </thead>
+            <tbody></tbody>
+
+        </table>
+    </div>
+
+</div>
+ 

@@ -1,0 +1,200 @@
+<body data-layout="horizontal" data-topbar="light" data-sidebar-size="sm">
+    <div class="page-content">
+        <div class="main-content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="page-title-box d-flex align-items-center justify-content-between">
+                            <h4 class="mb-0">@ViewData["custos"]</h4>
+
+                            <div class="page-title-right">
+                                <ol class="breadcrumb m-0">
+                                    <li>
+                                        <button type="button" id="btnAdd" value="Add" data-sid="0"
+                                            data-bs-toggle="modal" data-bs-target="#modal-smtp"
+                                            onclick="showCustModal(this)"
+                                            class="btn btn-outline-primary waves-effect waves-light f-right d-inline-block md-trigger ml-4">
+                                            <i data-feather="plus-circle" class="mr-2"></i>
+                                            @ViewData["addcusts"]
+                                        </button>
+                                    </li>
+                                </ol>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Container-fluid starts-->
+                @* BODY DETAILS CARD/PANEL *@
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card">
+                            @* <div class="card-header">
+                                <h2>
+                                    @ViewData["custdets"] <small></small>
+                                </h2>
+                                <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                                    <li> <a href="javascript:void(0);" data-bs-toggle="cardloading"
+                                            data-loading-effect="pulse"><i class="icon-refresh"></i></a></li>
+                                    <li><a href="javascript:void(0);" class="full-screen"><i
+                                                class="icon-size-fullscreen"></i></a>
+                                    </li>
+                                    <li class="dropdown">
+                                        <a href="javascript:void(0);" class="dropdown-toggle" data-bs-toggle="dropdown"
+                                            role="button" aria-haspopup="true" aria-expanded="false"></a>
+                                        <ul class="dropdown-menu">
+                                            <li><a href="javascript:void(0);">Action</a></li>
+                                            <li><a href="javascript:void(0);">Another Action</a></li>
+                                            <li><a href="javascript:void(0);">Something else</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div> *@
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="tbl-smtp"
+                                        class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                                        <thead>
+                                            <tr>
+                                                <th>Sno</th>
+                                                <th> @ViewData["custname"]</th>
+                                                <!-- <th>@ViewData["poboxno"]</th> -->
+                                                <!-- <th>@ViewData["addr"]</th> -->
+                                                <!-- <th class="d-none">Region Sno</th> -->
+                                                <!-- <th>@ViewData["Region"]</th> -->
+                                                <!-- <th class="d-none">District Sno</th> -->
+                                                <!-- <th>@ViewData["District"]</th> -->
+                                                <!-- <th class="d-none">Ward Sno</th> -->
+                                                <!-- <th>@ViewData["Ward"]</th> -->
+                                                <!-- <th>@ViewData["tino"]</th> -->
+                                                <!-- <th>@ViewData["vatno"]</th> -->
+                                                <!-- <th>@ViewData["conctper"]</th> -->
+                                                <th>@ViewData["EID"]</th>
+                                                <th>@ViewData["Mno"]</th>
+                                                <th class="d-none">Checker/Maker</th>
+                                                <th data-sort-ignore="true">@ViewData["Actions"]</th>
+                                            </tr>
+                                        </thead>
+                                        @* <tfoot>
+                                            <tr>
+                                                <th>Sno</th>
+                                                <th>Customer Name</th>
+                                                <th>Post Box No</th>
+                                                <th>Address</th>
+                                                <th class="d-none">Region Sno</th>
+                                                <th>Region</th>
+                                                <th class="d-none">District Sno</th>
+                                                <th>District</th>
+                                                <th class="d-none">Ward Sno</th>
+                                                <th>Ward</th>
+                                                <th>Tin No</th>
+                                                <th>Vat No</th>
+                                                <th>Contact Person</th>
+                                                <th>Email</th>
+                                                <th>Mobile Number</th>
+                                                <th data-sort-ignore="true">Actions</th>
+                                            </tr>
+                                        </tfoot> *@
+                                        <tbody>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md-overlay"></div>
+
+                <div id="styleSelector">
+
+                </div>
+
+                <!-- Container-fluid Ends-->
+
+
+                <!-- [MODALS] -->
+                <div class="modal" id="modal-smtp" role="dialog" data-backdrop="static" data-keyboard="false">
+                    <div class="modal-dialog believerModal" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">@ViewData["custos"] </h5>
+                                <button type="button" class="btn btn-outline-primary close" data-bs-dismiss="modal"
+                                    aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form class="col-12 p-0 mx-auto" action="" method="post">
+                                    <div class="row">
+
+                                        <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                                            <label for="gender" class="f-label_align">@ViewData["custname"]<span
+                                                    class="text-danger">*</span> </label>
+                                            <input type="text" class="form-control" id="txtcusname"
+                                                placeholder="Customer Name" onkeyup="validCust(this)"
+                                                onkeypress="return alpha(event)" maxlength="100" />
+                                            <input type="hidden" class="form-control  hidden" id="txtSID">
+                                            <input type="hidden" class="form-control  hidden" id="txtDname">
+
+                                        </div>
+
+
+                                        <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                                            <label for="gender" class="f-label_align">@ViewData["Mno"]<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="txtmob"
+                                                placeholder="Mobile Number" maxlength="12" @*onkeydown="validCust(this)"
+                                                *@ onblur="mobileNumDivisionValiadte(this);" />
+                                            <div class="form-group flex_form-group align-items-baseline offset">
+                                                <span id="lblError"></span>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                                            <label for="gender" class="f-label_align">@ViewData["EID"]</label>
+                                            <input type="text" class="form-control" id="txtemail" placeholder="Email"
+                                                onblur="ValidateEmail(this)" @*onkeyup="validCust(this)" *@
+                                                maxlength="100" />
+                                            <div class="form-group flex_form-group align-items-baseline offset">
+                                                <span id="lblError1"></span>
+                                            </div>
+                                            <div class="form-group flex_form-group align-items-baseline offset">
+                                                <span id="lblError2"></span>@*<span id="lblError2"></span>*@
+                                            </div>
+                                        </div>
+
+                                        <div class="d-none">
+                                            <label for="gender" class="f-label_align">Checker/Maker<span
+                                                    class="text-danger">*</span></label>
+                                            <input type="radio" class="ml-2" name="checker" id="rbyes"
+                                                value="Yes">&nbsp;<label for="Male">Yes</label>
+                                            &nbsp; <input class="ml-2" type="radio" name="checker" id="rbno"
+                                                value="No">&nbsp;<label for="FeMale">No</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-outline-info btn-sm"
+                                            data-bs-dismiss="modal">@ViewData["Close"]</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic"
+                                            id="btnSubmit">@ViewData["Save"]</button>
+                                    </div>
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="styleSelector">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>

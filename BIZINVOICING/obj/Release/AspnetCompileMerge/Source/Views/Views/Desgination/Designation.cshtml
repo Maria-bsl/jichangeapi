@@ -1,0 +1,330 @@
+﻿@{
+    ViewBag.Title = "Designation";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        avoidEnter('txtdesg');
+        Getcolumnslang_Desg();
+        GetCurrency_Desg();
+        $("#btnSubmit").click(function () {
+            adddesg_Desg();
+        })
+        $("#btnDelete").click(function () {
+            deldesig_Desg();
+        });
+    });
+
+
+    function Getcolumnslang_Desg() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "Currency")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    var glob;
+    function GetCurrency_Desg() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetdesDetails", "Desgination")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.Desg_Name + '</td>' +
+                            '<td ><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal-desg" id="btn' + value.Desg_Id + '" data-sid="' + value.Desg_Id + '" value="Edit" onclick="showdesgModal_Desg(this)"><i class="fa-solid fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-dark btn-sm" data-sid="' + value.Desg_Id + '" data-pwd="' + value.Desg_Name + '" id="btnDelete" data-rec="0" onclick="deldesig_Desg(this)"><i class="fa-solid fa-trash-can"></i></button></td>' +
+                            '</tr>';
+                        i++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+
+
+
+    function bindemployeeId_Desg() {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetNextEmployeeId", "Employee")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#txtEmployeeId").val(data);
+            }
+        })
+    }
+    function deldesig_Desg(e) {
+
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            var pt = jQuery(e).data('pwd');
+            deletedesg_Desg(cid, pt);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    function adddesg_Desg() {
+
+        var message = validateEmployeedesg_Desg(),
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getDesigValues_Desg());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Adddesg", "Desgination")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-desg');
+
+                    if (opType == 'C') {
+
+                        if (data == true) {
+                            message = jQuery("#txtdesg").val() + ' Desgination Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtdesg").val() + ' Desgination Successfully Created';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == false && jk == true) {
+                            message = jQuery("#txtdesg").val() + ' Desgination Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtdesg").val() + ' Desgination Successfully Updated';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'D' && data) {
+                        message = jQuery("#txtdesg").val() + ' Desgination details deleted successfully.';
+                        type = 'success';
+                    }
+
+                    GetCurrency_Desg();
+                    notifyMessage(message, type);
+
+                }
+            })
+        }
+    }
+
+    function deletedesg_Desg(cid, pt) {
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+        var params = JSON.stringify(getSMTPID_Desg(cid));
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("Deletedesg", "Desgination")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                hideModal('modal-desg');
+                if (data == true) {
+                    message = pt + ' Desgination is in Use,Cannot be Deleted.';
+                    type = 'danger';
+                }
+                else if (opType == 'D' && data) {
+                    message = pt + ' Desgination Successfully Deleted';
+                    type = 'success';
+
+                    //deletecurGrid();
+                }
+                notifyMessage(message, type);
+                GetCurrency_Desg();
+            }
+        })
+
+    }
+</script>
+
+
+<div class="block-header">
+    <div class="row clearfix">
+        <div class="col-md-6 col-sm-12">
+            <h2>Designation</h2>
+        </div>
+        <div class="col-md-6 col-sm-12 text-right">
+            <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a href="@Url.Action("Setup", "Setup")"><i class="icon-home"></i></a></li>
+                <li class="breadcrumb-item active">Designation Details</li>
+            </ul>
+            @* <a href="javascript:void(0);" class="btn btn-sm btn-primary" title="">Create New</a> *@
+         <button type="button" id="btnAdd" value="Add" data-sid="0"
+                                class="btn btn-primary waves-effect waves-light f-right d-inline-block md-trigger"
+                                data-modal="modal-13" onclick="showdesgModal_Desg(this);" data-toggle="modal"
+                                data-target="#modal-desg"> <i class="icofont icofont-plus m-r-5"></i>
+                                Add Designation
+                            </button>
+            <input type="hidden" id="hdnEmployee" />
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    @* BODY DETAILS CARD/PANEL *@
+    <div class="row clearfix">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="header">
+                    <h2>Designation Details <small></small>
+                    </h2>
+                    <ul class="header-dropdown dropdown dropdown-animated scale-left">
+                        <li> <a href="javascript:void(0);" data-toggle="cardloading" data-loading-effect="pulse"><i
+                                    class="icon-refresh"></i></a></li>
+                        <li><a href="javascript:void(0);" class="full-screen"><i class="icon-size-fullscreen"></i></a>
+                        </li>
+                        @* <li class="dropdown">
+                            <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                            aria-haspopup="true" aria-expanded="false"></a>
+                            <ul class="dropdown-menu">
+                            <li><a href="javascript:void(0);">Action</a></li>
+                            <li><a href="javascript:void(0);">Another Action</a></li>
+                            <li><a href="javascript:void(0);">Something else</a></li>
+                            </ul>
+                            </li> *@
+                    </ul>
+                </div>
+                <div class="body">
+                    <div class="table-responsive">
+                        <table id="tbl-smtp"
+                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                            <thead>
+                                <tr>
+                                   <th class="sno-th">Sno</th>
+                                                <th>Designation</th>
+                                                <th class="sno-th">Actions</th>
+                                </tr>
+                            </thead>
+                            @* <tfoot>
+                                <tr>
+                                   <th class="sno-th">Sno</th>
+                                                <th>Designation</th>
+                                                <th class="sno-th">Actions</th>
+                                </tr>
+                            </tfoot> *@
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+    <div class="md-overlay"></div>
+
+        <div id="styleSelector">
+
+        </div>
+</div>
+
+
+                        <!-- [MODALS] -->
+                        <div class="modal fade" id="modal-desg" tabindex="-1" role="dialog" data-backdrop="static"
+                            data-keyboard="false" aria-labelledby="believerCreateLabel" aria-hidden="true">
+                            <div class="modal-dialog believerModal" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="hddesg">Designation</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="col-12 p-0 mx-auto" action="Adddesg" method="post">
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for="gender" class="f-label_align"
+                                                        id="hddesg1">Designation<span class="red">*</span></label>
+                                                    <input type="text" class="form-control" id="txtdesg"
+                                                        placeholder="Enter Designation" maxlength="200"
+                                                        onkeyup="valid(this)">
+                                                    <input type="hidden" class="form-control hidden" id="txtSID">
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary btn-sm"
+                                                    data-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary btn-sm btn-biz_logic"
+                                                    id="btnSubmit">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md-overlay"></div>
+                        <!-- Add Contact Ends Model-->
+                    </div>
+
+                    <!-- Container-fluid ends -->
+                </div>
+                <!-- Page-body end -->
+            </div>
+        </div>
+        <!-- Warning Section Starts -->
+
+        <div id="styleSelector">
+
+        </div>
+    </div>

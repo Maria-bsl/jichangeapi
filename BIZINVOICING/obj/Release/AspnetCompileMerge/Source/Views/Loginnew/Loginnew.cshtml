@@ -1,0 +1,900 @@
+﻿@model BL.BIZINVOICING.BusinessEntities.Masters.CompanyBankMaster
+@{
+    ViewBag.Title = "Jichange Portal";
+}
+<html>
+
+<head>
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/assets/images/favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="/assetss/images/favicon.ico" type="image/x-icon">
+
+    <!-- Google font-->
+
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/font-awesome.css">
+    <!-- ico-font-->
+    @* <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/icofont.css"> *@
+    <!-- Themify icon-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/themify.css">
+    <!-- Flag icon-->
+    @* <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/flag-icon.css"> *@
+    <!-- Feather icon-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/feather-icon.css">
+    <!-- Plugins css start-->
+    <!-- Plugins css Ends-->
+    <!-- Bootstrap css-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/vendors/bootstrap.css">
+    <!-- App css-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/style.css">
+    <link id="color" rel="stylesheet" href="/assetss/css/color-1.css" media="screen">
+    <!-- Responsive css-->
+    <link rel="stylesheet" type="text/css" href="/assetss/css/responsive.css">
+
+    <script src="/js/jquery.min.js"></script>
+
+
+    <script src="/js/validations.js?ver=1.0"></script>
+
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+
+    @* <script src="/assetss/js/script.js"></script>
+<!-- login js--> *@
+
+    <script src="/js/Company.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+    @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> *@
+    <script src="https://kit.fontawesome.com/a708a171db.js" crossorigin="anonymous"></script>
+    <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+    <script src="/Script/bootstrap-notify.min.js" type="text/javascript"></script>
+</head>
+
+<script type="text/javascript">
+    var glob, check;
+    rt = true, dupicaterow = true;
+    jQuery(document).ready(function () {
+
+        /*jQuery('label[for="lblH"]').hide();
+
+        jQuery('label[for="lblcnH"]').hide();
+        jQuery('label[for="lblcn"]').hide();
+
+        jQuery('label[for="lblcustH"]').hide();
+        jQuery('label[for="lblcust"]').hide();
+
+        jQuery('label[for="lblptH"]').hide();
+        jQuery('label[for="lblpt"]').hide();
+
+        jQuery('label[for="lblpdH"]').hide();
+        jQuery('label[for="lblpd"]').hide();
+
+        jQuery('label[for="lbliaH"]').hide();
+        jQuery('label[for="lblia"]').hide();*/
+       // bindRegionDetails();
+        //bindCompanyBank();
+        bindBranches();
+        /*var tRows = document.getElementById('tblchruch');
+        var rows = tRows.rows;
+        for (var Index = 1, row = null; Index < rows.length; Index++) {
+            row = rows[Index];
+            row.cells[0].innerHTML = Index;
+        }*/
+        jQuery("#btnSubmit1").click(function () {
+            jQuery('#hdnEmployee').val('C');
+            opType = jQuery("#hdnEmployee").val();  // Value not picked on Company on Create Modal, Added manually
+            //alert(opType);
+            var message = validateCompanyBankLogin();
+
+                if (message.length > 0 && opType != 'D') {
+                    notifyMessage(message, 'danger');
+                }
+                else if (doublemob == false || doubleemail == false || doubleTin == false) {
+                    jQuery("#loader").css("display", "none"); // Loader not available right now
+                }
+                    //else if (doubleacc == true) {
+                    //    //jQuery("#loader").css("display", "none");
+                    //   // alert(account number already exists);
+                    //}
+
+                else {
+                        if (opType == 'C') {
+                            var x = confirm("Are you sure you want to Save?");
+                            if (x) {
+                                addgd();
+                                return true;
+                            }
+                            else
+                                return false;
+                        } else {
+                            //var doubleacc = true;
+                            var x = confirm("Are you sure you want to Update?");
+                            if (x) {
+                                addgd();
+                                return true;
+                            }
+                            else
+                                return false;
+                        }
+                }
+        })
+        jQuery("#btnControl").click(function () {
+            var message = validateControl();
+
+            if (message.length > 0 ) {
+                notifyMessage(message, 'danger');
+            }
+            else {
+
+                    var x = confirm("Are you sure you want to Submit?");
+                    if (x) {
+                        addControl();
+                        return true;
+                    }
+                    else
+                        return false;
+
+            }
+        })
+        jQuery("#btnDelete").click(function () {
+            delgd();
+        });
+    });
+
+
+    function delgd(e) {
+        var st = jQuery(e).data('pwd');
+        var x = confirm("Are you sure you want to Delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            deletegds(cid,st);
+            return true;
+        }
+        else
+            return false;
+    }
+    function addgd() {
+        var message = validateCompanyBankLogin();
+        //var message = satish();
+        type = '',
+            opType = jQuery("#hdnEmployee").val();  // Dynamic Value Changed but not picked
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getSMTPValuesgradedetailsLogin());//need to change
+           // alert(params);
+            console.log(params);
+            // Undefined on Create, problem hdnEmployee value not picked
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddCompanyBankL", "Company")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    hideModal('modal-smtp');
+                    if (opType == 'C') {
+                        if (data == true) {
+                            message = jQuery("#txtcompname").val() + '  or ' + jQuery("#txttinno").val() + ' Already Exists.';
+                            type = 'danger';
+                        }
+                        else if (data == "Exist") {
+                            message = jQuery("#txtemail").val() + ' Email Already Exists.';
+                            type = 'danger';
+                        }
+                        else if (data == "UExist") {
+                            message =  ' Username Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtcompname").val() +   ' Successfully Saved waiting for Approval.';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U') {
+                        jk = true;
+                        if (data == false && jk == true) {
+                            message = jQuery("#txtcompname").val() + '  or ' + jQuery("#txttinno").val() + ' Already  Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtcompname").val() + '  or ' + jQuery("#txttinno").val() +'  Successfully Updated';
+                            type = 'success';
+                        }
+                    }
+                    //jQuery("#loader").css("display", "none");
+                    notifyMessage(message, type);
+                    //bindCompanyBank();
+                    resetSGDLogin();
+                }
+            })
+        }
+    }
+    function addControl() {
+        showControlModel();
+        var message = validateControl();
+        //var message = satish();
+        type = '';
+
+        if (message.length > 0) {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getControl());//need to change
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("getControl", "Invoice")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //showControlModel(e);
+
+                    if (data == false) {
+                            message = jQuery("#txtcontrol").val()  + ' not found.';
+                        type = 'danger';
+                        notifyMessage(message, type);
+                        }
+
+                    else {
+                        jQuery('label[for="lblH"]').show();
+                        jQuery('label[for="lblcnH"]').show();
+                        jQuery('label[for="lblcn"]').show().text(data.Control_No);
+
+                        jQuery('label[for="lblcustH"]').show();
+                        jQuery('label[for="lblcust"]').show().text(data.Cust_Name);
+
+                        jQuery('label[for="lblptH"]').show();
+                        jQuery('label[for="lblpt"]').show().text(data.Payment_Type);
+
+                        jQuery('label[for="lblpdH"]').show();
+                        jQuery('label[for="lblpd"]').show().text(Comma(data.Balance));
+
+                        jQuery('label[for="lbliaH"]').show();
+                        jQuery('label[for="lblia"]').show().text(Comma(data.Item_Total_Amount));
+                            /*message = jQuery("#txtcontrol").val() +   ' Successfully Saved waiting for Approval.';
+                            type = 'success';*/
+                            notifyMessage(message, type);
+                        }
+
+
+
+
+
+                }
+            })
+        }
+    }
+    function deletegds(cid,st) {
+        type = '',
+            opType = jQuery("#hdnEmployee").val();  // hdnEmployee value not picked
+        var params = JSON.stringify(getSMTPID(cid));
+        //jQuery("#loader").css("display", "block");
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteCompanyBank", "Company")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                hideModal('modal-smtp');
+                if (data == true) {
+                    message = st + '  is in use, cannot be deleted';
+                    type = 'danger';
+                }
+                else if (opType == 'D' && data) {
+                    message = st + '   Successfully Deleted';
+                    type = 'success';
+                    jQuery("#tbl-smtp tbody").empty();
+                }
+                notifyMessage(message, type);
+                //bindCompanyBank();
+            }
+        })
+    }
+    function bindBranches() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetBranchDetails", "EMPLOYDET")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                $("#ddlbra").append($("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    $.each(data, function (key, value) {
+                        $("#ddlbra").append($("<option></option>").val(value.Sno).html(value.Name));
+                    });
+                }
+            }
+        })
+    }
+     function bindDistDetails(dlreg) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetDistDetails", "Company")',
+            data: JSON.stringify({ 'Sno': dlreg }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name));
+                    });
+                }
+                jQuery("#ddldist").val(dlreg).change();//ward
+            }
+        })
+    }
+     function bindRegionDetails() {
+        jQuery.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetRegionDetails", "Company")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#ddlreg").append(jQuery("<option></option>").val(0).html('Select'));
+                if (data != null) {
+                    jQuery.each(data, function (key, value) {
+                        jQuery("#ddlreg").append(jQuery("<option></option>").val(value.Region_SNO).html(value.Region_Name));
+                    });
+                }
+            }
+        })
+    }
+    jQuery(function () {
+        jQuery("#ddlreg").change(function () {
+             jQuery('#ddldist option').remove();
+            var dlreg = jQuery("#ddlreg > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetDistDetails", "Company")',
+                data: JSON.stringify({ 'Sno': dlreg }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddldist").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddldist").append(jQuery("<option></option>").val(value.SNO).html(value.District_Name ));
+                        });
+                    }
+                    else { jQuery("#ddldist").val(0).change(); }
+                    if (txtSname.value != 0) {
+                        jQuery("#ddldist").val(txtSname.value).change();
+                    }
+                }
+            })
+        })
+    })
+    jQuery(function () {
+        jQuery("#ddldist").change(function () {
+            jQuery('#ddlward option').remove();
+            var dldist = jQuery("#ddldist > option:selected").attr("value");
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetWard", "Company")',
+                data: JSON.stringify({ 'sno': dldist }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    jQuery("#ddlward").append(jQuery("<option></option>").val(0).html('Select'));
+                    if (data != 0) {
+                        jQuery.each(data, function (key, value) {
+                            jQuery("#ddlward").append(jQuery("<option></option>").val(value.SNO).html(value.Ward_Name));
+                        });
+                    }
+                    else {
+                        jQuery("#ddlward").val(0).change();
+                    }
+                  //  if (txtSname.value != 0) {
+                 //       jQuery("#ddlward").val(txtSname.value).change();
+                 //   }
+                    if (txtWname.value != 0) {
+                        jQuery("#ddlward").val(txtWname.value).change();
+                    }
+                }
+            })
+        })
+    })
+
+    function showCompanyModel(e) {
+        resetSGDLogin();
+        var txtCompName = document.getElementById('txtcompname');
+        var txtPono = document.getElementById("txtpono");
+        var txtAdd = document.getElementById("txtadd");
+        var txtTinno = document.getElementById("txttinno");
+        var txtVatno = document.getElementById("txtvatno");
+        var txtDperson = document.getElementById("txtdname");
+        var txtEmail = document.getElementById("txtemail");
+        var txtTelno = document.getElementById("txttelno");
+        var txtFaxno = document.getElementById("txtfaxno");
+        var txtMob = document.getElementById("txtmob");
+        var txtLogo = document.getElementById("imglogo");
+        var txtSig = document.getElementById("txtsig");
+        txtSID = document.getElementById('txtSID');
+        var ddlREG = document.getElementById("ddlreg");
+        //var regsno = ddlREG.options[ddlREG.selectedIndex].value;
+        //var ddlreg = ddlREG.options[ddlREG.selectedIndex].text;
+        var  ddlDIST = document.getElementById("ddldist");
+        //var distsno = ddlDIST.options[ddlDIST.selectedIndex].value;
+        //var ddldist = ddlDIST.options[ddlDIST.selectedIndex].text;
+          var  ddlWARD = document.getElementById("ddlward");
+        //var wardsno = ddlWARD.options[ddlWARD.selectedIndex].value;
+        //var    ddlward = ddlWARD.options[ddlWARD.selectedIndex].text,
+            //txtcompname, txtpono, txtadd, ddlreg, ddldist, ddlward, txttinno, txtdname, txtemail, txttelno, txtfaxno, txtmob, imglogo, txtsig
+        //txtSID = document.getElementById('txtSID');
+        //var tblemployee = document.getElementById('tbl-smtp'),
+            //rows = tblemployee.rows,
+        hdnEmployee = document.getElementById('hdnEmployee');
+
+   
+            txtSID.value = 0;
+   
+            hdnEmployee.value = 'C';
+
+            jQuery("#tdlast").show();
+            jQuery('#tblchruch tr th:nth-child(5)').show();
+            jQuery('#tblchruch tr td:nth-child(5)').show();
+            jQuery("#btnSubmit1").show();
+
+            jQuery("#btnSubmit1").html("@ViewData["Save"]");
+
+            //jQuery("#loader").css("display", "none");
+            $('#tblchruch tr:last').show();
+            var tRows = document.getElementById('tblchruch');
+            var rows = tRows.rows;
+            for (var Index = 1, row = null; Index < rows.length; Index++) {
+                row = rows[Index];
+                row.cells[0].innerHTML = Index;
+            }
+       // }
+    }
+
+    function showControlModel(e) {
+       // alert("test");
+        var txtcontrol = document.getElementById('txtcontrol');
+        //txtcontrol.value = '';
+        jQuery('label[for="lblH"]').hide();
+
+        jQuery('label[for="lblcnH"]').hide();
+        jQuery('label[for="lblcn"]').hide();
+
+        jQuery('label[for="lblcustH"]').hide();
+        jQuery('label[for="lblcust"]').hide();
+
+        jQuery('label[for="lblptH"]').hide();
+        jQuery('label[for="lblpt"]').hide();
+
+        jQuery('label[for="lblpdH"]').hide();
+        jQuery('label[for="lblpd"]').hide();
+
+        jQuery('label[for="lbliaH"]').hide();
+        jQuery('label[for="lblia"]').hide();
+
+
+    }
+
+    @*var double;
+    function binddupliacteDetailsGrade(desc, date) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckGrade", "Company")',
+            data: JSON.stringify({ 'desc': desc }, { 'date': date }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    double = false;
+                }
+                else {
+                    double = true;
+                }
+            }
+        })
+    }*@
+ function binddupliacteAccountDetails(acc) {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("CheckAccount", "Company")',
+            data: JSON.stringify({ 'acc': acc.value }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    doubleacc = false;
+                }
+                else {
+                    doubleacc = true;
+                    //lblError12.innerHTML = "";
+                }
+            }
+        })
+    }
+
+</script>
+
+
+<body>
+    <!-- Loader starts-->
+    <div class="loader-wrapper">
+      <div class="loader"></div>
+    </div>
+    <!-- Loader ends-->
+    <!-- login page start-->
+    <div class="container-fluid p-0">
+      <div class="row m-0">
+        <div class="col-12 p-0">    
+          <div class="login-card">
+            <div>
+                        @* <div><a class="logo" href="#"><img class="img-fluid for-light" src="/assets/images/jichange.png" alt="loginpage" width="290" height="180" class="d-inline-block align-top mr-2"></a></div> *@
+              <div class="login-main"> 
+                            @* <form class=""> *@  
+                    <div><a class="logo" href="#"><img class=" for-light" src="/assets/images/jichange.png" alt="loginpage"  height="115" class="d-inline-block align-top mr-2"></a></div>
+                  <h4 class="text-center">Sign in to account</h4>
+                  <p class="text-center">Enter your email & password to login</p>
+                  <div class="form-group">
+                    <label class="col-form-label">Email Address</label>
+                    <input class="form-control" type="text" required="" id="txtuname" placeholder="Username">
+                  </div>
+                  <div class="form-group">
+                    <label class="col-form-label">Password</label>
+                    <div class="form-input position-relative">
+                      <input class="form-control" name="login[password]" type="password" id="txtpwd" required="" placeholder="*********">
+                      <div class="show-hide"><span class="show">                         </span></div>
+                    </div>
+                  </div>
+                  <div class="form-group mb-0">
+                    <div class="">
+                                    @* <input id="checkbox1" type="checkbox">
+                       <label class="text-muted" for="checkbox1">Remember password</label> 
+                       *@
+                    </div><a class="link" href="/Forgot/Forgot">Forgot password?</a>
+                    <br>
+                    <div class="text-end mt-3">
+                      <button class="btn btn-outline-primary btn-block w-100" id="btnSubmit" type="submit">Sign in</button>
+                    </div>
+                  </div>
+                  <div class="login-social-title"> 
+                                <p style="margin-top: 15px;">  
+                        
+                        <button type="button"
+                              id="btnAdd" value="Add" data-sid="0"
+                              class="btn btn-outline-warning f-right d-inline-block "
+                              onclick="showCompanyModel(this);"
+                              data-bs-toggle="modal" data-bs-target="#modal-smtp">
+                          <i class="icofont icofont-plus m-r-5"></i>
+                          Register
+                      </button>
+                      <button type="button"
+                              id="btnCN" value="Control" data-sid="1"
+                              class="btn btn-outline-info  d-inline-block"
+                                onclick="showControlModel(this);"
+                              data-bs-toggle="modal" data-bs-target="#ModalControlnumber">
+                          <i class="icofont icofont-plus m-r-5"></i>
+                          Control No Details
+                      </button>
+                                </p>  
+                  </div>  
+                            @* 
+                    <h6>Or Sign in with </h6>
+                  </div>
+                  <div class="form-group">
+                    <ul class="login-social">
+                      <li><a href="https://www.linkedin.com/" target="_blank"><i data-feather="linkedin"></i></a></li>
+                      <li><a href="https://www.twitter.com/" target="_blank"><i data-feather="twitter"></i></a></li>
+                      <li><a href="https://www.facebook.com/" target="_blank"><i data-feather="facebook"></i></a></li>
+                      <li><a href="https://www.instagram.com/" target="_blank"><i data-feather="instagram"></i></a></li>
+                    </ul> *@
+
+                            @* </form> *@
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</body>
+
+<!-- COMPANY MODAL REGISTER -->
+<div class="modal fade" id="modal-smtp" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="believerCreateLabel"
+     aria-hidden="true">
+    <div class="modal-dialog believerModal modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title offset" id="exampleModalLabel1">Vendor Registration</h5>
+                <button type="button" class="btn btn-outline-primary close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form class="col-12 p-0 mx-auto" action="AddCompanyBank" method="post" name="form1">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                            <label for="gender" class="f-label_align">Vendor Name<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="txtcompname" placeholder="Vendor Name" onkeyup="validCompany(this)" onkeypress="return alpha(event)" maxlength="100" />
+                            <input type="hidden" class="form-control  hidden" id="txtSID">
+                            <input type="hidden" class="form-control  hidden" id="txtDname">
+                            <input type="hidden" id="hdnEmployee" />
+                        </div>
+
+                        <div class="form-group flex_form-group align-items-baseline col-md-6 col-lg-6">
+                            <label for="gender" class="f-label_align">@ViewData["Mno"]<span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="txtmob" placeholder="Mobile Number" maxlength="12" @*onkeydown="validCust(this)"*@ onblur="mobileValiadte(this);" />
+                            <div class="form-group flex_form-group align-items-baseline offset">
+                                <span id="lblError"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-6">
+                            <label for="gender" class="f-label_align">Branch<span class="text-danger">*</span></label>
+                            <select class="form-control" id="ddlbra" name="ddlbra"></select>
+                        </div>
+
+                        <div class="form-group flex_form-group align-items-baseline col-md-6">
+                            <label for="gender" class="f-label_align">@ViewData["accno"]<span class="text-danger">*</span></label>
+                                <div class="form-group mb-0">
+                                    <input type="text" class="form-control input-sm col-10" maxlength="50" autocomplete="off" placeholder="Account No" @*onkeydown="validCo(this)"*@ onchange="binddupliacteAccountDetails(this);" id="txtaccno" />
+                                </div>
+                           
+                    </div>
+                    <div class="row"></div>
+                    <div class="row">
+                        <div class="col-md-12 mt-6">
+                            <label for="gender" class="f-label_align ">Maker - Checker for Invoice Approval?<span class="text-danger">*</span></label>
+                            <input type="radio" class="ml-2 mt-6" name="checker" id="rbyes"
+                            value="Yes">&nbsp;<label for="Male">Yes</label>
+                            &nbsp; <input class="ml-2 mt-6" type="radio" name="checker" id="rbno"
+                            value="No">&nbsp;<label for="FeMale">No</label>
+                        </div>
+                    </div>
+                    
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-outline-info btn-sm" data-bs-dismiss="modal">@ViewData["Close"]</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic" id="btnSubmit1">
+                        <!-- Register -->
+                        @ViewData["Save"]
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- CONTROL NUMBER MODAL REGISTER -->
+<div class="modal fade" id="ModalControlnumber" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="ControlnumberLabel"
+    aria-hidden="true">
+<div class="modal-dialog modal-md ControlNumber" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title offset" id="exampleModalLabel1">Control Number Details</h5>
+            <button type="button" class="btn btn-outline-primary close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <form class="col-12 p-0 mx-auto" action="CheckControl" method="post" name="form3">
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-xl-12" >
+                        <label for="ctrl" class=" col-form-label">Control Number<span class="red">*</span></label>
+                        <input type="text" class="form-control" id="txtcontrol" placeholder="Control Number">
+                    </div>
+                </div>
+
+                <!-- Preloader -->
+                <div id="loader">
+                    <div>
+                        <div class="lds-dual-ring"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-success btn-sm btn-biz_logic" id="btnControl">Submit</button>
+                <button type="button" id="btnClose" class="btn btn-warning btn-sm"
+                        data-bs-dismiss="modal">
+                        @ViewData["Close"]
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="text-center flex_form-group align-items-baseline col-md-12 col-lg-12 col-xl-12">
+                        <label for="lblH" class="label-145"> Control Number Details</label>
+                        <hr>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-6 col-xl-6">
+                        <label class="label-145" for="lblcnH"> Control Number :</label>
+                    </div>
+                    <div class="col-md-4 col-lg-6 col-xl-6">
+                        <label for="lblcn"><span></span></label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-6 col-xl-6">
+                        <label class="label-145" for="lblcustH"> Customer Name :</label>
+                    </div>
+                    <div class="col-md-4 col-lg-6 col-xl-6">
+                        <label for="lblcust"><span></span></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-6 col-xl-6">
+                        <label class="label-145 " for="lblptH"> Payment Type :</label>
+
+                    </div>
+                    <div class="col-md-4 col-lg-6 col-xl-6">
+                        <label for="lblpt"><span></span></label>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-6 col-xl-6">
+                        <label class="label-145 " for="lbliaH"> Invoice Amount :</label>
+                    </div>
+                    <div class="col-md-4 col-lg-6 col-xl-6">
+                        <label for="lblia"><span></span></label>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="form-group flex_form-group align-items-baseline col-md-4 col-lg-6 col-xl-6">
+                        <label class="label-145 " for="lblpdH"> Balance Amount :</label>
+
+                    </div>
+                    <div class="col-md-4 col-lg-6 col-xl-6">
+                        <label for="lblpd"><span></span></label>
+                    </div>
+
+                </div>
+
+            </div> 
+        </form>
+
+    </div>
+</div>
+</div>
+
+<!-- END WRAPPER -->
+<script type="text/javascript">
+        /*jQuery(document).ready(function () {
+            $("body").on("contextmenu", function (e) {
+                return false;
+            });
+        });*/
+        jQuery("#btnSubmit").click(function () {
+            addoff();
+        })
+
+        function addoff() {
+
+            var message = validateEmployeeoff(),
+                type = '';
+            if (message.length > 0) {
+                notifyMessage(message, 'danger');
+            }
+            else {
+                var params = JSON.stringify(getSMTPValues());
+                //alert("check");
+                //jQuery.noConflict();
+                jQuery.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("addLogin", "Loginnew")',
+                    data: params,
+                    contentType: 'application/json; charset=utf-8',
+                    dataType: 'json',
+                    success: function (data) {
+
+                        //alert(data.check);
+
+
+                if (data != null) {
+                        //alert(data.check);
+                    if ((data.check == "company" || data.check == "Emp") && (data.flogin == "true")) {
+                       // alert(data.check);
+                            window.location.href = '@Url.Action("Setup", "Setup")';
+                        }
+
+                    if (data.flogin == "false") {
+                        //alert();
+                               window.location.href = '@Url.Action("Updatepwd", "Updatepwd")?type =' + data.check + '&Instid =' + data.InstID + '&Usersno =' + data.Usno;
+                           }
+                           // else if (data.check == "Emp") {
+                           //     window.location.href
+                           // }
+                           // else {
+                             //   window.location.href =
+                             //   message = data.check;
+                                //type = 'danger';
+                               // notifyMessage(message, 'danger');
+
+                           // }
+                        }
+                    }
+                });
+            }
+        }
+        function getSMTPValues() {
+            jQuery.noConflict();
+
+            var txtu = document.getElementById('txtuname');
+            var txtpwd = document.getElementById('txtpwd');
+
+            var data = {
+                uname: txtu.value,
+                pwd: txtpwd.value,
+
+            }
+
+            return data;
+        }
+
+        function validateEmployeeoff() {
+
+            var txtu = document.getElementById('txtuname');
+            var txtpwd = document.getElementById('txtpwd');
+            result = '';
+
+            if (txtu.value.length == 0) {
+                result += 'UserName is Required.<br/>';
+            }
+
+            if (txtpwd.value.length == 0) {
+                result += 'Password is Required.<br/>';
+            }
+            return result;
+        }
+
+        function notifyMessage(message, type) {
+            jQuery.notify({
+                // options
+                message: message
+            }, {
+                // settings
+                type: type,
+                delay: 5000
+            });
+        }
+
+</script>
+@*<script src="/asset/bundles/libscripts.bundle.js"></script>
+<script src="/asset/bundles/vendorscripts.bundle.js"></script>
+
+<script src="/asset/bundles/mainscripts.bundle.js"></script>*@
+
+<!-- Bootstrap js-->
+<script src="/assetss/js/bootstrap/bootstrap.bundle.min.js"></script>
+<!-- feather icon js-->
+<script src="/assetss/js/icons/feather-icon/feather.min.js"></script>
+<script src="/assetss/js/icons/feather-icon/feather-icon.js"></script> 
+<!-- scrollbar js-->
+<!-- Sidebar jquery-->
+<script src="/assetss/js/config.js"></script>
+<!-- Plugins JS start-->
+<!-- Plugins JS Ends-->
+<!-- Theme js-->
+
+<script src="/assetss/js/script.js"></script>
+<!-- Plugin used-->
+
+</html>

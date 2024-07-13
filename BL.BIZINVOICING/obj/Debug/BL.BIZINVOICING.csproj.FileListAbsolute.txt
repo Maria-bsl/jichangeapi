@@ -1,0 +1,209 @@
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll.config
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\BIZINVOICING\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Ashwin_BizInvoicing\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Ashwin Mvc\BIZINVOICING\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Madhu\TestFolder\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Madhu\TestFolder\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Madhu\TestFolder\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Madhu\TestFolder\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Madhu\TestFolder\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Madhu\TestFolder\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Madhu\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Madhusudhan\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Harshini\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Harshini\invoice back before design\Invoice(7-21-22)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Harshini\new design invoicing\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Harshini\invoicing(26-09-22)\invoicing(09-02-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Harshini\AuditTrail\Biz-invoicing(01-11-2022)\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.xml
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\Satish\Harshini_Satish_Invoicing\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.dll
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\Applications\INvoiceProject\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.xml
+D:\Applications\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csprojAssemblyReference.cache
+D:\Applications\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\Applications\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\Applications\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\Applications\INvoiceProject\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.pdb
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\EntityFramework.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\DaL.BIZINVOICING.pdb
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\EntityFramework.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\EntityFramework.SqlServer.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.AssemblyReference.cache
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CoreCompileInputs.cache
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.csproj.CopyComplete
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\obj\Debug\BL.BIZINVOICING.pdb
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\BL.BIZINVOICING.dll.config
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.Bson.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Buffers.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Memory.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Net.Http.Formatting.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Numerics.Vectors.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Threading.Tasks.Extensions.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Web.Cors.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Web.Http.Cors.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Web.Http.dll
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.Bson.pdb
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\Newtonsoft.Json.Bson.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Buffers.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Memory.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Net.Http.Formatting.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Numerics.Vectors.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Runtime.CompilerServices.Unsafe.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Threading.Tasks.Extensions.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Web.Http.xml
+D:\JICHANGE_3_4_24\jichangeapi\BL.BIZINVOICING\bin\Debug\System.Web.Http.Cors.xml

@@ -1,0 +1,885 @@
+@{
+    var user = Session["admin1"] as string;
+    var flogin = Session["flogin"] as string;
+
+
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+        <title>@ViewBag.Title</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="description" content="#">
+        <meta name="keywords" content="">
+        <meta name="author" content="#">
+        <!-- Favicon icon -->
+
+        <link rel="icon" href="/assets/images/vfdlg3.png" type="image/x-icon">
+        <link rel="icon" href="/assets/images/vfdlg3.png" type="image/x-icon">
+        @* <!-- Google font-->
+            <link href="~/../../../../css.css?family=Mada:300,400,500,600,700" rel="stylesheet"> *@
+
+        <!-- VENDOR CSS -->
+        <link rel="stylesheet" href="/asset/vendor/bootstrap/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/asset/vendor/font-awesome/css/font-awesome.min.css">
+        @* <link rel="stylesheet" href="/asset/vendor/charts-c3/plugin.css" /> *@
+        <link rel="stylesheet" href="/asset/vendor/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css"> 
+        @* <link rel="stylesheet" href="/asset/vendor/chartist/css/chartist.min.css"> *@
+        @* <link rel="stylesheet" href="/asset/vendor/chartist-plugin-tooltip/chartist-plugin-tooltip.css"> *@
+        <link rel="stylesheet" type="text/css" href="/assets/pages/advance-elements/css/bootstrap-datetimepicker.css">
+        <!-- Date-range picker css  -->
+        <link rel="stylesheet" type="text/css" href="/bower_components/bootstrap-daterangepicker/css/daterangepicker.css">
+        <!-- Date-Dropper css -->
+        <link rel="stylesheet" type="text/css" href="/bower_components/datedropper/css/datedropper.min.css">
+
+
+        <!-- DATATABLE CSS -->
+        <link rel="stylesheet" href="/asset/vendor/jquery-datatable/dataTables.bootstrap4.min.css">
+        <link rel="stylesheet" href="/asset/vendor/jquery-datatable/fixedeader/dataTables.fixedcolumns.bootstrap4.min.css">
+        <link rel="stylesheet" href="/asset/vendor/jquery-datatable/fixedeader/dataTables.fixedheader.bootstrap4.min.css">
+        <link rel="stylesheet" href="/asset/vendor/sweetalert/sweetalert.css" />
+        
+        <!-- MAIN CSS -->
+        <link rel="stylesheet" href="/asset/css/main.css">
+        <link rel="stylesheet" href="/asset/css/color_skins.css">
+
+        <link rel="stylesheet" href="/asset/vendor/toastr/toastr.min.css">
+        <link rel="stylesheet" href="/assets/css/jquery.mCustomScrollbar.css">
+       <script src="/js/jquery.min.js"></script>
+
+         @*<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>*@
+         @* <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+            integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" /> *@
+        <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+        <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+
+        <script src="/asset/bundles/libscripts.bundle.js"></script>
+        <script src="/asset/bundles/vendorscripts.bundle.js"></script>
+         <script src="/asset/vendor/toastr/toastr.js"></script>
+        <script src="/Script/bootstrap-notify.min.js"></script>
+        @* <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/fontawesome.min.css"
+        integrity="sha512-RvQxwf+3zJuNwl4e0sZjQeX7kUa3o82bDETpgVCH2RiwYSZVDdFJ7N/woNigN/ldyOOoKw8584jM4plQdt8bhA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> *@
+
+        <script src="/js/jspdf.debug.js"></script> 
+        <script src="https://unpkg.com/jspdf-autotable@2.3.2"></script> 
+        <script src="/js/popper.min.js"></script>
+        @* <script src="/js/bootstrap.min.js"></script> *@
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/jquery-ui.min.js"></script>
+        @* <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script> *@
+        <script src="https://kit.fontawesome.com/a708a171db.js" crossorigin="anonymous"></script>
+            <script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script> 
+
+
+        @* <script src="/js/jquery.table2excel.min.js"></script> *@
+        @* <script src="/assets/dataTable/js/jquery.dataTables.min.js"></script> *@
+        @* <script src="/Script/fnFilterClear.js" type="text/javascript"></script> *@
+        @* <script src="/assets/dataTable/js/dataTables.bootstrap4.min.js"></script> *@
+        @* <script src="/Script/fnFilterClear.js" type="text/javascript"></script> *@
+
+
+        <script src="/js/script.js"></script>
+        <script src="/js/validations.js?ver=1.0"></script>
+        <script src="/js/Count.js"></script>
+        <script src="/js/Employeee.js"></script>
+        <script src="/js/Invoice.js"></script>
+        <script src="/js/Region.js"></script>
+        <script src="/js/District.js"></script>
+        <script src="/js/Ward.js"></script>
+        <script src="/js/Company.js"></script>
+        <script src="/js/CustomerMaster.js"></script>
+        <script src="/js/designation.js"></script>
+        <script src="/js/currency.js"></script>
+        <script src="/js/Smtp.js"></script>
+        <script src="/js/email.js"></script>
+        <script src="/js/ques.js"></script>
+        @* <script src="/js/cloneData.js"></script> *@
+
+    </head>
+
+    <body class="theme-green">
+        <!-- Page Loader -->
+        <div class="page-loader-wrapper">
+            <div class="loader">
+                <div class="m-t-30">
+                    <img src="https://wrraptheme.com/templates/hexabit/html/assets/images/icon-light.svg" width="48"
+                        height="48" alt="Biz-VFD">
+                </div>
+                <p>Please wait...</p>
+            </div>
+        </div>
+        <!-- Overlay For Sidebars -->
+        <div class="overlay"></div>
+
+
+        @if (user == "Bank" && flogin == "true")
+        {
+
+            <div id="wrapper">
+
+                <nav class="navbar navbar-fixed-top">
+                    <div class="container-fluid">
+
+                        <div class="navbar-left">
+                            <div class="navbar-btn">
+                                <a href="#"><img src="/assets/images/vfdlg3.png" alt="VFD Logo" class="img-fluid logo"></a>
+                                <button type="button" class="btn-toggle-offcanvas">
+                                    <i class="lnr lnr-menu fa fa-bars"></i>
+                                </button>
+                            </div>
+                            <a href="javascript:void(0);" class="icon-menu btn-toggle-fullwidth">
+                                <i class="fa fa-arrow-left"></i>
+                            </a>
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown dropdown-animated scale-right">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"></a>
+                                    BIZ-VFD
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="navbar-right">
+
+                            <div id="navbar-menu">
+                                <ul class="nav navbar-nav">
+                                    <li class="header-notification lng-dropdown">
+                                        <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                        data-pwd="BNK" onclick="Getlangeg(this)">
+                                            <i class="flag-icon flag-icon-gb m-r-5"></i> English
+                                        </a>
+                                    </li>
+                                    <li class="header-notification lng-dropdown">
+                                        <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="Swahili"
+                                        data-pwd="BNK" onclick="Getlangsw(this)">
+                                            <i class="flag-icon flag-icon-tz m-r-5"></i> Kiswahili
+                                        </a>
+                                    </li>
+                                    <li class="dropdown dropdown-animated scale-left">
+                                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                            <i class="icon-envelope"></i>
+                                            @* <span class="notification-dot"></span> *@
+                                        </a>
+
+                                    </li>
+                                    <li class="dropdown dropdown-animated scale-left">
+                                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                            <i class="icon-bell"></i>
+                                            @* <span class="notification-dot"></span> *@
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="@Url.Action("Logout","Loginnew")" class="icon-menu">
+                                            <i class="icon-power"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <div id="left-sidebar" class="sidebar content">
+                    <div class="navbar-brand">
+                        <a href="index.html">
+                            <img src="/assets/images/vfdlg3.png" alt="VFD Logo" class="img-fluid logo" height="50px"
+                            width="80px"><span> | BIZ-VFD</span>
+                        </a>
+                        <button type="button" class="btn-toggle-offcanvas btn btn-sm btn-default float-right">
+                            <i class="lnr lnr-menu fa fa-chevron-circle-left"></i>
+                        </button>
+                    </div>
+
+                    <div class="sidebar-scroll">
+                        <div class="user-account">
+                            <div class="user_div">
+                                <img src="/asset/images/user1.jpg" class="user-photo" alt="User Profile Picture">
+                            </div>
+                            <div class="dropdown">
+                                <span>Welcome,</span>
+                                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown">
+                                    <strong>
+                                        @Session["UfullName"] | <small>
+                                            Role : @Session["admin1"]
+                                        </small>
+                                    </strong>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right account">
+                                    <li><a href="page-profile.html"><i class="icon-user"></i>My Profile</a></li>
+                                    <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
+                                    <li>
+                                        <a href="change-password.html">
+                                            <i class="ti-lock"></i> Change Password
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="@Url.Action("Logout","Loginnew")"><i class="icon-power"></i>Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <nav id="left-sidebar-nav" class="sidebar-nav">
+                            <ul id="main-menu" class="metismenu">
+                                <li class="active">
+                                    <a href="/Setup/Setup">
+                                        <i class="fa-solid fa-house"></i><span>@ViewData["dash"]</span>
+                                    </a>
+                                </li>
+                                @* <li><a href="app-inbox.html"><i class="icon-envelope"></i><span>Inbox</span></a></li>
+                                    <li><a href="app-chat.html"><i class="icon-bubbles"></i><span>Chat</span></a></li> *@
+                                <li>
+                                    <a href="#uiElements" class="has-arrow">
+                                        <i class="fa fa-solid fa-gear"></i><span>@ViewData["setup"]</span>
+                                    </a>
+                                    <ul>
+                                        <li><a href="/Country/Country">@ViewData["cout"]</a></li>
+                                        <li><a href="/Region/Region">@ViewData["Region"]</a></li>
+                                        <li><a href="/District/District">@ViewData["District"]</a></li>
+                                        <li><a href="/Ward/Ward">@ViewData["Ward"]</a></li>
+                                        <li><a href="/Currency/Currency">@ViewData["curr"]</a></li>
+                                        <li><a href="/Desgination/Designation">@ViewData["Desg"]</a></li>
+                                        <li><a href="/Question/Question">@ViewData["Sques"]</a></li>
+                                        <li><a href="/SMTP/SMTP">@ViewData["smtp"]</a></li>
+                                        <li><a href="/Email/Email">@ViewData["et"]</a></li>
+                                        <li><a href="/Vatper/VatPercentage">@ViewData["vatper"]</a></li>
+                                        <li><a href="/EMPLOYDET/EMPLOYDET">@ViewData["BU"]</a></li>
+
+                                    </ul>
+                                </li>
+                                @* <li>
+                                    <a href="/Customers/Customers"><i class="fa fa-solid fa-users"></i><span>Customers</span></a>
+                                    </li> *@
+                                <li>
+                                    <a href="/Company/Company"><i
+                                        class="fa fa-solid fa-building"></i><span>@ViewData["comp"]</span></a>
+
+                                </li>
+
+                                <li>
+                                    <a href="/Language/Language"><i
+                                        class="fa fa-solid fa-building"></i><span>@ViewData["lang"]</span></a>
+
+                                </li>
+                                <li>
+                                    <a href="/AuditTrail/AuditTrail"><i
+                                        class="fa fa-solid fa-building"></i><span>@ViewData["Atra"]</span></a>
+
+                                </li>
+                                @* <li>
+                                    <a href="/Invoice/Invoice"><i class="fa fa-solid fa-file"></i><span>Invoice</span></a>
+                                    </li> *@
+                                @* <li>
+                                    <a href="/Invoice/Generatedinvoices"><i class="fa fa-solid
+                                    fa-file-lines"></i><span>Generatedinvoices</span></a>
+
+                                    </li> *@
+                                @* <li class="pcoded-hasmenu">
+                                    <a href="#forms" class="has-arrow"><i class="fa fa-solid
+                                    fa-receipt"></i><span>Reports</span></a>
+                                    <a href="javascript:void(0)">
+                                    <span class="pcoded-micon"><i class="icofont icofont-ui-settings"></i></span>
+                                    <span class="pcoded-mtext" data-i18n="nav.page_layout.main">Reports</span>
+                                    <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul>
+                                    <li><a href="/InvoiceRep/InvoiceRep"><i class="fa fa-solid
+                                    fa-file-invoice"></i><span>Invoice</span></a></li>
+                                    <li><a href="/InvoiceRep/InvoiceDetRep"><i class="fa fa-solid fa-info"></i><span>Invoice
+                                    Details</span></a></li>
+
+                                    </ul>
+
+                                    <li class=" ">
+                                    <a href="/RepCustomer/RepCustomer">
+                                    <span><i class="icofont icofont-minus"></i></span>
+
+                                    <span>Customer Details</span>
+                                    </a>
+                                    </li>
+                                    <li class=" ">
+                                    <a href="/RepNonInvioce/RepNonInvioce">
+                                    <span><i class="icofont icofont-minus"></i></span>
+
+                                    <span>Non Invoice Details</span>
+                                    </a>
+                                    </li>
+                                    <li class=" ">
+                                    <a href="/RepZ/RepZ">
+                                    <span><i class="icofont icofont-minus"></i></span>
+
+                                    <span>Z Report</span>
+                                    </a>
+                                    </li>
+                                    </li> *@
+                                <li class="pcoded-hasmenu">
+                                    <a href="javascript:void(0)">
+                                        <span class="pcoded-micon"><i class="fa fa-solid fa-file"></i></span>
+                                        <span class="pcoded-mtext" data-i18n="nav.page_layout.main">@ViewData["Brep"]</span>
+                                        <span class="pcoded-mcaret"></span>
+                                    </a>
+                                    <ul class="pcoded-submenu">
+                                        <li class=" ">
+                                            <a href="/InvoiceRep/InvoiceRep">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["invoice"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/InvoiceRep/InvoiceDetRep">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["invdet"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/RepCustomer/RepCustomer">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["custdetrep"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/RepNonInvioce/RepNonInvioce">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["noninvrep"] </span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/RepZ/RepZ">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["zrep"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/Userlog/Userlog">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["uselog"]</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                        </nav>
+                    </div>
+                </div>
+
+                <div id="main-content">
+
+                    @RenderBody()
+
+
+                    <div class="container-fluid">
+
+
+                    </div>
+
+                </div>
+                @* <footer class="footer text-center">
+                    <p class="m-0">
+                    Designed & Developed by
+                    <a class="links" href="http://bizlogicsolutions.com/"
+                    target="_blank">Biz-Logic
+                    Solutions Ltd.</a>
+                    </p>
+                    <div class="co-operate--wrapper">
+                    <div class="co-operate-logo-wrapper"></div>
+
+                    </div>
+                    </footer> *@
+
+            </div>
+
+
+            @* <hr>
+                <footer class="footer text-center">
+                <p class="m-0">
+                Designed & Developed by
+                <a class="links" href="http://bizlogicsolutions.com/"
+                target="_blank">Biz-Logic
+                Solutions Ltd.</a>
+                </p>
+                <div class="co-operate--wrapper">
+                <div class="co-operate-logo-wrapper"></div>
+
+                </div>
+                </footer> *@
+        }
+        else if (user == "Companys" && flogin == "true")
+        {
+            <div id="wrapper">
+
+                <nav class="navbar navbar-fixed-top">
+                    <div class="container-fluid">
+
+                        <div class="navbar-left">
+                            <div class="navbar-btn">
+                                <a href="#"><img src="/assets/images/vfdlg3.png" alt="VFD Logo" class="img-fluid logo"></a>
+                                <button type="button" class="btn-toggle-offcanvas">
+                                    <i class="lnr lnr-menu fa fa-bars"></i>
+                                </button>
+                            </div>
+                            <a href="javascript:void(0);" class="icon-menu btn-toggle-fullwidth">
+                                <i class="fa fa-arrow-left"></i>
+                            </a>
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown dropdown-animated scale-right">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"></a>
+                                    BIZ-VFD
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="navbar-right">
+
+                            <div id="navbar-menu">
+                                <ul class="nav navbar-nav">
+                                    <li class="header-notification lng-dropdown">
+                                        <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                        data-pwd="BNK" onclick="Getlangeg1(this)">
+                                            <i class="flag-icon flag-icon-gb m-r-5"></i> English
+                                        </a>
+                                    </li>
+                                    <li class="header-notification lng-dropdown">
+                                        <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="Swahili"
+                                        data-pwd="BNK" onclick="Getlangsw1(this)">
+                                            <i class="flag-icon flag-icon-tz m-r-5"></i> Kiswahili
+                                        </a>
+                                    </li>
+                                    <li class="dropdown dropdown-animated scale-left">
+                                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                            <i class="icon-envelope"></i>
+
+                                        </a>
+
+                                    </li>
+                                    <li class="dropdown dropdown-animated scale-left">
+                                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                            <i class="icon-bell"></i>
+
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+                                        <a href="@Url.Action("Logout","Loginnew")" class="icon-menu">
+                                            <i class="icon-power"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <div id="left-sidebar" class="sidebar content">
+                    <div class="navbar-brand">
+                        <a href="index.html">
+                            <img src="/assets/images/vfdlg3.png" alt="VFD Logo" class="img-fluid logo" height="50px"
+                            width="80px"><span> | BIZ-VFD</span>
+                        </a>
+                        <button type="button" class="btn-toggle-offcanvas btn btn-sm btn-default float-right">
+                            <i class="lnr lnr-menu fa fa-chevron-circle-left"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar-scroll">
+                        <div class="user-account">
+                            <div class="user_div">
+                                <img src="/asset/images/user1.jpg" class="user-photo" alt="User Profile Picture">
+                            </div>
+                            <div class="dropdown">
+                                <span>Welcome,</span>
+                                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown">
+                                    <strong>
+                                        @Session["UfullName"] | <small>
+                                            Role : @Session["admin1"]
+                                        </small>
+                                    </strong>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right account">
+                                    <li><a href="page-profile.html"><i class="icon-user"></i>My Profile</a></li>
+                                    <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="@Url.Action("Logout","Loginnew")"><i class="icon-power"></i>Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <nav id="left-sidebar-nav" class="sidebar-nav">
+                            <ul id="main-menu" class="metismenu">
+                                <li class="active">
+                                    <a href="/Setup/Setup">
+                                        <i class="fa-solid fa-house"></i><span>@ViewData["dash"]</span>
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="/Customers/Customers">
+                                        <i class="fa fa-solid fa-users"></i><span>@ViewData["custos"]</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/CompanyUsers/CompanyUsers">
+                                        <i class="fa fa-solid fa-building"></i><span>@ViewData["compus"]</span>
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="/Invoice/Invoice"><i
+                                        class="fa fa-solid fa-file"></i><span>@ViewData["invdet"]</span></a>
+                                </li>
+                                <li>
+                                    <a href="/Invoice/Generatedinvoices">
+                                        <i class="fa fa-solid fa-file-lines"></i><span>@ViewData["Geninv"]</span>
+                                    </a>
+
+                                </li>
+                                <li>
+                                    <a href="/Langc/Langc">
+                                        <i class="fa fa-solid fa-building"></i><span>@ViewData["Blang"]</span>
+                                    </a>
+
+                                </li>
+                                <li class="pcoded-hasmenu">
+                                    <a href="#forms" class="has-arrow">
+
+                                        <i class="fa fa-solid fa-receipt"></i><span>@ViewData["Brep"]</span>
+                                    </a>
+
+                                    <ul>
+                                        <li>
+                                            <a href="/RepCompInvoice/RepCompInvoice">
+                                                @* <i class="fa fa-solid fa-file-invoice"></i><span></span> *@
+                                                <span>@ViewData["invoice"]</span>
+                                            </a>
+                                        </li>
+                                        <li class="">
+                                            <a href="/RepCompInvoice/RepCompInvoicedetails">
+                                                @* <i class="fa fa-solid fa-info"></i> *@
+                                                <span>@ViewData["invdet"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/RepCompCustomer/RepCompCustomer">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["custdetrep"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/RepCompNonInvioce/RepCompNonInvioce">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["noninvrep"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/RepCompZ/RepCompZ">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["zrep"]</span>
+                                            </a>
+                                        </li>
+                                        <li class=" ">
+                                            <a href="/CompUserlog/CompUserlog">
+                                                @* <span><i class="icofont icofont-minus"></i></span> *@
+
+                                                <span>@ViewData["userlog"]</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                        </nav>
+
+                    </div>
+
+                </div>
+
+                <div id="main-content">
+
+                    @RenderBody()
+
+                </div>
+
+            </div>
+        }
+        else if (flogin == "false")
+        {
+            <div id="wrapper">
+
+                <nav class="navbar navbar-fixed-top">
+                    <div class="container-fluid">
+
+                        <div class="navbar-left">
+                            <div class="navbar-btn">
+                                <a href="#"><img src="/assets/images/vfdlg3.png" alt="VFD Logo" class="img-fluid logo"></a>
+                                <button type="button" class="btn-toggle-offcanvas">
+                                    <i class="lnr lnr-menu fa fa-bars"></i>
+                                </button>
+                            </div>
+                            <a href="javascript:void(0);" class="icon-menu btn-toggle-fullwidth">
+                                <i class="fa fa-arrow-left"></i>
+                            </a>
+                            <ul class="nav navbar-nav">
+                                <li class="dropdown dropdown-animated scale-right">
+                                    <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown"></a>
+                                    BIZ-VFD
+                                </li>
+
+                            </ul>
+                        </div>
+
+                        <div class="navbar-right">
+
+                            <div id="navbar-menu">
+                                <ul class="nav navbar-nav">
+                                    <li class="header-notification lng-dropdown">
+                                        <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="English"
+                                        data-pwd="BNK" onclick="Getlangeg(this)">
+                                            <i class="flag-icon flag-icon-gb m-r-5"></i> English
+                                        </a>
+                                    </li>
+                                    <li class="header-notification lng-dropdown">
+                                        <a href="#" id="dropdown-active-item" data-lng="en" tabindex="0" value="Swahili"
+                                        data-pwd="BNK" onclick="Getlangsw(this)">
+                                            <i class="flag-icon flag-icon-tz m-r-5"></i> Kiswahili
+                                        </a>
+                                    </li>
+                                    <li class="dropdown dropdown-animated scale-left">
+                                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                            <i class="icon-envelope"></i>
+                                            @* <span class="notification-dot"></span> *@
+                                        </a>
+
+                                    </li>
+                                    <li class="dropdown dropdown-animated scale-left">
+                                        <a href="javascript:void(0);" class="dropdown-toggle icon-menu" data-toggle="dropdown">
+                                            <i class="icon-bell"></i>
+                                            @* <span class="notification-dot"></span> *@
+                                        </a>
+
+                                    </li>
+
+                                    <li>
+                                        <a href="@Url.Action("Logout","Loginnew")" class="icon-menu">
+                                            <i class="icon-power"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+
+                <div id="left-sidebar" class="sidebar">
+                    <div class="navbar-brand">
+                        <a href="index.html">
+                            <img src="/assets/images/vfdlg3.png" alt="VFD Logo" class="img-fluid logo" height="50px"
+                            width="80px"><span> | BIZ-VFD</span>
+                        </a>
+                        <button type="button" class="btn-toggle-offcanvas btn btn-sm btn-default float-right">
+                            <i class="lnr lnr-menu fa fa-chevron-circle-left"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar-scroll">
+                        <div class="user-account">
+                            <div class="user_div">
+                                <img src="/asset/images/user1.jpg" class="user-photo" alt="User Profile Picture">
+                            </div>
+                            <div class="dropdown">
+                                <span>Welcome,</span>
+                                <a href="javascript:void(0);" class="dropdown-toggle user-name" data-toggle="dropdown">
+                                    <strong>
+                                        @Session["UfullName"] | <small>
+                                            Role : @Session["admin1"]
+                                        </small>
+                                    </strong>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right account">
+                                    <li><a href="page-profile.html"><i class="icon-user"></i>My Profile</a></li>
+                                    <li><a href="app-inbox.html"><i class="icon-envelope-open"></i>Messages</a></li>
+                                    <li><a href="javascript:void(0);"><i class="icon-settings"></i>Settings</a></li>
+                                    <li>
+                                        <a href="change-password.html">
+                                            <i class="ti-lock"></i> Change Password
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li><a href="@Url.Action("Logout","Loginnew")"><i class="icon-power"></i>Logout</a></li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="main-content">
+
+                    @RenderBody()
+
+
+                    <div class="container-fluid">
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        }
+    
+        <script type="text/javascript" src="/bower_components/bootstrap-daterangepicker/js/daterangepicker.js"></script>
+        <script type="text/javascript" src="/assets/pages/advance-elements/moment-with-locales.min.js"></script>
+        <script type="text/javascript" src="/bower_components/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script> 
+        <script type="text/javascript" src="/assets/pages/advance-elements/bootstrap-datetimepicker.min.js"></script>
+        <!-- Date-range picker js -->
+
+        <!-- Date-dropper js -->
+        <script type="text/javascript" src="/bower_components/datedropper/js/datedropper.min.js"></script>
+
+        <!-- Javascript -->
+       
+        <script src="/asset/bundles/fullcalendarscripts.bundle.js"></script>
+        <script src="/asset/bundles/c3.bundle.js"></script>
+        @*<script src="/asset/bundles/chartist.bundle.js"></script>*@
+        <script src="/asset/bundles/datatablescripts.bundle.js"></script>
+        <script src="/asset/vendor/jquery-datatable/buttons/dataTables.buttons.min.js"></script>
+        <script src="/asset/vendor/jquery-datatable/buttons/buttons.bootstrap4.min.js"></script>
+        <script src="/asset/vendor/jquery-datatable/buttons/buttons.colVis.min.js"></script>
+        <script src="/asset/vendor/jquery-datatable/buttons/buttons.html5.min.js"></script>
+        <script src="/asset/vendor/jquery-datatable/buttons/buttons.print.min.js"></script>
+
+        <script src="/asset/vendor/sweetalert/sweetalert.min.js"></script><!-- SweetAlert Plugin Js -->
+
+        <script src="/asset/bundles/mainscripts.bundle.js"></script>
+        <script src="/asset/js/pages/tables/jquery-datatable.js"></script>
+        <script src="/asset/js/index.js"></script>
+        <script src="/assets/js/jquery.mCustomScrollbar.concat.min.js"></script>
+        @RenderSection("scripts", required: false)
+    </body>
+    </html>
+}
+
+<script type="text/javascript">
+    // alert("jshdhs");
+    function Getlangeg(e) {
+        // alert("ghghgh");
+        //alert();
+        var pt = jQuery(e).data('pwd');
+        // alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Language")',
+                data: JSON.stringify({ 'name': 'English' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //alert(data.name);
+                    if (data != null) {
+                        location.reload();
+                    }
+                }
+            });
+
+        }
+    }
+    function Getlangsw(e) {
+        // alert("ghghgh");
+        var pt = jQuery(e).data('pwd');
+        // alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Language")',
+                data: JSON.stringify({ 'name': 'Swahili' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        // alert();
+                        location.reload();
+                    }
+                }
+            });
+
+        }
+    }
+    function Getlangeg1(e) {
+        // alert("ghghgh");
+        var pt = jQuery(e).data('pwd');
+        // alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Langc")',
+                data: JSON.stringify({ 'name': 'English' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+
+                        location.reload();
+
+
+                    }
+                }
+            });
+
+        }
+    }
+    function Getlangsw1(e) {
+        // alert("ghghgh");
+        var pt = jQuery(e).data('pwd');
+        //alert(pt);
+        if (pt == 'BNK') {
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("Update", "Langc")',
+                data: JSON.stringify({ 'name': 'Swahili' }),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    //alert(data);
+                    if (data != null) {
+
+                        location.reload();
+
+
+                    }
+                }
+            });
+
+        }
+    }
+
+    @*else {
+        jQuery.ajax({
+        type: 'POST',
+        url: '@Url.Action("Update", "Instituteuser")',
+        data: JSON.stringify({ 'name': e.value }),
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success: function (data) {
+        if (data != null) {
+        // Getcolumnslang();
+        location.reload();
+        }
+        }
+
+        });
+
+        }*@
+
+        (function ($) {
+            $(window).on("load", function () {
+                $(".content").mCustomScrollbar();
+            });
+        })(jQuery);
+
+</script>

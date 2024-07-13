@@ -1,0 +1,233 @@
+﻿
+@{
+    ViewBag.Title = "Loginnew";
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="Description" content="Enter your description here" />
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="/assets/fontawesome-free-5.13.0-web/css/all.css">
+    <link rel="stylesheet" href="/css/hamburgers.min.css">
+    <!-- DataTable -->
+    @*<link rel="stylesheet" href="/assets/dataTable/css/dataTables.bootstrap4.min.css">*@
+    <!-- Datepicker CSS -->
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/js/jquery.min.js"></script>
+
+    <script src="~/Script/bootstrap-notify.min.js" type="text/javascript"></script>
+
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <style type="text/css">
+        .account-info,
+        .app-toggle,
+        sidebar {
+            display: none !important;
+        }
+
+        .app-main {
+            padding-left: 0 !important;
+        }
+
+        .main-area {
+            background-image: url(images/equity-bank-logo.png);
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            background-size: contain;
+            background-blend-mode: color-burn;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card-auth {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .corp-logo {
+            max-width: 120px;
+            margin: 0 auto;
+            padding-bottom: .5em;
+        }
+
+            .corp-logo > img {
+                max-width: 100%;
+                height: auto;
+            }
+    </style>
+    @*<script src="/assets/datepicker/gijgo.min.js"></script>*@
+    <!-- Datepicker -->
+
+</head>
+<body>
+    <div class="back-drop"></div>
+    <div class="container-fluid">
+        <header class="shadow fixed-top d-flex">
+            <div class="app-logo__toggle-btn d-flex pt-2">
+                <div class="app-logo px-2 pt-2">
+                    <div class="brand-logo"></div>
+                </div>
+                <div class="app-toggle pt-1">
+                    <div class="hamburger hamburger--spin p-2">
+                        <div class="hamburger-box">
+                            <div class="hamburger-inner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </header>
+        <div class="row">
+
+            <div class="app-main d-flex flex-column">
+                <div class="main-area">
+                    <div class="card card-auth mx-auto">
+                        <div class="card-body pt-2">
+                            <div class="corp-logo">
+                                <img src="Images/RCP-logo.png" alt="">
+                            </div>
+                            <h5 class="text-muted font-size-18 mb-1 text-center">Invoice Contribution Portal</h5>
+                            <hr>
+                            <div class="form-group">
+                                <label class="font-w500" for="username">User Name<span class="red">*</span></label>
+                                <input type="text" class="form-control" id="txtuname" placeholder="Enter User Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="font-w500" for="userpassword">Password<span class="red">*</span></label>
+                                <input type="password" class="form-control" id="txtpwd"
+                                       placeholder="Enter password">
+                            </div>
+                            <div class="form-group row auth-control mb-0">
+                                <div class="col-8 d-flex align-items-center">
+                                    <a href="../Forgot/Forgot" class="text-muted">
+                                        <i class="fa fa-lock" aria-hidden="true"></i> Forgot your password?
+                                    </a>
+                                </div>
+                                <div class="col-4 text-right">
+                                    <button class="btn btn-biz_logic" id="btnSubmit" type="submit">Log In</button>
+                                </div>
+                            </div>
+
+                            @*</form>*@
+                        </div>
+                    </div>
+                </div>
+                <div class="footer px-2">
+                    <p class="mb-0 small">
+                        Designed &amp; Developed by <a class="links" href="http://bizlogicsolutions.com/" target="_blank">
+                            Biz-Logic Solutions
+                            Ltd.
+                        </a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("body").on("contextmenu", function (e) {
+            return false;
+        });
+    });
+    jQuery("#btnSubmit").click(function () {
+        addoff();
+    })
+
+    function addoff() {
+
+        var message = validateEmployeeoff(),
+            type = '';
+        if(message.length > 0) {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getSMTPValues());
+            //alert("check");
+            //jQuery.noConflict();
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("addLogin", "Loginnew")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    if (data != null) {
+                        if (data.flogin == "false") {
+                            window.location.href = '@Url.Action("Updatepwd", "Updatepwd")?type =' + data.check + '&Instid =' + data.InstID + '&Usersno =' + data.Usno;
+                        }
+                        else if (data.check == "Emp") {
+                            window.location.href = '@Url.Action("Setup", "Setup")';
+                        }
+                        else {
+                            message = data.check;
+                            //type = 'danger';
+                            notifyMessage(message, 'danger');
+
+                        }
+
+
+                    }
+
+
+                }
+            })
+        }
+    }
+    function getSMTPValues() {
+        jQuery.noConflict();
+
+        var txtu = document.getElementById('txtuname');
+        var txtpwd = document.getElementById('txtpwd');
+
+        var data = {
+            uname: txtu.value,
+            pwd: txtpwd.value,
+
+        }
+
+        return data;
+    }
+
+    function validateEmployeeoff() {
+
+        var txtu = document.getElementById('txtuname');
+        var txtpwd = document.getElementById('txtpwd');
+        result = '';
+
+        if (txtu.value.length == 0) {
+            result += 'UserName is Required.<br/>';
+        }
+
+        if (txtpwd.value.length == 0) {
+            result += 'Password is Required.<br/>';
+        }
+
+
+        return result;
+    }
+
+    function notifyMessage(message, type) {
+        jQuery.notify({
+            // options
+            message: message
+        }, {
+                // settings
+                type: type,
+                delay: 5000
+            });
+    }
+
+</script>
+

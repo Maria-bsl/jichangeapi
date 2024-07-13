@@ -1,0 +1,332 @@
+﻿
+@{
+    ViewBag.Title = "SMTP";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        Getcolumnslang_Smtp();
+        bindSMTPDetails_Smtp();
+
+    $("#btnSubmit").click(function () {
+    addSMTP_Smtp();
+    //jQuery("#tbl-smtp tbody").empty();
+    })
+
+    $("#btnDelete").click(function () {
+    delSMTP_Smtp();
+    });
+    });
+</script>
+
+<script type="text/javascript">
+    var glob;
+     function Getcolumnslang_Smtp() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("bindlan", "SMTP")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data != null) {
+
+                }
+            }
+        });
+    }
+    function bindSMTPDetails_Smtp() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetSMTPDetails", "SMTP")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var i = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+
+                            '<td>' + i + '</td>' +
+                            '<td>' + value.From_Address + '</td>' +
+                            '<td>' + value.SSL_Enable + '</td>' +
+                            '<td>' + value.SMTP_Address + '</td>' +
+                            '<td>' + value.SMTP_Port + '</td>' +
+                            '<td>' + value.SMTP_UName + '</td>' +
+                            '<td ><button class="btn btn-outline-secondary btn-sm" data-toggle="modal" data-target="#modal-smtp" id="btn' + value.SNO + '" data-sid="' + value.SNO + '" data-pwd="' + value.SMTP_Password + '"  value="Edit" onclick="showSMTPModal_Smtp(this)"><i class="fas fa-pen" ></i ></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-dark btn-sm" data-sid="' + value.SNO + '" id="btnDelete" data-pwd="' + value.SMTP_Password + '" data-rec="0" onclick="delSMTP_Smtp(this)"><i class="fas fa-trash" aria-hidden="true"></i></button></td>' +
+                            '</tr>';
+                        i++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+
+            }
+        })
+    }
+
+
+
+    function bindemployeeId_Smtp() {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetNextEmployeeId", "Employee")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#txtEmployeeId").val(data);
+            }
+        })
+    }
+    function delSMTP_Smtp(e) {
+
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+            deleteSMTP_Smtp(cid);
+            return true;
+        }
+        else
+            return false;
+
+    }
+    function binddupliacteDetails_Smtp(name) {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("Checkdupliacte", "SMTP")',
+            data: JSON.stringify({ 'name': name }),
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+
+                    lblError12.innerHTML = "already exists User Name.";
+                    jQuery('#lblError12').css('color', 'Red');
+                }
+                else {
+                    lblError12.innerHTML = "";
+                }
+
+
+            }
+        })
+    }
+    function addSMTP_Smtp() {
+
+        var message = validateEmployee_Smtp(),
+            //var message = '',
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getSMTPValues_Smtp());
+            //  alert(params);
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddSMTP", "SMTP")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    hideModal('modal-smtp');
+                    if (opType == 'C' && data) {
+
+
+                        if (data == true) {
+                            message = jQuery("#txtEmail").val() + ' Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtEmail").val() + ' Successfully Created';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U' && data) {
+                        message = jQuery("#txtEmail").val() + ' Successfully Updated';
+                        type = 'success';
+                    }
+                    else if (opType == 'D' && data) {
+                        message = jQuery("#txtEmail").val() + ' Details deleted successfully.';
+                        type = 'success';
+                    }
+
+                    notifyMessage(message, type, 5);
+                    bindSMTPDetails_Smtp();
+                }
+            })
+        }
+    }
+
+
+    function deleteSMTP_Smtp(cid) {
+        //var message = validateEmployee(),
+        //var message = '',
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+
+        var params = JSON.stringify(getSMTPID_Smtp(cid));
+
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteSMTP", "SMTP")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+                if (opType == 'D' && data) {
+                    if (data == true) {
+                        message = jQuery("#txtEmail").val() + ' Details is in Use,Cannot be Deleted.';
+                        type = 'danger';
+                    }
+                    else {
+                        message = jQuery("#txtEmail").val() + ' Successfully Deleted';
+                        type = 'success';
+
+                    }
+                }
+                notifyMessage(message, type);
+                bindSMTPDetails_Smtp();
+            }
+        })
+
+    }
+
+</script>
+
+
+
+<div class="card-body">
+    <h5 class="card-title" id="lblsm">SMTP</h5>
+
+    <div class="form-group d-flex">
+        <button type="button" id="btnAdd" value="Add" data-sid="0"
+                class="btn ml-auto mr-1 btn-sm btn-success btn-biz_logic" onclick="showSMTPModal_Smtp(this);" data-toggle="modal"
+                data-target="#modal-smtp">
+           Create
+        </button>
+        <input type="hidden" id="hdnEmployee" />
+    </div>
+
+    <div class="table-responsive">
+        <table id="tbl-smtp" class="table table-bordered table-sm rounded display">
+            <thead class="thead-light">
+                <tr>
+                    <th>Sno</th>
+                    <th>Form Address</th>
+                    <th class="sno-th">SSL Enable</th>
+                    <th>Address</th>
+                    <th class="sno-th">Port Number</th>
+                    <th class="sno-th">Username</th>
+                    <th class="sno-th">Actions</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<!-- [MODALS] -->
+<div class="modal fade" id="modal-smtp" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false"
+     aria-labelledby="believerCreateLabel" aria-hidden="true">
+    <div class="modal-dialog believerModal" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="lblsm1">SMTP</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="col-12 p-0 mx-auto" action="AddSMTP" method="post">
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtdFrom" class="f-label_align">From Address<span class="red">*</span></label>
+
+                            <input type="text" class="form-control" id="txtEmail" maxlength="200"
+                                   placeholder="Enter From Email ID" onblur="ValidateEmail_Smtp(this)" />
+                            <input type="hidden" class="form-control  hidden" id="txtSID">
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtSSL" class="f-label_align">SSL Enable<span class="red">*</span></label>
+
+                            &nbsp;<input type="radio" name="gender" id="rbtrue" value="True">&nbsp;<label for="Male">True</label>
+                            &nbsp; <input type="radio" name="gender" id="rbfalse" value="False">&nbsp;<label for="FeMale">False</label>
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label id="lblError"></label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtdAddress" class="f-label_align">
+                                address<span class="red">*</span>
+                            </label>
+
+                            <input type="text" class="form-control" id="txtAdd" maxlength="200"
+                                   placeholder="Enter Address" />
+
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtdPort" class="f-label_align">Port Number<span class="red">*</span></label>
+
+                            <input type="text" class="form-control" id="txtPort" maxlength="10"
+                                   placeholder="Enter Port Number">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtdUser" class="f-label_align">Username<span class="red">*</span></label>
+
+                            <input type="text" class="form-control " id="txtUname" maxlength="200"
+                                   onkeyup="checkduplicate_Smtp(this)" placeholder="Enter Username"><br />
+                            <span id="lblError12"></span>
+                        </div>
+                        <div class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                            <label for="txtdPass" class="f-label_align">Password<span class="red">*</span></label>
+
+                            <input type="password" class="form-control" id="txtPass" maxlength="200"
+                                   placeholder="Enter Password">
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success btn-sm btn-biz_logic" id="btnSubmit">Save</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+   
+</script>
+

@@ -1,0 +1,429 @@
+﻿@{
+    ViewBag.Title = "Region";
+    Layout = "~/Views/Shared/_Invoice_layout.cshtml";
+}
+
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        avoidEnter('txtregion');
+        bindRegionDetails();
+        bindCountryDetails();
+
+
+        $("#btnSubmit").click(function () {
+            addReGION();
+            //jQuery("#tbl-smtp tbody").empty();
+        })
+
+        $("#btnDelete").click(function () {
+            delRegion();
+        });
+    });
+</script>
+
+<script type="text/javascript">
+    var glob;
+    function bindRegionDetails() {
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetRegionDetails", "Region")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+
+    @* clearconsole();  *@
+                    jQuery("#tbl-smtp tbody").empty();
+                if (jQuery.fn.DataTable.isDataTable("#tbl-smtp")) {
+                    jQuery('#tbl-smtp').DataTable().clear().destroy();
+                }
+
+                if (data != 0) {
+                    var conut = 1;
+                    jQuery.each(data, function (key, value) {
+                        var row = '<tr>' +
+                            '<td>' + conut + '</td>' +
+                            '<td>' + value.Country_Name + '</td>' +
+                            '<td>' + value.Region_Name + '</td>' +
+                            '<td class="d-none">' + value.Country_Sno + '</td>' +
+                            '<td>' + value.Region_Status + '</td>' +
+                            '<td ><button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#modal-region" id="btn' + value.Region_SNO + '" data-sid="' + value.Region_SNO + '" value="Edit" onclick="showRegionModalreg(this)"><i class="fa-solid fa-pen"></i></button >&nbsp;&nbsp;&nbsp;<button class="btn btn-outline-danger btn-sm" data-sid="' + value.Region_SNO + '" data-pwd="' + value.Region_Name + '" id="btnDelete" data-rec="0" onclick="delRegion(this)"><i class="fa-solid fa-trash-can"></i></button></td>' +
+
+                            '</tr>';
+                        conut++;
+                        jQuery("#tbl-smtp tbody").append(row);
+                    });
+                }
+                applyDatatable('tbl-smtp');
+
+            }
+        })
+    }
+
+
+    function bindCountryDetails() {
+
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("GetCountryDetails", "Region")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                //alert("hh")
+                $("#ddlcountry").append($("<option></option>").val(0).html('Select'));
+
+                if (data != null) {
+
+                    $.each(data, function (key, text) {
+
+                        $("#ddlcountry").append($("<option></option>").val(text.SNO).html(text.Country_Name));
+
+                    });
+
+                }
+            }
+        })
+    }
+    function bindemployeeId() {
+
+        $.ajax({
+            type: 'POST',
+            url: '@Url.Action("GetNextEmployeeId", "Employee")',
+            data: '{}',
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                $("#txtEmployeeId").val(data);
+            }
+        })
+    }
+    function delRegion(e) {
+
+        var pt = jQuery(e).data('pwd');
+
+        var x = confirm("Are you sure you want to delete?");
+        if (x) {
+            jQuery('#hdnEmployee').val('D');
+            cid = jQuery(e).data('sid');
+
+            deleteRegion(cid, pt);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    function addReGION() {
+
+        var message = validateEmployeereg(),
+            type = '',
+            opType = jQuery("#hdnEmployee").val();
+
+        if (message.length > 0 && opType != 'D') {
+            notifyMessage(message, 'danger');
+        }
+        else {
+            var params = JSON.stringify(getRegionValuesreg());
+
+            jQuery.ajax({
+                type: 'POST',
+                url: '@Url.Action("AddRegion", "Region")',
+                data: params,
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+
+                    hideModal('modal-region');
+
+                    if (opType == 'C' && data) {
+
+                        if (data == true) {
+                            message = jQuery("#txtregion").val() + ' Region Already Exists.';
+                            type = 'danger';
+                        }
+                        else {
+                            message = jQuery("#txtregion").val() + ' Region Successfully Created';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'U') {
+                        var jk = true;
+                        if (data == false && jk == true) {
+                            message = jQuery("#txtregion").val() + ' Region Already Exists.';
+                            type = 'danger';
+                        } else {
+                            bindRegionDetails();
+                            message = jQuery("#txtregion").val() + ' Region Successfully Updated';
+                            type = 'success';
+                        }
+                    }
+                    else if (opType == 'D' && data) {
+                        message = jQuery("#txtregion").val() + 'Region deleted successfully.';
+                        type = 'success';
+
+                        deleteRowForEmployeeGrid();
+                    }
+                    notifyMessage(message, type);
+                    bindRegionDetails();
+                }
+            })
+        }
+    }
+    function deleteRegion(cid, pt) {
+        type = '',
+            opType = jQuery("#hdnEmployee").val();
+        var params = JSON.stringify(getSMTPIDreg(cid));
+        jQuery.ajax({
+            type: 'POST',
+            url: '@Url.Action("DeleteRegion", "Region")',
+            data: params,
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (data) {
+                if (data == true) {
+                    message = pt + ' Region is in Use,Cannot be Deleted.';
+                    type = 'danger';
+                }
+                else if (opType == 'D' && data) {
+                    message = pt + ' Region Successfully Deleted';
+                    type = 'success';
+                }
+                notifyMessage(message, type);
+                bindRegionDetails();
+            }
+        })
+    }
+    function showRegionModalreg(e) {
+
+    var txtRegion = document.getElementById('txtregion');
+    var ddlcou = document.getElementById("ddlcountry");
+    jk = false;
+    rblGender = jQuery("input[name='gender']:checked"),
+
+
+        tblemployee = document.getElementById('tbl-smtp'),
+        rows = tblemployee.rows,
+        hdnEmployee = document.getElementById('hdnEmployee');
+
+    if (e.value.indexOf('Edit') > -1) {
+
+        jQuery("#btnSubmit").html("@ViewData["Save"]");
+        for (var i = 0, row = null; i < rows.length; i++) {
+            row = rows[i];
+
+            if (row.cells[5].innerHTML.indexOf(e.id) > -1) {
+
+                txtSID.value = jQuery(e).data('sid');
+                txtRegion.value = row.cells[2].innerHTML;
+                ddlcou.value = row.cells[3].innerHTML;
+                var flag = row.cells[4].innerHTML;
+                if (flag == 'Active') {
+                    jQuery("#rbtrue").prop("checked", true);
+                    jQuery("#rbfalse").prop("checked", false);
+                }
+                else if (flag == 'InActive') {
+                    jQuery("#rbtrue").prop("checked", false);
+                    jQuery("#rbfalse").prop("checked", true);
+                } else {
+                    jQuery("#rbtrue").prop("checked", false);
+                    jQuery("#rbfalse").prop("checked", false);
+                }
+
+
+                break;
+            }
+        }
+
+        hdnEmployee.value = 'U';
+    }
+    else if (e.value.indexOf('Add') > -1) {
+        resetRegionreg();
+        jQuery("#btnSubmit").html("@ViewData["Save"]"); 
+        
+        hdnEmployee.value = 'C';
+    }
+
+}
+</script>
+
+<body data-layout="horizontal" data-topbar="dark" data-sidebar-size="sm">
+
+    <div class="main-content">
+        <div class="page-content">
+<div class="page-body">
+        <div class="container-fluid">
+<div class="page-title">
+     <div class="row">
+                            <div class="col-12">
+                                <div class="page-title-box d-flex align-items-center justify-content-between">
+                                    <h4 class="mb-0">@ViewData["Regiondets"]</h4>
+
+                                    <div class="page-title-right">
+                                        <ol class="breadcrumb m-0">
+                                            <li>
+                                               <button type="button" id="btnAdd" value="Add" data-sid="0"
+                    class="btn btn-outline-primary waves-effect waves-light f-right d-inline-block ml-4"
+                    onclick="showRegionModalreg(this);" data-bs-toggle="modal" data-bs-target="#modal-region">
+                <i data-feather="plus-circle" class="mr-1"></i>
+                @ViewData["addRegion"]
+            </button> 
+                                               <input type="hidden" id="hdnEmployee" />
+                                            </li>
+                                        </ol>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+        </div>
+</div>
+ </div>
+        <!-- Container-fluid starts-->
+<div class="container-fluid general-widget">
+    @* BODY DETAILS CARD/PANEL *@
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table id="tbl-smtp"
+                            class="table table-bordered table-hover js-basic-example dataTable table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Sno</th>
+                                    <th>@ViewData["cout"]</th>
+                                    <th>@ViewData["Region"]</th>
+                                    <th class="d-none">Country Sno</th>
+                                    <th class="sno-th">@ViewData["Status"]</th>
+                                    <th class="th_actions">@ViewData["Actions"]</th>
+                                </tr>
+                            </thead>
+                            @* <tfoot>
+                                <tr>
+                                    <th>Sno</th>
+                                    <th>@ViewData["cout"]</th>
+                                    <th>@ViewData["Region"]</th>
+                                    <th class="d-none">Country Sno</th>
+                                    <th class="sno-th">@ViewData["Status"]</th>
+                                    <th class="th_actions">@ViewData["Actions"]</th>
+                                </tr>
+                            </tfoot> *@
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @* <footer class="py-4 bg-light mt-auto">
+                <div class="container-fluid px-4">
+                    <div class="d-flex align-items-center justify-content-between small">
+                        <div class="text-primary">Designed & and Developed by Biz-Logic Solutions LTD</div>
+                        <div>
+                            <a href="#">Privacy Policy</a>
+                            &middot;
+                            <a href="#">Terms &amp; Conditions</a>
+                        </div>
+                    </div>
+                </div>
+            </footer> *@
+    <div class="md-overlay"></div>
+
+    <div id="styleSelector">
+
+    </div>
+</div>
+
+  <!-- Container-fluid Ends-->
+</div>
+
+
+                        <!-- Add Contact Start Model -->
+
+                        <!-- [MODALS] -->
+                        <div class="modal" id="modal-region" tabindex="-1" role="dialog"
+                            aria-labelledby="believerCreateLabel" aria-hidden="true">
+
+                            <div class="modal-dialog believerModal" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="hdreg1">@ViewData["Region"]</h5>
+                                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="col-12 p-0 mx-auto" action="AddRegion" method="post">
+                                            <div class="row">
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for="gender" class="f-label_align" id="lblcount">
+                                                        @ViewData["cout"]<span class="red">*</span>
+                                                    </label>
+                                                    <select class="form-control" id="ddlcountry"
+                                                        name="ddlcountry"></select>
+                                                </div>
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-8 col-lg-6">
+                                                    <label for="gender" class="f-label_align" id="lblreg">
+                                                        @ViewData["Region"]<span class="red">*</span>
+                                                                                                    </label>
+                                                    <input type="text" class="form-control" id="txtregion"
+                                                        placeholder="Enter Region" maxlength="200"
+                                                        onkeyup="validreg(this)">
+                                                    <input type="hidden" class="form-control  hidden" id="txtSID">
+                                                </div>
+
+                                                <div
+                                                    class="form-group flex_form-group align-items-baseline col-md-6 mt-1">
+                                                    <label for="gender" class="f-label_align" id="lblstat">
+                                                        @ViewData["Status"]<span class="red">*</span>
+                                                    </label>
+                                                    &nbsp;<input type="radio" name="gender" id="rbtrue"
+                                                        value="Active">&nbsp;<label for="Male">Active</label>
+                                                    &nbsp; <input class="ml-2" type="radio" name="gender" id="rbfalse"
+                                                        value="InActive">&nbsp;<label for="FeMale">InActive</label>
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-outline-info btn-sm" id="btnclose"
+                                                        data-bs-dismiss="modal">
+                                                    @ViewData["Close"]
+                                                </button>
+                                                <button type="button" class="btn btn-outline-primary btn-sm btn-biz_logic"
+                                                        id="btnSubmit">
+                                                    @ViewData["Save"]
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="md-overlay"></div>
+                        <!-- Add Contact Ends Model-->
+                        </form>
+                    </div>
+
+                    <!-- Container-fluid ends -->
+                </div>
+                <!-- Page-body end -->
+            </div>
+        </div>
+        <!-- Warning Section Starts -->
+
+        <div id="styleSelector">
+
+        </div>
+    </div>
+</div>
+</div>
+</body>

@@ -270,7 +270,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
 
-        }public List<CustomerMaster> CustGet()
+        }
+        public List<CustomerMaster> CustGet()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {

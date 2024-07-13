@@ -65,6 +65,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public string Zreport_Date2 { get; set; }
         public string Control_No { get; set; }
         public String Reason { get; set; }
+        public string Status { get; set; }
         #endregion Properties
 
 
@@ -1990,6 +1991,28 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public List<INVOICE> GetInvoiceNos_(long Sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                where (c.approval_status == "2") &&
+                                 (Sno == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == Sno)//c.cust_mas_sno == Sno
+                                 /**//*&& (c.comp_mas_sno == cno)*/
+                                select new INVOICE
+                                {
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    Invoice_No = c.invoice_no
+
+                                }).Distinct().ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
         public List<INVOICE> GetInvRep(long Comp,long cust, string stdate, string enddate)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -2085,7 +2108,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
-                                                     approval_date = approval_date
+                                                     approval_date = (DateTime)approval_date,
+                                                     p_date = (DateTime)c.p_date,
+                                                     Control_No = c.control_no,
+                                                     Currency_Code = c.currency_code,
+                                                     Payment_Type = c.payment_type,
+                                                     Status = c.goods_status,
+                                                     Company_Name = c.company_master.company_name,
+                                                     Due_Date = c.due_date,
+                                                     Invoice_Expired_Date = c.invoice_expired
+
 
                                                  }).ToList();
                     return listinvoice;
@@ -2119,7 +2151,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
-                                                     approval_date = approval_date
+                                                     approval_date = approval_date,
+                                                     p_date = (DateTime)c.p_date,
+                                                     Control_No = c.control_no,
+                                                     Currency_Code = c.currency_code,
+                                                     Payment_Type = c.payment_type,
+                                                     Status = c.goods_status,
+                                                     Company_Name = c.company_master.company_name,
+                                                     Due_Date = c.due_date,
+                                                     Invoice_Expired_Date = c.invoice_expired
 
                                                  }).ToList();
                     return listinvoice;
@@ -2152,7 +2192,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
-                                                     approval_date = approval_date
+                                                     approval_date = approval_date,
+                                                     p_date = (DateTime)c.p_date,
+                                                     Control_No = c.control_no,
+                                                     Currency_Code = c.currency_code,
+                                                     Payment_Type = c.payment_type,
+                                                     Status = c.goods_status,
+                                                     Company_Name = c.company_master.company_name,
+                                                     Due_Date = c.due_date,
+                                                     Invoice_Expired_Date = c.invoice_expired
+
 
                                                  }).ToList();
                     return listinvoice;
@@ -2187,7 +2236,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
-                                                     approval_date = approval_date
+                                                     approval_date = approval_date,
+                                                     p_date = (DateTime)c.p_date,
+                                                     Control_No = c.control_no,
+                                                     Currency_Code = c.currency_code,
+                                                     Payment_Type = c.payment_type,
+                                                     Status = c.goods_status,
+                                                     Company_Name = c.company_master.company_name,
+                                                     Due_Date = c.due_date,
+                                                     Invoice_Expired_Date = c.invoice_expired
+
 
                                                  }).ToList();
                     return listinvoice;
@@ -2219,7 +2277,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
-                                                     approval_date = approval_date
+                                                     approval_date = approval_date,
+                                                     p_date = (DateTime)c.p_date,
+                                                     Control_No = c.control_no,
+                                                     Currency_Code = c.currency_code,
+                                                     Payment_Type = c.payment_type,
+                                                     Status = c.goods_status,
+                                                     Company_Name = c.company_master.company_name,
+                                                     Due_Date = c.due_date,
+                                                     Invoice_Expired_Date = c.invoice_expired
+
 
                                                  }).ToList();
                     return listinvoice;
@@ -2253,7 +2320,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
-                                                     approval_date = approval_date
+                                                     approval_date = approval_date,
+                                                     p_date = (DateTime)c.p_date,
+                                                     Control_No = c.control_no,
+                                                     Currency_Code = c.currency_code,
+                                                     Payment_Type = c.payment_type,
+                                                     Status = c.goods_status,
+                                                     Company_Name = c.company_master.company_name,
+                                                     Due_Date = c.due_date,
+                                                     Invoice_Expired_Date = c.invoice_expired
+
 
                                                  }).ToList();
                     return listinvoice;

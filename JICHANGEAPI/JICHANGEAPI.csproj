@@ -218,6 +218,7 @@
     <Compile Include="Controllers\CompanyInboxController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceRepController.cs" />
+    <Compile Include="Controllers\RepCompInvoiceController.cs" />
     <Compile Include="Models\AuthLog.cs" />
     <Compile Include="Models\BranchRef.cs" />
     <Compile Include="Models\ControlNo.cs" />
@@ -230,7 +231,6 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginUserController.cs" />
     <Compile Include="Controllers\UserLogController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

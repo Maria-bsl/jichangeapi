@@ -223,34 +223,41 @@ namespace JichangeApi.Controllers
         //    return null;
         //}
         [HttpPost]
-        public HttpResponseMessage InvList(long Sno)
+        public HttpResponseMessage InvList(SingletonSno c)
         {
-            try
-            {
-                string ash = null;
-                if (Sno == Convert.ToInt64(ash))
-                {
-                    return Request.CreateResponse(new {response = Sno, message ="Failed"});
+            if (ModelState.IsValid) {   
+                    try
+                    {
+                        string ash = null;
+                        if (c.Sno == Convert.ToInt64(ash))
+                        {
+                            return Request.CreateResponse(new {response = c.Sno, message ="Failed"});
+                        }
+                        else
+                        {
+                            var result = inv.GetInvoiceNos((long)c.Sno);  //Cust_mas_sno ==> Sno
+                            if (result == null)
+                            {
+                                int d = 0;
+                                return Request.CreateResponse(new {response = 0, message ="Failed"});
+                            }
+                            else
+                            {
+                                return Request.CreateResponse(new {response = result, message ="Success"});
+                            }
+                        }
+                    }
+                    catch (Exception Ex)
+                    {
+                        //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
+                        Ex.ToString();
+                    }
                 }
                 else
                 {
-                    var result = inv.GetInvoiceNos(Sno);  //Cust_mas_sno ==> Sno
-                    if (result == null)
-                    {
-                        int d = 0;
-                        return Request.CreateResponse(new {response = 0, message ="Failed"});
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new {response = result, message ="Success"});
-                    }
+                    var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                    return Request.CreateResponse(new { response = 0, message = errorMessages});
                 }
-            }
-            catch (Exception Ex)
-            {
-                //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
-                Ex.ToString();
-            }
             return returnNull;
         }
 
@@ -332,7 +339,7 @@ namespace JichangeApi.Controllers
                 try
                 {
 
-                    var result = inv.GetInvRep((long)i.Comp, (long)i.cusid, i.stdate, i.enddate);
+                    var result = inv.GetInvRep((long)i.Comp, long.Parse(i.cusid), i.stdate, i.enddate);
                     if (result != null)
                     {
 

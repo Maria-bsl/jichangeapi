@@ -241,6 +241,37 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+        public CustomerMaster CustGetId(long sno, long cno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var list = (from c in context.customer_master
+                            where c.comp_mas_sno == sno && c.cust_mas_sno == cno
+                            select new CustomerMaster
+                            {
+                                Cust_Sno = c.cust_mas_sno,
+                                Cust_Name = c.customer_name,
+                                PostboxNo = c.pobox_no,
+                                Address = c.physical_address,
+                                Region_SNO = c.region_id,
+                                DistSno = c.district_sno,
+                                WardSno = c.ward_sno,
+                                TinNo = c.tin_no,
+                                VatNo = c.vat_no,
+                                ConPerson = c.contact_person,
+                                Email = c.email_address,
+                                Phone = c.mobile_no,
+                                Checker = c.checker
+                            }).FirstOrDefault();
+
+                if (list != null)
+                    return list;
+                else
+                    return null;
+            }
+
+        }
         public List<CustomerMaster> CustGet(long sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

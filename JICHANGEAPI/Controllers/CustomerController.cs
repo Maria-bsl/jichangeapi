@@ -12,7 +12,7 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class CustomersController : ApiController
+    public class CustomerController : ApiController
     {
         CustomerMaster cm = new CustomerMaster();
         CompanyBankMaster c = new CompanyBankMaster();
@@ -59,38 +59,40 @@ namespace JichangeApi.Controllers
             return returnNull;
         }
 
+
         [HttpPost]
-        public HttpResponseMessage GetRegion(string rn)
+        public HttpResponseMessage GetCustbyId(CompSnoModel d)
         {
-            try
+            if (ModelState.IsValid)
             {
-                long rid = 0;
-                if (string.IsNullOrEmpty(rn))
+                try
                 {
 
-                }
-                else
-                {
-                    rid = long.Parse(rn);
-                }
-                var result = r.EditREGION(rid);
-                if (result != null)
-                {
-                    return Request.CreateResponse(new {response = result, message ="Success"});
-                }
-                else
-                {
-                    var d = 0;
-                    return Request.CreateResponse(new {response = d, message ="Failed"});
-                }
+                    var result = cm.CustGetId(long.Parse(d.compid.ToString()), (long) d.Sno );
+                    if (result != null)
+                    {
+                        return Request.CreateResponse(new { response = result, message = "Success" });
+                    }
+                    else
+                    {
+                        var t = 0;
+                        return Request.CreateResponse(new { response = t, message = "Failed" });
+                    }
 
+                }
+                catch (Exception Ex)
+                {
+                    Ex.ToString();
+                }
             }
-            catch (Exception Ex)
+            else
             {
-                Ex.ToString();
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+            return Request.CreateResponse(new {response = 0, message ="Failed" });
         }
+
         [HttpPost]
         public HttpResponseMessage GetComp(SingletonComp d)
         {
@@ -126,6 +128,39 @@ namespace JichangeApi.Controllers
 
 
         [HttpPost]
+        public HttpResponseMessage GetRegion(string rn)
+        {
+            try
+            {
+                long rid = 0;
+                if (string.IsNullOrEmpty(rn))
+                {
+
+                }
+                else
+                {
+                    rid = long.Parse(rn);
+                }
+                var result = r.EditREGION(rid);
+                if (result != null)
+                {
+                    return Request.CreateResponse(new {response = result, message ="Success"});
+                }
+                else
+                {
+                    var d = 0;
+                    return Request.CreateResponse(new {response = d, message ="Failed"});
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                Ex.ToString();
+            }
+            return returnNull;
+        }
+
+        [HttpPost]
         public HttpResponseMessage GetDistrict(string dn)
         {
             try
@@ -157,6 +192,7 @@ namespace JichangeApi.Controllers
             }
             return returnNull;
         }
+
         [HttpPost]
         public HttpResponseMessage GetWard(string wn)
         {
@@ -189,6 +225,7 @@ namespace JichangeApi.Controllers
             }
             return returnNull;
         }
+
         [HttpGet]
         public HttpResponseMessage GetRegionDetails()
         {
@@ -203,6 +240,7 @@ namespace JichangeApi.Controllers
             }
             return returnNull;
         }//need to check get methods
+
         [HttpPost]
         public HttpResponseMessage GetRegionDetails1(long Sno)
         {
@@ -249,6 +287,7 @@ namespace JichangeApi.Controllers
             }
             return returnNull;
         }
+
         [HttpPost]
         public HttpResponseMessage GetWardDetails(long sno = 1)
         {
@@ -271,6 +310,7 @@ namespace JichangeApi.Controllers
             }
             return returnNull;
         }
+
         [HttpPost]
         public HttpResponseMessage GetTIN(long sno)
         {
@@ -296,120 +336,121 @@ namespace JichangeApi.Controllers
 
 
 
-     /*   [HttpPost]
+       [HttpPost]
         public HttpResponseMessage AddCustomer(CustomersForm c)
         {
             if (ModelState.IsValid) {  
                     try
                     {
-                        cm.Cust_Sno = CSno;
-                        cm.Cust_Name = CName;
-                        cm.PostboxNo = PostboxNo;
-                        cm.Address = Address;
+                        cm.Cust_Sno = c.CSno;
+                        cm.Cust_Name = c.CName;
+                        cm.PostboxNo = c.PostboxNo;
+                        cm.Address = c.Address;
                         cm.CompanySno = long.Parse((c.compid).ToString());
-                        if (regid > 0)
+                        if (c.regid > 0)
                         {
-                            cm.Region_SNO = regid;
+                            cm.Region_SNO = c.regid;
                         }
-                        if (distsno > 0)
+                        if (c.distsno > 0)
                         {
-                            cm.DistSno = distsno;
+                            cm.DistSno = c.distsno;
                         }
-                        if (wardsno > 0)
+                        if (c.wardsno > 0)
                         {
-                            cm.WardSno = wardsno;
+                            cm.WardSno = c.wardsno;
                         }
 
-                        cm.TinNo = Tinno;
-                        cm.VatNo = VatNo;
-                        cm.ConPerson = CoPerson;
-                        cm.Email = Mail;
-                        cm.Phone = Mobile_Number;
+                        cm.TinNo = c.Tinno;
+                        cm.VatNo = c.VatNo;
+                        cm.ConPerson = c.CoPerson;
+                        cm.Email = c.Mail;
+                        cm.Phone = c.Mobile_Number;
                         //sd.Status = Session["admin1"].ToString() == "Admin" ? "Approved" : "Pending";
                         //sd.Facility_reg_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
                         //sd.Facility_Name = Session["Facili_Name"].ToString();
-                        cm.Posted_by = Session["UserID"].ToString();
-                        cm.Checker = check_status;
+                        cm.Posted_by = c.userid.ToString();
+                        cm.Checker = c.check_status;
                         long ssno = 0;
-                        if (CSno == 0)
+                        if (c.CSno == 0)
                         {
-                            var result = cm.ValidateCount(CName.ToLower(), Tinno);
-                            //result = false;
-                            if (result == true)
-                            {
-                                return Request.CreateResponse(new {response = result, message ="Success"});
-                            }
-                            else
-                            {
-                                ssno = cm.CustAdd(cm);
+                            var result = cm.ValidateCount(c.CName.ToLower(), c.Tinno);
+                        //result = false;
+                        if (result == true)
+                        {
+                            return Request.CreateResponse(new { response = result, message = "Success" });
+                        }
+                        else
+                        {
+                            ssno = cm.CustAdd(cm);
 
-                                *//*if (ssno > 0)
+                            /*if (ssno > 0)
+                            {
+
+                                String[] list1 = new String[15] { ssno.ToString(), c.CName, c.PostboxNo, c.Address, c.regid.ToString(), c.distsno.ToString(), c.wardsno.ToString(),
+                                    c.Tinno, c.VatNo, c.CoPerson, c.Mail, c.Mobile_Number, c.userid.ToString(), DateTime.Now.ToString(),(c.compid).ToString() };
+                                for (int i = 0; i < list.Count(); i++)
                                 {
-                            
-                                    String[] list1 = new String[15] { ssno.ToString(), CName, PostboxNo, Address, regid.ToString(), distsno.ToString(), wardsno.ToString(),
-                                        Tinno, VatNo, CoPerson, Mail, Mobile_Number, Session["UserID"].ToString(), DateTime.Now.ToString(),(c.compid).ToString() };
-                                    for (int i = 0; i < list.Count(); i++)
-                                    {
-                                        ad.Audit_Type = "Insert";
-                                        ad.Columnsname = list[i];
-                                        ad.Table_Name = "Customers";
-                                        ad.Newvalues = list1[i];
-                                        ad.AuditBy = Session["UserID"].ToString();
-                                        ad.Comp_Sno= long.Parse(c.compid.ToString());
-                                        ad.Audit_Date = DateTime.Now;
-                                        ad.Audit_Time = DateTime.Now;
-                                        ad.AddAudit(ad);
-                                    }
-                                }*//*
+                                    ad.Audit_Type = "Insert";
+                                    ad.Columnsname = list[i];
+                                    ad.Table_Name = "Customers";
+                                    ad.Newvalues = list1[i];
+                                    ad.AuditBy = Session["UserID"].ToString();
+                                    ad.Comp_Sno= long.Parse(c.compid.ToString());
+                                    ad.Audit_Date = DateTime.Now;
+                                    ad.Audit_Time = DateTime.Now;
+                                    ad.AddAudit(ad);
+                                }
+                            }*/
 
-                                return Json(ssno, JsonRequestBehavior.AllowGet);
+                            return Request.CreateResponse(new {response =ssno, message = "Success"});
                             }
                         }
-                        else if (CSno > 0)
+                        else if (c.CSno > 0)
                         {
-                            var update = cm.ValidateDeleteorUpdate(CSno);
+                            var update = cm.ValidateDeleteorUpdate(c.CSno);
                             if (update == false)
                             {
 
-                                if (dummy == false)
-                                {
-                                    return Json(dummy, JsonRequestBehavior.AllowGet);
-                                }
+                            if (c.dummy == false)
+                            {
+                                return Request.CreateResponse(new { response = c.dummy, message = "Failed" });
+                            }
 
-                                else
-                                {
+                            else
+                            {
 
-                                    var dd = cm.EditCust(CSno);
-                                    *//*if (dd != null)
+                                var dd = cm.EditCust(c.CSno);
+                                
+                                if (dd != null)
+                                {
+                                    String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
+                                        dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, c.userid.ToString(),  DateTime.Now.ToString(),dd.CompanySno.ToString() };
+                                    String[] list1 = new String[15] { c.CSno.ToString(), c.CName, c.PostboxNo, c.Address, c.regid.ToString(), c.distsno.ToString(), c.wardsno.ToString(),
+                                    c.Tinno, c.VatNo, c.CoPerson, c.Mail, c.Mobile_Number, c.userid.ToString(), DateTime.Now.ToString(),(c.compid).ToString() };
+
+                                    for (int i = 0; i < list.Count(); i++)
                                     {
-                                        String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
-                                            dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, Session["UserID"].ToString(),  DateTime.Now.ToString(),dd.CompanySno.ToString() };
-                                        String[] list1 = new String[15] { CSno.ToString(), CName, PostboxNo, Address, regid.ToString(), distsno.ToString(), wardsno.ToString(),
-                                        Tinno, VatNo, CoPerson, Mail, Mobile_Number, Session["UserID"].ToString(), DateTime.Now.ToString(),(c.compid).ToString() };
 
-                                        for (int i = 0; i < list.Count(); i++)
-                                        {
-                                    
-                                                ad.Audit_Type = "Update";
-                                                ad.Columnsname = list[i];
-                                                ad.Table_Name = "Customers";
-                                                ad.Oldvalues = list2[i];
-                                                ad.Newvalues = list1[i];
-                                                ad.AuditBy = Session["UserID"].ToString();
-                                                ad.Audit_Date = DateTime.Now;
-                                                ad.Audit_Time = DateTime.Now;
-                                                ad.AddAudit(ad);
-                                    
-                                        }
-                                    }*//*
-                                    cm.CustUpdate(cm);
-                                    ssno = CSno;
-                                    return Json(ssno, JsonRequestBehavior.AllowGet);
+                                            ad.Audit_Type = "Update";
+                                            ad.Columnsname = list[i];
+                                            ad.Table_Name = "Customers";
+                                            ad.Oldvalues = list2[i];
+                                            ad.Newvalues = list1[i];
+                                            ad.AuditBy = c.userid.ToString();
+                                            ad.Audit_Date = DateTime.Now;
+                                            ad.Audit_Time = DateTime.Now;
+                                            ad.AddAudit(ad);
+
+                                    }
+                                }
+                                cm.CustUpdate(cm);
+                                ssno = c.CSno;
+                                return Request.CreateResponse(new {response = ssno, message = "Success"});
                                 }
                             }
                             else
                             {
-                                return Json(update, JsonRequestBehavior.AllowGet);
+                                return Request.CreateResponse(new { response = update, message = "Failed"});
                             }
                         }
 
@@ -429,7 +470,8 @@ namespace JichangeApi.Controllers
                 }
             return returnNull;
         }
-*/
+
+
         [HttpPost]
         public HttpResponseMessage DeleteCust(long sno)
         {

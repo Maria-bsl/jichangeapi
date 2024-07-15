@@ -350,7 +350,6 @@ namespace JichangeApi.Controllers
                         return Request.CreateResponse(new {response = 0, message ="Failed"});
                     }
 
-
                 }
                 catch (Exception Ex)
                 {

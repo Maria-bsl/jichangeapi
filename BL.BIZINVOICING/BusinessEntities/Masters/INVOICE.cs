@@ -1105,6 +1105,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Chus_Name = det.customer_name,
                                     Currency_Code = c.currency_code,
                                     Currency_Name= cur.currency_name,
+                                    Control_No = c.control_no,
                                     Remarks= c.inv_remarks,
                                     Customer_ID_Type = c.customer_id_type,
                                     Customer_ID_No = c.customer_id_no,

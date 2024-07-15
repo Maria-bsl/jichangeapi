@@ -235,6 +235,38 @@ namespace JichangeApi.Controllers
             return null;
         }
 
+        [HttpPost]
+        public HttpResponseMessage GetSignedInvoiceById(SingletonCompInvid s)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var result = inv.GetINVOICEMas2(long.Parse(s.compid.ToString()), s.invid);
+                    if (result != null)
+                    {
+                        return Request.CreateResponse(new { response = result, message = "Success" });
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(new { response = 0, message = "Failed" });
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    Ex.ToString();
+                }
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
+            }
+
+            return null;
+        }
+
         #endregion
 
 
@@ -246,7 +278,7 @@ namespace JichangeApi.Controllers
                 try
                 {
                     //var result = inv.GetINVOICEMas(long.Parse(s.compid.ToString())).Where(x => x.Inv_Mas_Sno == s.invid).FirstOrDefault();
-                    var result = inv.GetINVOICEMas1(long.Parse(s.compid.ToString()), s.invid.ToString());
+                    var result = inv.GetINVOICEMas1(long.Parse(s.compid.ToString()), s.invid);
 
                     if (result != null)
                     {

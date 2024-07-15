@@ -216,9 +216,11 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CompanyInboxController.cs" />
+    <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
     <Compile Include="Controllers\InvoiceRepController.cs" />
     <Compile Include="Controllers\RepCompInvoiceController.cs" />
+    <Compile Include="Controllers\RepCustomerController.cs" />
     <Compile Include="Models\AuthLog.cs" />
     <Compile Include="Models\BranchRef.cs" />
     <Compile Include="Models\ControlNo.cs" />
@@ -241,6 +243,7 @@
     <Compile Include="Models\ReportDates.cs" />
     <Compile Include="Models\SingletonComp.cs" />
     <Compile Include="Models\SingletonCompInvid.cs" />
+    <Compile Include="Models\SingletonGetCustDetRepModel.cs" />
     <Compile Include="Models\SingletonInv.cs" />
     <Compile Include="Models\SingletonInvMas.cs" />
     <Compile Include="Models\SingletonSno.cs" />

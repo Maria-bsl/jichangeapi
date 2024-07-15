@@ -1083,7 +1083,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public List<INVOICE> GetINVOICEMas1(long cno, string invid)
+        public INVOICE GetINVOICEMas1(long cno, long invid)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -1091,7 +1091,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
-                                where c.comp_mas_sno == cno && c.invoice_no == invid
+                                where c.comp_mas_sno == cno && c.inv_mas_sno == invid
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
@@ -1122,8 +1122,55 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     approval_status = c.approval_status,
                                     approval_date = approval_date
 
-                                }).ToList();
-                if (adetails != null && adetails.Count > 0)
+                                }).FirstOrDefault();
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        public INVOICE GetINVOICEMas2(long cno, long invid)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
+                                join cur in context.currency_master on c.currency_code equals cur.currency_code
+                                where c.comp_mas_sno == cno && c.inv_mas_sno == invid && c.approval_status == "2"
+                                select new INVOICE
+                                {
+                                    Com_Mas_Sno = c.company_master.comp_mas_sno,
+                                    Company_Name = cmp.company_name,
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    Invoice_No = c.invoice_no,
+                                    Invoice_Date = c.invoice_date,
+                                    Due_Date = c.due_date,
+                                    Invoice_Expired_Date = c.invoice_expired,
+                                    Payment_Type = c.payment_type,
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Chus_Name = det.customer_name,
+                                    Currency_Code = c.currency_code,
+                                    Currency_Name = cur.currency_name,
+                                    Control_No = c.control_no,
+                                    Remarks = c.inv_remarks,
+                                    Customer_ID_Type = c.customer_id_type,
+                                    Customer_ID_No = c.customer_id_no,
+                                    Total = (decimal)c.total_amount,
+                                    Total_Vt = (decimal)c.vat_amount,
+                                    Total_Without_Vt = (decimal)c.total_without_vat,
+                                    //Vat_Amount = (long)c.vat_amount,
+                                    warrenty = c.warrenty,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    grand_count = (int)c.grand_count,
+                                    daily_count = (int)c.daily_count,
+                                    approval_status = c.approval_status,
+                                    approval_date = approval_date
+
+                                }).FirstOrDefault();
+                if (adetails != null)
                     return adetails;
                 else
                     return null;

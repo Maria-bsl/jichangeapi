@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
-    <History>True|2024-07-11T14:46:47.6842857Z;True|2024-07-11T16:58:59.4010393+03:00;True|2024-07-11T16:36:14.7884394+03:00;True|2024-07-11T16:15:53.4717246+03:00;True|2024-07-11T15:03:37.9812764+03:00;True|2024-07-11T14:49:10.5489979+03:00;True|2024-07-10T09:48:56.4909779+03:00;True|2024-07-10T09:47:07.5443016+03:00;True|2024-07-09T17:04:32.5492192+03:00;False|2024-07-09T17:04:17.2598028+03:00;</History>
+    <History>True|2024-07-15T10:41:56.2199613Z;True|2024-07-15T12:24:05.1002262+03:00;True|2024-07-11T17:46:47.6842857+03:00;True|2024-07-11T16:58:59.4010393+03:00;True|2024-07-11T16:36:14.7884394+03:00;True|2024-07-11T16:15:53.4717246+03:00;True|2024-07-11T15:03:37.9812764+03:00;True|2024-07-11T14:49:10.5489979+03:00;True|2024-07-10T09:48:56.4909779+03:00;True|2024-07-10T09:47:07.5443016+03:00;True|2024-07-09T17:04:32.5492192+03:00;False|2024-07-09T17:04:17.2598028+03:00;</History>
     <_PublishTargetUrl>D:\JichangeApi09072024</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
@@ -90,13 +90,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2024 15:50:52</publishTime>
     </File>
     <File Include="bin/BL.BIZINVOICING.dll">
-      <publishTime>07/13/2024 11:21:09</publishTime>
+      <publishTime>07/15/2024 12:23:15</publishTime>
     </File>
     <File Include="bin/BL.BIZINVOICING.dll.config">
       <publishTime>07/11/2024 15:50:51</publishTime>
     </File>
     <File Include="bin/BL.BIZINVOICING.pdb">
-      <publishTime>07/13/2024 11:21:09</publishTime>
+      <publishTime>07/15/2024 12:23:15</publishTime>
     </File>
     <File Include="bin/DaL.BIZINVOICING.dll">
       <publishTime>07/11/2024 15:50:52</publishTime>
@@ -111,10 +111,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/11/2024 15:50:52</publishTime>
     </File>
     <File Include="bin/JichangeApi.dll">
-      <publishTime>07/13/2024 11:44:59</publishTime>
+      <publishTime>07/15/2024 13:41:50</publishTime>
     </File>
     <File Include="bin/JichangeApi.pdb">
-      <publishTime>07/13/2024 11:44:59</publishTime>
+      <publishTime>07/15/2024 13:41:50</publishTime>
     </File>
     <File Include="bin/Microsoft.Bcl.AsyncInterfaces.dll">
       <publishTime>07/11/2024 15:50:52</publishTime>

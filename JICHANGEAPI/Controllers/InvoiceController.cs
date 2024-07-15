@@ -245,7 +245,9 @@ namespace JichangeApi.Controllers
             if (ModelState.IsValid) {    
                 try
                 {
-                    var result = inv.GetINVOICEMas(long.Parse(s.compid.ToString())).Where(x => x.Inv_Mas_Sno == s.invid).FirstOrDefault();
+                    //var result = inv.GetINVOICEMas(long.Parse(s.compid.ToString())).Where(x => x.Inv_Mas_Sno == s.invid).FirstOrDefault();
+                    var result = inv.GetINVOICEMas1(long.Parse(s.compid.ToString()), s.invid.ToString());
+
                     if (result != null)
                     {
                         return Request.CreateResponse(new { response = result, message = "Success" });

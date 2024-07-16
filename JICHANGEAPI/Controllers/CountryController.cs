@@ -40,7 +40,7 @@ namespace JichangeApi.Controllers
                         var result = cty.ValidateLicense(c.country_name.ToLower());
                         if (result == true)
                         {
-                            return Request.CreateResponse(new { response = result, message = "Failed" });
+                            return Request.CreateResponse(new { response = result, message = new List<string> { "Failed" } });
                         }
                         else
                         {
@@ -61,14 +61,14 @@ namespace JichangeApi.Controllers
                                     ad.AddAudit(ad);
                                 }
                             }
-                            return Request.CreateResponse(new { response = ssno, message = "Success" });
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                         }
                     }
                     else if (c.sno > 0)
                     {
                         if (c.dummy == false)
                         {
-                            return Request.CreateResponse(new { response = c.dummy, message = "Failed" });
+                            return Request.CreateResponse(new { response = c.dummy, message = new List<string> { "Failed" } });
 
                         }
                         else
@@ -93,7 +93,7 @@ namespace JichangeApi.Controllers
                             }
                             cty.Updatecountries(cty);
                             ssno = c.sno;
-                            return Request.CreateResponse(new { response = ssno, message = "Success" });
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                         }
 
                     }
@@ -102,7 +102,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -121,20 +121,20 @@ namespace JichangeApi.Controllers
                 var result = cty.GETcountries();
                 if (result != null)
                 {
-                    return Request.CreateResponse(new { response = result, message = "Success" });
+                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
                 }
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = "Failed" });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
             }
             catch (Exception Ex)
             {
-                Ex.ToString();
+                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
 
-            return returnNull;
+            //return returnNull;
         }
 
 
@@ -149,7 +149,7 @@ namespace JichangeApi.Controllers
                 var name = cty.ValidateCount(deleteCountryForm.sno);
                 if (name == true)
                 {
-                    return Request.CreateResponse(new { response = name, message = "Failed" });
+                    return Request.CreateResponse(new { response = name, message = new List<string> { "Failed" } });
 
                 }
                 else
@@ -177,15 +177,15 @@ namespace JichangeApi.Controllers
                     }
                     var result = deleteCountryForm.sno;
 
-                    return Request.CreateResponse(new { response = result, message = "Success" });
+                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
                 }
             }
             catch (Exception Ex)
             {
-                Ex.ToString();
+                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
 
-            return returnNull;
+            //return returnNull;
         }
 
 
@@ -200,14 +200,14 @@ namespace JichangeApi.Controllers
 
                 var result = cty.ValidateCount(sno);
 
-                return Request.CreateResponse(new { response = result, message = "Success" });
+                return Request.CreateResponse(new { response = result, message = new List<string> { } });
             }
             catch (Exception Ex)
             {
-                Ex.ToString();
+                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
 
-            return returnNull;
+            //return returnNull;
         }
    
     }

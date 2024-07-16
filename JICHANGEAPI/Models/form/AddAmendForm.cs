@@ -7,9 +7,10 @@ using System.Web;
 
 namespace JichangeApi.Models.form
 {
-    public class InvoiceForm : MainForm
+    public class AddAmendForm : MainForm
     {
-        
+
+
         [Required(ErrorMessage = "Comp ID is missing", AllowEmptyStrings = false)]
         public long? compid { get; set; }
 
@@ -48,7 +49,14 @@ namespace JichangeApi.Models.form
         public string goods_status { get; set; }
         public string delivery_status { get; set; }
 
-        
+       /* string invno, string auname, string date, string edate, string iedate, string ptype, long chus,
+            long comno, string ccode, string ctype, string cino,
+           string twvat, string vtamou, string total, string Inv_remark, int lastrow, 
+            List<INVOICE> details, long sno, string warrenty, string goods_status,
+            string delivery_status,*/
+
+         [Required(ErrorMessage = "Missing Reason", AllowEmptyStrings = false)]
+        public string reason { get; set; }
 
 
     }

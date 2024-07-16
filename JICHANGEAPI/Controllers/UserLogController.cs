@@ -32,19 +32,19 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new { response = result,  message = "Success" }); 
+                        return Request.CreateResponse(new { response = result,  message = new List<string> { } }); 
                     }
                     else
                     {
-                        return Request.CreateResponse(new { response = result, message = "Failed" });
+                        return Request.CreateResponse(new { response = result, message = new List<string> { "Failed" } });
                     }
 
 
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
-                    // long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                    // long errorLogID = ApplicationError.ErrorHandling(Ex, Request.RequestUri.ToString(), Request.Url.ToString(), Request.Browser.Type);
                 }
             }
             else
@@ -53,7 +53,7 @@ namespace JichangeApi.Controllers
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
 
-            return returnNull;
+            //return returnNull;
         }
 
     }

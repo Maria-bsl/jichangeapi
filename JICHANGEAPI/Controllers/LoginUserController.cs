@@ -102,14 +102,14 @@ namespace JichangeApi.Controllers
                         dt.Description = "company";
                         dt.AddTrack(dt);
                         returnField = new { Token = jwtToken, check = "company", flogin = company.Flogin, InstID = company.Compmassno,role = admin1, braid = braid, Usno = company.CompuserSno, desig = admin1, sessComp = sessComp, userid = userid, Uname = UfullName };
-                        return Request.CreateResponse(new { response = returnField, message = "Success" });
+                        return Request.CreateResponse(new { response = returnField, message = new List<string> { } });
 
                     }
                     else
                     {
 
                         var returnField0 = new { check = "Username or password is incorrect" };
-                        return Request.CreateResponse(new { response = returnField0, message = "Failed"});
+                        return Request.CreateResponse(new { response = returnField0, message = new List<string> { "Failed" }});
                     }
 
                 }
@@ -159,7 +159,7 @@ namespace JichangeApi.Controllers
            /* Session.Clear();
             Session.Abandon();
             Session.RemoveAll();*/
-            return Request.CreateResponse(new {response = "Successfully Log Out", message = "Success"});
+            return Request.CreateResponse(new {response = "Successfully Log Out", message = new List<string> { }});
         }
 
         private static string GetEncryptedData(string value)

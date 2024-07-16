@@ -223,9 +223,11 @@
     <Compile Include="Controllers\RepCustomerController.cs" />
     <Compile Include="Models\AuthLog.cs" />
     <Compile Include="Models\BranchRef.cs" />
+    <Compile Include="Models\CancelRepModel.cs" />
     <Compile Include="Models\CompSnoModel.cs" />
     <Compile Include="Models\ControlNo.cs" />
     <Compile Include="Models\Desibraid.cs" />
+    <Compile Include="Models\form\AddAmendForm.cs" />
     <Compile Include="Models\form\CustomersForm.cs" />
     <Compile Include="Models\form\InvoiceForm.cs" />
     <Compile Include="Models\InvDetRepModel.cs" />
@@ -245,8 +247,10 @@
     <Compile Include="Models\ReportDates.cs" />
     <Compile Include="Models\SingletonComp.cs" />
     <Compile Include="Models\SingletonCompInvid.cs" />
+    <Compile Include="Models\SingletonControl.cs" />
     <Compile Include="Models\SingletonGetCustDetRepModel.cs" />
     <Compile Include="Models\SingletonInv.cs" />
+    <Compile Include="Models\SingletonInvComp.cs" />
     <Compile Include="Models\SingletonInvMas.cs" />
     <Compile Include="Models\SingletonSno.cs" />
     <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />

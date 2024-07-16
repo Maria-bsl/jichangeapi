@@ -31,7 +31,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -42,7 +42,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -51,7 +51,7 @@ namespace JichangeApi.Controllers
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
 
-            return null;
+            //return null;
         }
 
 
@@ -66,7 +66,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -77,7 +77,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -86,7 +86,7 @@ namespace JichangeApi.Controllers
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
 
-            return null;
+            //return null;
         }
 
 
@@ -112,14 +112,14 @@ namespace JichangeApi.Controllers
                         }
                         else
                         {
-                            return Request.CreateResponse(new {response = result, message ="Success"});
+                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
                         }
                     }
                 }
                 catch (Exception Ex)
                 {
                     //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -127,7 +127,7 @@ namespace JichangeApi.Controllers
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+            //return returnNull;
         }
 
 
@@ -142,7 +142,7 @@ namespace JichangeApi.Controllers
                 if (result != null)
                 {
 
-                    return Request.CreateResponse(new {response = result, message ="Success"});
+                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
                 }
                 else
                 {
@@ -153,10 +153,10 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
-                Ex.ToString();
+                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
 
-            return null;
+            //return null;
         }
 
 
@@ -177,7 +177,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -187,7 +187,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -196,7 +196,7 @@ namespace JichangeApi.Controllers
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
 
-            return null;
+            //return null;
         }
 
 
@@ -211,7 +211,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -222,7 +222,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -230,7 +230,7 @@ namespace JichangeApi.Controllers
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return null;
+            //return null;
         }
 
 

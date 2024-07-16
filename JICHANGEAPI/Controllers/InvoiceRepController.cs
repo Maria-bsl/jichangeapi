@@ -33,7 +33,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -44,7 +44,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }else 
             {
@@ -67,7 +67,7 @@ namespace JichangeApi.Controllers
                         if (result != null)
                         {
 
-                            return Request.CreateResponse(new {response = result, message ="Success"});
+                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
                         }
                         else
                         {
@@ -78,7 +78,7 @@ namespace JichangeApi.Controllers
                     }
                     catch (Exception Ex)
                     {
-                        Ex.ToString();
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                     }
             }
             else
@@ -113,14 +113,14 @@ namespace JichangeApi.Controllers
                             }
                             else
                             {
-                                return Request.CreateResponse(new {response = result, message ="Success"});
+                                return Request.CreateResponse(new { response = result, message = new List<string> { } });
                             }
                         }
                     }
                     catch (Exception Ex)
                     {
                         //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
-                        Ex.ToString();
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                     }
             }
             else
@@ -144,7 +144,7 @@ namespace JichangeApi.Controllers
                 if (result != null)
                 {
 
-                    return Request.CreateResponse(new {response = result, message ="Success"});
+                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
                 }
                 else
                 {
@@ -155,7 +155,7 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
-                Ex.ToString();
+                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
 
             return null;
@@ -171,18 +171,18 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new { response = result, message = "Success" });
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
-                        return Request.CreateResponse(new { response = 0, message = "Failed" });
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "Failed"} });
                     }
 
 
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -206,7 +206,7 @@ namespace JichangeApi.Controllers
         //        if (result != null)
         //        {
 
-        //            return Request.CreateResponse(new {response = result, message ="Success"});
+        //            return Request.CreateResponse(new { response = result, message = new List<string> { } });
         //        }
         //        else
         //        {
@@ -217,7 +217,7 @@ namespace JichangeApi.Controllers
         //    }
         //    catch (Exception Ex)
         //    {
-        //        Ex.ToString();
+        //        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
         //    }
 
         //    return null;
@@ -243,14 +243,14 @@ namespace JichangeApi.Controllers
                             }
                             else
                             {
-                                return Request.CreateResponse(new {response = result, message ="Success"});
+                                return Request.CreateResponse(new { response = result, message = new List<string> { } });
                             }
                         }
                     }
                     catch (Exception Ex)
                     {
                         //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
-                        Ex.ToString();
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                     }
                 }
                 else
@@ -273,7 +273,7 @@ namespace JichangeApi.Controllers
         //        if (result != null)
         //        {
 
-        //            return Request.CreateResponse(new {response = result, message ="Success"});
+        //            return Request.CreateResponse(new { response = result, message = new List<string> { } });
         //        }
         //        else
         //        {
@@ -284,7 +284,7 @@ namespace JichangeApi.Controllers
         //    }
         //    catch (Exception Ex)
         //    {
-        //        Ex.ToString();
+        //        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
         //    }
 
         //    return null;
@@ -312,14 +312,14 @@ namespace JichangeApi.Controllers
                         }
                         else
                         {
-                            return Request.CreateResponse(new {response = result, message ="Success"});
+                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
                         }
                     }
 
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -343,7 +343,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -353,7 +353,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else
@@ -376,7 +376,7 @@ namespace JichangeApi.Controllers
                     if (result != null)
                     {
 
-                        return Request.CreateResponse(new {response = result, message ="Success"});
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
                     else
                     {
@@ -387,7 +387,7 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
             }
             else

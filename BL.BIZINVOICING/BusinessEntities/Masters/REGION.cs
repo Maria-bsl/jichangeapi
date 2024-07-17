@@ -64,11 +64,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 {
                                     Region_SNO = c.region_sno,
                                     Region_Name = c.region_name,
-                                    //Country_Sno = (long)c.country_sno,
-                                    //Country_Name = c.country_name,
-                                    //Region_Status = c.region_status,
-                                    //Audit_Date = c.posted_date,
-                                })./*OrderByDescending(z => z.Audit_Date).*/ToList();
+                                    Country_Sno = (long)c.country_sno,
+                                    Country_Name = c.country_name,
+                                    Region_Status = c.region_status,
+                                    Audit_Date = c.posted_date,
+                                }).OrderByDescending(z => z.Audit_Date).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else
@@ -172,7 +172,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-
         public bool ValidateDeletion(long sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -185,6 +184,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+
+        public bool isExistRegion(long regionSno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.region_master.Find(regionSno);
+                return exists != null;
+            }
+        }
+
         public List<REGION> GetREG()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -265,7 +274,24 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateREGION(REGION dep)
+        public long removeRegion(long regionSno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var region = context.region_master.Find(regionSno);
+                if (region != null)
+                {
+                    context.region_master.Remove(region);
+                    return region.region_sno;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
+
+        public long UpdateREGION(REGION dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -281,9 +307,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.region_status = dep.Region_Status;
                     UpdateContactInfo.posted_by = dep.AuditBy;
                     UpdateContactInfo.posted_date = DateTime.Now;
-
                     context.SaveChanges();
+                    return UpdateContactInfo.region_sno;
                 }
+                return 0;
             }
         }
 

@@ -1,6 +1,7 @@
 ﻿using DaL.BIZINVOICING.EDMX;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -418,7 +419,55 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         }
 
 
+        public static void insertAuditTrail(List<string> values, long userid, string tableName,List<string> tableColumns)
+        {
+            Debug.Assert(values.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");
+            Auditlog ad = new Auditlog();
+            for (int i = 0; i < values.Count(); i++)
+            {
+                ad.Audit_Type = "Insert";
+                ad.Columnsname = tableColumns[i];
+                ad.Table_Name = tableName;
+                ad.Newvalues = values[i];
+                ad.AuditBy = userid.ToString();
+                ad.Audit_Date = DateTime.Now;
+                ad.Audit_Time = DateTime.Now;
+                ad.AddAudit(ad);
+            }
+        }
 
+        public static void updateAuditTrail(List<string> oldValues,List<string> newValues,long userid,string tableName,List<string> tableColumns)
+        {
+            Auditlog ad = new Auditlog();
+            for (int i = 0; i < tableColumns.Count(); i++)
+            {
+                ad.Audit_Type = "Update";
+                ad.Columnsname = tableColumns[i];
+                ad.Table_Name = tableName;
+                ad.Oldvalues = oldValues[i];
+                ad.Newvalues = newValues[i];
+                ad.AuditBy = userid.ToString();
+                ad.Audit_Date = DateTime.Now;
+                ad.Audit_Time = DateTime.Now;
+                ad.AddAudit(ad);
+            }
+        }
+
+        public static void deleteAuditTrail(List<string> values, long userid, string tableName, List<string> tableColumns)
+        {
+            Auditlog ad = new Auditlog();
+            for (int i = 0; i < tableColumns.Count(); i++)
+            {
+                ad.Audit_Type = "Delete";
+                ad.Columnsname = tableColumns[i];
+                ad.Table_Name = tableName;
+                ad.Oldvalues = values[i];
+                ad.AuditBy = userid.ToString();
+                ad.Audit_Date = DateTime.Now;
+                ad.Audit_Time = DateTime.Now;
+                ad.AddAudit(ad);
+            }
+        }
 
 
 

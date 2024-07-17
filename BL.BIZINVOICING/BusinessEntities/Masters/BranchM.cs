@@ -20,7 +20,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public DateTime Audit_Date { get; set; }
         #endregion properties
         #region methods
-        public void AddBranch(BranchM sc)
+        public long AddBranch(BranchM sc)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -34,7 +34,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 };
                 context.branch_name.Add(ps);
                 context.SaveChanges();
-
+                return ps.sno;
             }
         }
         public bool ValidateBranch(String name)//, String code
@@ -185,7 +185,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateBranch(BranchM dep)
+        public long UpdateBranch(BranchM dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -202,10 +202,23 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_date = DateTime.Now;
 
                     context.SaveChanges();
+                    return UpdateContactInfo.sno;
                 }
+                return 0;
             }
         }
-        
+
+        public bool isExistBranch(long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                //var exist = (from c in context.branch_name where (c.sno == sno) select c);
+                //return exist.Count() > 0;
+                var exists = context.branch_name.Find(sno);
+                return exists != null;
+            }
+        }
+
 
         #endregion Methods
     }

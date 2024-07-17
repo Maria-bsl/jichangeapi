@@ -58,6 +58,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+
+        public bool isExistDesignation(long designationId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.designation_list.Find(designationId);
+                return exists != null;
+            }
+        }
+
         public List<DESIGNATION> GetDesignation()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -85,7 +95,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 {
                                     Desg_Id = c.desg_id,
                                     Desg_Name = c.desg_name,
-                                    
+                                    AuditBy = c.posted_by,
+                                    Audit_Date = c.posted_date
+
                                 }).FirstOrDefault();
                 if (edetails != null)
                     return edetails;

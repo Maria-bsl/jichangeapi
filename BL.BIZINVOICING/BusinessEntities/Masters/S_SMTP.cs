@@ -160,6 +160,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
+        public bool isExistSMTP(long smtpId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.smtp_settings.Find(smtpId);
+                return exists != null;
+            }
+        }
+
         public void UpdateSMTP(S_SMTP dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

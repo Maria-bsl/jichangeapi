@@ -30,7 +30,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 };
                 context.currency_master.Add(ps);
                 context.SaveChanges();
-                
             }
         }
         public List<CURRENCY> ValidateCURRENCY(String name,String code)
@@ -90,6 +89,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                
             }
         }
+
+        public bool isExistCurrencyCode(String code)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.currency_master where (c.currency_code.ToLower().Equals(code)) select c);
+                return validation.Count() > 0;
+            }
+        }
+
+
+
         public List<CURRENCY> GetCURRENCY()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

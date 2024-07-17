@@ -228,7 +228,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateWARD(WARD dep)
+        public bool isExistWard(long wardSno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var ward = context.ward_master.Find(wardSno);
+                return ward != null;
+            }
+        }
+
+        public long UpdateWARD(WARD dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -245,9 +254,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.ward_status = dep.Ward_Status;
                     UpdateContactInfo.posted_by = dep.AuditBy;
                     UpdateContactInfo.posted_date = DateTime.Now;
-
                     context.SaveChanges();
+                    return UpdateContactInfo.ward_sno;
                 }
+                return 0;
             }
         }
 

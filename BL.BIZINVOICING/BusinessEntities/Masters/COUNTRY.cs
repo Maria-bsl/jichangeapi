@@ -24,9 +24,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-               country  ps = new country()
+                country ps = new country()
                 {
-                    
+
                     country_name = sc.Country_Name,
                 };
                 context.countries.Add(ps);
@@ -34,7 +34,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 return ps.country_sno;
             }
         }
-        public bool ValidateLicense( String name)
+        public bool ValidateLicense(String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -51,7 +51,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var validation = (from c in context.countries join det in context.region_master on c.country_sno equals det.country_sno
+                var validation = (from c in context.countries
+                                  join det in context.region_master on c.country_sno equals det.country_sno
                                   where (c.country_sno == name)
                                   select c);
                 if (validation.Count() > 0)
@@ -60,6 +61,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+
+        public bool isExistCountry(long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.countries.Find(sno);
+                return exists != null;
+            }
+        }
+
         public List<COUNTRY> GETcountries()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -70,7 +81,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     SNO = c.country_sno,
                                     Country_Name = c.country_name,
 
-                                }).OrderByDescending(z=>z.SNO).ToList();
+                                }).OrderByDescending(z => z.SNO).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else
@@ -112,7 +123,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public void Deletecountries(long no)
+        public long Deletecountries(long no)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -125,13 +136,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     //context.DeleteObject(noteDetails);
                     context.countries.Remove(noteDetails);
                     context.SaveChanges();
+                    return no;
+                }
+                else
+                {
+                    return 0;
                 }
 
             }
 
         }
 
-        public void Updatecountries(COUNTRY dep)
+        public long Updatecountries(COUNTRY dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -146,7 +162,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
 
                     context.SaveChanges();
+                    return dep.SNO;
                 }
+                return 0;
             }
 
         }

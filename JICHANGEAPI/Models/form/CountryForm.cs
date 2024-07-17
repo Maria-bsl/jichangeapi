@@ -9,14 +9,16 @@ namespace JichangeApi.Models
 {
     public class CountryForm : MainForm
     {
-        [Required(ErrorMessage ="Missing Name", AllowEmptyStrings =false)]
-        public string country_name { get; set; }
-        [Required(ErrorMessage = "Missing Sno")]
-        public long sno { get; set; }
-
-        [Required(ErrorMessage = "Missing Dummy")]
+        [Required(ErrorMessage = "Missing name", AllowEmptyStrings = false)]
+        public string Country_Name { get; set; }
+        [Required(ErrorMessage = "Missing dummy")]
         public bool dummy { get; set; }
+        [Required(ErrorMessage = "Missing SNO")]
+        public long sno { get; set; }
+        [Required(ErrorMessage = "Missing Audit By")]
+        public string AuditBy { get; set; }
 
-        
+
+
     }
 }

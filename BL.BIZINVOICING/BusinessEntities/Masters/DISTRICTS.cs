@@ -209,7 +209,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateDISTRICTS(DISTRICTS dep)
+        public bool isExistDistrict(long districtId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var district = context.district_master.Find(districtId);
+                return district != null;
+            }
+        }
+
+        public long UpdateDISTRICTS(DISTRICTS dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -227,7 +236,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_date = DateTime.Now;
 
                     context.SaveChanges();
+                    return UpdateContactInfo.district_sno;
                 }
+                return 0;
             }
         }
 

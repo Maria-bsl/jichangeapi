@@ -144,6 +144,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public bool isExistEmail(long emailId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.email_text.Find(emailId);
+                return exists != null;
+            }
+        }
         public void DeleteEMAIL(long no)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

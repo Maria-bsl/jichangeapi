@@ -76,6 +76,9 @@
     <Reference Include="Newtonsoft.Json.Bson, Version=1.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.Bson.1.0.2\lib\net45\Newtonsoft.Json.Bson.dll</HintPath>
     </Reference>
+    <Reference Include="PasswordGenerator, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PasswordGenerator.2.1.0\lib\netstandard2.0\PasswordGenerator.dll</HintPath>
+    </Reference>
     <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
       <HintPath>..\packages\Swashbuckle.Core.5.6.0\lib\net40\Swashbuckle.Core.dll</HintPath>
     </Reference>
@@ -234,6 +237,7 @@
     <Compile Include="Models\ControlNo.cs" />
     <Compile Include="Models\Desibraid.cs" />
     <Compile Include="Models\form\AddAmendForm.cs" />
+    <Compile Include="Models\form\AddBankUserForm.cs" />
     <Compile Include="Models\form\AddCurrencyForm.cs" />
     <Compile Include="Models\form\AddDesignationForm.cs" />
     <Compile Include="Models\form\AddDistrictForm.cs" />
@@ -246,8 +250,10 @@
     <Compile Include="Models\form\DeleteCurrencyForm.cs" />
     <Compile Include="Models\form\DeleteDesignationForm.cs" />
     <Compile Include="Models\form\DeleteDistrictForm.cs" />
+    <Compile Include="Models\form\DeleteEmailTextForm.cs" />
     <Compile Include="Models\form\DeleteRegionForm.cs" />
     <Compile Include="Models\form\DeleteSmtpForm.cs" />
+    <Compile Include="Models\form\GetEmployeeForm.cs" />
     <Compile Include="Models\form\InvoiceForm.cs" />
     <Compile Include="Models\form\RemoveWardForm.cs" />
     <Compile Include="Models\InvDetRepModel.cs" />

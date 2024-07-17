@@ -237,6 +237,7 @@
     <Compile Include="Models\form\AddCurrencyForm.cs" />
     <Compile Include="Models\form\AddDesignationForm.cs" />
     <Compile Include="Models\form\AddDistrictForm.cs" />
+    <Compile Include="Models\form\AddEmailForm.cs" />
     <Compile Include="Models\form\AddRegionForm.cs" />
     <Compile Include="Models\form\AddSmtpForm.cs" />
     <Compile Include="Models\form\AddWardForm.cs" />

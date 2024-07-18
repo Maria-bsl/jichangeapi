@@ -53,15 +53,15 @@ namespace BIZINVOICING.Controllers
 
         // Get Invoice Data Download-- Madhu  on 05/01/2021
         #region PDF Download Page
-        
-        public ActionResult InvoiceDownload(int Id,int ? rst)
+
+        public ActionResult InvoiceDownload(int Id, int? rst)
         {
             if (Session["sessComp"] == null)
             {
                 return RedirectToAction("Loginnew", "Loginnew");
             }
             String temp = String.Format(new CultureInfo("en-US"), "{0:C0}", 10000000).Replace("$", "");
-            
+
             // TRAPDFDOWnload(1);
             InvoicePDfData inovoicedata = new InvoicePDfData();
             int invoicenumber = Id;
@@ -103,7 +103,7 @@ namespace BIZINVOICING.Controllers
             TRAPDFDOWnload(Id);
         }
 
-       
+
         public void InvoicePDFDownload(int Id)
         {
 
@@ -214,7 +214,7 @@ namespace BIZINVOICING.Controllers
             table.SpacingAfter = 5f;
 
             //chunk = new Chunk(inovoicedata.CompName + "\n P.O.Box:" + inovoicedata.CompPostBox + "\n " + inovoicedata.CompAddress + "\n" + " TEL : " + inovoicedata.CompTelNo + " " + "FAX :" + inovoicedata.CompFaxNo + "\n MOB : " + inovoicedata.CompMobNo + "\n" + "EMAIL:" + inovoicedata.CompEmail + " \n VATNO:" + inovoicedata.CompVatNo + " TIN NO:" + inovoicedata.TinNo + "", FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK));
-            
+
 
 
 
@@ -222,9 +222,9 @@ namespace BIZINVOICING.Controllers
             string invnewdate = invdate.ToString("dd-MMM-yyyy");
 
             //chunk = new Chunk(invnewdate + "\n \n \n  \n  \n   Invoice No: " + inovoicedata.Invoice_No + " ", FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK));
-            
+
             //chunk = new Chunk(invnewdate + "INVOICE " + " ", FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK));
-            
+
             //Add table to document
             pdfDoc.Add(table);
 
@@ -241,7 +241,7 @@ namespace BIZINVOICING.Controllers
             table.AddCell(cell);
 
             //chunk = new Chunk(" TEL : " + inovoicedata.CompTelNo + " " + "FAX :" + inovoicedata.CompFaxNo + "\n MOB : " + inovoicedata.CompMobNo + "\n" + "EMAIL:" + inovoicedata.CompEmail + " \n VATNO:" + inovoicedata.CompVatNo + " TIN NO:" + inovoicedata.TinNo + "", FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK));
-            chunk = new Chunk("Tel: "+inovoicedata.CompMobNo + " FAX :" + inovoicedata.CompFaxNo, FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK));
+            chunk = new Chunk("Tel: " + inovoicedata.CompMobNo + " FAX :" + inovoicedata.CompFaxNo, FontFactory.GetFont("Arial", 10, iTextSharp.text.Font.NORMAL, BaseColor.BLACK));
             cell = new PdfPCell();
             cell.Border = 0;
             cell.AddElement(chunk);
@@ -277,7 +277,7 @@ namespace BIZINVOICING.Controllers
             cell = new PdfPCell();
             ph = new Paragraph("Invoice #  " + inovoicedata.Invoice_No + " ", fontTinyItalic);
             ph.Alignment = Element.ALIGN_RIGHT;
-            
+
             cell.AddElement(ph);
             cell.Border = 0;
             table.AddCell(cell);
@@ -301,13 +301,13 @@ namespace BIZINVOICING.Controllers
             cell.AddElement(chunk);
             cell.Border = 0;
             table.AddCell(cell);
-            DateTime dued= new DateTime();
-            if(inovoicedata.Invoice_Expired_Date != null)
+            DateTime dued = new DateTime();
+            if (inovoicedata.Invoice_Expired_Date != null)
             {
                 dued = (DateTime)inovoicedata.Invoice_Expired_Date;
-                
+
             }
-            
+
             cell = new PdfPCell();
             if (inovoicedata.Invoice_Expired_Date != null)
             {
@@ -317,7 +317,7 @@ namespace BIZINVOICING.Controllers
             {
                 ph = new Paragraph("", fontTinyItalic);
             }
-                
+
             ph.Alignment = Element.ALIGN_RIGHT;
 
             cell.AddElement(ph);
@@ -330,11 +330,11 @@ namespace BIZINVOICING.Controllers
             cell.AddElement(chunk);
             cell.Border = 0;
             table.AddCell(cell);
-   
+
             cell = new PdfPCell();
-            
-            ph = new Paragraph("Control No "+inovoicedata.Control_No, fontTinyItalic);
-            
+
+            ph = new Paragraph("Control No " + inovoicedata.Control_No, fontTinyItalic);
+
 
             ph.Alignment = Element.ALIGN_RIGHT;
 
@@ -388,10 +388,10 @@ namespace BIZINVOICING.Controllers
             //table.SetWidths(firstTablecellwidths);
 
 
-           
 
 
-            
+
+
 
             //blak color
             cell = new PdfPCell();
@@ -407,7 +407,7 @@ namespace BIZINVOICING.Controllers
             table.AddCell(new PdfPCell(new Paragraph("QTY", fontTinyItalic)) { HorizontalAlignment = Element.ALIGN_CENTER });
             table.AddCell(new PdfPCell(new Paragraph("DESCRIPTION", fontTinyItalic)) { HorizontalAlignment = Element.ALIGN_CENTER });
             table.AddCell(new PdfPCell(new Paragraph("UNIT PRICE" + "", fontTinyItalic)) { HorizontalAlignment = Element.ALIGN_CENTER });
-            table.AddCell(new PdfPCell(new Paragraph("AMOUNT" +  "", fontTinyItalic)) { HorizontalAlignment = Element.ALIGN_CENTER });
+            table.AddCell(new PdfPCell(new Paragraph("AMOUNT" + "", fontTinyItalic)) { HorizontalAlignment = Element.ALIGN_CENTER });
             foreach (var item in inovoicedata.InvoiceItemlist)
             {
                 table.AddCell(new PdfPCell(new Paragraph(item.Item_Qty.ToString(), fontTinyItalic)) { HorizontalAlignment = Element.ALIGN_RIGHT });
@@ -445,7 +445,7 @@ namespace BIZINVOICING.Controllers
 
             var dd = "Only";
             cell = new PdfPCell();
-            chunk = new Chunk("Amount In words " +  ": " + inovoicedata.AmountWords.ToString() + "" + dd.ToString() + "", fontTinyItalic);
+            chunk = new Chunk("Amount In words " + ": " + inovoicedata.AmountWords.ToString() + "" + dd.ToString() + "", fontTinyItalic);
             cell.AddElement(chunk);
 
             cell.HorizontalAlignment = 40;
@@ -454,7 +454,7 @@ namespace BIZINVOICING.Controllers
 
             pdfDoc.Add(table);
 
-            ph = new Paragraph("Remarks: "+inovoicedata.Remarks, fontTinyItalic);
+            ph = new Paragraph("Remarks: " + inovoicedata.Remarks, fontTinyItalic);
             ph.Alignment = Element.ALIGN_LEFT;
             ph.SpacingAfter = 150f;
             pdfDoc.Add(ph);
@@ -532,7 +532,7 @@ namespace BIZINVOICING.Controllers
             pdfDoc.Close();
             Response.Buffer = true;
             Response.ContentType = "application/pdf";
-            Response.AddHeader("content-disposition", "attachment;filename=Invoice-"+ inovoicedata.CompName+"-"+ inovoicedata.Invoice_No + ".pdf");
+            Response.AddHeader("content-disposition", "attachment;filename=Invoice-" + inovoicedata.CompName + "-" + inovoicedata.Invoice_No + ".pdf");
             Response.Cache.SetCacheability(HttpCacheability.NoCache);
             Response.Write(pdfDoc);
             Response.End();
@@ -548,22 +548,23 @@ namespace BIZINVOICING.Controllers
         public void TRAPDFDOWnload(int Id)
         {
 
-            try { 
-            string path = System.Web.Configuration.WebConfigurationManager.AppSettings["FilePathPDF"].ToString();
-            //TO get invoice information
-            InvoicePDfData inovoicedata = new InvoicePDfData();
-            TRARegistration objtra = new TRARegistration();
-            var gAPI = areg.getAPI();
-            int invoicenumber = Id;
-            inovoicedata = inv.GetINVOICEpdf(invoicenumber);
-            //var getCust = inv.GetINVOICEpdf(invoicenumber);
-            inovoicedata.AmountWords = changeToWords(inovoicedata.Item_Total_Amount.ToString(), false).ToString();
-            inovoicedata.InvoiceItemlist = inv.GetInvoiceDetails(invoicenumber);
-            inovoicedata.Vat_Percentage = inovoicedata.InvoiceItemlist[0].Vat_Percentage;
+            try
+            {
+                string path = System.Web.Configuration.WebConfigurationManager.AppSettings["FilePathPDF"].ToString();
+                //TO get invoice information
+                InvoicePDfData inovoicedata = new InvoicePDfData();
+                TRARegistration objtra = new TRARegistration();
+                var gAPI = areg.getAPI();
+                int invoicenumber = Id;
+                inovoicedata = inv.GetINVOICEpdf(invoicenumber);
+                //var getCust = inv.GetINVOICEpdf(invoicenumber);
+                inovoicedata.AmountWords = changeToWords(inovoicedata.Item_Total_Amount.ToString(), false).ToString();
+                inovoicedata.InvoiceItemlist = inv.GetInvoiceDetails(invoicenumber);
+                inovoicedata.Vat_Percentage = inovoicedata.InvoiceItemlist[0].Vat_Percentage;
 
-            long aNo = inovoicedata.Inv_Mas_Sno;
-            //string path = f_Path + "/Invoices/";
-            string fpath = path + aNo + ".pdf";
+                long aNo = inovoicedata.Inv_Mas_Sno;
+                //string path = f_Path + "/Invoices/";
+                string fpath = path + aNo + ".pdf";
                 #region samplecode
                 /*string Rand = "12345678";
                 Random random = new Random();
@@ -765,24 +766,24 @@ namespace BIZINVOICING.Controllers
                 #endregion
                 #region Data for Sign
                 bool success = false;
-                    bool STime = false;
-                    /*var getDG = inv.getDGCount(invoicenumber);
-                    long daiC = inv.GetDaily() + 1;
-                    long graC = inv.GetMax() + 1;
-                    if(getDG != null)
-                    {
-                        daiC = (long)getDG.daily_count;
-                        graC = (long)getDG.grand_count;
-                        STime = false;
-                    }
-                    else
-                    {
-                        STime = true;
-                        UpdateInvoiceD(inovoicedata);
-                    }*/
-                    
-                    
-                    try
+                bool STime = false;
+                /*var getDG = inv.getDGCount(invoicenumber);
+                long daiC = inv.GetDaily() + 1;
+                long graC = inv.GetMax() + 1;
+                if(getDG != null)
+                {
+                    daiC = (long)getDG.daily_count;
+                    graC = (long)getDG.grand_count;
+                    STime = false;
+                }
+                else
+                {
+                    STime = true;
+                    UpdateInvoiceD(inovoicedata);
+                }*/
+
+
+                try
                 {
                     var getD = inv.GetINVOICEpdf(invoicenumber);
                     #region somecomment
@@ -1133,7 +1134,7 @@ namespace BIZINVOICING.Controllers
                         ds2.Tables["tbMessages_sms"].Rows.Add(rs2);
                         da2.Update(ds2, "tbMessages_sms");
                     }
-                    catch(Exception ch)
+                    catch (Exception ch)
                     {
 
                     }
@@ -1194,7 +1195,7 @@ namespace BIZINVOICING.Controllers
                 }
                 catch (Exception ex)
                 {
-                        ex.ToString();
+                    ex.ToString();
                 }
 
                 #endregion
@@ -2184,5 +2185,3 @@ namespace BIZINVOICING.Controllers
         #endregion
     }
 }
-
-

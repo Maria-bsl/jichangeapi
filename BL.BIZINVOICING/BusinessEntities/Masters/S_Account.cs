@@ -177,6 +177,14 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public bool isExistSuspenseAccount(long suspenseAccountId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.suspense_account.Find(suspenseAccountId);
+                return exists != null;
+            }
+        }
 
         #endregion Methods
     }

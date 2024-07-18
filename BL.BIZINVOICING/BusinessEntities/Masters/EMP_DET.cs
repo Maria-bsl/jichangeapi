@@ -208,6 +208,39 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public EMP_DET FindEmployee(long employeeId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.emp_detail.Find(employeeId);
+                if (exists == null)
+                {
+                    return null;
+                }
+                var designation = new DESIGNATION();
+                var branch = new BranchM();
+                var employee = new EMP_DET();
+                employee.Detail_Id = exists.emp_detail_id;
+                employee.Emp_Id_No = exists.emp_id_no;
+                employee.Full_Name = exists.full_name;
+                employee.First_Name = exists.first_name;
+                employee.Middle_name = exists.middle_name;
+                employee.Last_name = exists.last_name;
+                employee.User_name = exists.username;
+                employee.Mobile_No = exists.mobile_no;
+                employee.Branch_Sno = exists.branch_Sno;
+                employee.Desg_Id = (long) exists.desg_id;
+                employee.Desg_name = designation.GetDesignation().Find(e => e.Desg_Id == exists.desg_id).Desg_Name;
+                //employee.Branch_Name = branch.GetBranches().Find(e => e.Branch_Sno == exists.branch_Sno).Name;
+                employee.Email_Address = exists.email_id;
+                employee.Created_Date = exists.created_date;
+                employee.F_Login = exists.f_login;
+                employee.Emp_Status = exists.emp_status;
+                employee.Audit_Date = exists.posted_date;
+                return employee;
+            }
+        }
+
         public List<EMP_DET> GetEMPAct()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -510,6 +543,31 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public void UpdateEmployee(EMP_DET data)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var employee = context.emp_detail.Find(data.Detail_Id);
+                if (employee != null)
+                {
+                    employee.emp_id_no = data.Emp_Id_No;
+                    employee.full_name = data.Full_Name;
+                    employee.first_name = data.First_Name;
+                    employee.middle_name = data.Middle_name;
+                    employee.last_name = data.Last_name;
+                    employee.desg_id = data.Desg_Id;
+                    employee.emp_status = data.Emp_Status;
+                    employee.username = data.User_name;
+                    employee.email_id = data.Email_Address;
+                    employee.mobile_no = data.Mobile_No;
+                    employee.branch_Sno = data.Branch_Sno;
+                    employee.posted_by = data.AuditBy;
+                    employee.posted_date = DateTime.Now;
+                    context.SaveChanges();
+                }
+            }
+        } 
+
         public void Updatelang(EMP_DET dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -608,6 +666,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public bool isExistEmployee(long employeeId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.emp_detail.Find(employeeId);
+                return exists != null;
+            }
+        }
+
         public EMP_DET CheckuserLogStatbnk(String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

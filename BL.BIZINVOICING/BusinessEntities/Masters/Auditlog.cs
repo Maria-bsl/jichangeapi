@@ -438,6 +438,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         public static void updateAuditTrail(List<string> oldValues,List<string> newValues,long userid,string tableName,List<string> tableColumns)
         {
+            Debug.Assert(oldValues.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");
+            Debug.Assert(newValues.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");
             Auditlog ad = new Auditlog();
             for (int i = 0; i < tableColumns.Count(); i++)
             {
@@ -455,6 +457,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         public static void deleteAuditTrail(List<string> values, long userid, string tableName, List<string> tableColumns)
         {
+            Debug.Assert(values.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");
             Auditlog ad = new Auditlog();
             for (int i = 0; i < tableColumns.Count(); i++)
             {

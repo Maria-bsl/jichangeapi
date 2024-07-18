@@ -8,11 +8,10 @@ namespace JichangeApi.Models.form
 {
     public class AddBankUserForm : MainForm
     {
-        [Required(ErrorMessage = "Missing employee id")]
-        public long? empid { get; set; }
-        [Required(ErrorMessage = "Missing full name", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Missing employee number",AllowEmptyStrings = false)]
+        public string empid { get; set; }
+        [Required(ErrorMessage = "Missing first name", AllowEmptyStrings = false)]
         public string fname { get; set; }
-        [Required(ErrorMessage = "Missing middle name", AllowEmptyStrings = false)]
         public string mname { get; set; }
         [Required(ErrorMessage = "Missing last name", AllowEmptyStrings = false)]
         public string lname { get; set; }
@@ -24,7 +23,7 @@ namespace JichangeApi.Models.form
         public string mobile { get; set; }
         [Required(ErrorMessage = "Missing username", AllowEmptyStrings = false)]
         public string user { get; set; }
-        [Required(ErrorMessage = "Missing gender")]
+        [Required(ErrorMessage = "Missing status")]
         public string gender { get; set; }
         [Required(ErrorMessage = "Missing branch")]
         public long? branch { get; set; }

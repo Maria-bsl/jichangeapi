@@ -28,7 +28,7 @@ namespace JichangeApi.Controllers
             return encodedData;
         }
 
-        private static void SendActivationEmail(String email, String fullname, String pwd, String uname)
+        private void SendActivationEmail(String email, String fullname, String pwd, String uname)
         {
             Guid activationCode = Guid.NewGuid();
             SmtpClient smtp = new SmtpClient();
@@ -106,6 +106,18 @@ namespace JichangeApi.Controllers
             }
         }
 
+        private string getUserFullname(string firstname,string middlename,string lastname)
+        {
+            if (middlename == null && lastname != null)
+            {
+                return firstname.Trim() + " " + lastname.Trim();
+            }
+            else
+            {
+                return firstname.Trim() + " " + middlename.Trim() + " " + lastname.Trim();
+            }
+        }
+
         [HttpPost]
         public HttpResponseMessage AddEmp(AddBankUserForm addBankUserForm)
         {
@@ -114,11 +126,11 @@ namespace JichangeApi.Controllers
                 try
                 {
                     var employeeDetails = new EMP_DET();
-                    employeeDetails.Emp_Id_No = ((long)addBankUserForm.empid).ToString();
+                    employeeDetails.Emp_Id_No = addBankUserForm.empid;
                     employeeDetails.First_Name = addBankUserForm.fname;
                     employeeDetails.Middle_name = addBankUserForm.mname;
                     employeeDetails.Last_name = addBankUserForm.lname;
-                    employeeDetails.Full_Name = addBankUserForm.fname + " " + (addBankUserForm.mname != null ? addBankUserForm.mname + " " + addBankUserForm.lname : addBankUserForm.lname);
+                    employeeDetails.Full_Name = getUserFullname(addBankUserForm.fname,addBankUserForm.mname, addBankUserForm.lname);
                     employeeDetails.Desg_Id = (long)addBankUserForm.desg;
                     employeeDetails.Email_Address = addBankUserForm.email;
                     employeeDetails.Mobile_No = addBankUserForm.mobile;
@@ -131,7 +143,7 @@ namespace JichangeApi.Controllers
                     employeeDetails.Detail_Id = (long)addBankUserForm.sno;
                     if ((long)addBankUserForm.sno == 0)
                     {
-                        var existsEmpId = employeeDetails.Validateuser(((long)addBankUserForm.empid).ToString());
+                        var existsEmpId = employeeDetails.Validateuser(addBankUserForm.empid);
                         var exitsUsername = employeeDetails.Validateduplicate(addBankUserForm.user);
                         if (existsEmpId)
                         {
@@ -149,7 +161,7 @@ namespace JichangeApi.Controllers
                             var password = EmployDetController.GetEncryptedData(passwordGenerator.Next());
                             employeeDetails.Password = password;
                             var addedEmployee = employeeDetails.AddEMP(employeeDetails);
-                            EmployDetController.SendActivationEmail(addBankUserForm.email, addBankUserForm.fname, password, addBankUserForm.user);
+                            //SendActivationEmail(addBankUserForm.email, addBankUserForm.fname, password, addBankUserForm.user);
                             var values = new List<string> { addedEmployee.ToString(), employeeDetails.Emp_Id_No,employeeDetails.Full_Name,employeeDetails.First_Name, employeeDetails.Middle_name,  employeeDetails.Last_name,foundDesignation.Desg_Name.ToString(),employeeDetails.Email_Address,
                                 employeeDetails.Mobile_No,employeeDetails.Created_Date.ToString(),employeeDetails.Expiry_Date.ToString(), employeeDetails.Emp_Status,addBankUserForm.userid.ToString(), DateTime.Now.ToString(),employeeDetails.User_name };
                             Auditlog.insertAuditTrail(values, (long)addBankUserForm.userid, "Bank User", tableColumns);
@@ -168,12 +180,12 @@ namespace JichangeApi.Controllers
                         {
                             return Request.CreateResponse(new { response = 0, message = new List<string> { "Invalid designation." } });
                         }
-                        var employee = employeeDetails.EditEMP((long)addBankUserForm.sno);
+                        var employee = employeeDetails.FindEmployee((long)addBankUserForm.sno);
                         if (employee == null)
                         {
                             return Request.CreateResponse(new { response = 0, message = new List<string> { "Bank user deos not exist." } });
                         }
-                        employeeDetails.UpdateEMP(employeeDetails);
+                        employeeDetails.UpdateEmployee(employeeDetails);
                         var oldValues = new List<string> { employee.Detail_Id.ToString(), employee.Emp_Id_No,employee.Full_Name,employee.First_Name, employee.Middle_name,  employee.Last_name,employee.Desg_name.ToString(),employee.Email_Address,
                                 employee.Mobile_No,employee.Created_Date.ToString(),employee.Expiry_Date.ToString(), employee.Emp_Status,employee.AuditBy,employee.Audit_Date.ToString(),employee.User_name };
 
@@ -201,12 +213,54 @@ namespace JichangeApi.Controllers
             try
             {
                 var employeeDetails = new EMP_DET();
-                var result = employeeDetails.getEMPText((long) getEmployeeForm.sno);
-                return Request.CreateResponse(new { response = employeeDetails, message = new List<string>() });
+                var employee = employeeDetails.FindEmployee((long) getEmployeeForm.sno);
+                if (employee == null)
+                {
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "User not found." } });
+                }
+                else
+                {
+                    return Request.CreateResponse(new { response = employee, message = new List<string>() });
+                }
             }
             catch (Exception Ex)
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+            }
+        }
+
+        [HttpPost] 
+        public HttpResponseMessage DeleteEmployee(DeleteBankUserForm deleteBankUserForm)
+        {
+            if (ModelState.IsValid)
+            {
+                var employeeDetails = new EMP_DET();
+                try
+                {
+                    var isExists = employeeDetails.isExistEmployee(deleteBankUserForm.sno);
+                    if (isExists)
+                    {
+                        var employee = employeeDetails.FindEmployee(deleteBankUserForm.sno);
+                        var values = new List<string> { employee.Detail_Id.ToString(), employee.Emp_Id_No,employee.Full_Name,employee.First_Name, employee.Middle_name,  employee.Last_name,employee.Desg_Id.ToString(),employee.Email_Address,
+                                                        employee.Mobile_No,employee.Created_Date.ToString(),employee.Expiry_Date.ToString(), employee.Emp_Status,employee.AuditBy,employee.Audit_Date.ToString(),employee.User_name };  
+                        employeeDetails.DeleteEMP(deleteBankUserForm.sno);
+                        Auditlog.deleteAuditTrail(values, (long)deleteBankUserForm.userid, "Bank User", tableColumns);
+                        return Request.CreateResponse(new { response = deleteBankUserForm.sno, message = new List<string>() });
+                    }
+                    else
+                    {
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "Bank user does not exist." } });
+                    }
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                }
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
         }
     }

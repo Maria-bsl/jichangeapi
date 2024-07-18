@@ -22,7 +22,14 @@ namespace JichangeApi.Controllers
             {
                 var dg = new DESIGNATION();
                 var result = dg.GetDesignation();
-                return Request.CreateResponse(new { response = result, message = new List<string>() });
+                if (result != null)
+                {
+                    return Request.CreateResponse(new { response = result, message = new List<string>() });
+                }
+                else
+                {
+                    return Request.CreateResponse(new { response = new List<DESIGNATION>(), message = new List<string>() });
+                }
             }
             catch (Exception Ex)
             {

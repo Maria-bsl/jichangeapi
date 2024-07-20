@@ -55,7 +55,7 @@ namespace JichangeApi.Controllers.setup
                     }*/
                     var addedEmail = email.AddEMAIL(email);
                     var values = new List<string> { addedEmail.ToString(), email.Flow_Id, email.Email_Text, DateTime.Now.ToString(), addEmailForm.userid.ToString(), DateTime.Now.ToString(), email.Subject, email.Local_subject, email.Local_Text };
-                    Auditlog.insertAuditTrail(values, (long)addEmailForm.userid, "Email Text", tableColumns);
+                    Auditlog.InsertAuditTrail(values, (long)addEmailForm.userid, "Email Text", tableColumns);
                     return Request.CreateResponse(new { response = addedEmail, message = new List<string>() });
                 }
                 else
@@ -64,7 +64,7 @@ namespace JichangeApi.Controllers.setup
                     var oldValues = new List<string> { fetchedEmail.SNO.ToString(), fetchedEmail.Flow_Id, fetchedEmail.Email_Text, fetchedEmail.Effective_Date.ToString(), fetchedEmail.AuditBy, fetchedEmail.Audit_Date.ToString(), fetchedEmail.Subject, fetchedEmail.Local_subject, fetchedEmail.Local_Text };
                     var newValues = new List<string> { fetchedEmail.SNO.ToString(), email.Flow_Id, fetchedEmail.Email_Text, DateTime.Now.ToString(), ((long) addEmailForm.userid).ToString(), DateTime.Now.ToString(), email.Subject, email.Local_subject, email.Local_Text };
                     email.UpdateEMAIL(email);
-                    Auditlog.updateAuditTrail(oldValues, newValues, (long)addEmailForm.userid, "Email Text", tableColumns);
+                    Auditlog.UpdateAuditTrail(oldValues, newValues, (long)addEmailForm.userid, "Email Text", tableColumns);
                     return Request.CreateResponse(new { response = addEmailForm.sno, message = new List<string>() });
                 }
             }

@@ -37,12 +37,23 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.designation_list
-                                  where ( c.desg_name.ToLower().Equals(name))
+                                  where ( c.desg_name.ToLower().Equals(name.ToLower()) )
                                   select c);
                 if (validation.Count() > 0)
                     return true;
                 else
                     return false;
+            }
+        }
+
+        public bool isDuplicate(string designationName,long designationSno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.designation_list
+                                  where ((c.desg_name.ToLower().Equals(designationName.ToLower())) && c.desg_id != designationSno)
+                                  select c);
+                return validation.Count() > 0;
             }
         }
         public bool ValidateDeletion(long no)
@@ -145,7 +156,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateDesignation(DESIGNATION dep)
+        public long UpdateDesignation(DESIGNATION dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -160,7 +171,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_date = DateTime.Now;
 
                     context.SaveChanges();
+                    return UpdateContactInfo.desg_id;
                 }
+                return 0;
             }
         }
 

@@ -42,7 +42,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.branch_name
-                                  where(c.name == name)//&& c.location == code
+                                  where(c.name.ToLower() == name.ToLower())//&& c.location == code
                                   select c);
                 if (validation.Count() > 0)
                     return true;
@@ -50,6 +50,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+
+        public bool IsDuplicatedName(String name,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.branch_name
+                                  where ((c.name.ToLower() == name.ToLower()) && c.sno != sno)//&& c.location == code
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
+
         public bool ValidateDelete(long sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -154,6 +166,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new BranchM
                                 {
                                     Sno = c.sno,
+                                    Branch_Sno = c.sno,
                                     Name = c.name,
                                     Location = c.location,
                                     Status = c.status,

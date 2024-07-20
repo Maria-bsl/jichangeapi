@@ -46,12 +46,22 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.ward_master
-                                  where (c.district_sno == rgn && c.ward_name.ToLower().Equals(name)  && c.region_id == rname)
+                                  where (c.district_sno == rgn && c.ward_name.ToLower().Equals(name.ToLower())  && c.region_id == rname)
                                   select c);
                 if (validation.Count() > 0)
                     return true;
                 else
                     return false;
+            }
+        }
+        public bool isDuplicateWard(long districtId,string wardName,long regionId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.ward_master
+                                  where (c.district_sno != districtId && c.ward_name.ToLower().Equals(wardName.ToLower()) && c.region_id != regionId)
+                                  select c);
+                return validation.Count() > 0;
             }
         }
         public List<WARD> GetWARDAct(long regno)//need to updatelong regno, long dno
@@ -190,7 +200,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var edetails = (from c in context.ward_master
+                /*var edetails = (from c in context.ward_master
                                 where c.ward_sno == sno
 
                                 select new WARD
@@ -206,7 +216,23 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (edetails != null)
                     return edetails;
                 else
-                    return null;
+                    return null;*/
+                var adetails = (from c in context.ward_master
+                                join det in context.region_master on c.region_id equals det.region_sno
+                                join dis in context.district_master on c.district_sno equals dis.district_sno
+                                where c.ward_sno == sno
+                                select new WARD
+                                {
+                                    SNO = c.ward_sno,
+                                    Ward_Name = c.ward_name,
+                                    District_Name = dis.district_name,
+                                    Region_Name = det.region_name,
+                                    Region_Id = (long)c.region_id,
+                                    District_Sno = (long)c.district_sno,
+                                    Ward_Status = c.ward_status,
+                                    Audit_Date = c.posted_date,
+                                }).FirstOrDefault();
+                return adetails != null ? adetails : null;
             }
         }
 

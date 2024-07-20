@@ -166,7 +166,7 @@ namespace JichangeApi.Controllers.setup
                             //SendActivationEmail(addBankUserForm.email, addBankUserForm.fname, password, addBankUserForm.user);
                             var values = new List<string> { addedEmployee.ToString(), employeeDetails.Emp_Id_No,employeeDetails.Full_Name,employeeDetails.First_Name, employeeDetails.Middle_name,  employeeDetails.Last_name,foundDesignation.Desg_Name.ToString(),employeeDetails.Email_Address,
                                 employeeDetails.Mobile_No,employeeDetails.Created_Date.ToString(),employeeDetails.Expiry_Date.ToString(), employeeDetails.Emp_Status,addBankUserForm.userid.ToString(), DateTime.Now.ToString(),employeeDetails.User_name };
-                            Auditlog.insertAuditTrail(values, (long)addBankUserForm.userid, "Bank User", tableColumns);
+                            Auditlog.InsertAuditTrail(values, (long)addBankUserForm.userid, "Bank User", tableColumns);
                             return Request.CreateResponse(new { response = addedEmployee, message = new List<string>() });
                         }
                         else
@@ -193,7 +193,7 @@ namespace JichangeApi.Controllers.setup
 
                         var newValues = new List<string> { ((long) addBankUserForm.sno).ToString(), employeeDetails.Emp_Id_No,employeeDetails.Full_Name,employeeDetails.First_Name, employeeDetails.Middle_name,  employeeDetails.Last_name,foundDesignation.Desg_Name.ToString(),employeeDetails.Email_Address,
                                 employeeDetails.Mobile_No,employeeDetails.Created_Date.ToString(),employeeDetails.Expiry_Date.ToString(), employeeDetails.Emp_Status,((long) addBankUserForm.userid).ToString(), DateTime.Now.ToString(),employeeDetails.User_name };
-                        Auditlog.updateAuditTrail(oldValues, newValues, (long)addBankUserForm.sno, "Bank User", tableColumns);
+                        Auditlog.UpdateAuditTrail(oldValues, newValues, (long)addBankUserForm.sno, "Bank User", tableColumns);
                         return Request.CreateResponse(new { response = (long)addBankUserForm.sno, message = new List<string>() });
                     }
                 }

@@ -17,7 +17,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public DateTime? Audit_Date { get; set; }
         #endregion properties
         #region methods
-        public void AddCURRENCY(CURRENCY sc)
+        public string AddCURRENCY(CURRENCY sc)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -30,6 +30,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 };
                 context.currency_master.Add(ps);
                 context.SaveChanges();
+                return ps.currency_code;
             }
         }
         public List<CURRENCY> ValidateCURRENCY(String name,String code)
@@ -94,7 +95,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var validation = (from c in context.currency_master where (c.currency_code.ToLower().Equals(code)) select c);
+                var validation = (from c in context.currency_master where (c.currency_code.ToLower().Equals(code.ToLower())) select c);
                 return validation.Count() > 0;
             }
         }
@@ -193,7 +194,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateCURRENCY(CURRENCY dep)
+        public string UpdateCURRENCY(CURRENCY dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -208,7 +209,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_date = DateTime.Now;
 
                     context.SaveChanges();
+                    return dep.Currency_Code;
                 }
+                return "";
             }
         }
 

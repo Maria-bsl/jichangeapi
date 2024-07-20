@@ -13,113 +13,141 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers.setup
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class DesignationController : ApiController
+    public class DesignationController : SetupBaseController
     {
-        private readonly List<string> tableColumns = new List<string> { "desg_id", "desg_name", "posted_by", "posted_date" };
+        private static readonly List<string> tableColumns = new List<string> { "desg_id", "desg_name", "posted_by", "posted_date" };
+        private static readonly string tableName = "Designation";
 
         [HttpPost]
         public HttpResponseMessage GetdesgDetails()
         {
+            DESIGNATION designation = new DESIGNATION();
             try
             {
-                var dg = new DESIGNATION();
-                var result = dg.GetDesignation();
-                if (result != null)
-                {
-                    return Request.CreateResponse(new { response = result, message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = new List<DESIGNATION>(), message = new List<string>() });
-                }
+                var results = designation.GetDesignation();
+                return this.GetList<List<DESIGNATION>, DESIGNATION>(results);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private DESIGNATION CreateDesignation(AddDesignationForm addDesignationForm)
+        {
+            DESIGNATION designation = new DESIGNATION();
+            designation.Desg_Name = addDesignationForm.desg;
+            designation.Desg_Id = (long)addDesignationForm.sno;
+            designation.AuditBy = addDesignationForm.userid.ToString();
+            return designation;
+        }
+
+        private void AppendInsertAuditTrail(long designationSno, DESIGNATION designation, long userid)
+        {
+            List<string> values = new List<string> { designationSno.ToString(), designation.Desg_Name, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.InsertAuditTrail(values,userid, DesignationController.tableName, DesignationController.tableColumns);
+        }
+
+        private void AppendUpdateAuditTrail(long designationSno, DESIGNATION oldDesignation, DESIGNATION newDesignation, long userid)
+        {
+            var oldValues = new List<string> { designationSno.ToString(), oldDesignation.Desg_Name, oldDesignation.AuditBy, oldDesignation.Audit_Date.ToString() };
+            var newValues = new List<string> { designationSno.ToString(), newDesignation.Desg_Name, newDesignation.AuditBy, DateTime.Now.ToString() };
+            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, DesignationController.tableName, DesignationController.tableColumns);
+
+        }
+
+        private void AppendDeleteAuditTrail(long designationSno, DESIGNATION designation, long userid)
+        {
+            List<string> values = new List<string> { designationSno.ToString(), designation.Desg_Name, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.deleteAuditTrail(values, userid, DesignationController.tableName, DesignationController.tableColumns);
+        }
+
+        private HttpResponseMessage InsertDesignation(DESIGNATION designation,AddDesignationForm addDesignationForm)
+        {
+            try
+            {
+                var isExist = designation.ValidateDesignation(addDesignationForm.desg);
+                if (isExist) return this.GetAlreadyExistsErrorResponse();
+                var addedDesignation = designation.AddUser(designation);
+                AppendInsertAuditTrail(addedDesignation, designation, (long)addDesignationForm.userid);
+                return FindDesignation(addedDesignation);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private HttpResponseMessage UpdateDesignation(DESIGNATION designation,AddDesignationForm addDesignationForm)
+        {
+            try
+            {
+                var isExist = designation.isExistDesignation((long)addDesignationForm.sno);
+                if (!isExist) { return this.GetNotFoundResponse();  }
+                var isDuplicate = designation.isDuplicate(addDesignationForm.desg, (long)addDesignationForm.sno);
+                if (isDuplicate) { return this.GetAlreadyExistsErrorResponse();  }
+                DESIGNATION oldDesignation = designation.getDesignationText((long)addDesignationForm.sno);
+                long updateDesignation = designation.UpdateDesignation(designation);
+                AppendUpdateAuditTrail(updateDesignation, oldDesignation, designation, (long)addDesignationForm.userid);
+                return FindDesignation(updateDesignation);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
         public HttpResponseMessage Adddesg(AddDesignationForm addDesignationForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
+            {
+                DESIGNATION designation = CreateDesignation(addDesignationForm);
+                if (addDesignationForm.sno == 0) { return InsertDesignation(designation,addDesignationForm); }
+                else { return UpdateDesignation(designation,addDesignationForm);  }
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage FindDesignation(long sno)
+        {
+            try
             {
                 DESIGNATION designation = new DESIGNATION();
-                designation.Desg_Name = addDesignationForm.desg;
-                designation.Desg_Id = (long)addDesignationForm.sno;
-                designation.AuditBy = addDesignationForm.userid.ToString();
-                try
-                {
-                    if ((long) addDesignationForm.sno == 0)
-                    {
-                        var isExist = designation.isExistDesignation((long) addDesignationForm.sno);
-                        if (isExist)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Already exists." } });
-                        }
-                        else
-                        {
-                            var addedDesignation = designation.AddUser(designation);
-                            var insertAudits = new List<string> { addedDesignation.ToString(), addDesignationForm.desg, addDesignationForm.userid.ToString(), DateTime.Now.ToString() };
-                            Auditlog.insertAuditTrail(insertAudits, (long) addDesignationForm.userid, "Designation",tableColumns);
-                            return Request.CreateResponse(new { response = addedDesignation, message = new List<string>() });
-                        }
-                    }
-                    else
-                    {
-                        var design = designation.getDesignationText((long)addDesignationForm.sno);
-                        
-                        designation.UpdateDesignation(designation);
-                        
-                        var oldValues = new List<string> { design.Desg_Id.ToString(), design.Desg_Name, design.AuditBy, design.Audit_Date.ToString() };
-                        var newValues = new List<string> { design.Desg_Id.ToString(), addDesignationForm.desg, addDesignationForm.userid.ToString(), DateTime.Now.ToString() };
-                        Auditlog.updateAuditTrail(oldValues, newValues, (long) addDesignationForm.userid, "Designation", tableColumns);
-                        return Request.CreateResponse(new { response = addDesignationForm.sno, message = new List<string>() });
-                    }
-                }
-                catch(Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                bool isExist = designation.isExistDesignation(sno);
+                if (!isExist) return this.GetNotFoundResponse();
+                DESIGNATION found = designation.Editdesignation(sno);
+                return this.GetSuccessResponse(found);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
         public HttpResponseMessage Deletedesg(DeleteDesignationForm deleteDesignationForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            DESIGNATION designation = new DESIGNATION();
+            try
             {
-                var designation = new DESIGNATION();
-                try
-                {
-                    var isExists = designation.isExistDesignation(deleteDesignationForm.sno);
-                    if (isExists)
-                    {
-                        var design = designation.getDesignationText(deleteDesignationForm.sno);
-                        var values = new List<string> { design.Desg_Id.ToString(), design.Desg_Name.ToString(), design.AuditBy, design.Audit_Date.ToString() };
-                        Auditlog.deleteAuditTrail(values, (long)deleteDesignationForm.userid, "Designation", this.tableColumns);
-                        designation.DeleteDesignation(deleteDesignationForm.sno);
-                        return Request.CreateResponse(new { response = deleteDesignationForm.sno, message = new List<string>() });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "Designation does not exist." } });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                bool isExists = designation.isExistDesignation(deleteDesignationForm.sno);
+                if (!isExists) return this.GetNotFoundResponse();
+                designation.DeleteDesignation(deleteDesignationForm.sno);
+                AppendDeleteAuditTrail(deleteDesignationForm.sno, designation, (long)deleteDesignationForm.userid);
+                return this.GetSuccessResponse((long) deleteDesignationForm.sno);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
     }

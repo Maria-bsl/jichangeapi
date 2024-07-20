@@ -39,12 +39,22 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.countries
-                                  where (c.country_name.ToLower().Equals(name))
+                                  where (c.country_name.ToLower().Equals(name.ToLower()))
                                   select c);
                 if (validation.Count() > 0)
                     return true;
                 else
                     return false;
+            }
+        }
+        public bool IsDuplicatedName(string name,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.countries
+                                  where ((c.country_name.ToLower().Equals(name.ToLower())) && c.country_sno != sno)
+                                  select c);
+                return validation.Count() > 0;
             }
         }
         public bool ValidateCount(long name)
@@ -127,7 +137,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var noteDetails = (from n in context.countries
+                /*var noteDetails = (from n in context.countries
                                    where n.country_sno == no
                                    select n).First();
 
@@ -141,7 +151,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 else
                 {
                     return 0;
+                }*/
+                var country = context.countries.Find(no);
+                if (country != null)
+                {
+                    context.countries.Remove(country);
+                    context.SaveChanges();
+                    return no;
                 }
+                return no;
 
             }
 

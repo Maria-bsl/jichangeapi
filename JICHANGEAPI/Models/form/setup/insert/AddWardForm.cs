@@ -6,7 +6,7 @@ using System.Web;
 
 namespace JichangeApi.Models.form.setup.insert
 {
-    public class AddWardForm
+    public class AddWardForm : MainForm
     {
         [Required(ErrorMessage = "Missing ward",AllowEmptyStrings = false)]
         public string ward_name { get; set; }

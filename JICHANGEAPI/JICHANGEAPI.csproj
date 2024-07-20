@@ -241,6 +241,7 @@
     <Compile Include="Controllers\setup\RegionController.cs" />
     <Compile Include="Controllers\RepCompInvoiceController.cs" />
     <Compile Include="Controllers\RepCustomerController.cs" />
+    <Compile Include="Controllers\setup\SetupBaseController.cs" />
     <Compile Include="Controllers\setup\SMTPController.cs" />
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />

@@ -110,6 +110,17 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+        public bool isDuplicatedRegion(string regionName,long regionSno,long countrySno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.region_master where 
+                                  ((c.region_name.ToLower().Equals(regionName.ToLower())) && c.region_sno != regionSno && c.country_sno != countrySno) 
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
+
         public List<REGION> GetREGIONActive(long Regsno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

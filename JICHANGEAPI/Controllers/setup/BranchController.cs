@@ -13,7 +13,7 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers.setup
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class BranchController : ApiController
+    public class BranchController : SetupBaseController
     {
         [HttpPost]
         public HttpResponseMessage GetBranchLists()
@@ -22,86 +22,81 @@ namespace JichangeApi.Controllers.setup
             try
             {
                 var results = branch.GetBranches();
-                if (results != null)
-                {
-                    return Request.CreateResponse(new { response = results, message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = new List<BranchM>(), message = new List<string> { "Failed to retrieve branch list" } });
-                }
+                return this.GetList<List<BranchM>, BranchM>(results);
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private BranchM createBranchM(AddBranchForm addBranchForm)
+        {
+            BranchM branchM = new BranchM();
+            branchM.Sno = addBranchForm.Branch_Sno;
+            branchM.Name = addBranchForm.Name;
+            branchM.Location = addBranchForm.Location;
+            branchM.Status = addBranchForm.Status;
+            branchM.AuditBy = addBranchForm.AuditBy;
+            return branchM;
+        }
+
+        private HttpResponseMessage InsertBranch(BranchM branchM)
+        {
+            try
+            {
+                bool existsBranch = branchM.ValidateBranch(branchM.Name);
+                if (existsBranch) return this.GetAlreadyExistsErrorResponse();
+                long addedBranch = branchM.AddBranch(branchM);
+                return this.FindBranch(addedBranch);
+            }
+            catch(Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private HttpResponseMessage UpdateBranch(BranchM branchM)
+        {
+            try
+            {
+                bool exitsBranch = branchM.isExistBranch(branchM.Sno);
+                if (!exitsBranch) return this.GetNotFoundResponse();
+                bool isDuplicatedName = branchM.IsDuplicatedName(branchM.Name, branchM.Sno);
+                if (isDuplicatedName) return this.GetAlreadyExistsErrorResponse();
+                long updatedBranch = branchM.UpdateBranch(branchM);
+                return this.FindBranch(updatedBranch);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
-        public HttpResponseMessage AddBranch(AddBranchForm branchForm)
+        public HttpResponseMessage AddBranch(AddBranchForm addBranchForm)
         {
-            if (ModelState.IsValid)
-            {
-                var branch = new BranchM();
-                branch.Sno = branchForm.Branch_Sno;
-                branch.Name = branchForm.Name;
-                branch.Location = branchForm.Location;
-                branch.Status = branchForm.Status;
-                branch.AuditBy = branchForm.AuditBy;
-                if (branchForm.Branch_Sno == 0)
-                {
-                    try
-                    {
-                        var existsBranch = branch.ValidateBranch(branch.Name);
-                        if (existsBranch)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Already exists." } });
-                        }
-                        var addedBranch = branch.AddBranch(branch);
-                        if (addedBranch > 0)
-                        {
-                            return Request.CreateResponse(new { response = addedBranch, message = new List<string>() });
-                        }
-                        else
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Failed to add new branch." } });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                    }
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            BranchM branchM = createBranchM(addBranchForm);
+            if (addBranchForm.Branch_Sno == 0) { return InsertBranch(branchM); }
+            else { return UpdateBranch(branchM); }
+        }
 
-                }
-                else
-                {
-                    try
-                    {
-                        var existsBranch = branch.isExistBranch(branchForm.Branch_Sno);
-                        if (!existsBranch)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Branch does not exist." } });
-                        }
-                        var updatedBranch = branch.UpdateBranch(branch);
-                        if (updatedBranch > 0)
-                        {
-                            return Request.CreateResponse(new { response = updatedBranch, message = new List<string>() });
-                        }
-                        else
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Failed to update branch." } });
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                    }
-                }
-            }
-            else
+        [HttpGet]
+        public HttpResponseMessage FindBranch(long sno)
+        {
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                BranchM branchM = new BranchM();
+                bool exitsBranch = branchM.isExistBranch(sno);
+                if (!exitsBranch) return this.GetNotFoundResponse();
+                BranchM found = branchM.EditBranch(sno);
+                return this.GetSuccessResponse(found);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
@@ -110,21 +105,17 @@ namespace JichangeApi.Controllers.setup
         {
             try
             {
-                var branch = new BranchM();
-                var exitsBranch = branch.isExistBranch(long.Parse(Sno));
-                if (exitsBranch)
-                {
-                    branch.DeleteBranch(long.Parse(Sno));
-                    return Request.CreateResponse(new { response = "Branch deleted successfully!", message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "Branch does not exist." } });
-                }
+                List<string> modelStateErrors = this.ModelStateErrors();
+                if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+                var branchM = new BranchM();
+                var exitsBranch = branchM.isExistBranch(long.Parse(Sno));
+                if (!exitsBranch) return this.GetNotFoundResponse();
+                branchM.DeleteBranch(long.Parse(Sno));
+                return this.GetSuccessResponse(long.Parse(Sno));
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
     }

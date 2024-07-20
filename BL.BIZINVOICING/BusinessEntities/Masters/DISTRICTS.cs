@@ -63,12 +63,24 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return true;
             }
         }
+
+        public bool isDuplicateDistrict(string district,long districtId,long regionId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.district_master
+                                  where ((c.district_name.ToLower().Equals(district.ToLower())) && 
+                                  c.district_sno != districtId && c.region_id != regionId) select c);
+                return validation.Count() > 0;
+            }
+        }
+
         public bool Validateduplicatechecking(string name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.district_master
-                                  where (c.district_name.ToLower().Equals(name))
+                                  where (c.district_name.ToLower().Equals(name.ToLower()))
                                   select c);
                 if (validation.Count() > 0)
                     return true;
@@ -171,23 +183,19 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var edetails = (from c in context.district_master
+                var adetails = (from c in context.district_master
+                                join reg in context.region_master on c.region_id equals reg.region_sno
                                 where c.district_sno == sno
-
                                 select new DISTRICTS
                                 {
                                     SNO = c.district_sno,
                                     District_Name = c.district_name,
                                     Region_Id = (long)c.region_id,
+                                    Region_Name = reg.region_name,
                                     District_Status = c.district_status,
-                                    AuditBy = c.posted_by,
-                                    Audit_Date = c.posted_date
-
+                                    Audit_Date = c.posted_date,
                                 }).FirstOrDefault();
-                if (edetails != null)
-                    return edetails;
-                else
-                    return null;
+                return adetails != null ? adetails : null;
             }
         }
         

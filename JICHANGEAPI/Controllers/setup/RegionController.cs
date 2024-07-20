@@ -13,142 +13,141 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers.setup
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class RegionController : ApiController
+    public class RegionController : SetupBaseController
     {
+        private static readonly List<string> tableColumns = new List<string> { "region_sno", "region_name", "country_sno", "country_name", "region_status", "posted_by", "posted_date" };
+        private static readonly string tableName = "Region";
+
+
         [HttpPost]
         public HttpResponseMessage GetRegionDetails()
         {
-            var region = new REGION();
+            REGION region = new REGION();
             try
             {
-                var regions = region.GetReg();
-                if (regions != null)
-                {
-                    return Request.CreateResponse(new { response = regions, message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = new List<REGION>(), message = new List<string> { "No data found." } });
-                }
+                var results = region.GetReg();
+                return this.GetList<List<REGION>, REGION>(results);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
-
-        private HttpResponseMessage AddRegion(REGION region,AddRegionForm addRegionForm)
+        private void AppendInsertRegionAuditTrail(long regionSno, REGION region, long userid)
         {
-            var addedRegion = region.AddREGION(region);
-            if (addedRegion > 0)
+            List<string> insertAudits = new List<string> { regionSno.ToString(), region.Region_Name, region.Country_Sno.ToString(), region.Country_Name, region.Region_Status, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.InsertAuditTrail(insertAudits, userid, RegionController.tableName, RegionController.tableColumns);
+        }
+        private void AppendUpdateRegionAuditTrail(long regionSno, REGION oldRegion, REGION newRegion, long userid)
+        {
+            List<string> oldValues = new List<string> { regionSno.ToString(), oldRegion.Region_Name, oldRegion.Country_Sno.ToString(), oldRegion.Country_Name, oldRegion.Region_Status, userid.ToString(), DateTime.Now.ToString() };
+            List<string> newValues = new List<string> { regionSno.ToString(), newRegion.Region_Name, newRegion.Country_Sno.ToString(), newRegion.Country_Name, newRegion.Region_Status, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, RegionController.tableName, RegionController.tableColumns);
+        }
+        private void AppendDeleteRegionAuditTrail(long regionSno,REGION region,long userid)
+        {
+            List<string> values = new List<string> { regionSno.ToString(), region.Region_Name, region.Country_Sno.ToString(), region.Country_Name, region.Region_Status, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.deleteAuditTrail(values, userid, RegionController.tableName, RegionController.tableColumns);
+        }
+        private REGION CreateRegion(AddRegionForm addRegionForm,COUNTRY country)
+        {            
+            REGION region = new REGION();
+            region.Region_SNO = addRegionForm.sno;
+            region.Region_Name = addRegionForm.region;
+            region.Country_Sno = addRegionForm.csno;
+            region.Country_Name = country.Country_Name;
+            region.Region_Status = addRegionForm.Status;
+            region.AuditBy = addRegionForm.userid.ToString();
+            return region;
+        }
+        private HttpResponseMessage InsertRegion(REGION region, AddRegionForm addRegionForm)
+        {
+            try
             {
-                var list = new List<string> { addedRegion.ToString(), addRegionForm.region };
-                Auditlog ad = new Auditlog();
-                for (int i = 0; i < list.Count(); i++)
-                {
-                    ad.Audit_Type = "Insert";
-                    ad.Columnsname = list[i];
-                    ad.Table_Name = "Region";
-                    ad.Newvalues = list[i];
-                    ad.AuditBy = addRegionForm.userid.ToString();
-                    ad.Audit_Date = DateTime.Now;
-                    ad.Audit_Time = DateTime.Now;
-                    ad.AddAudit(ad);
-                }
-                return Request.CreateResponse(new { response = addedRegion, message = new List<string>() });
+                var isExistRegion = region.Validatedupicate(region.Region_Name.ToLower());
+                if (isExistRegion) return this.GetAlreadyExistsErrorResponse();
+                long addedRegion = region.AddREGION(region);
+                AppendInsertRegionAuditTrail(addedRegion, region, (long) addRegionForm.userid);
+                return FindRegion(addedRegion);
             }
-            else
+            catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "Failed to add region." } });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
-
+        private HttpResponseMessage UpdateRegion(REGION region, AddRegionForm addRegionForm)
+        {
+            try
+            {
+                bool exists = region.isExistRegion(region.Region_SNO);
+                if (!exists) return this.GetNotFoundResponse();
+                bool isDuplicateRegion = region.isDuplicatedRegion(region.Region_Name, region.Region_SNO, region.Country_Sno);
+                if (isDuplicateRegion) return this.GetAlreadyExistsErrorResponse();
+                REGION oldRegion = region.EditREGION(addRegionForm.sno);
+                long updatedRegion = region.UpdateREGION(region);
+                AppendUpdateRegionAuditTrail(updatedRegion, oldRegion, region, (long)addRegionForm.userid);
+                return this.FindRegion(region.Region_SNO);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+        [HttpPost]
         public HttpResponseMessage AddRegion(AddRegionForm addRegionForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
             {
-                var region = new REGION();
-                var country = new COUNTRY();
-                var foundCountry = country.GETcountries().Find(c => c.SNO == addRegionForm.csno);
+                COUNTRY foundCountry = new COUNTRY().GETcountries().Find(c => c.SNO == addRegionForm.csno);
                 if (foundCountry == null)
                 {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "Country not found." } });
+                    var messages = new List<string> { "Country not found" };
+                    this.GetCustomErrorMessageResponse(messages);
                 }
-                region.Region_SNO = addRegionForm.sno;
-                region.Region_Name = addRegionForm.region;
-                region.Country_Sno = addRegionForm.csno;
-                region.Country_Name = foundCountry.Country_Name;
-                region.Region_Status = addRegionForm.Status;
-                region.AuditBy = addRegionForm.userid.ToString();
-                try
-                {
-                    if (addRegionForm.sno == 0)
-                    {
-                        var isExist = region.Validatedupicate(addRegionForm.region.ToLower());
-                        var isExistCountry = region.ValidateREGION(addRegionForm.region.ToLower(), addRegionForm.csno);
-                        if (isExist || isExistCountry)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Already exists." } });
-                        }
-                        else
-                        {
-                            return this.AddRegion(region,addRegionForm);
-                        }
-                    }
-                    else
-                    {
-                        var updatedRegion = region.UpdateREGION(region);
-                        if (updatedRegion > 0)
-                        {
-                            return Request.CreateResponse(new { response = updatedRegion, message = new List<string>() });
-                        }
-                        else
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Failed to update region." } });
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                REGION region = this.CreateRegion(addRegionForm, foundCountry);
+                if (addRegionForm.sno == 0) { return InsertRegion(region,addRegionForm); }
+                else { return UpdateRegion(region,addRegionForm); }
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
-
+        [HttpGet]
+        public HttpResponseMessage FindRegion(long sno)
+        {
+            try
+            {
+                REGION region = new REGION();
+                bool exists = region.isExistRegion(sno);
+                if (!exists) return this.GetNotFoundResponse();
+                REGION found = region.EditREGION(sno);
+                return this.GetSuccessResponse(found);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
         [HttpPost]
         public HttpResponseMessage DeleteRegion(DeleteRegionForm deleteRegionForm)
         {
-            if (ModelState.IsValid)
+            try
             {
-                if (deleteRegionForm.sno > 0)
-                {
-                    var region = new REGION();
-                    region.Region_SNO = deleteRegionForm.sno;
-                    var isValidDelete = region.isExistRegion(deleteRegionForm.sno);
-                    if (isValidDelete)
-                    {
-                        region.DeleteREGION(deleteRegionForm.sno);
-                        return Request.CreateResponse(new { response = deleteRegionForm.sno, message = new List<string> () });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "Failed. Region does not exist." } });
-                    }
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "Invalid sno." } });
-                }
+                List<string> modelStateErrors = this.ModelStateErrors();
+                if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+                REGION region = new REGION();
+                var isExistRegion = region.isExistRegion(deleteRegionForm.sno);
+                if (!isExistRegion) return this.GetNotFoundResponse();
+                region.DeleteREGION(deleteRegionForm.sno);
+                AppendDeleteRegionAuditTrail(deleteRegionForm.sno, region, (long) deleteRegionForm.userid);
+                return this.GetSuccessResponse(deleteRegionForm.sno);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
     }

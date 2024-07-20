@@ -92,6 +92,22 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+        public bool isExistFromAddress(string fromAddress)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.smtp_settings
+                                where c.from_address == fromAddress
+                                select new S_SMTP
+                                {
+                                    SNO = c.sno,
+                                    From_Address = c.from_address
+
+
+                                }).FirstOrDefault();
+                return edetails != null;
+            }
+        }
         public S_SMTP getSMTPText()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -166,6 +182,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             {
                 var exists = context.smtp_settings.Find(smtpId);
                 return exists != null;
+            }
+        }
+
+        public bool isDuplicateSmtp(long smtpId,string fromAddress,string username)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var noteDetails = (from n in context.smtp_settings
+                                   where ( (n.from_address.ToLower().Equals(fromAddress.ToLower()) || n.username.ToLower().Equals(username.ToLower()) ) && n.sno != smtpId)
+                                   select n).First();
+
+                return noteDetails != null;
             }
         }
 

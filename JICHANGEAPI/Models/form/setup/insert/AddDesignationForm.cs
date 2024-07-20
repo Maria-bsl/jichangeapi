@@ -12,7 +12,6 @@ namespace JichangeApi.Models.form.setup.insert
         public string desg { get; set; }
         [Required(ErrorMessage = "Missing SNO")]
         public long? sno { get; set; }
-        [Required(ErrorMessage = "Mising dummy")]
         public bool? dummy { get; set; }
     }
 }

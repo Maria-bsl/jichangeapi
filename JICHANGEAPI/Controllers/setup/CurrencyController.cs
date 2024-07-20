@@ -13,100 +13,126 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers.setup
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class CurrencyController : ApiController
+    public class CurrencyController : SetupBaseController
     {
+        private static readonly List<string> tableColumns = new List<string> { "currency_code", "currency_name", "posted_by", "posted_date" };
+        private static readonly string tableName = "Currency";
+
         [HttpPost]
         public HttpResponseMessage GetCurrencyDetails()
         {
-            var currency = new CURRENCY();
+            CURRENCY currency = new CURRENCY();
             try
             {
-                var currencies = currency.GetCURRENCY();
-                if (currencies != null)
-                {
-                    return Request.CreateResponse(new { response = currencies, message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = new List<string>(), message = new List<string> { "Failed to retrieve ward list." } });
-                }
+                List<CURRENCY> currencies = currency.GetCURRENCY();
+                return this.GetList<List<CURRENCY>, CURRENCY>(currencies);
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+        private CURRENCY CreateCurrency(AddCurrencyForm addCurrencyForm)
+        {
+            CURRENCY currency = new CURRENCY();
+            currency.Currency_Code = addCurrencyForm.code;
+            currency.Currency_Name = addCurrencyForm.cname;
+            currency.AuditBy = addCurrencyForm.userid.ToString();
+            return currency;
+        }
+        private void AppendInsertAuditTrail(string currencyCode, CURRENCY currency, long userid)
+        {
+            List<string> values = new List<string> { currency.Currency_Code, currency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.InsertAuditTrail(values, userid, CurrencyController.tableName, CurrencyController.tableColumns);
+        }
+        private void AppendUpdateAuditTrail(string currencyCode, CURRENCY oldCurrency, CURRENCY newCurrency, long userid)
+        {
+            List<string> oldValues = new List<string> { currencyCode, oldCurrency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
+            List<string> newValues = new List<string> { currencyCode, newCurrency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, CurrencyController.tableName, CurrencyController.tableColumns);
+
+        }
+        private void AppendDeleteAuditTrail(string currencyCode, CURRENCY currency, long userid)
+        {
+            List<string> values = new List<string> { currency.Currency_Code, currency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
+            Auditlog.deleteAuditTrail(values, userid, CurrencyController.tableName, CurrencyController.tableColumns);
+        }
+        private HttpResponseMessage InsertCurrency(CURRENCY currency,AddCurrencyForm addCurrencyForm)
+        {
+            try
+            {
+                bool exists = currency.isExistCurrencyCode(addCurrencyForm.code);
+                if (exists) return this.GetAlreadyExistsErrorResponse();
+                string currencyCode = currency.AddCURRENCY(currency);
+                AppendInsertAuditTrail(currencyCode, currency, (long) addCurrencyForm.userid);
+                return FindCurrency(currencyCode);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private HttpResponseMessage UpdateCurrency(CURRENCY currency,AddCurrencyForm addCurrencyForm)
+        {
+            try
+            {
+                bool exists = currency.isExistCurrencyCode(addCurrencyForm.code);
+                if (!exists) return this.GetNotFoundResponse();
+                CURRENCY found = currency.getCURRENCYText(addCurrencyForm.code);
+                string code = currency.UpdateCURRENCY(currency);
+                AppendUpdateAuditTrail(code, found, currency, (long) addCurrencyForm.userid);
+                return FindCurrency(code);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
         public HttpResponseMessage AddCurrency(AddCurrencyForm addCurrencyForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            CURRENCY currency = CreateCurrency(addCurrencyForm);
+            if (addCurrencyForm.sno == 0) { return InsertCurrency(currency,addCurrencyForm);  }
+            else { return UpdateCurrency(currency, addCurrencyForm); }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage FindCurrency(string code)
+        {
+            try
             {
-                var currency = new CURRENCY();
-                currency.Currency_Code = addCurrencyForm.code;
-                currency.Currency_Name = addCurrencyForm.cname;
-                currency.AuditBy = addCurrencyForm.userid.ToString();
-                try
-                {
-                    if (addCurrencyForm.sno == 0)
-                    {
-                        var isExist = currency.isExistCurrencyCode(addCurrencyForm.code);
-                        if (isExist)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Already exists." } });
-                        }
-                        else
-                        {
-                            currency.AddCURRENCY(currency);
-                            return Request.CreateResponse(new { response = "1", message = new List<string>() });
-                        }
-                    }
-                    else
-                    {
-                        currency.UpdateCURRENCY(currency);
-                        return Request.CreateResponse(new { response = "1", message = new List<string>() });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                CURRENCY currency = new CURRENCY();
+                bool exists = currency.isExistCurrencyCode(code);
+                if (!exists) return this.GetNotFoundResponse();
+                CURRENCY found = currency.getCURRENCYText(code);
+                return this.GetSuccessResponse(found);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
         public HttpResponseMessage Deletecurrency(DeleteCurrencyForm deleteCurrencyForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            CURRENCY currency = new CURRENCY();
+            try
             {
-                try
-                {
-                    var currency = new CURRENCY();
-                    var isExist = currency.isExistCurrencyCode(deleteCurrencyForm.code);
-                    if (isExist)
-                    {
-                        currency.DeleteCURRENCY(deleteCurrencyForm.code);
-                        return Request.CreateResponse(new { response = deleteCurrencyForm.code, message = new List<string>() });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "Currency does not exist." } });
-                    }
-                }
-                catch(Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                bool isExist = currency.isExistCurrencyCode(deleteCurrencyForm.code);
+                currency.DeleteCURRENCY(deleteCurrencyForm.code);
+                AppendDeleteAuditTrail(deleteCurrencyForm.code, currency, (long) deleteCurrencyForm.userid);
+                return this.GetSuccessResponse(deleteCurrencyForm.code);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
     }

@@ -419,7 +419,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         }
 
 
-        public static void insertAuditTrail(List<string> values, long userid, string tableName,List<string> tableColumns)
+        public static void InsertAuditTrail(List<string> values, long userid, string tableName,List<string> tableColumns)
         {
             Debug.Assert(values.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");
             Auditlog ad = new Auditlog();
@@ -436,7 +436,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public static void updateAuditTrail(List<string> oldValues,List<string> newValues,long userid,string tableName,List<string> tableColumns)
+        public static void UpdateAuditTrail(List<string> oldValues,List<string> newValues,long userid,string tableName,List<string> tableColumns)
         {
             Debug.Assert(oldValues.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");
             Debug.Assert(newValues.Count() == tableColumns.Count(), "Audit trail lists must be of the same size");

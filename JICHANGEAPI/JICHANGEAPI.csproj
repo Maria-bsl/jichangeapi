@@ -298,6 +298,7 @@
     <Compile Include="Models\SingletonInvComp.cs" />
     <Compile Include="Models\SingletonInvMas.cs" />
     <Compile Include="Models\SingletonSno.cs" />
+    <Compile Include="Models\SingletonSnoUser.cs" />
     <!-- <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" /> -->
     <!-- <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" /> -->
     <Compile Include="Properties\AssemblyInfo.cs" />

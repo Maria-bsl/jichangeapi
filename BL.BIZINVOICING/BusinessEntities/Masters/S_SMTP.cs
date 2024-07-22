@@ -197,7 +197,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public void UpdateSMTP(S_SMTP dep)
+        public long UpdateSMTP(S_SMTP dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -217,7 +217,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_date = DateTime.Now;
                     UpdateContactInfo.ssl_enable = dep.SSL_Enable;
                     context.SaveChanges();
+                    return UpdateContactInfo.sno;
                 }
+                return 0;
             }
         }
         public bool Validateduplicatedata(String name)

@@ -141,8 +141,9 @@ namespace JichangeApi.Controllers.setup
             {
                 bool isExists = designation.isExistDesignation(deleteDesignationForm.sno);
                 if (!isExists) return this.GetNotFoundResponse();
+                DESIGNATION found = designation.Editdesignation(deleteDesignationForm.sno);
+                AppendDeleteAuditTrail(deleteDesignationForm.sno, found, (long)deleteDesignationForm.userid);
                 designation.DeleteDesignation(deleteDesignationForm.sno);
-                AppendDeleteAuditTrail(deleteDesignationForm.sno, designation, (long)deleteDesignationForm.userid);
                 return this.GetSuccessResponse((long) deleteDesignationForm.sno);
             }
             catch (Exception ex)

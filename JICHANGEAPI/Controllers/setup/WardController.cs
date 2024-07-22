@@ -140,8 +140,9 @@ namespace JichangeApi.Controllers.setup
                 WARD ward = new WARD();
                 bool isExistWard = ward.isExistWard(removeWardForm.sno);
                 if (!isExistWard) return this.GetNotFoundResponse();
+                WARD found = ward.EditWARD((long) removeWardForm.sno);
+                AppendDeleteAuditTrail(removeWardForm.sno, found, (long) removeWardForm.userid);
                 ward.DeleteWARD(removeWardForm.sno);
-                AppendDeleteAuditTrail(removeWardForm.sno, ward, (long) removeWardForm.userid);
                 return this.GetSuccessResponse( (long) removeWardForm.sno);
             } 
             catch(Exception ex)

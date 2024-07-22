@@ -139,8 +139,9 @@ namespace JichangeApi.Controllers.setup
                 DISTRICTS district = new DISTRICTS();
                 bool isExistDistrict = district.isExistDistrict(deleteDistrictForm.sno);
                 if (!isExistDistrict) return this.GetNotFoundResponse();
+                DISTRICTS found = district.EditDISTRICTS((long)deleteDistrictForm.sno);
+                AppendDeleteRegionAuditTrail((long)deleteDistrictForm.sno, found, (long) deleteDistrictForm.userid);
                 district.DeleteDISTRICTS(deleteDistrictForm.sno);
-                AppendDeleteRegionAuditTrail((long)deleteDistrictForm.sno, district, (long) deleteDistrictForm.userid);
                 return this.GetSuccessResponse(deleteDistrictForm.sno);
             }
             catch (Exception ex)

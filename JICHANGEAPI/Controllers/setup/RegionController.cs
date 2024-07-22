@@ -141,8 +141,9 @@ namespace JichangeApi.Controllers.setup
                 REGION region = new REGION();
                 var isExistRegion = region.isExistRegion(deleteRegionForm.sno);
                 if (!isExistRegion) return this.GetNotFoundResponse();
+                REGION found = region.EditREGION((long) deleteRegionForm.sno);
+                AppendDeleteRegionAuditTrail(deleteRegionForm.sno, found, (long) deleteRegionForm.userid);
                 region.DeleteREGION(deleteRegionForm.sno);
-                AppendDeleteRegionAuditTrail(deleteRegionForm.sno, region, (long) deleteRegionForm.userid);
                 return this.GetSuccessResponse(deleteRegionForm.sno);
             }
             catch (Exception ex)

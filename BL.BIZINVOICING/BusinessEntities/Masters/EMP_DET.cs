@@ -275,6 +275,26 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+        public bool isDuplicateEmployeeId(string employeeId,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.emp_detail
+                                  where (c.emp_id_no.ToLower().Equals(employeeId.ToLower()) && c.sno != sno)
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
+        public bool isDuplicateEmployeeUsername(string username,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.emp_detail
+                                  where (c.username.ToLower().Equals(username.ToLower()) && c.sno != sno)
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
         public bool Validateuser(String id)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -543,7 +563,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public void UpdateEmployee(EMP_DET data)
+        public long UpdateEmployee(EMP_DET data)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -564,7 +584,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     employee.posted_by = data.AuditBy;
                     employee.posted_date = DateTime.Now;
                     context.SaveChanges();
+                    return data.Detail_Id;
                 }
+                return 0;
             }
         } 
 

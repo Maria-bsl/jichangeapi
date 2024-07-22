@@ -54,6 +54,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+        public bool isDuplicateFlow(string flow,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.email_text
+                                  where (c.flow_id == flow && c.sno != sno)
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
         public List<EMAIL> GetEMAIL()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -172,7 +182,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateEMAIL(EMAIL dep)
+        public long UpdateEMAIL(EMAIL dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -191,7 +201,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_by = dep.AuditBy;
                     UpdateContactInfo.posted_date = DateTime.Now;
                     context.SaveChanges();
+                    return UpdateContactInfo.sno;
                 }
+                return 0;
             }
         }
 

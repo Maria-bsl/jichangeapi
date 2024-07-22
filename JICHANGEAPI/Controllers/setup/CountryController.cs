@@ -134,7 +134,8 @@ namespace JichangeApi.Controllers.setup
                 COUNTRY country = new COUNTRY();
                 bool isExistSCountry = country.isExistCountry(deleteCountryForm.sno);
                 if (!isExistSCountry) return this.GetNotFoundResponse();
-                AppendDeleteCountryAuditTrail(deleteCountryForm.sno, country, deleteCountryForm.sno);
+                COUNTRY found = country.Editcountries((long)deleteCountryForm.sno);
+                AppendDeleteCountryAuditTrail(deleteCountryForm.sno, found, deleteCountryForm.sno);
                 country.Deletecountries(deleteCountryForm.sno);
                 return this.GetSuccessResponse(deleteCountryForm.sno);
             }

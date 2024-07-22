@@ -126,8 +126,9 @@ namespace JichangeApi.Controllers.setup
             try
             {
                 bool isExist = currency.isExistCurrencyCode(deleteCurrencyForm.code);
+                CURRENCY found = currency.getCURRENCYText(deleteCurrencyForm.code);
+                AppendDeleteAuditTrail(deleteCurrencyForm.code, found, (long) deleteCurrencyForm.userid);
                 currency.DeleteCURRENCY(deleteCurrencyForm.code);
-                AppendDeleteAuditTrail(deleteCurrencyForm.code, currency, (long) deleteCurrencyForm.userid);
                 return this.GetSuccessResponse(deleteCurrencyForm.code);
             }
             catch (Exception ex)

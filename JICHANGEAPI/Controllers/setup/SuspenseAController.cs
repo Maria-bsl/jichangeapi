@@ -13,27 +13,20 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers.setup
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class SuspenseAController : ApiController
+    public class SuspenseAController : SetupBaseController
     {
         [HttpPost]
         public HttpResponseMessage GetAccount()
         {
-            var suspenseAccount = new S_Account();
+            S_Account suspenseAccount = new S_Account();
             try
             {
                 var results = suspenseAccount.GetAccounts();
-                if (results != null)
-                {
-                    return Request.CreateResponse(new { response = results, message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = new List<BranchM>(), message = new List<string> { "Failed to retrieve branch list" } });
-                }
+                return this.GetList<List<S_Account>, S_Account>(results);
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 

@@ -451,6 +451,27 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public CompanyBankMaster GetCompany_MStatus(long cno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from sc in context.company_master
+                                where sc.comp_mas_sno == cno
+                                where sc.status == "Approved"
+                                select new CompanyBankMaster
+                                {
+                                    Status = sc.status,
+                                    CompName = sc.company_name
+
+
+                                }).FirstOrDefault();
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
         public List<CompanyBankMaster> GetCompany1_Branch(long bsno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

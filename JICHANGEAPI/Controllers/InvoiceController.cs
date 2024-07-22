@@ -34,6 +34,7 @@ namespace JichangeApi.Controllers
         EMAIL em = new EMAIL();
         S_SMTP ss = new S_SMTP();
         C_Deposit cd = new C_Deposit();
+        CompanyBankMaster sbm = new CompanyBankMaster();
 
         string pwd, drt;
         //string strConnString = ConfigurationManager.ConnectionStrings["SchCon"].ToString();
@@ -567,7 +568,7 @@ namespace JichangeApi.Controllers
             //return null;
         }
 
-        [HttpPost]
+        
         public HttpResponseMessage GetCurrency()
         {
             try
@@ -626,7 +627,7 @@ namespace JichangeApi.Controllers
             return null;
         }
 
-        /* #region Save Update Invoice
+         #region Save Update Invoice
          [HttpPost]
          public HttpResponseMessage AddInvoice(InvoiceForm o)
          {
@@ -634,117 +635,142 @@ namespace JichangeApi.Controllers
                  try
              {
 
+                    // Check for Userid for created invoice
+                    var cb = sbm.GetCompany_MStatus((long)o.compid);
+                    if (cb.Status.ToLower().ToString().Equals("no"))
+                    {
+                        // Automatic Approve Invoice and Generated Control number
+                        string cno = string.Empty;
+                        cno = o.sno.ToString().PadLeft(8, '0');
+
+                        inv.goods_status = "Approved";
+                        inv.Control_No = "T" + cno;
+                        inv.approval_status = "2";
+                        inv.approval_date = System.DateTime.Now;
+                        //inv.UpdateInvoice(inv);
+                       
+
+                    }
+                    else
+                    {
+                        inv.Control_No = "";
+                        //inv.approval_date = ;
+                        inv.goods_status = "Pending";
+                        inv.approval_status = "1";
+                    }
+
                  DateTime dates = DateTime.Now;
                  DateTime dates1 = DateTime.Now;
                  DateTime dates2 = DateTime.Now;
                  //dates = DateTime.ParseExact(date, "dd/MM/yyyy", null);
-                 dates = DateTime.Parse(v.date);
-                 if (!string.IsNullOrEmpty(edate))
+                 dates = DateTime.Parse(o.date);
+                 if (!string.IsNullOrEmpty(o.edate))
                  {
                      //dates1 = DateTime.ParseExact(edate, "dd/MM/yyyy", null);
-                     dates1 = DateTime.Parse(edate);
+                     dates1 = DateTime.Parse(o.edate);
                  }
                  //dates2 = DateTime.ParseExact(iedate, "dd/MM/yyyy", null);
-                 dates2 = DateTime.Parse(iedate);
+                 dates2 = DateTime.Parse(o.iedate);
 
-                 inv.Invoice_No = invno;
+                 inv.Invoice_No = o.invno;
                  inv.Invoice_Date = dates;
-                 if (!string.IsNullOrEmpty(edate))
+                 if (!string.IsNullOrEmpty(o.edate))
                  {
-                     inv.Due_Date = Convert.ToDateTime(edate);
+                     inv.Due_Date = Convert.ToDateTime(o.edate);
                  }
-                 inv.Invoice_Expired_Date = Convert.ToDateTime(iedate);
-                 inv.Payment_Type = ptype;
-                 inv.Com_Mas_Sno = long.Parse(compid.ToString());
-                 inv.Chus_Mas_No = chus;
-                 inv.Currency_Code = ccode;
-                 inv.Total_Without_Vt = Decimal.Parse(twvat);
-                 inv.Vat_Amount = Decimal.Parse(vtamou);
-                 inv.Total = Decimal.Parse(total);
-                 inv.Inv_Remarks = Inv_remark;
-                 inv.warrenty = warrenty;
-                 inv.goods_status = goods_status;
-                 inv.delivery_status = delivery_status;
+                 inv.Invoice_Expired_Date = Convert.ToDateTime(o.iedate);
+                 inv.Payment_Type = o.ptype;
+                 inv.Com_Mas_Sno = long.Parse(o.compid.ToString());
+                 inv.Chus_Mas_No = o.chus;
+                 inv.Currency_Code = o.ccode;
+                 inv.Total_Without_Vt = Decimal.Parse(o.twvat);
+                 inv.Vat_Amount = Decimal.Parse(o.vtamou);
+                 inv.Total = Decimal.Parse(o.total);
+                 inv.Inv_Remarks = o.Inv_remark;
+                 inv.warrenty = o.warrenty;
+                 //inv.goods_status = "Pending";
+                 inv.delivery_status = o.delivery_status;
                  //inv.Customer_ID_Type = string.Empty;
                  //inv.Customer_ID_No = cino;
-                 inv.AuditBy = userid.ToString();
+                 inv.AuditBy = o.userid.ToString();
                  long ssno = 0;
 
-                 if (sno == 0)
+                 if (o.sno == 0)
                  {
-                     if (inv.ValidateNo(invno, long.Parse(compid.ToString())))
-                     {
-                         return Json("EXIST", JsonRequestBehavior.AllowGet);
-                     }
-                     ssno = inv.Addinvoi(inv);
-                     for (int i = 0; i < details.Count; i++)
-                     {
-                         if (details[i].Inv_Mas_Sno == 0)
+                        if (inv.ValidateNo(o.invno, long.Parse(o.compid.ToString())))
+                        {
+                            return Request.CreateResponse(new {response = "EXIST", message = "Failed" });
+                        }
+                         ssno = inv.Addinvoi(inv);
+                         for (int i = 0; i < o.details.Count; i++)
                          {
-                             inv.Inv_Mas_Sno = ssno;
-                             inv.Item_Description = details[i].Item_Description;
-                             inv.Item_Qty = details[i].Item_Qty;
-                             inv.Item_Unit_Price = details[i].Item_Unit_Price;
-                             inv.Item_Total_Amount = details[i].Item_Total_Amount;
-                             inv.Vat_Percentage = details[i].Vat_Percentage;
-                             inv.Vat_Amount = details[i].Vat_Amount;
-                             inv.Item_Without_vat = details[i].Item_Without_vat;
-                             inv.Remarks = details[i].Remarks;
-                             inv.vat_category = details[i].vat_category;
-                             inv.Vat_Type = details[i].Vat_Type;
-                             inv.AddInvoiceDetails(inv);
+                             if (o.details[i].Inv_Mas_Sno == 0)
+                             {
+                                 inv.Inv_Mas_Sno = ssno;
+                                 inv.Item_Description = o.details[i].Item_Description;
+                                 inv.Item_Qty = o.details[i].Item_Qty;
+                                 inv.Item_Unit_Price = o.details[i].Item_Unit_Price;
+                                 inv.Item_Total_Amount = o.details[i].Item_Total_Amount;
+                                 inv.Vat_Percentage = o.details[i].Vat_Percentage;
+                                 inv.Vat_Amount = o.details[i].Vat_Amount;
+                                 inv.Item_Without_vat = o.details[i].Item_Without_vat;
+                                 inv.Remarks = o.details[i].Remarks;
+                                 inv.vat_category = o.details[i].vat_category;
+                                 inv.Vat_Type = o.details[i].Vat_Type;
+                                 inv.AddInvoiceDetails(inv);
+                             }
                          }
-                     }
 
                  }
-                 else if (sno > 0 && goods_status == "Approve")
+                 else if (o.sno > 0 && o.goods_status == "Approve")
                  {
                      string cno = string.Empty;
-                     cno = sno.ToString().PadLeft(8, '0');
+                     cno = o.sno.ToString().PadLeft(8, '0');
 
-                     inv.Inv_Mas_Sno = sno;
-                     inv.daily_count = 0;// (int)daiC;
-                     inv.grand_count = 0;// (int)graC;
+                     inv.Inv_Mas_Sno = o.sno;
+                     inv.goods_status = "Approved";
+                     //inv.daily_count = 0;// (int)daiC;
+                     //inv.grand_count = 0;// (int)graC;
                      inv.Control_No = "T" + cno;
                      inv.UpdateInvoiMasForTRA1(inv);
                      inv.approval_status = "2";
                      inv.approval_date = System.DateTime.Now;
                      inv.UpdateInvoice(inv);
-                     ssno = sno;
+                     ssno = o.sno;
                  }
-                 else if (sno > 0)
+                 else if (o.sno > 0)
                  {
-                     var getI = inv.EditINVOICEMas(sno);
+                     var getI = inv.EditINVOICEMas(o.sno);
                      bool flag = true;
-                     if (getI.Invoice_No == invno)
+                     if (getI.Invoice_No == o.invno)
                      {
                          flag = false;
                      }
-                     if (inv.ValidateNo(invno, long.Parse(compid.ToString())) && flag == true)
+                    /* if (inv.ValidateNo(o.invno, long.Parse(o.compid.ToString())) && flag == true)
                      {
-                         return Json("EXIST", JsonRequestBehavior.AllowGet);
-                     }
-                     inv.Inv_Mas_Sno = sno;
+                         return Request.CreateResponse(new { response = "EXIST", message = "Failed" });
+                     }*/
+                     inv.Inv_Mas_Sno = o.sno;
                      inv.UpdateInvoiMas(inv);
                      inv.DeleteInvoicedet(inv);
-                     for (int i = 0; i < details.Count; i++)
+                     for (int i = 0; i < o.details.Count; i++)
                      {
-                         if (details[i].Inv_Mas_Sno == 0)
+                         if (o.details[i].Inv_Mas_Sno == 0)
                          {
-                             inv.Inv_Mas_Sno = sno;
-                             inv.Item_Description = details[i].Item_Description;
-                             inv.Item_Qty = details[i].Item_Qty;
-                             inv.Item_Unit_Price = details[i].Item_Unit_Price;
-                             inv.Item_Total_Amount = details[i].Item_Total_Amount;
-                             inv.Vat_Percentage = details[i].Vat_Percentage;
-                             inv.Vat_Amount = details[i].Vat_Amount;
-                             inv.Item_Without_vat = details[i].Item_Without_vat;
-                             inv.Remarks = details[i].Remarks;
-                             inv.vat_category = details[i].vat_category;
+                             inv.Inv_Mas_Sno = o.sno;
+                             inv.Item_Description = o.details[i].Item_Description;
+                             inv.Item_Qty = o.details[i].Item_Qty;
+                             inv.Item_Unit_Price = o.details[i].Item_Unit_Price;
+                             inv.Item_Total_Amount = o.details[i].Item_Total_Amount;
+                             inv.Vat_Percentage = o.details[i].Vat_Percentage;
+                             inv.Vat_Amount = o.details[i].Vat_Amount;
+                             inv.Item_Without_vat = o.details[i].Item_Without_vat;
+                             inv.Remarks = o.details[i].Remarks;
+                             inv.vat_category = o.details[i].vat_category;
                              inv.AddInvoiceDetails(inv);
                          }
                      }
-                     ssno = sno;
+                     ssno = o.sno;
                  }
                  var result1 = ssno;
                  return Request.CreateResponse(new { response = result1, message = new List<string> { } });
@@ -881,7 +907,7 @@ namespace JichangeApi.Controllers
                          string body = "Dear: " + getD.Cust_Name + "<br><br>";
                          body += "Your control no amended for following details " + "<br /><br />";
                          body += "Old Invoice Amount: " + String.Format("{0:n0}", getI.Item_Total_Amount) + "<br /><br />";
-                         body += "New Invoice Amount: " + String.Format("{0:n0}", total) + "<br /><br />";
+                         body += "New Invoice Amount: " + String.Format("{0:n0}", f.total) + "<br /><br />";
                          body += "Thanks," + "<br /><br /> JICHANGE";
                          var esmtp = ss.getSMTPText();
                          if (esmtp != null)
@@ -914,54 +940,62 @@ namespace JichangeApi.Controllers
                      }
                      catch (Exception ex)
                      {
-                         pay.Error_Text = ex.ToString();
-                         pay.AddErrorLogs(pay);
-                     }
-                     try
-                     {
-                         var getD = cum.get_Cust(getI.Cust_Sno);
-                         SqlConnection cn = new SqlConnection(strConnString);
-                         cn.Open();
-                         string txtM = string.Empty;
-                         txtM = "Your Control no ammended, Old invoice amount: " + String.Format("{0:n0}", getI.Item_Total_Amount) + Environment.NewLine + "New amount " + String.Format("{0:n0}", f.total) + Environment.NewLine;// + "TZS " + String.Format("{0:n0}", fee) + " imelipwa kwa ajili ya " + chkFee.Fee_Type + " kupitia ";
-                                                                                                                                                                                                                                //txtM = txtM + servicePaymentDetails.transactionChannel + Environment.NewLine + "Namba ya muamala: " + servicePaymentDetails.paymentReference + " Namba ya stakabadhi: " + servicePaymentDetails.transactionRef + Environment.NewLine + "Kiasi unachodaiwa ni TZS " + String.Format("{0:n0}", bamount) + Environment.NewLine + "Ahsante, " + chkFee.Facility_Name;
-                         DataSet ds2 = new DataSet();
-                         SqlDataAdapter da2 = new SqlDataAdapter(new SqlCommand("select * from tbMessages_sms", cn));
-                         SqlCommandBuilder cb2 = new SqlCommandBuilder(da2);
-                         da2.FillSchema(ds2, SchemaType.Source);
-                         DataTable dt2 = ds2.Tables["Table"];
-                         dt2.TableName = "tbMessages_sms";
-                         DataRow rs2 = ds2.Tables["tbMessages_sms"].NewRow();
 
-                         rs2["msg_date"] = DateTime.Now;
-                         rs2["PhoneNumber"] = "255" + getD.Phone;
-                         rs2["TransactionNo"] = getI.Control_No;
-                         if (AccNo != null)
-                         {
-                             rs2["AccountNumber"] = AccNo.Fee_Acc_No;
-                         }
-                         else
-                         {
-                             rs2["AccountNumber"] = "0";
-                             //}
-                             rs2["Message"] = txtM;
-                             rs2["trials"] = 0;
-                             rs2["deliveryCode"] = DBNull.Value;
-                             rs2["sent"] = 0;
-                             rs2["delivered"] = 0;
-                             rs2["txn_type"] = "SCHOOL";
-                             rs2["Msg_Date_Time"] = DateTime.Now;
-                             ds2.Tables["tbMessages_sms"].Rows.Add(rs2);
-                             da2.Update(ds2, "tbMessages_sms");
-                             cn.Close();
-                         }
-                             catch (Exception ex)
-                     {
-                         pay.Error_Text = ex.ToString();
-                         pay.AddErrorLogs(pay);
-                     }
+                        Utilites.logfile("Add Ammend - email", "0", ex.ToString());
+                        pay.Error_Text = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", ex.ToString() } });
+                    }
+                    try
+                    {
+                        var getD = cum.get_Cust(getI.Cust_Sno);
+                        SqlConnection cn = new SqlConnection(strConnString);
+                        cn.Open();
+                        string txtM = string.Empty;
+                        txtM = "Your Control no ammended, Old invoice amount: " + String.Format("{0:n0}", getI.Item_Total_Amount) + Environment.NewLine + "New amount " + String.Format("{0:n0}", f.total) + Environment.NewLine;// + "TZS " + String.Format("{0:n0}", fee) + " imelipwa kwa ajili ya " + chkFee.Fee_Type + " kupitia ";
+                                                                                                                                                                                                                                 //txtM = txtM + servicePaymentDetails.transactionChannel + Environment.NewLine + "Namba ya muamala: " + servicePaymentDetails.paymentReference + " Namba ya stakabadhi: " + servicePaymentDetails.transactionRef + Environment.NewLine + "Kiasi unachodaiwa ni TZS " + String.Format("{0:n0}", bamount) + Environment.NewLine + "Ahsante, " + chkFee.Facility_Name;
+                        DataSet ds2 = new DataSet();
+                        SqlDataAdapter da2 = new SqlDataAdapter(new SqlCommand("select * from tbMessages_sms", cn));
+                        SqlCommandBuilder cb2 = new SqlCommandBuilder(da2);
+                        da2.FillSchema(ds2, SchemaType.Source);
+                        DataTable dt2 = ds2.Tables["Table"];
+                        dt2.TableName = "tbMessages_sms";
+                        DataRow rs2 = ds2.Tables["tbMessages_sms"].NewRow();
+
+                        rs2["msg_date"] = DateTime.Now;
+                        rs2["PhoneNumber"] = "255" + getD.Phone;
+                        rs2["TransactionNo"] = getI.Control_No;
+                        /*  if (AccNo != null)
+                          {
+                              rs2["AccountNumber"] = AccNo.Fee_Acc_No;
+                          }
+                          else
+                          {
+                              rs2["AccountNumber"] = "0";
+                              //}
+                              rs2["Message"] = txtM;
+                              rs2["trials"] = 0;
+                              rs2["deliveryCode"] = DBNull.Value;
+                              rs2["sent"] = 0;
+                              rs2["delivered"] = 0;
+                              rs2["txn_type"] = "SCHOOL";
+                              rs2["Msg_Date_Time"] = DateTime.Now;
+                              ds2.Tables["tbMessages_sms"].Rows.Add(rs2);
+                              da2.Update(ds2, "tbMessages_sms");
+                              cn.Close();
+                          }*/
+                    }
+                    catch (Exception ex)
+                    {
+
+                        Utilites.logfile("Add Ammend - sms", "0", ex.ToString());
+                        pay.Error_Text = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", ex.ToString() } });
+                    }
                      ssno = f.sno;
                  }
+
                  var result1 = ssno;
                  return Request.CreateResponse(new { response = result1, message = new List<string> { } });
              }
@@ -974,47 +1008,48 @@ namespace JichangeApi.Controllers
 
 
          [HttpPost]
-         public HttpResponseMessage AddCancel(string invno, string auname, string date, string edate, string iedate, string ptype, long chus, long comno, string ccode, string ctype, string cino,
-            string twvat, string vtamou, string total, string Inv_remark, int lastrow, List<INVOICE> details, long sno, string warrenty, string goods_status, string delivery_status, string reason)
+         public HttpResponseMessage AddCancel(AddAmendForm ac)
          {
+            /*string invno, string auname, string date, string edate, string iedate, string ptype, long chus, long comno, string ccode, string ctype, string cino,
+            string twvat, string vtamou, string total, string Inv_remark, int lastrow, List< INVOICE > details, long sno, string warrenty, string goods_status, string delivery_status, string reason*/
              try
              {
                  DateTime dates = DateTime.Now;
                  DateTime dates1 = DateTime.Now;
                  DateTime dates2 = DateTime.Now;
 
-                 dates = DateTime.ParseExact(date, "dd/MM/yyyy", null);
-                 if (!string.IsNullOrEmpty(edate))
+                 dates = DateTime.ParseExact(ac.date, "dd/MM/yyyy", null);
+                 if (!string.IsNullOrEmpty(ac.edate))
                  {
-                     dates1 = DateTime.ParseExact(edate, "dd/MM/yyyy", null);
+                     dates1 = DateTime.ParseExact(ac.edate, "dd/MM/yyyy", null);
                  }
-                 dates2 = DateTime.ParseExact(iedate, "dd/MM/yyyy", null);
+                 dates2 = DateTime.ParseExact(ac.iedate, "dd/MM/yyyy", null);
 
 
-                 inv.Invoice_No = invno;
+                 inv.Invoice_No = ac.invno;
                  inv.Invoice_Date = dates;
-                 if (!string.IsNullOrEmpty(edate))
+                 if (!string.IsNullOrEmpty(ac.edate))
                  {
-                     inv.Due_Date = Convert.ToDateTime(edate);
+                     inv.Due_Date = Convert.ToDateTime(ac.edate);
                  }
-                 inv.Invoice_Expired_Date = Convert.ToDateTime(iedate);
-                 inv.Payment_Type = ptype;
-                 inv.Com_Mas_Sno = long.Parse(compid.ToString());
-                 inv.Chus_Mas_No = chus;
-                 inv.Currency_Code = ccode;
-                 inv.Total_Without_Vt = Decimal.Parse(twvat);
-                 inv.Vat_Amount = Decimal.Parse(vtamou);
-                 inv.Total = Decimal.Parse(total);
-                 inv.Inv_Remarks = Inv_remark;
-                 inv.warrenty = warrenty;
-                 inv.goods_status = goods_status;
-                 inv.delivery_status = delivery_status;
-                 inv.AuditBy = userid.ToString();
+                 inv.Invoice_Expired_Date = Convert.ToDateTime(ac.iedate);
+                 inv.Payment_Type = ac.ptype;
+                 inv.Com_Mas_Sno = long.Parse(ac.compid.ToString());
+                 inv.Chus_Mas_No = ac.chus;
+                 inv.Currency_Code = ac.ccode;
+                 inv.Total_Without_Vt = Decimal.Parse(ac.twvat);
+                 inv.Vat_Amount = Decimal.Parse(ac.vtamou);
+                 inv.Total = Decimal.Parse(ac.total);
+                 inv.Inv_Remarks = ac.Inv_remark;
+                 inv.warrenty = ac.warrenty;
+                 inv.goods_status = ac.goods_status;
+                 inv.delivery_status = ac.delivery_status;
+                 inv.AuditBy = ac.userid.ToString();
                  long ssno = 0;
 
-                 if (sno > 0)
+                 if (ac.sno > 0)
                  {
-                     var getI = inv.GetINVOICEpdf(sno);
+                     var getI = inv.GetINVOICEpdf(ac.sno);
                      if (getI != null)
                      {
                          if (pay.Validate_Invoice(getI.Control_No, getI.CompanySno))
@@ -1024,33 +1059,33 @@ namespace JichangeApi.Controllers
                          ic.Control_No = getI.Control_No;
                          ic.Com_Mas_Sno = getI.CompanySno;
                          ic.Cust_Mas_No = getI.Cust_Sno;
-                         ic.Inv_Mas_Sno = sno;
+                         ic.Inv_Mas_Sno = ac.sno;
                          ic.Invoice_Amount = getI.Item_Total_Amount;
-                         ic.Reason = reason;
-                         ic.AuditBy = userid.ToString();
+                         ic.Reason = ac.reason;
+                         ic.AuditBy = ac.userid.ToString();
                          ic.AddCancel(ic);
                      }
 
 
 
-                     inv.Inv_Mas_Sno = sno;
+                     inv.Inv_Mas_Sno = ac.sno;
                      inv.approval_status = "Cancel";
                      inv.UpdateStatus(inv);
                      inv.DeleteInvoicedet(inv);
-                     for (int i = 0; i < details.Count; i++)
+                     for (int i = 0; i < ac.details.Count; i++)
                      {
-                         if (details[i].Inv_Mas_Sno == 0)
+                         if (ac.details[i].Inv_Mas_Sno == 0)
                          {
-                             inv.Inv_Mas_Sno = sno;
-                             inv.Item_Description = details[i].Item_Description;
-                             inv.Item_Qty = details[i].Item_Qty;
-                             inv.Item_Unit_Price = details[i].Item_Unit_Price;
-                             inv.Item_Total_Amount = details[i].Item_Total_Amount;
-                             inv.Vat_Percentage = details[i].Vat_Percentage;
-                             inv.Vat_Amount = details[i].Vat_Amount;
-                             inv.Item_Without_vat = details[i].Item_Without_vat;
-                             inv.Remarks = details[i].Remarks;
-                             inv.vat_category = details[i].vat_category;
+                             inv.Inv_Mas_Sno = ac.sno;
+                             inv.Item_Description = ac.details[i].Item_Description;
+                             inv.Item_Qty = ac.details[i].Item_Qty;
+                             inv.Item_Unit_Price = ac.details[i].Item_Unit_Price;
+                             inv.Item_Total_Amount = ac.details[i].Item_Total_Amount;
+                             inv.Vat_Percentage = ac.details[i].Vat_Percentage;
+                             inv.Vat_Amount = ac.details[i].Vat_Amount;
+                             inv.Item_Without_vat = ac.details[i].Item_Without_vat;
+                             inv.Remarks = ac.details[i].Remarks;
+                             inv.vat_category = ac.details[i].vat_category;
                              inv.AddInvoiceDetails(inv);
                          }
                      }
@@ -1105,12 +1140,15 @@ namespace JichangeApi.Controllers
                      }
                      catch (Exception ex)
                      {
-                         pay.Error_Text = ex.ToString();
-                         pay.AddErrorLogs(pay);
-                     }
-                     try
-                     {
-                         var getD = cum.get_Cust(getI.Cust_Sno);
+
+                        Utilites.logfile("Add Cancel - email", "0", ex.ToString());
+                        pay.Error_Text = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", ex.ToString() } });
+                    }
+                    try
+                    {
+                        /*  var getD = cum.get_Cust(getI.Cust_Sno);
                          SqlConnection cn = new SqlConnection(strConnString);
                          cn.Open();
                          string txtM = string.Empty;
@@ -1127,7 +1165,7 @@ namespace JichangeApi.Controllers
                          rs2["msg_date"] = DateTime.Now;
                          rs2["PhoneNumber"] = "255" + getD.Phone;
                          rs2["TransactionNo"] = getI.Control_No;
-                         if (AccNo != null)
+                        if (AccNo != null)
                          {
                              rs2["AccountNumber"] = AccNo.Fee_Acc_No;
                          }
@@ -1145,14 +1183,17 @@ namespace JichangeApi.Controllers
                              ds2.Tables["tbMessages_sms"].Rows.Add(rs2);
                              da2.Update(ds2, "tbMessages_sms");
                              cn.Close();
-                         }
-                             catch (Exception ex)
-                     {
+                         }*/
+                    }
+                    catch (Exception ex)
+                    {
 
-                         pay.Error_Text =  ex.ToString();
-                         pay.AddErrorLogs(pay);
-                     }
-                     ssno = sno;
+                        Utilites.logfile("Add Cancel - sms", "0", ex.ToString());
+                        pay.Error_Text = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", ex.ToString() } });
+                    }
+                     ssno = ac.sno;
                  }
                  var result1 = ssno;
                  return Request.CreateResponse(new { response = result1, message = new List<string> { } });
@@ -1352,14 +1393,14 @@ namespace JichangeApi.Controllers
                      mm.From = new MailAddress(m.From_Address);
                      mm.Subject = data.Local_subject;
                      drt = data.Local_subject;
-                     var urlBuilder =
-                    new System.UriBuilder(Request.Url.AbsoluteUri)
-                    {
-                        Path = Url.Action("Loginnew", "Loginnew"),
-                        Query = null,
-                    };
+                     /*var urlBuilder =
+                        new System.UriBuilder(Request.Url.AbsoluteUri)
+                        {
+                            Path = Url.Action("Loginnew", "Loginnew"),
+                            Query = null,
+                        };*/
 
-                     Uri uri = urlBuilder.Uri;
+                     //Uri uri = urlBuilder.Uri;
                      //string url = "web_url";
                      string weburl = System.Web.Configuration.WebConfigurationManager.AppSettings["web_url"].ToString();
                      string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
@@ -1394,7 +1435,7 @@ namespace JichangeApi.Controllers
          }
 
          #endregion
- */
+
 
         #endregion
 

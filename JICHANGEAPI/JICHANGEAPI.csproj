@@ -298,6 +298,7 @@
     <Compile Include="Models\SingletonInvComp.cs" />
     <Compile Include="Models\SingletonInvMas.cs" />
     <Compile Include="Models\SingletonSno.cs" />
+    <Compile Include="Models\SingletonSnoUser.cs" />
     <!-- <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" /> -->
     <!-- <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" /> -->
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -339,10 +340,6 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\CollectionModelDescription.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
-    <Content Include=".vs\JichangeApi\v16\.suo" />
-    <Content Include=".vs\ProjectSettings.json" />
-    <Content Include=".vs\slnx.sqlite" />
-    <Content Include=".vs\VSWorkspaceState.json" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />

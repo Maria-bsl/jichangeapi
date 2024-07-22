@@ -33,100 +33,111 @@ namespace JichangeApi.Controllers.setup
         [HttpPost]
         public HttpResponseMessage GetAccount_Active()
         {
-            var suspenseAccount = new S_Account();
+            S_Account suspenseAccount = new S_Account();
             try
             {
                 var results = suspenseAccount.GetAccounts_Active();
-                if (results != null)
-                {
-                    return Request.CreateResponse(new { response = results, message = new List<string>() });
-                }
-                else
-                {
-                    return Request.CreateResponse(new { response = new List<BranchM>(), message = new List<string> { "Failed to retrieve branch list" } });
-                }
+                return this.GetList<List<S_Account>, S_Account>(results);
             }
             catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private S_Account CreateSuspenseAccount(AddSuspenseAccountForm addSuspenseAccountForm)
+        {
+            S_Account suspenseAccount = new S_Account();
+            suspenseAccount.Sus_Acc_No = addSuspenseAccountForm.account;
+            suspenseAccount.Status = addSuspenseAccountForm.status;
+            suspenseAccount.AuditBy = addSuspenseAccountForm.userid.ToString();
+            suspenseAccount.Sus_Acc_Sno = (long)addSuspenseAccountForm.sno;
+            return suspenseAccount;
+        }
+
+        private HttpResponseMessage InsertSuspenseAccount(S_Account suspenseAccount,AddSuspenseAccountForm addSuspenseAccountForm)
+        {
+            try
+            {
+                bool isExist = suspenseAccount.ValidateAccount(suspenseAccount.Sus_Acc_No.ToLower());
+                if (isExist) return this.GetAlreadyExistsErrorResponse();
+                long addedSuspenseAccount = suspenseAccount.AddAccount(suspenseAccount);
+                return FindSuspenseAccount(addedSuspenseAccount);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private HttpResponseMessage UpdateSuspenseAccount(S_Account suspenseAccount,AddSuspenseAccountForm addSuspenseAccountForm)
+        {
+            try
+            {
+                bool isExist = suspenseAccount.isExistSuspenseAccount((long) addSuspenseAccountForm.sno);
+                if (!isExist) return this.GetNotFoundResponse();
+                bool isDuplicate = suspenseAccount.isDuplicateAccountNumber(addSuspenseAccountForm.account, (long)addSuspenseAccountForm.sno);
+                if (isDuplicate) { return this.GetAlreadyExistsErrorResponse(); }
+                long updatedSno = suspenseAccount.UpdateAccount(suspenseAccount);
+                return FindSuspenseAccount(updatedSno);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
         public HttpResponseMessage AddAccount(AddSuspenseAccountForm addSuspenseAccountForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
             {
-                var suspenseAccount = new S_Account();
-                try
-                {
-                    suspenseAccount.Sus_Acc_No = addSuspenseAccountForm.account;
-                    suspenseAccount.Status = addSuspenseAccountForm.status;
-                    suspenseAccount.AuditBy = addSuspenseAccountForm.userid.ToString();
-                    suspenseAccount.Sus_Acc_Sno = (long) addSuspenseAccountForm.sno;
-                    if (addSuspenseAccountForm.sno == 0)
-                    {
-                        var isExist = suspenseAccount.ValidateAccount(suspenseAccount.Sus_Acc_No.ToLower());
-                        if (isExist)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Already exists." } });
-                        }
-                        var addedSuspenseAccount = suspenseAccount.AddAccount(suspenseAccount);
-                        return Request.CreateResponse(new { response = addedSuspenseAccount, message = new List<string>() });
-                    }
-                    else
-                    {
-                        var account = suspenseAccount.getAccount((long) addSuspenseAccountForm.sno);
-                        if (account == null)
-                        {
-                            return Request.CreateResponse(new { response = 0, message = new List<string> { "Suspense Account not found" } });
-                        }
-                        suspenseAccount.UpdateAccount(suspenseAccount);
-                        return Request.CreateResponse(new { response = (long)addSuspenseAccountForm.sno, message = new List<string>() });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                S_Account suspenseAccount = CreateSuspenseAccount(addSuspenseAccountForm);
+                if ((long) addSuspenseAccountForm.sno == 0) { return InsertSuspenseAccount(suspenseAccount,addSuspenseAccountForm);  }
+                else { return UpdateSuspenseAccount(suspenseAccount,addSuspenseAccountForm); }
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage FindSuspenseAccount(long sno)
+        {
+            try
+            {
+                S_Account suspenseAccount = new S_Account();
+                bool isExist = suspenseAccount.isExistSuspenseAccount(sno);
+                if (!isExist) return this.GetNotFoundResponse();
+                S_Account found = suspenseAccount.EditAccount(sno);
+                return this.GetSuccessResponse(found);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
 
         [HttpPost]
         public HttpResponseMessage DeleteAccount(DeleteSuspenseAccountForm deleteSuspenseAccountForm)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            S_Account suspenseAccount = new S_Account();
+            try
             {
-                var suspenseAccount = new S_Account();
-                try
-                {
-                    var exists = suspenseAccount.isExistSuspenseAccount(deleteSuspenseAccountForm.sno);
-                    if (exists)
-                    {
-                        suspenseAccount.DeleteAccount(deleteSuspenseAccountForm.sno);
-                        return Request.CreateResponse(new { response = deleteSuspenseAccountForm.sno, message = new List<string>() });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "Suspense account does not exist." } });
-                    }
-                }
-                catch (Exception ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
-                }
+                var isExist = suspenseAccount.isExistSuspenseAccount(deleteSuspenseAccountForm.sno);
+                if (!isExist) return this.GetNotFoundResponse();
+                suspenseAccount.DeleteAccount((long) deleteSuspenseAccountForm.sno);
+                return this.GetSuccessResponse((long) deleteSuspenseAccountForm.sno);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
         }
-
     }
 }

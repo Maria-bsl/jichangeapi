@@ -15,7 +15,8 @@ namespace JichangeApi.Controllers
     public class CustomerController : ApiController
     {
         CustomerMaster cm = new CustomerMaster();
-        CompanyBankMaster c = new CompanyBankMaster();
+        CompanyBankMaster cbm = new CompanyBankMaster();
+        CompanyUsers cu = new CompanyUsers();
         //COUNTRY c = new COUNTRY();
         Auditlog ad = new Auditlog();
         REGION r = new REGION();
@@ -26,37 +27,38 @@ namespace JichangeApi.Controllers
         String[] list = new String[15] { "cust_mas_sno", "customer_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno",
             "tin_no", "vat_no","contact_person","email_address","mobile_no", "posted_by", "posted_date", "comp_mas_sno" };
 
-    
+
         [HttpPost]
         public HttpResponseMessage GetCusts(SingletonComp c)
         {
-            if (ModelState.IsValid) { 
-                    try
-                    {
+            if (ModelState.IsValid)
+            {
+                try
+                {
 
-                        var result = cm.CustGet(long.Parse(c.compid.ToString()));
-                        if (result != null)
-                        {
-                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                        }
-                        else
-                        {
-                            var d = 0;
-                            return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
-                        }
-
-                    }
-                    catch (Exception Ex)
+                    var result = cm.CustGet(long.Parse(c.compid.ToString()));
+                    if (result != null)
                     {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
+                    else
+                    {
+                        var d = 0;
+                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                }
             }
             else
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+            //return returnNull;
         }
 
 
@@ -68,7 +70,7 @@ namespace JichangeApi.Controllers
                 try
                 {
 
-                    var result = cm.CustGetId(long.Parse(d.compid.ToString()), (long) d.Sno );
+                    var result = cm.CustGetId(long.Parse(d.compid.ToString()), (long)d.Sno);
                     if (result != null)
                     {
                         return Request.CreateResponse(new { response = result, message = new List<string> { } });
@@ -90,17 +92,18 @@ namespace JichangeApi.Controllers
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return Request.CreateResponse(new {response = 0, message ="Failed" });
+            //return Request.CreateResponse(new {response = 0, message ="Failed" });
         }
 
         [HttpPost]
         public HttpResponseMessage GetComp(SingletonComp d)
         {
-            if (ModelState.IsValid) { 
+            if (ModelState.IsValid)
+            {
                 try
                 {
 
-                    var result = c.CompGet(long.Parse(d.compid.ToString()));
+                    var result = cbm.CompGet(long.Parse(d.compid.ToString()));
                     if (result != null)
                     {
                         return Request.CreateResponse(new { response = result, message = new List<string> { } });
@@ -108,7 +111,7 @@ namespace JichangeApi.Controllers
                     else
                     {
                         var t = 0;
-                        return Request.CreateResponse(new {response = t, message ="Failed"});
+                        return Request.CreateResponse(new { response = t, message = "Failed" });
                     }
 
                 }
@@ -120,9 +123,9 @@ namespace JichangeApi.Controllers
             else
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages});
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+            //return returnNull;
 
         }
 
@@ -149,7 +152,7 @@ namespace JichangeApi.Controllers
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
 
             }
@@ -157,7 +160,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
         [HttpPost]
@@ -182,7 +185,7 @@ namespace JichangeApi.Controllers
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
 
             }
@@ -190,7 +193,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
         [HttpPost]
@@ -215,7 +218,7 @@ namespace JichangeApi.Controllers
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
 
             }
@@ -223,7 +226,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
         [HttpGet]
@@ -238,7 +241,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }//need to check get methods
 
         [HttpPost]
@@ -253,7 +256,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }//need to check get methods
 
 
@@ -273,7 +276,7 @@ namespace JichangeApi.Controllers
                     if (result == null)
                     {
                         int d = 0;
-                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                     }
                     else
                     {
@@ -285,7 +288,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }
 
         [HttpPost]
@@ -297,7 +300,7 @@ namespace JichangeApi.Controllers
                 if (result == null)
                 {
                     int d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
                 else
                 {
@@ -308,7 +311,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }
 
         [HttpPost]
@@ -320,7 +323,7 @@ namespace JichangeApi.Controllers
                 if (result == null)
                 {
                     int d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
                 else
                 {
@@ -331,49 +334,50 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }
 
 
 
-       [HttpPost]
+        [HttpPost]
         public HttpResponseMessage AddCustomer(CustomersForm c)
         {
-            if (ModelState.IsValid) {  
-                    try
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    cm.Cust_Sno = c.CSno;
+                    cm.Cust_Name = c.CName;
+                    cm.PostboxNo = c.PostboxNo;
+                    cm.Address = c.Address;
+                    cm.CompanySno = long.Parse((c.compid).ToString());
+                    if (c.regid > 0)
                     {
-                        cm.Cust_Sno = c.CSno;
-                        cm.Cust_Name = c.CName;
-                        cm.PostboxNo = c.PostboxNo;
-                        cm.Address = c.Address;
-                        cm.CompanySno = long.Parse((c.compid).ToString());
-                        if (c.regid > 0)
-                        {
-                            cm.Region_SNO = c.regid;
-                        }
-                        if (c.distsno > 0)
-                        {
-                            cm.DistSno = c.distsno;
-                        }
-                        if (c.wardsno > 0)
-                        {
-                            cm.WardSno = c.wardsno;
-                        }
+                        cm.Region_SNO = c.regid;
+                    }
+                    if (c.distsno > 0)
+                    {
+                        cm.DistSno = c.distsno;
+                    }
+                    if (c.wardsno > 0)
+                    {
+                        cm.WardSno = c.wardsno;
+                    }
 
-                        cm.TinNo = c.Tinno;
-                        cm.VatNo = c.VatNo;
-                        cm.ConPerson = c.CoPerson;
-                        cm.Email = c.Mail;
-                        cm.Phone = c.Mobile_Number;
-                        //sd.Status = Session["admin1"].ToString() == "Admin" ? "Approved" : "Pending";
-                        //sd.Facility_reg_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
-                        //sd.Facility_Name = Session["Facili_Name"].ToString();
-                        cm.Posted_by = c.userid.ToString();
-                        cm.Checker = c.check_status;
-                        long ssno = 0;
-                        if (c.CSno == 0)
-                        {
-                            var result = cm.ValidateCount(c.CName.ToLower(), c.Tinno);
+                    cm.TinNo = c.Tinno;
+                    cm.VatNo = c.VatNo;
+                    cm.ConPerson = c.CoPerson;
+                    cm.Email = c.Mail;
+                    cm.Phone = c.Mobile_Number;
+                    //sd.Status = Session["admin1"].ToString() == "Admin" ? "Approved" : "Pending";
+                    //sd.Facility_reg_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
+                    //sd.Facility_Name = Session["Facili_Name"].ToString();
+                    cm.Posted_by = c.userid.ToString();
+                    cm.Checker = c.check_status;
+                    long ssno = 0;
+                    if (c.CSno == 0)
+                    {
+                        var result = cm.ValidateCount(c.CName.ToLower(), c.Tinno);
                         //result = false;
                         if (result == true)
                         {
@@ -395,22 +399,22 @@ namespace JichangeApi.Controllers
                                     ad.Table_Name = "Customers";
                                     ad.Newvalues = list1[i];
                                     ad.AuditBy = c.userid.ToString();
-                                    ad.Comp_Sno= long.Parse(c.compid.ToString());
+                                    ad.Comp_Sno = long.Parse(c.compid.ToString());
                                     ad.Audit_Date = DateTime.Now;
                                     ad.Audit_Time = DateTime.Now;
                                     ad.AddAudit(ad);
                                 }
                             }
-                            
 
-                            return Request.CreateResponse(new {response =ssno, message = new List<string> { }});
-                            }
+
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                         }
-                        else if (c.CSno > 0)
+                    }
+                    else if (c.CSno > 0)
+                    {
+                        var update = cm.ValidateDeleteorUpdate(c.CSno);
+                        if (update == false)
                         {
-                            var update = cm.ValidateDeleteorUpdate(c.CSno);
-                            if (update == false)
-                            {
 
                             if (c.dummy == false)
                             {
@@ -421,7 +425,7 @@ namespace JichangeApi.Controllers
                             {
 
                                 var dd = cm.EditCust(c.CSno);
-                                
+
                                 if (dd != null)
                                 {
                                     String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
@@ -432,91 +436,104 @@ namespace JichangeApi.Controllers
                                     for (int i = 0; i < list.Count(); i++)
                                     {
 
-                                            ad.Audit_Type = "Update";
-                                            ad.Columnsname = list[i];
-                                            ad.Table_Name = "Customers";
-                                            ad.Oldvalues = list2[i];
-                                            ad.Newvalues = list1[i];
-                                            ad.AuditBy = c.userid.ToString();
-                                            ad.Audit_Date = DateTime.Now;
-                                            ad.Audit_Time = DateTime.Now;
-                                            ad.AddAudit(ad);
+                                        ad.Audit_Type = "Update";
+                                        ad.Columnsname = list[i];
+                                        ad.Table_Name = "Customers";
+                                        ad.Oldvalues = list2[i];
+                                        ad.Newvalues = list1[i];
+                                        ad.AuditBy = c.userid.ToString();
+                                        ad.Comp_Sno = long.Parse(c.compid.ToString());
+                                        ad.Audit_Date = DateTime.Now;
+                                        ad.Audit_Time = DateTime.Now;
+                                        ad.AddAudit(ad);
 
                                     }
                                 }
                                 cm.CustUpdate(cm);
                                 ssno = c.CSno;
-                                return Request.CreateResponse(new {response = ssno, message = new List<string> { }});
-                                }
-                            }
-                            else
-                            {
-                                return Request.CreateResponse(new { response = update, message = new List<string> { "Failed" }});
+                                return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                             }
                         }
-
-
-
+                        else
+                        {
+                            return Request.CreateResponse(new { response = update, message = new List<string> { "Failed" } });
+                        }
                     }
-                    catch (Exception Ex)
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                    }
+
+
 
                 }
-                else
+                catch (Exception Ex)
                 {
-                    var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                    return Request.CreateResponse(new { response = 0, message = errorMessages });
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                 }
+
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
+            }
             return returnNull;
         }
 
 
         [HttpPost]
-        public HttpResponseMessage DeleteCust(long sno)
+        public HttpResponseMessage DeleteCust(SingletonSnoUser sno)
         {
-            try
+            if (ModelState.IsValid)
             {
-
-                //var name = sd.ValidateDeleteorUpdate(sno, long.Parse(Session["Facili_Reg_No"].ToString()));
-                //if (name == true)
-                //{
-                //    return Json(name, JsonRequestBehavior.AllowGet);
-                //}
-                //else
-                //{
-                if (sno > 0)
+                try
                 {
-                    var dd = cm.EditCust(sno);
-                    /*if (dd != null)
+
+                    //var name = sd.ValidateDeleteorUpdate(sno, long.Parse(Session["Facili_Reg_No"].ToString()));
+                    //if (name == true)
+                    //{
+                    //    return Json(name, JsonRequestBehavior.AllowGet);
+                    //}
+                    //else
+                    //{
+                    if (sno.Sno > 0)
                     {
-                        //String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
-                        //            dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, dd.Posted_by, dd.Posted_Date.ToString(),dd.CompanySno.ToString() };
-                        String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
-                                    dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, Session["UserID"].ToString(),  DateTime.Now.ToString(),dd.CompanySno.ToString() };
-                        for (int i = 0; i < list.Count(); i++)
+                        var dd = cm.EditCust((long)sno.Sno);
+                        //Get Compid from Userid here
+                        var cp = cu.GetCompanyid((long)sno.userid);
+
+
+                        if (dd != null)
                         {
-                            ad.Audit_Type = "Delete";
-                            ad.Columnsname = list[i];
-                            ad.Table_Name = "Customers";
-                            ad.Oldvalues = list2[i];
-                            ad.AuditBy = Session["UserID"].ToString();
-                            ad.Comp_Sno = long.Parse(c.compid.ToString());
-                            ad.Audit_Date = DateTime.Now;
-                            ad.Audit_Time = DateTime.Now;
-                            ad.AddAudit(ad);
+                            //String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
+                            //            dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, dd.Posted_by, dd.Posted_Date.ToString(),dd.CompanySno.ToString() };
+                            String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
+                                        dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, sno.userid.ToString(),  DateTime.Now.ToString(),dd.CompanySno.ToString() };
+                            for (int i = 0; i < list.Count(); i++)
+                            {
+                                ad.Audit_Type = "Delete";
+                                ad.Columnsname = list[i];
+                                ad.Table_Name = "Customers";
+                                ad.Oldvalues = list2[i];
+                                ad.AuditBy = sno.userid.ToString();
+                                ad.Comp_Sno = long.Parse(cp.Compmassno.ToString());
+                                ad.Audit_Date = DateTime.Now;
+                                ad.Audit_Time = DateTime.Now;
+                                ad.AddAudit(ad);
+                            }
                         }
-                    }*/
-                    //al.Facility_Sno = sno;
-                    cm.CustDelete(sno);
-                    return Request.CreateResponse(new { response = sno, message = new List<string> { } });
+                        //al.Facility_Sno = sno;
+                        cm.CustDelete((long)sno.Sno);
+                        return Request.CreateResponse(new { response = sno, message = new List<string> { } });
+                    }
+                    //}
                 }
-                //}
+                catch (Exception Ex)
+                {
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                }
             }
-            catch (Exception Ex)
+            else
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
             return returnNull;
         }

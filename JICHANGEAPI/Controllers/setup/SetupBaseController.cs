@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Text;
+using System.Text.Json.Nodes;
 using System.Web;
 using System.Web.Http;
 
@@ -52,6 +55,16 @@ namespace JichangeApi.Controllers.setup
         protected HttpResponseMessage GetCustomErrorMessageResponse(List<string> messages)
         {
             return Request.CreateResponse(new { response = 0, message = messages });
+        }
+
+        protected HttpResponseMessage SuccessJsonResponse(JsonObject data)
+        {
+            JsonObject json = new JsonObject();
+            json.Add("response", data);
+            json.Add("message", new JsonArray());
+            var response = this.GetSuccessResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(json.ToJsonString(), Encoding.UTF8, "application/json");
+            return response;
         }
         protected List<string> ModelStateErrors()
         {

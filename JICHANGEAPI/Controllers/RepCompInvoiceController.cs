@@ -1,4 +1,5 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class RepCompInvoiceController : ApiController
+    public class RepCompInvoiceController : SetupBaseController
     {
 
         // GET: RepCompInvoice
@@ -159,8 +160,27 @@ namespace JichangeApi.Controllers
             //return null;
         }
 
-
         [HttpPost]
+        public HttpResponseMessage GetInvReport(InvRepoModel invRepoModel)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
+            {
+                INVOICE invoice = new INVOICE();
+                invRepoModel.cusid = invRepoModel.cusid.ToString().ToLower() == "all" ? "0" : invRepoModel.cusid;
+                var result = inv.GetInvRep1((long)invRepoModel.Comp, long.Parse(invRepoModel.cusid), invRepoModel.stdate, invRepoModel.enddate);
+                if (result == null) { return this.GetNoDataFoundResponse();  }
+                else { return this.GetSuccessResponse(result);  }
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+
+        /*[HttpPost]
         public HttpResponseMessage GetInvReport(InvRepoModel i)
         { 
             
@@ -195,9 +215,7 @@ namespace JichangeApi.Controllers
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-
-            //return null;
-        }
+        }*/
 
 
         [HttpPost]

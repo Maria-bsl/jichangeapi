@@ -1,4 +1,5 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Models.form;
 using System;
@@ -12,7 +13,7 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class CustomerController : ApiController
+    public class CustomerController : SetupBaseController
     {
         CustomerMaster cm = new CustomerMaster();
         CompanyBankMaster c = new CompanyBankMaster();
@@ -23,8 +24,9 @@ namespace JichangeApi.Controllers
         WARD w = new WARD();
         private readonly dynamic returnNull = null;
         //AuditLogs al = new AuditLogs();
-        String[] list = new String[15] { "cust_mas_sno", "customer_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno",
+        private static readonly List<string> tableColumns = new List<string> { "cust_mas_sno", "customer_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno",
             "tin_no", "vat_no","contact_person","email_address","mobile_no", "posted_by", "posted_date", "comp_mas_sno" };
+        private static readonly string tableName = "Customers";
 
     
         [HttpPost]
@@ -63,34 +65,19 @@ namespace JichangeApi.Controllers
         [HttpPost]
         public HttpResponseMessage GetCustbyId(CompSnoModel d)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
             {
-                try
-                {
-
-                    var result = cm.CustGetId(long.Parse(d.compid.ToString()), (long) d.Sno );
-                    if (result != null)
-                    {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    else
-                    {
-                        var t = 0;
-                        return Request.CreateResponse(new { response = t, message = new List<string> { "Failed" } });
-                    }
-
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
+                CustomerMaster customerMaster = new CustomerMaster();
+                var result = customerMaster.CustGetId(long.Parse(d.compid.ToString()), (long)d.Sno);
+                if (result == null) { return this.GetNotFoundResponse();  }
+                return this.GetSuccessResponse(result);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
-            return Request.CreateResponse(new {response = 0, message ="Failed" });
         }
 
         [HttpPost]
@@ -334,215 +321,153 @@ namespace JichangeApi.Controllers
             return returnNull;
         }
 
-
-
-       [HttpPost]
-        public HttpResponseMessage AddCustomer(CustomersForm c)
+        private CustomerMaster CreateCustomer(CustomersForm customersForm)
         {
-            if (ModelState.IsValid) {  
-                    try
-                    {
-                        cm.Cust_Sno = c.CSno;
-                        cm.Cust_Name = c.CName;
-                        cm.PostboxNo = c.PostboxNo;
-                        cm.Address = c.Address;
-                        cm.CompanySno = long.Parse((c.compid).ToString());
-                        if (c.regid > 0)
-                        {
-                            cm.Region_SNO = c.regid;
-                        }
-                        if (c.distsno > 0)
-                        {
-                            cm.DistSno = c.distsno;
-                        }
-                        if (c.wardsno > 0)
-                        {
-                            cm.WardSno = c.wardsno;
-                        }
+            CustomerMaster customer = new CustomerMaster();
+            customer.Cust_Sno = customersForm.CSno;
+            customer.Cust_Name = customersForm.CName;
+            customer.PostboxNo = customersForm.PostboxNo;
+            customer.Address = c.Address;
+            customer.CompanySno = long.Parse((customersForm.compid).ToString());
+            if (customersForm.regid > 0) { customer.Region_SNO = customersForm.regid; }
+            if (customersForm.distsno > 0) { customer.DistSno = customersForm.distsno; }
+            if (customersForm.wardsno > 0) { customer.WardSno = customersForm.wardsno; }
+            customer.TinNo = customersForm.Tinno;
+            customer.VatNo = customersForm.VatNo;
+            customer.ConPerson = customersForm.CoPerson;
+            customer.Email = customersForm.Mail;
+            customer.Phone = customersForm.Mobile_Number;
+            customer.Posted_by = customersForm.userid.ToString();
+            customer.Checker = customersForm.check_status;
+            return customer;
+        }
 
-                        cm.TinNo = c.Tinno;
-                        cm.VatNo = c.VatNo;
-                        cm.ConPerson = c.CoPerson;
-                        cm.Email = c.Mail;
-                        cm.Phone = c.Mobile_Number;
-                        //sd.Status = Session["admin1"].ToString() == "Admin" ? "Approved" : "Pending";
-                        //sd.Facility_reg_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
-                        //sd.Facility_Name = Session["Facili_Name"].ToString();
-                        cm.Posted_by = c.userid.ToString();
-                        cm.Checker = c.check_status;
-                        long ssno = 0;
-                        if (c.CSno == 0)
-                        {
-                            var result = cm.ValidateCount(c.CName.ToLower(), c.Tinno);
-                        //result = false;
-                        if (result == true)
-                        {
-                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                        }
-                        else
-                        {
-                            ssno = cm.CustAdd(cm);
+        private void AppendInsertAuditTrail(long sno, CustomerMaster customerMaster, long userid)
+        {
+            var values = new List<string> { sno.ToString(), customerMaster.Cust_Name, customerMaster.PostboxNo, customerMaster.Address, customerMaster.Region_SNO.ToString(), customerMaster.DistSno.ToString(), customerMaster.WardSno.ToString(),
+                                    customerMaster.TinNo, customerMaster.VatNo, customerMaster.ConPerson, customerMaster.Email, customerMaster.Phone, userid.ToString(), DateTime.Now.ToString(),(customerMaster.CompanySno).ToString() };
+            Auditlog.InsertAuditTrail(values, userid, CustomerController.tableName, CustomerController.tableColumns);
+        }
 
-                            if (ssno > 0)
-                            {
+        private void AppendUpdateAuditTrail(long sno, CustomerMaster oldCustomer, CustomerMaster newCustomer, long userid)
+        {
+            var oldValues = new List<string> { sno.ToString(), oldCustomer.Cust_Name, oldCustomer.PostboxNo, oldCustomer.Address, oldCustomer.Region_SNO.ToString(), oldCustomer.DistSno.ToString(), oldCustomer.WardSno.ToString(),
+                                        oldCustomer.TinNo, oldCustomer.VatNo,oldCustomer.ConPerson,oldCustomer.Email,oldCustomer.Phone, userid.ToString(),  DateTime.Now.ToString(),oldCustomer.CompanySno.ToString() };
+            
+            var newValues = new List<string> { sno.ToString(), newCustomer.Cust_Name, newCustomer.PostboxNo, newCustomer.Address, newCustomer.Region_SNO.ToString(), newCustomer.DistSno.ToString(), newCustomer.WardSno.ToString(),
+                                        newCustomer.TinNo, newCustomer.VatNo,newCustomer.ConPerson,newCustomer.Email,newCustomer.Phone, userid.ToString(),  DateTime.Now.ToString(),newCustomer.CompanySno.ToString() };
+            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, CustomerController.tableName, CustomerController.tableColumns);
+        }
 
-                                string[] list1 = new string[15] { ssno.ToString(), c.CName, c.PostboxNo, c.Address, c.regid.ToString(), c.distsno.ToString(), c.wardsno.ToString(),
-                                    c.Tinno, c.VatNo, c.CoPerson, c.Mail, c.Mobile_Number, c.userid.ToString(), DateTime.Now.ToString(),(c.compid).ToString() };
-                                for (int i = 0; i < list.Count(); i++)
-                                {
-                                    ad.Audit_Type = "Insert";
-                                    ad.Columnsname = list[i];
-                                    ad.Table_Name = "Customers";
-                                    ad.Newvalues = list1[i];
-                                    ad.AuditBy = c.userid.ToString();
-                                    ad.Comp_Sno= long.Parse(c.compid.ToString());
-                                    ad.Audit_Date = DateTime.Now;
-                                    ad.Audit_Time = DateTime.Now;
-                                    ad.AddAudit(ad);
-                                }
-                            }
-                            
+        private void AppendDeleteAuditTrail(long sno, CustomerMaster customerMaster, long userid)
+        {
+            var values = new List<string> { sno.ToString(), customerMaster.Cust_Name, customerMaster.PostboxNo, customerMaster.Address, customerMaster.Region_SNO.ToString(), customerMaster.DistSno.ToString(), customerMaster.WardSno.ToString(),
+                                    customerMaster.TinNo, customerMaster.VatNo, customerMaster.ConPerson, customerMaster.Email, customerMaster.Phone, userid.ToString(), DateTime.Now.ToString(),(customerMaster.CompanySno).ToString() };
+            Auditlog.deleteAuditTrail(values, userid, CustomerController.tableName, CustomerController.tableColumns);
+        }
 
-                            return Request.CreateResponse(new {response =ssno, message = new List<string> { }});
-                            }
-                        }
-                        else if (c.CSno > 0)
-                        {
-                            var update = cm.ValidateDeleteorUpdate(c.CSno);
-                            if (update == false)
-                            {
-
-                            if (c.dummy == false)
-                            {
-                                return Request.CreateResponse(new { response = c.dummy, message = new List<string> { "Failed" } });
-                            }
-
-                            else
-                            {
-
-                                var dd = cm.EditCust(c.CSno);
-                                
-                                if (dd != null)
-                                {
-                                    String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
-                                        dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, c.userid.ToString(),  DateTime.Now.ToString(),dd.CompanySno.ToString() };
-                                    String[] list1 = new String[15] { c.CSno.ToString(), c.CName, c.PostboxNo, c.Address, c.regid.ToString(), c.distsno.ToString(), c.wardsno.ToString(),
-                                    c.Tinno, c.VatNo, c.CoPerson, c.Mail, c.Mobile_Number, c.userid.ToString(), DateTime.Now.ToString(),(c.compid).ToString() };
-
-                                    for (int i = 0; i < list.Count(); i++)
-                                    {
-
-                                            ad.Audit_Type = "Update";
-                                            ad.Columnsname = list[i];
-                                            ad.Table_Name = "Customers";
-                                            ad.Oldvalues = list2[i];
-                                            ad.Newvalues = list1[i];
-                                            ad.AuditBy = c.userid.ToString();
-                                            ad.Audit_Date = DateTime.Now;
-                                            ad.Audit_Time = DateTime.Now;
-                                            ad.AddAudit(ad);
-
-                                    }
-                                }
-                                cm.CustUpdate(cm);
-                                ssno = c.CSno;
-                                return Request.CreateResponse(new {response = ssno, message = new List<string> { }});
-                                }
-                            }
-                            else
-                            {
-                                return Request.CreateResponse(new { response = update, message = new List<string> { "Failed" }});
-                            }
-                        }
-
-
-
-                    }
-                    catch (Exception Ex)
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                    }
-
+        private HttpResponseMessage InsertCustomer(CustomerMaster customerMaster,CustomersForm customersForm)
+        {
+            try
+            {
+                string exists = customerMaster.IsDuplicateCustomer(customerMaster.Cust_Name, customerMaster.Phone,customerMaster.Email,customerMaster.TinNo);
+                if (exists.Length > 0) {
+                    var messages = new List<string> { exists };
+                    return this.GetCustomErrorMessageResponse(messages);
                 }
-                else
+                long addedCustomer = customerMaster.CustAdd(customerMaster);
+                AppendInsertAuditTrail(addedCustomer, customerMaster, (long) customersForm.userid);
+                return FindCustomer((long)customersForm.compid, addedCustomer);
+
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        private HttpResponseMessage UpdateCustomer(CustomerMaster customerMaster,CustomersForm customersForm)
+        {
+            try
+            {
+                bool isExist = customerMaster.isExistCustomer(customerMaster.Cust_Sno);
+                if (!isExist) { return this.GetNotFoundResponse();  }
+                bool isValidUpdate = customerMaster.ValidateDeleteorUpdate(customerMaster.Cust_Sno);
+                if (isValidUpdate)
                 {
-                    var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                    return Request.CreateResponse(new { response = 0, message = errorMessages });
+                    var messages = new List<string> { "Customer has invoice" };
+                    return this.GetCustomErrorMessageResponse(messages);
                 }
-            return returnNull;
+                string exists = customerMaster.IsDuplicateCustomer(customerMaster.Cust_Name, customerMaster.Phone, customerMaster.Email, customerMaster.TinNo,customerMaster.Cust_Sno);
+                if (exists.Length > 0)
+                {
+                    var messages = new List<string> { exists };
+                    return this.GetCustomErrorMessageResponse(messages);
+                }
+                CustomerMaster found = customerMaster.FindCustomer(customerMaster.Cust_Sno);
+                AppendUpdateAuditTrail(customerMaster.Cust_Sno, found, customerMaster, (long) customersForm.userid);
+                customerMaster.CustUpdate(customerMaster);
+                return FindCustomer((long) customersForm.compid, customersForm.CSno);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage AddCustomer(CustomersForm customersForm)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
+            {
+                CustomerMaster customerMaster = CreateCustomer(customersForm);
+                if (customersForm.CSno == 0) { return InsertCustomer(customerMaster,customersForm); }
+                else { return UpdateCustomer(customerMaster,customersForm);  }
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage FindCustomer(long companyid,long customerId)
+        {
+            try
+            {
+                CustomerMaster customerMaster = new CustomerMaster();
+                CustomerMaster found = customerMaster.CustGetId(companyid, customerId);
+                if (found == null) { return this.GetNotFoundResponse(); }
+                return this.GetSuccessResponse(found);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
         }
 
 
         [HttpPost]
-        public HttpResponseMessage DeleteCust(long sno)
+        public HttpResponseMessage DeleteCust(DeleteCustomerForm deleteCustomerForm)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
             try
             {
-
-                //var name = sd.ValidateDeleteorUpdate(sno, long.Parse(Session["Facili_Reg_No"].ToString()));
-                //if (name == true)
-                //{
-                //    return Json(name, JsonRequestBehavior.AllowGet);
-                //}
-                //else
-                //{
-                if (sno > 0)
-                {
-                    var dd = cm.EditCust(sno);
-                    /*if (dd != null)
-                    {
-                        //String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
-                        //            dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, dd.Posted_by, dd.Posted_Date.ToString(),dd.CompanySno.ToString() };
-                        String[] list2 = new String[15] { dd.Cust_Sno.ToString(), dd.Cust_Name, dd.PostboxNo, dd.Address, dd.Region_SNO.ToString(), dd.DistSno.ToString(), dd.WardSno.ToString(),
-                                    dd.TinNo, dd.VatNo,dd.ConPerson,dd.Email,dd.Phone, Session["UserID"].ToString(),  DateTime.Now.ToString(),dd.CompanySno.ToString() };
-                        for (int i = 0; i < list.Count(); i++)
-                        {
-                            ad.Audit_Type = "Delete";
-                            ad.Columnsname = list[i];
-                            ad.Table_Name = "Customers";
-                            ad.Oldvalues = list2[i];
-                            ad.AuditBy = Session["UserID"].ToString();
-                            ad.Comp_Sno = long.Parse(c.compid.ToString());
-                            ad.Audit_Date = DateTime.Now;
-                            ad.Audit_Time = DateTime.Now;
-                            ad.AddAudit(ad);
-                        }
-                    }*/
-                    //al.Facility_Sno = sno;
-                    cm.CustDelete(sno);
-                    return Request.CreateResponse(new { response = sno, message = new List<string> { } });
-                }
-                //}
+                CustomerMaster customerMaster = new CustomerMaster();
+                bool isExist = customerMaster.isExistCustomer((long)deleteCustomerForm.sno);
+                if (!isExist) { return this.GetNotFoundResponse();  }
+                CustomerMaster found = cm.FindCustomer((long)deleteCustomerForm.sno);
+                AppendDeleteAuditTrail((long)deleteCustomerForm.sno, found, (long)deleteCustomerForm.userid);
+                customerMaster.CustDelete((long)deleteCustomerForm.sno);
+                return this.GetSuccessResponse((long)deleteCustomerForm.sno);
             }
-            catch (Exception Ex)
+            catch (Exception ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                return this.GetServerErrorResponse(ex.Message);
             }
-            return returnNull;
         }
-
-
-        //private void sendcode(String email, String auname)
-        //{
-        //    using (MailMessage message = new MailMessage())
-        //    {
-        //        Random random = new Random();
-        //        message.To.Add(email);
-        //        SmtpClient smtp = new SmtpClient();
-        //        smtp.Host = "smtp.gmail.com";
-        //        smtp.Port = 587;
-        //        smtp.Credentials = new System.Net.NetworkCredential("institutionreg@gmail.com", "instreg@1");
-        //        smtp.EnableSsl = true;
-        //        message.Subject = "Activation code to verify email Address";
-        //        message.Body = "Hello! " + auname.ToString() + ",your Activation code is " + auname + "\n\n\n Thanks & Regards";
-        //        Session["sendcode"] = auname;
-        //        string toaddress = email.ToString();
-        //        string fromaddress = "institutionreg@gmail.com";
-        //        message.From = new MailAddress(fromaddress);
-        //        smtp.Send(message);
-        //    }
-        //}
-
-
     }
 }

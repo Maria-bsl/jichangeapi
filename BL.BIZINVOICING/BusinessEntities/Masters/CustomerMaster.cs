@@ -428,7 +428,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Email = c.email_address,
                                     Phone = c.mobile_no,
                                     Checker = c.checker
-                                }).ToList();
+                                }).OrderByDescending(z => z.Cust_Sno).ToList();
                     return list;
                 }
                 else
@@ -602,11 +602,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 PostboxNo = c.pobox_no,
                                 Address = c.physical_address,
                                 Region_SNO = c.region_id,
-                                //Region_Name = a.region_name,
+                                Region_Name = a.region_name, //was commented
                                 DistSno = c.district_sno,
-                               // DistName = b.district_name,
+                                DistName = b.district_name, //was commented
                                 WardSno = c.ward_sno,
-                                //WardName = d.ward_name,
+                                WardName = d.ward_name, //was commented
                                 CompanySno=(long)c.comp_mas_sno,
                                 TinNo = c.tin_no,
                                 VatNo = c.vat_no,
@@ -681,6 +681,58 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+        public string IsDuplicateCustomer(string customerName,string mobileNumber,string email,string tinNumber)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var existsName = from c in context.customer_master where c.customer_name.ToLower().Equals(customerName.ToLower()) select c;
+                if (existsName.Count() > 0) return "Exists name";
+                var existsMobile = from c in context.customer_master where c.mobile_no.ToLower().Equals(mobileNumber.ToLower()) select c;
+                if (existsMobile.Count() > 0) return "Exists phone";
+                else if (tinNumber != null && tinNumber.Length > 0)
+                {
+                    var existsTinNumber = from c in context.customer_master where c.tin_no.ToLower().Equals(tinNumber.ToLower()) select c;
+                    if (existsTinNumber.Count() > 0) return "Exists tin";
+                }
+                else if (email != null && email.Length > 0)
+                {
+                    var existsEmail = from c in context.customer_master where c.email_address.ToLower().Equals(email.ToLower()) select c;
+                    if (existsEmail.Count() > 0) return "Exists email";
+                }
+                else
+                {
+                    return "";
+                }
+                return "";
+            }
+        }
+
+        public string IsDuplicateCustomer(string customerName, string mobileNumber, string email, string tinNumber,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var existsName = from c in context.customer_master where (c.customer_name.ToLower().Equals(customerName.ToLower()) && c.cust_mas_sno != sno) select c;
+                if (existsName.Count() > 0) return "Exists name";
+                var existsMobile = from c in context.customer_master where (c.mobile_no.ToLower().Equals(mobileNumber.ToLower()) && c.cust_mas_sno != sno) select c;
+                if (existsMobile.Count() > 0) return "Exists phone";
+                else if (tinNumber != null && tinNumber.Length > 0)
+                {
+                    var existsTinNumber = from c in context.customer_master where (c.tin_no.ToLower().Equals(tinNumber.ToLower()) && c.cust_mas_sno != sno) select c;
+                    if (existsTinNumber.Count() > 0) return "Exists tin";
+                }
+                else if (email != null && email.Length > 0)
+                {
+                    var existsEmail = from c in context.customer_master where (c.email_address.ToLower().Equals(email.ToLower()) && c.cust_mas_sno != sno) select c;
+                    if (existsEmail.Count() > 0) return "Exists email";
+                }
+                else
+                {
+                    return "";
+                }
+                return "";
+            }
+        }
+
 
         public bool ValidateDeleteorUpdate(long ssno)
         {
@@ -697,6 +749,42 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return true;
                 else
                     return false;
+            }
+        }
+
+        public bool isExistCustomer(long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var exists = context.customer_master.Find(sno);
+                return exists != null;
+            }
+        }
+
+        public CustomerMaster FindCustomer(long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var found = context.customer_master.Find(sno);
+                CustomerMaster customerMaster = new CustomerMaster();
+                customerMaster.Cust_Sno = found.cust_mas_sno;
+                customerMaster.Cust_Sno = found.cust_mas_sno;
+                customerMaster.Cust_Name = found.customer_name;
+                customerMaster.PostboxNo = found.pobox_no;
+                customerMaster.Address = found.physical_address;
+                customerMaster.Region_SNO = found.region_id;
+                //customerMaster.Region_Name = found.region_name, //was commented
+                customerMaster.DistSno = found.district_sno;
+                //customerMaster.DistName = b.district_name, //was commented
+                customerMaster.WardSno = found.ward_sno;
+                //customerMaster.WardName = d.ward_name, //was commented
+                customerMaster.CompanySno = (long)found.comp_mas_sno;
+                customerMaster.TinNo = found.tin_no;
+                customerMaster.VatNo = found.vat_no;
+                customerMaster.ConPerson = found.contact_person;
+                customerMaster.Email = found.email_address;
+                customerMaster.Phone = found.mobile_no;
+                return customerMaster;
             }
         }
 

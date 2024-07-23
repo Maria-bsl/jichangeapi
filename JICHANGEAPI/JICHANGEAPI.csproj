@@ -253,6 +253,7 @@
     <Compile Include="Models\Desibraid.cs" />
     <Compile Include="Models\form\AddAmendForm.cs" />
     <Compile Include="Models\form\CustomersForm.cs" />
+    <Compile Include="Models\form\DeleteCustomerForm.cs" />
     <Compile Include="Models\form\GetEmployeeForm.cs" />
     <Compile Include="Models\form\InvoiceForm.cs" />
     <Compile Include="Models\form\MainForm.cs" />

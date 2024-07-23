@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.ConstantFile;
 using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Models.form;
 using System;
@@ -13,11 +14,14 @@ using System.Net.Http;
 using System.Net.Mail;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text;
 
 namespace JichangeApi.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class InvoiceController : ApiController
+    public class InvoiceController : SetupBaseController
     {
         #region Global Declrations
         // GET: Invoice
@@ -627,175 +631,357 @@ namespace JichangeApi.Controllers
             return null;
         }
 
-         #region Save Update Invoice
-         [HttpPost]
-         public HttpResponseMessage AddInvoice(InvoiceForm o)
-         {
-             if (ModelState.IsValid) { 
-                 try
-             {
+        private INVOICE CreateInvoice(InvoiceForm invoiceForm)
+        {
+            CompanyBankMaster companyBankMaster = new CompanyBankMaster();
+            INVOICE invoice = new INVOICE();
+            CompanyBankMaster approvedCompany = companyBankMaster.GetCompany_MStatus((long)invoiceForm.compid);
+            if (approvedCompany.Status.ToLower().ToString().Equals("no"))
+            {
+                string invoiceSno = invoiceForm.sno.ToString().PadLeft(8, '0');
+                invoice.goods_status = "Approved";
+                invoice.Control_No = "T" + invoiceSno;
+                invoice.approval_status = "2";
+                invoice.approval_date = DateTime.Now;
+            }
+            else
+            {
+                invoice.Control_No = "";
+                invoice.goods_status = "Pending";
+                invoice.approval_status = "1";
+            }
+            invoice.Invoice_No = invoiceForm.invno;
+            invoice.Invoice_Date = DateTime.Parse(invoiceForm.date);
+            invoice.Due_Date = DateTime.Parse(invoiceForm.edate);
+            invoice.Invoice_Expired_Date = DateTime.Parse(invoiceForm.iedate);
+            invoice.Payment_Type = invoiceForm.ptype;
+            invoice.Com_Mas_Sno = (long)invoiceForm.compid;
+            invoice.Chus_Mas_No = (long) invoiceForm.chus;
+            invoice.Currency_Code = invoiceForm.ccode;
+            invoice.Total_Without_Vt = Decimal.Parse(invoiceForm.twvat);
+            invoice.Vat_Amount = Decimal.Parse(invoiceForm.vtamou);
+            invoice.Total = Decimal.Parse(invoiceForm.total);
+            invoice.Inv_Remarks = invoiceForm.Inv_remark;
+            invoice.warrenty = invoiceForm.warrenty;
+            invoice.delivery_status = invoiceForm.delivery_status;
+            invoice.AuditBy = invoiceForm.userid.ToString();
+            return invoice;
+        }
 
-                    // Check for Userid for created invoice
-                    var cb = sbm.GetCompany_MStatus((long)o.compid);
-                    if (cb.Status.ToLower().ToString().Equals("no"))
-                    {
-                        // Automatic Approve Invoice and Generated Control number
-                        string cno = string.Empty;
-                        cno = o.sno.ToString().PadLeft(8, '0');
+        private INVOICE CreateEditInvoice(InvoiceForm invoiceForm)
+        {
+            INVOICE invoice = new INVOICE();
+            INVOICE found = invoice.GetINVOICEMas1((long)invoiceForm.compid, (long)invoiceForm.sno);
+            if (found == null) return null;
+            found.Due_Date = DateTime.Parse(invoiceForm.edate);
+            found.Invoice_Expired_Date = DateTime.Parse(invoiceForm.edate);
+            found.Payment_Type = invoiceForm.ptype;
+            found.Inv_Remarks = invoiceForm.Inv_remark;
+            return found;
+        }
 
-                        inv.goods_status = "Approved";
-                        inv.Control_No = "T" + cno;
-                        inv.approval_status = "2";
-                        inv.approval_date = System.DateTime.Now;
-                        //inv.UpdateInvoice(inv);
-                       
+        private void InsertInvoiceDetails(List<INVOICE> details,long invoiceSno)
+        {
+            for (int i = 0; i < details.Count(); i++)
+            {
+                INVOICE detail = details[i];
+                if (detail.Inv_Mas_Sno == 0)
+                {
+                    INVOICE invoice = new INVOICE();
+                    invoice.Inv_Mas_Sno = invoiceSno;
+                    invoice.Item_Description = detail.Item_Description;
+                    invoice.Item_Qty = detail.Item_Qty;
+                    invoice.Item_Unit_Price = detail.Item_Unit_Price;
+                    invoice.Item_Total_Amount = detail.Item_Total_Amount;
+                    invoice.Vat_Percentage = detail.Vat_Percentage;
+                    invoice.Vat_Amount = detail.Vat_Amount;
+                    invoice.Item_Without_vat = detail.Item_Without_vat;
+                    invoice.Remarks = detail.Remarks;
+                    invoice.vat_category = detail.vat_category;
+                    invoice.Vat_Type = detail.Vat_Type;
+                    invoice.AddInvoiceDetails(invoice);
+                }
+            }
+        }
 
-                    }
-                    else
-                    {
-                        inv.Control_No = "";
-                        //inv.approval_date = ;
-                        inv.goods_status = "Pending";
-                        inv.approval_status = "1";
-                    }
+        [HttpGet]
+        public HttpResponseMessage FindInvoice(long companySno,long invoiceSno)
+        {
+            try
+            {
+                INVOICE invoice = new INVOICE();
+                INVOICE found = invoice.GetINVOICEMas1(companySno, invoiceSno);
+                if (found == null) { return this.GetNotFoundResponse();  }
+                List<INVOICE> details = invoice.GetInvoiceDetails(invoiceSno);
+                string jsonString = JsonSerializer.Serialize(found);
+                JsonObject jsonObject = JsonNode.Parse(jsonString).AsObject();
+                var detailsArray = new JsonArray();
+                for (int i = 0; i < details.Count(); i++)
+                {
+                    var json = JsonSerializer.Serialize(details[i]);
+                    JsonObject detail = JsonNode.Parse(json).AsObject();
+                    detailsArray.Add(detail);
+                }
+                jsonObject.Add("details", detailsArray);
+                return this.SuccessJsonResponse(jsonObject);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
 
-                 DateTime dates = DateTime.Now;
-                 DateTime dates1 = DateTime.Now;
-                 DateTime dates2 = DateTime.Now;
-                 //dates = DateTime.ParseExact(date, "dd/MM/yyyy", null);
-                 dates = DateTime.Parse(o.date);
-                 if (!string.IsNullOrEmpty(o.edate))
-                 {
-                     //dates1 = DateTime.ParseExact(edate, "dd/MM/yyyy", null);
-                     dates1 = DateTime.Parse(o.edate);
-                 }
-                 //dates2 = DateTime.ParseExact(iedate, "dd/MM/yyyy", null);
-                 dates2 = DateTime.Parse(o.iedate);
+        private HttpResponseMessage InsertInvoice(InvoiceForm invoiceForm)
+        {
+            try
+            {
+                INVOICE invoice = CreateInvoice(invoiceForm);
+                bool isExistInvoiceNo = invoice.ValidateNo(invoiceForm.invno, (long) invoiceForm.compid); 
+                if (isExistInvoiceNo)
+                {
+                    var messages = new List<string> { "Invoice number exists" };
+                    return this.GetCustomErrorMessageResponse(messages);
+                }
+                bool isExistControlNo = invoice.ValidateControl(invoice.Control_No);
+                if (isExistControlNo)
+                {
+                    var messages = new List<string> { "Control number exists" };
+                    return this.GetCustomErrorMessageResponse(messages);
+                }
+                long invoiceSno = invoice.Addinvoi(invoice);
+                InsertInvoiceDetails(invoiceForm.details,invoiceSno);
+                return FindInvoice((long) invoiceForm.compid, invoiceSno);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
 
-                 inv.Invoice_No = o.invno;
-                 inv.Invoice_Date = dates;
-                 if (!string.IsNullOrEmpty(o.edate))
-                 {
-                     inv.Due_Date = Convert.ToDateTime(o.edate);
-                 }
-                 inv.Invoice_Expired_Date = Convert.ToDateTime(o.iedate);
-                 inv.Payment_Type = o.ptype;
-                 inv.Com_Mas_Sno = long.Parse(o.compid.ToString());
-                 inv.Chus_Mas_No = o.chus;
-                 inv.Currency_Code = o.ccode;
-                 inv.Total_Without_Vt = Decimal.Parse(o.twvat);
-                 inv.Vat_Amount = Decimal.Parse(o.vtamou);
-                 inv.Total = Decimal.Parse(o.total);
-                 inv.Inv_Remarks = o.Inv_remark;
-                 inv.warrenty = o.warrenty;
-                 //inv.goods_status = "Pending";
-                 inv.delivery_status = o.delivery_status;
-                 //inv.Customer_ID_Type = string.Empty;
-                 //inv.Customer_ID_No = cino;
-                 inv.AuditBy = o.userid.ToString();
-                 long ssno = 0;
+        private HttpResponseMessage ApproveInvoice(InvoiceForm invoiceForm)
+        {
+            try
+            {
+                INVOICE invoice = CreateInvoice(invoiceForm);
+                invoice.Inv_Mas_Sno = invoiceForm.sno;
+                invoice.goods_status = "Approved";
+                string controlNumber = invoiceForm.sno.ToString().PadLeft(8, '0');
+                invoice.Control_No = "T" + controlNumber;
+                invoice.UpdateInvoiMasForTRA1(invoice);
+                invoice.approval_status = "2";
+                invoice.approval_date = System.DateTime.Now;
+                invoice.UpdateInvoice(invoice);
+                return FindInvoice((long)invoiceForm.compid, invoiceForm.sno);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
 
-                 if (o.sno == 0)
-                 {
-                        if (inv.ValidateNo(o.invno, long.Parse(o.compid.ToString())))
+        private HttpResponseMessage UpdateInvoice(InvoiceForm invoiceForm)
+        {
+            try
+            {
+                INVOICE invoice = CreateEditInvoice(invoiceForm);
+                if (invoice == null) { return this.GetNotFoundResponse(); }
+                invoice.UpdateInvoiMas(invoice);
+                invoice.DeleteInvoicedet(invoice);
+                InsertInvoiceDetails(invoiceForm.details, invoice.Inv_Mas_Sno);
+                return FindInvoice((long)invoiceForm.compid, invoice.Inv_Mas_Sno);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage AddInvoice(InvoiceForm invoiceForm)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
+            {
+                if (invoiceForm.sno == 0) { return InsertInvoice(invoiceForm); }
+                else if (invoiceForm.sno > 0 && invoiceForm.goods_status == "Approve") { return ApproveInvoice(invoiceForm); }
+                else return UpdateInvoice(invoiceForm);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        #region Save Update Invoice
+        /*[HttpPost]
+        public HttpResponseMessage AddInvoice(InvoiceForm o)
+        {
+            if (ModelState.IsValid) { 
+                try
+            {
+
+                   // Check for Userid for created invoice
+                   var cb = sbm.GetCompany_MStatus((long)o.compid);
+                   if (cb.Status.ToLower().ToString().Equals("no"))
+                   {
+                       // Automatic Approve Invoice and Generated Control number
+                       string cno = string.Empty;
+                       cno = o.sno.ToString().PadLeft(8, '0');
+
+                       inv.goods_status = "Approved";
+                       inv.Control_No = "T" + cno;
+                       inv.approval_status = "2";
+                       inv.approval_date = System.DateTime.Now;
+                       //inv.UpdateInvoice(inv);
+
+
+                   }
+                   else
+                   {
+                       inv.Control_No = "";
+                       //inv.approval_date = ;
+                       inv.goods_status = "Pending";
+                       inv.approval_status = "1";
+                   }
+
+                DateTime dates = DateTime.Now;
+                DateTime dates1 = DateTime.Now;
+                DateTime dates2 = DateTime.Now;
+                //dates = DateTime.ParseExact(date, "dd/MM/yyyy", null);
+                dates = DateTime.Parse(o.date);
+                if (!string.IsNullOrEmpty(o.edate))
+                {
+                    //dates1 = DateTime.ParseExact(edate, "dd/MM/yyyy", null);
+                    dates1 = DateTime.Parse(o.edate);
+                }
+                //dates2 = DateTime.ParseExact(iedate, "dd/MM/yyyy", null);
+                dates2 = DateTime.Parse(o.iedate);
+
+                inv.Invoice_No = o.invno;
+                inv.Invoice_Date = dates;
+                if (!string.IsNullOrEmpty(o.edate))
+                {
+                    inv.Due_Date = Convert.ToDateTime(o.edate);
+                }
+                inv.Invoice_Expired_Date = Convert.ToDateTime(o.iedate);
+                inv.Payment_Type = o.ptype;
+                inv.Com_Mas_Sno = long.Parse(o.compid.ToString());
+                inv.Chus_Mas_No = o.chus;
+                inv.Currency_Code = o.ccode;
+                inv.Total_Without_Vt = Decimal.Parse(o.twvat);
+                inv.Vat_Amount = Decimal.Parse(o.vtamou);
+                inv.Total = Decimal.Parse(o.total);
+                inv.Inv_Remarks = o.Inv_remark;
+                inv.warrenty = o.warrenty;
+                //inv.goods_status = "Pending";
+                inv.delivery_status = o.delivery_status;
+                //inv.Customer_ID_Type = string.Empty;
+                //inv.Customer_ID_No = cino;
+                inv.AuditBy = o.userid.ToString();
+                long ssno = 0;
+
+                if (o.sno == 0)
+                {
+                       if (inv.ValidateNo(o.invno, long.Parse(o.compid.ToString())))
+                       {
+                           return Request.CreateResponse(new {response = "EXIST", message = "Failed" });
+                       }
+                        ssno = inv.Addinvoi(inv);
+                        for (int i = 0; i < o.details.Count; i++)
                         {
-                            return Request.CreateResponse(new {response = "EXIST", message = "Failed" });
+                            if (o.details[i].Inv_Mas_Sno == 0)
+                            {
+                                inv.Inv_Mas_Sno = ssno;
+                                inv.Item_Description = o.details[i].Item_Description;
+                                inv.Item_Qty = o.details[i].Item_Qty;
+                                inv.Item_Unit_Price = o.details[i].Item_Unit_Price;
+                                inv.Item_Total_Amount = o.details[i].Item_Total_Amount;
+                                inv.Vat_Percentage = o.details[i].Vat_Percentage;
+                                inv.Vat_Amount = o.details[i].Vat_Amount;
+                                inv.Item_Without_vat = o.details[i].Item_Without_vat;
+                                inv.Remarks = o.details[i].Remarks;
+                                inv.vat_category = o.details[i].vat_category;
+                                inv.Vat_Type = o.details[i].Vat_Type;
+                                inv.AddInvoiceDetails(inv);
+                            }
                         }
-                         ssno = inv.Addinvoi(inv);
-                         for (int i = 0; i < o.details.Count; i++)
-                         {
-                             if (o.details[i].Inv_Mas_Sno == 0)
-                             {
-                                 inv.Inv_Mas_Sno = ssno;
-                                 inv.Item_Description = o.details[i].Item_Description;
-                                 inv.Item_Qty = o.details[i].Item_Qty;
-                                 inv.Item_Unit_Price = o.details[i].Item_Unit_Price;
-                                 inv.Item_Total_Amount = o.details[i].Item_Total_Amount;
-                                 inv.Vat_Percentage = o.details[i].Vat_Percentage;
-                                 inv.Vat_Amount = o.details[i].Vat_Amount;
-                                 inv.Item_Without_vat = o.details[i].Item_Without_vat;
-                                 inv.Remarks = o.details[i].Remarks;
-                                 inv.vat_category = o.details[i].vat_category;
-                                 inv.Vat_Type = o.details[i].Vat_Type;
-                                 inv.AddInvoiceDetails(inv);
-                             }
-                         }
 
-                 }
-                 else if (o.sno > 0 && o.goods_status == "Approve")
-                 {
-                     string cno = string.Empty;
-                     cno = o.sno.ToString().PadLeft(8, '0');
+                }
+                else if (o.sno > 0 && o.goods_status == "Approve")
+                {
+                    string cno = string.Empty;
+                    cno = o.sno.ToString().PadLeft(8, '0');
 
-                     inv.Inv_Mas_Sno = o.sno;
-                     inv.goods_status = "Approved";
-                     //inv.daily_count = 0;// (int)daiC;
-                     //inv.grand_count = 0;// (int)graC;
-                     inv.Control_No = "T" + cno;
-                     inv.UpdateInvoiMasForTRA1(inv);
-                     inv.approval_status = "2";
-                     inv.approval_date = System.DateTime.Now;
-                     inv.UpdateInvoice(inv);
-                     ssno = o.sno;
-                 }
-                 else if (o.sno > 0)
-                 {
-                     var getI = inv.EditINVOICEMas(o.sno);
-                     bool flag = true;
-                     if (getI.Invoice_No == o.invno)
-                     {
-                         flag = false;
-                     }
-                    /* if (inv.ValidateNo(o.invno, long.Parse(o.compid.ToString())) && flag == true)
-                     {
-                         return Request.CreateResponse(new { response = "EXIST", message = "Failed" });
-                     }*/
-                     inv.Inv_Mas_Sno = o.sno;
-                     inv.UpdateInvoiMas(inv);
-                     inv.DeleteInvoicedet(inv);
-                     for (int i = 0; i < o.details.Count; i++)
-                     {
-                         if (o.details[i].Inv_Mas_Sno == 0)
-                         {
-                             inv.Inv_Mas_Sno = o.sno;
-                             inv.Item_Description = o.details[i].Item_Description;
-                             inv.Item_Qty = o.details[i].Item_Qty;
-                             inv.Item_Unit_Price = o.details[i].Item_Unit_Price;
-                             inv.Item_Total_Amount = o.details[i].Item_Total_Amount;
-                             inv.Vat_Percentage = o.details[i].Vat_Percentage;
-                             inv.Vat_Amount = o.details[i].Vat_Amount;
-                             inv.Item_Without_vat = o.details[i].Item_Without_vat;
-                             inv.Remarks = o.details[i].Remarks;
-                             inv.vat_category = o.details[i].vat_category;
-                             inv.AddInvoiceDetails(inv);
-                         }
-                     }
-                     ssno = o.sno;
-                 }
-                 var result1 = ssno;
-                 return Request.CreateResponse(new { response = result1, message = new List<string> { } });
-             }
-             catch (Exception Ex)
-             {
-                 // Catch Log here for exception thrown
+                    inv.Inv_Mas_Sno = o.sno;
+                    inv.goods_status = "Approved";
+                    //inv.daily_count = 0;// (int)daiC;
+                    //inv.grand_count = 0;// (int)graC;
+                    inv.Control_No = "T" + cno;
+                    inv.UpdateInvoiMasForTRA1(inv);
+                    inv.approval_status = "2";
+                    inv.approval_date = System.DateTime.Now;
+                    inv.UpdateInvoice(inv);
+                    ssno = o.sno;
+                }
+                else if (o.sno > 0)
+                {
+                    var getI = inv.EditINVOICEMas(o.sno);
+                    bool flag = true;
+                    if (getI.Invoice_No == o.invno)
+                    {
+                        flag = false;
+                    }
+                   *//* if (inv.ValidateNo(o.invno, long.Parse(o.compid.ToString())) && flag == true)
+                    {
+                        return Request.CreateResponse(new { response = "EXIST", message = "Failed" });
+                    }*//*
+                    inv.Inv_Mas_Sno = o.sno;
+                    inv.UpdateInvoiMas(inv);
+                    inv.DeleteInvoicedet(inv);
+                    for (int i = 0; i < o.details.Count; i++)
+                    {
+                        if (o.details[i].Inv_Mas_Sno == 0)
+                        {
+                            inv.Inv_Mas_Sno = o.sno;
+                            inv.Item_Description = o.details[i].Item_Description;
+                            inv.Item_Qty = o.details[i].Item_Qty;
+                            inv.Item_Unit_Price = o.details[i].Item_Unit_Price;
+                            inv.Item_Total_Amount = o.details[i].Item_Total_Amount;
+                            inv.Vat_Percentage = o.details[i].Vat_Percentage;
+                            inv.Vat_Amount = o.details[i].Vat_Amount;
+                            inv.Item_Without_vat = o.details[i].Item_Without_vat;
+                            inv.Remarks = o.details[i].Remarks;
+                            inv.vat_category = o.details[i].vat_category;
+                            inv.AddInvoiceDetails(inv);
+                        }
+                    }
+                    ssno = o.sno;
+                }
+                var result1 = ssno;
+                return Request.CreateResponse(new { response = result1, message = new List<string> { } });
+            }
+            catch (Exception Ex)
+            {
+                // Catch Log here for exception thrown
 
-                 Utilites.logfile("Add Invoice", "0", Ex.ToString());
-                 pay.Error_Text = Ex.ToString();
-                 pay.AddErrorLogs(pay);
-                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-             }
-                 //return null;
-             }
-             else
-             {
-                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                 return Request.CreateResponse(new { response = 0, message = errorMessages });
-             }
-         }
+                Utilites.logfile("Add Invoice", "0", Ex.ToString());
+                pay.Error_Text = Ex.ToString();
+                pay.AddErrorLogs(pay);
+                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+            }
+                //return null;
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
+            }
+        }*/
 
 
 
-         [HttpPost]
+        [HttpPost]
          public HttpResponseMessage AddAmend(AddAmendForm f)
          {
              try

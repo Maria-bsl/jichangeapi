@@ -170,7 +170,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.invoice_master
-                                  where c.control_no == cn //&& c.comp_mas_sno == comno
+                                  where ((!string.IsNullOrEmpty(c.control_no)) && (c.control_no == cn)) //&& c.comp_mas_sno == comno
                                   select c);
                 if (validation.Count() > 0)
                     return true;

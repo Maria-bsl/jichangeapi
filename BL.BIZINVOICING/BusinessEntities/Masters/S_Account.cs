@@ -60,6 +60,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }*/
+        public bool isDuplicateAccountNumber(string accountNumber,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.suspense_account
+                                  where (c.sus_acc_no.ToLower().Equals(accountNumber.ToLower()) && c.sus_acc_sno != sno)
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
         public List<S_Account> GetAccounts()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -157,7 +167,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         }
 
-        public void UpdateAccount(S_Account dep)
+        public long UpdateAccount(S_Account dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -173,7 +183,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.posted_date = DateTime.Now;
 
                     context.SaveChanges();
+                    return dep.Sus_Acc_Sno;
                 }
+                return 0;
             }
         }
 

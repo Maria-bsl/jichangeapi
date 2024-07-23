@@ -45,7 +45,7 @@ namespace JichangeApi.Controllers.setup
                 using (MailMessage mm = new MailMessage())
                 {
                     var m = stp.getSMTPText();
-                    var data = em.getEMAILst("2");
+                    var data = em.getEMAILst("1");
                     mm.To.Add(email);
                     mm.From = new MailAddress(m.From_Address);
                     mm.Subject = data.Subject;
@@ -134,7 +134,7 @@ namespace JichangeApi.Controllers.setup
             }
         }
 
-        private string getUserFullname(string firstname,string middlename,string lastname)
+        private string GetUserFullname(string firstname,string middlename,string lastname)
         {
             if (middlename == null && lastname != null)
             {
@@ -153,7 +153,7 @@ namespace JichangeApi.Controllers.setup
             employeeDetails.First_Name = addBankUserForm.fname;
             employeeDetails.Middle_name = addBankUserForm.mname;
             employeeDetails.Last_name = addBankUserForm.lname;
-            employeeDetails.Full_Name = getUserFullname(addBankUserForm.fname, addBankUserForm.mname, addBankUserForm.lname);
+            employeeDetails.Full_Name = GetUserFullname(addBankUserForm.fname, addBankUserForm.mname, addBankUserForm.lname);
             employeeDetails.Desg_Id = (long)addBankUserForm.desg;
             employeeDetails.Desg_name = designation.Desg_Name;
             employeeDetails.Email_Address = addBankUserForm.email;
@@ -187,6 +187,8 @@ namespace JichangeApi.Controllers.setup
                     this.GetCustomErrorMessageResponse(messages);
                 }
                 long addedEmployee = employee.AddEMP(employee);
+                var fullName = GetUserFullname(addBankUserForm.fname, addBankUserForm.mname, addBankUserForm.lname);
+                SendActivationEmail(employee.Email_Address, employee.Full_Name, employee.Password,employee.User_name);
                 AppendInsertAuditTrail(addedEmployee, employee, (long) addBankUserForm.userid);
                 return FindEmployee(addedEmployee);
             }

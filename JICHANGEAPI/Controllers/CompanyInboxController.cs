@@ -1,4 +1,5 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Web.Http.Cors;
 namespace JichangeApi.Controllers
 {
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class CompanyInboxController : ApiController
+    public class CompanyInboxController : SetupBaseController
     {
         // GET: CompanyInbox
         //string f_Path = System.Web.Configuration.WebConfigurationManager.AppSettings["FileP"].ToString();
@@ -32,40 +33,17 @@ namespace JichangeApi.Controllers
         [HttpPost]
         public HttpResponseMessage GetCompanys(Desibraid d)
         {
-            if (ModelState.IsValid) { 
-                try
-                {
-                    var result = c.GetCompany1();
-                    if (d.design.ToString() == "Administrator")
-                    {
-                        result = c.GetCompany1();
-                    }
-                    else
-                    {
-                        result = c.GetCompany1_Branch(long.Parse(d.braid.ToString()));
-                    }
-                        if (result != null)
-                        {
-                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                        }
-                        else
-                        {
-                            //var d = 0;
-                            return Request.CreateResponse(new {response = 0, message ="Failed"});
-                        }
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
-
-            }
-            else
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                var result = d.design.ToString().ToLower() == "administrator" ? c.GetCompany1() : c.GetCompany1_Branch(long.Parse(d.braid.ToString()));
+                return this.GetList<List<CompanyBankMaster>, CompanyBankMaster>(result);
             }
-            return returnNull;
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
         }
 
         [HttpPost]

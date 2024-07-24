@@ -327,7 +327,7 @@ namespace JichangeApi.Controllers
             customer.Cust_Sno = customersForm.CSno;
             customer.Cust_Name = customersForm.CName;
             customer.PostboxNo = customersForm.PostboxNo;
-            customer.Address = c.Address;
+            customer.Address = customersForm.Address;
             customer.CompanySno = long.Parse((customersForm.compid).ToString());
             if (customersForm.regid > 0) { customer.Region_SNO = customersForm.regid; }
             if (customersForm.distsno > 0) { customer.DistSno = customersForm.distsno; }

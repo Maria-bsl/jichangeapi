@@ -15,6 +15,7 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class BranchController : SetupBaseController
     {
+        [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage GetBranchLists()
         {

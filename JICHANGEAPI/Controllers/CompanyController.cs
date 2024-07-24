@@ -471,235 +471,133 @@ public HttpResponseMessage GetApp()
         [HttpPost]
         public HttpResponseMessage AddCompanyBank(CompanyBankAddModel m)
         {
-            try
+            if (ModelState.IsValid)
             {
-                c.CompSno = compsno;
-                c.CompName = compname;
-                c.PostBox = pbox;
-                c.Address = addr;
-                c.RegId = rsno;
-                c.DistSno = dsno;
-                c.WardSno = wsno;
-                c.TinNo = tin;
-                c.VatNo = vat;
-                c.DirectorName = dname;
-                c.Email = email;
-                c.TelNo = telno;
-                c.FaxNo = fax;
-                c.MobNo = mob;
-                c.Branch_Sno = branch;
-                c.Checker = check_status;
-                //c.CompLogo = clogo;
-                //c.DirectorSig = sig;
-                //c.Postedby = string.Empty;//Session["UserID"].ToString();
-                c.Status = "Pending";
-                long ssno = 0;
-                if (compsno == 0)
+                try
                 {
-                    //var chk = sgd.Validateduplicatechecking(long.Parse(Session["Facili_Reg_No"].ToString()), desc, dt);
-                    //if (chk == false)
-                    //{
-                    var result = c.ValidateCount(compname.ToLower(), tin);
+                    c.CompSno = m.compsno;
+                    c.CompName = m.compname;
+                    c.PostBox = m.pbox;
+                    c.Address = m.addr;
+                    c.RegId = m.rsno;
+                    c.DistSno = m.dsno;
+                    c.WardSno = m.wsno;
+                    c.TinNo = m.tin;
+                    c.VatNo = m.vat;
+                    c.DirectorName = m.dname;
+                    c.Email = m.email;
+                    c.TelNo = m.telno;
+                    c.FaxNo = m.fax;
+                    c.MobNo = m.mob;
+                    c.Branch_Sno = m.branch;
+                    c.Checker = m.check_status;
+                    //c.CompLogo = clogo;
+                    //c.DirectorSig = sig;
+                    //c.Postedby = string.Empty;//Session["UserID"].ToString();
+                    c.Status = "Pending";
+                    long ssno = 0;
+                    if (m.compsno == 0)
+                    {
+                        //var chk = sgd.Validateduplicatechecking(long.Parse(Session["Facili_Reg_No"].ToString()), desc, dt);
+                        //if (chk == false)
+                        //{
+                        var result = c.ValidateCount(m.compname.ToLower(), m.tin);
 
-                    if (result == true)
-                    {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    //else
-                    //{
-
-                    if (cu.ValidateduplicateEmail1(email))
-                    {
-                        return Json("Exist", JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    if (cu.ValidateMobile(mob))
-                    {
-                        return Request.CreateResponse(new { response = "MExist", message = new List<string> { "Failed" } });
-                    }
-                    //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
-                    else if (cu.Validateduplicateuser1(mob))
-                    {
-                        return Json("UExist", JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        ssno = c.AddCompany(c);
-                        var glang = lc.GetlocalengI();
-                        foreach (langcompany li in glang)
+                        if (result == true)
                         {
-                            lc.Loc_Eng = li.Loc_Eng;
-                            lc.Loc_Eng1 = li.Loc_Eng1;
-                            lc.Table_name = li.Table_name;
-                            lc.Col_name = li.Col_name;
-                            lc.Loc_Oth1 = li.Dyn_Swa;
-                            lc.comp_no = ssno;
-                            lc.AddLang(lc);
+                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
                         }
-                        cu.Compmassno = ssno;
-                        cu.Email = email;
-                        cu.Usertype = "001";
-                        cu.Mobile = mob;
-                        cu.Flogin = "false";
-                        //cu.Fullname = email.Split('@')[0];
-                        cu.Fullname = mob;
-                        //cu.Username = email.Split('@')[0];
-                        cu.Username = mob;
-                        pwd = CreateRandomPassword(8);
-                        cu.Password = GetEncryptedData(pwd);
-                        cu.CreatedDate = DateTime.Now;
-                        cu.PostedDate = DateTime.Now;
-                        cu.ExpiryDate = System.DateTime.Now.AddMonths(3);
-                        long adcompsno = 0;
-                        adcompsno = cu.AddCompanyUsers1(cu);
-                        if (ssno > 0)
-                        {
-
-                            //String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, Session["UserID"].ToString(), DateTime.Now.ToString() };
-                            String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, "1", DateTime.Now.ToString() };
-                            for (int i = 0; i < list.Count(); i++)
-                            {
-                                ad.Audit_Type = "Insert";
-                                ad.Columnsname = list[i];
-                                ad.Table_Name = "Company";
-                                ad.Newvalues = list1[i];
-                                //ad.AuditBy = Session["UserID"].ToString();
-                                ad.Audit_Date = DateTime.Now;
-                                ad.Audit_Time = DateTime.Now;
-                                ad.AddAudit(ad);
-                            }
-                        }
-
-                        if (ssno > 0)
-                        {
-
-                            SendActivationEmail(email, email.Split('@')[0], pwd, email.Split('@')[0]);
-                        }
-                    }
-                    if (ssno > 0)
-                    {
-                        for (int i = 0; i < details.Count(); i++)
-                        {
-                            if (details[i].AccountNo != null)
-                            {
-                                c.CompSno = ssno;
-                                //c.BankSno = details[i].BankSno;
-                                //c.BankName = details[i].BankName;
-                                //c.BankBranch = details[i].BankBranch;
-                                c.AccountNo = details[i].AccountNo;
-                                //c.Swiftcode = details[i].Swiftcode;
-
-                                long detsno = c.AddBank(c);
-                                var getcom = c.EditBank(compsno);
-                                //String[] li = new String[7] { getcom.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
-                                //String[] det1 = new String[7] { detsno.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
-                                //for (int j = 0; j < detlist.Count(); j++)
-                                //{
-                                //    ad.Audit_Type = "Insert";
-                                //    ad.Columnsname = detlist[i];
-                                //    ad.Table_Name = "grades_sal_details";
-                                //    ad.Newvalues = det1[i];
-                                //    ad.Oldvalues = li[i];
-                                //    ad.AuditBy = Session["UserID"].ToString();
-                                //    ad.Audit_Date = DateTime.Now;
-                                //    ad.Audit_Time = DateTime.Now;
-                                //    ad.Facility_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
-                                //    ad.AddAudit(ad);
-                                //}
-                                //}
-                            }
-                        }
-                        //}
                         //else
                         //{
-                        //    return Json(chk, JsonRequestBehavior.AllowGet);
-                        //}
-                        //String[] list1 = new String[11] { ssno.ToString(), sgd.Sheet_Date.ToString(), sgd.Grade_Sno.ToString(), sgd.Grade_Desc, sgd.Status, sgd.Facility_reg_Sno.ToString(), sgd.Facility_Name, sgd.Posted_by, sgd.Posted_Date.ToString(), sgd.Checked_By, sgd.Checked_Date.ToString() };
-                        //for (int i = 0; i < list.Count(); i++)
-                        //{
-                        //    ad.Audit_Type = "Insert";
-                        //    ad.Columnsname = list[i];
-                        //    ad.Table_Name = "grades_sal_master";
-                        //    ad.Newvalues = list1[i];
-                        //    ad.AuditBy = Session["UserID"].ToString();
-                        //    ad.Audit_Date = DateTime.Now;
-                        //    ad.Audit_Time = DateTime.Now;
-                        //    ad.Facility_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
-                        //    ad.AddAudit(ad);
-                        //}
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
-                    }
-                }
-                else if (compsno > 0)
-                {
-                    var getcom = c.EditCompany(compsno);
-                    bool flag = true;
-                    bool cmp = true;
-                    if (getcom.MobNo == mob)
-                    {
-                        flag = false;
-                    }
-                    if (getcom.CompName == compname)
-                    {
-                        cmp = false;
-                    }
-                    if (cu.ValidateMobile(mob) && flag == true)
-                    {
-                        return Request.CreateResponse(new { response = "MExist", message = new List<string> { "Failed" } });
-                    }
-                    else if (c.ValidateCount(compname.ToLower(), tin) && cmp == true)
-                    {
-                        return Request.CreateResponse(new { response = "CExist", message = new List<string> { "Failed" } });
-                    }
-                    else
-                    {
-                        //getcom = c.EditCompany(compsno);
-                        //var dd = des.Editdesignation(sno);
-                        if (getcom != null)
+
+                        if (cu.ValidateduplicateEmail1(m.email))
                         {
-                            String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, userid.ToString(), DateTime.Now.ToString() };
-                            String[] list2 = new String[16] { getcom.CompSno.ToString(), getcom.CompName,getcom.PostBox, getcom.Address, getcom.RegId.ToString(),getcom.DistSno.ToString(),getcom.WardSno.ToString(),getcom.TinNo,getcom.VatNo,getcom.DirectorName,
-                               getcom.Email,getcom.TelNo,getcom.FaxNo,getcom.MobNo, string.Empty, getcom.Posteddate.ToString() };//Session["UserID"].ToString()
-                            for (int i = 0; i < list.Count(); i++)
+                            return Request.CreateResponse(new { response = "Email already exist", message = new List<string> { "Failed" } });
+                        }
+                        else
+                        if (cu.ValidateMobile(m.mob))
+                        {
+                            return Request.CreateResponse(new { response = "Mobile number already exist", message = new List<string> { "Failed" } });
+                        }
+                        //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
+                        else if (cu.Validateduplicateuser1(m.mob))
+                        {
+                            return Request.CreateResponse(new { response = "User already exist", message = new List<string> { "Failed" } });
+                        }
+                        else
+                        {
+                            ssno = c.AddCompany(c);
+                            var glang = lc.GetlocalengI();
+                            foreach (langcompany li in glang)
                             {
-                                ad.Audit_Type = "Update";
-                                ad.Columnsname = list[i];
-                                ad.Table_Name = "Company";
-                                ad.Oldvalues = list2[i];
-                                ad.Newvalues = list1[i];
-                                //ad.AuditBy = Session["UserID"].ToString();
-                                ad.Audit_Date = DateTime.Now;
-                                ad.Audit_Time = DateTime.Now;
-                                ad.AddAudit(ad);
+                                lc.Loc_Eng = li.Loc_Eng;
+                                lc.Loc_Eng1 = li.Loc_Eng1;
+                                lc.Table_name = li.Table_name;
+                                lc.Col_name = li.Col_name;
+                                lc.Loc_Oth1 = li.Dyn_Swa;
+                                lc.comp_no = ssno;
+                                lc.AddLang(lc);
+                            }
+                            cu.Compmassno = ssno;
+                            cu.Email = m.email;
+                            cu.Usertype = "001";
+                            cu.Mobile = m.mob;
+                            cu.Flogin = "false";
+                            //cu.Fullname = email.Split('@')[0];
+                            cu.Fullname = m.mob;
+                            //cu.Username = email.Split('@')[0];
+                            cu.Username = m.mob;
+                            pwd = CreateRandomPassword(8);
+                            cu.Password = GetEncryptedData(pwd);
+                            cu.CreatedDate = DateTime.Now;
+                            cu.PostedDate = DateTime.Now;
+                            cu.ExpiryDate = System.DateTime.Now.AddMonths(3);
+                            long adcompsno = 0;
+                            adcompsno = cu.AddCompanyUsers1(cu);
+                            if (ssno > 0)
+                            {
+
+                                //String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, Session["UserID"].ToString(), DateTime.Now.ToString() };
+                                String[] list1 = new String[16] { ssno.ToString(), m.compname, m.pbox, m.addr, m.rsno.ToString(), m.dsno.ToString(), m.wsno.ToString(), m.tin, m.vat, m.dname, m.email, m.telno, m.fax, m.mob, "1", DateTime.Now.ToString() };
+                                for (int i = 0; i < list.Count(); i++)
+                                {
+                                    ad.Audit_Type = "Insert";
+                                    ad.Columnsname = list[i];
+                                    ad.Table_Name = "Company";
+                                    ad.Newvalues = list1[i];
+                                    //ad.AuditBy = Session["UserID"].ToString();
+                                    ad.Audit_Date = DateTime.Now;
+                                    ad.Audit_Time = DateTime.Now;
+                                    ad.AddAudit(ad);
+                                }
+                            }
+
+                            if (ssno > 0)
+                            {
+                                // Add SMS Method here
+                                SendActivationEmail(m.email, m.mob, cu.Password, m.mob);
                             }
                         }
-
-                        c.UpdateCompany(c);
-                        ssno = compsno;
                         if (ssno > 0)
                         {
-                            c.CompSno = ssno;
-                            c.DeleteBank(c);
-                            for (int i = 0; i < details.Count(); i++)
+                            for (int i = 0; i < m.details.Count(); i++)
                             {
-                                //if (details[i].Term_Sno != 0 && details[i].Currency_Sno != 0)
-                                //{
-                                if (details[i].AccountNo != null)
+                                if (m.details[i].AccountNo != null)
                                 {
-
                                     c.CompSno = ssno;
-                                    c.BankSno = details[i].BankSno;
-                                    c.BankName = details[i].BankName;
-                                    c.BankBranch = details[i].BankBranch;
-                                    c.AccountNo = details[i].AccountNo;
-                                    c.Swiftcode = details[i].Swiftcode;
-                                    var getcom1 = c.EditBank(compsno);
+                                    //c.BankSno = details[i].BankSno;
+                                    //c.BankName = details[i].BankName;
+                                    //c.BankBranch = details[i].BankBranch;
+                                    c.AccountNo = m.details[i].AccountNo;
+                                    //c.Swiftcode = details[i].Swiftcode;
+
                                     long detsno = c.AddBank(c);
-                                    //String[] li = new String[7] { getcom1.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
+                                    var getcom = c.EditBank(m.compsno);
+                                    //String[] li = new String[7] { getcom.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
                                     //String[] det1 = new String[7] { detsno.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
                                     //for (int j = 0; j < detlist.Count(); j++)
                                     //{
-                                    //    ad.Audit_Type = "Update";
+                                    //    ad.Audit_Type = "Insert";
                                     //    ad.Columnsname = detlist[i];
                                     //    ad.Table_Name = "grades_sal_details";
                                     //    ad.Newvalues = det1[i];
@@ -710,22 +608,135 @@ public HttpResponseMessage GetApp()
                                     //    ad.Facility_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
                                     //    ad.AddAudit(ad);
                                     //}
+                                    //}
                                 }
                             }
+                            //}
+                            //else
+                            //{
+                            //    return Json(chk, JsonRequestBehavior.AllowGet);
+                            //}
+                            //String[] list1 = new String[11] { ssno.ToString(), sgd.Sheet_Date.ToString(), sgd.Grade_Sno.ToString(), sgd.Grade_Desc, sgd.Status, sgd.Facility_reg_Sno.ToString(), sgd.Facility_Name, sgd.Posted_by, sgd.Posted_Date.ToString(), sgd.Checked_By, sgd.Checked_Date.ToString() };
+                            //for (int i = 0; i < list.Count(); i++)
+                            //{
+                            //    ad.Audit_Type = "Insert";
+                            //    ad.Columnsname = list[i];
+                            //    ad.Table_Name = "grades_sal_master";
+                            //    ad.Newvalues = list1[i];
+                            //    ad.AuditBy = Session["UserID"].ToString();
+                            //    ad.Audit_Date = DateTime.Now;
+                            //    ad.Audit_Time = DateTime.Now;
+                            //    ad.Facility_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
+                            //    ad.AddAudit(ad);
+                            //}
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                         }
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                     }
-                    //}
-                    //}
-                    //else
-                    //{
-                    //    return Json(chk, JsonRequestBehavior.AllowGet);
-                    //}
+                    else if (m.compsno > 0)
+                    {
+                        var getcom = c.EditCompany(m.compsno);
+                        bool flag = true;
+                        bool cmp = true;
+                        if (getcom.MobNo == m.mob)
+                        {
+                            flag = false;
+                        }
+                        if (getcom.CompName == m.compname)
+                        {
+                            cmp = false;
+                        }
+                        if (cu.ValidateMobile(m.mob) && flag == true)
+                        {
+                            return Request.CreateResponse(new { response = "Mobile number already exist", message = new List<string> { "Failed" } });
+                        }
+                        else if (c.ValidateCount(m.compname.ToLower(), m.tin) && cmp == true)
+                        {
+                            return Request.CreateResponse(new { response = "Company name already exist", message = new List<string> { "Failed" } });
+                        }
+                        else
+                        {
+                            //getcom = c.EditCompany(compsno);
+                            //var dd = des.Editdesignation(sno);
+                            if (getcom != null)
+                            {
+                                String[] list1 = new String[16] { ssno.ToString(), m.compname, m.pbox, m.addr, m.rsno.ToString(), m.dsno.ToString(), m.wsno.ToString(), m.tin, m.vat, m.dname, m.email, m.telno, m.fax, m.mob, m.userid.ToString(), DateTime.Now.ToString() };
+                                String[] list2 = new String[16] { getcom.CompSno.ToString(), getcom.CompName,getcom.PostBox, getcom.Address, getcom.RegId.ToString(),getcom.DistSno.ToString(),getcom.WardSno.ToString(),getcom.TinNo,getcom.VatNo,getcom.DirectorName,
+                                       getcom.Email,getcom.TelNo,getcom.FaxNo,getcom.MobNo, string.Empty, getcom.Posteddate.ToString() };//Session["UserID"].ToString()
+                                for (int i = 0; i < list.Count(); i++)
+                                {
+                                    ad.Audit_Type = "Update";
+                                    ad.Columnsname = list[i];
+                                    ad.Table_Name = "Company";
+                                    ad.Oldvalues = list2[i];
+                                    ad.Newvalues = list1[i];
+                                    ad.AuditBy = m.userid.ToString();
+                                    ad.Audit_Date = DateTime.Now;
+                                    ad.Audit_Time = DateTime.Now;
+                                    ad.AddAudit(ad);
+                                }
+                            }
+
+                            c.UpdateCompany(c);
+                            ssno = m.compsno;
+                            if (ssno > 0)
+                            {
+                                c.CompSno = ssno;
+                                c.DeleteBank(c);
+                                for (int i = 0; i < m.details.Count(); i++)
+                                {
+                                    //if (details[i].Term_Sno != 0 && details[i].Currency_Sno != 0)
+                                    //{
+                                    if (m.details[i].AccountNo != null)
+                                    {
+
+                                        c.CompSno = ssno;
+                                        //c.BankSno = m.details[i].BankSno;
+                                        // c.BankName = m.details[i].BankName;
+                                        //c.BankBranch = m.details[i].BankBranch;
+                                        c.AccountNo = m.details[i].AccountNo;
+                                        //c.Swiftcode = m.details[i].Swiftcode;
+                                        var getcom1 = c.EditBank(m.compsno);
+                                        long detsno = c.AddBank(c);
+                                        //String[] li = new String[7] { getcom1.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
+                                        //String[] det1 = new String[7] { detsno.ToString(), ssno.ToString(), details[i].Term_Sno.ToString(), details[i].Term_Name, details[i].Term_Type, details[i].Currency_Code.ToString(), details[i].Term_Amount.ToString() };
+                                        //for (int j = 0; j < detlist.Count(); j++)
+                                        //{
+                                        //    ad.Audit_Type = "Update";
+                                        //    ad.Columnsname = detlist[i];
+                                        //    ad.Table_Name = "grades_sal_details";
+                                        //    ad.Newvalues = det1[i];
+                                        //    ad.Oldvalues = li[i];
+                                        //    ad.AuditBy = Session["UserID"].ToString();
+                                        //    ad.Audit_Date = DateTime.Now;
+                                        //    ad.Audit_Time = DateTime.Now;
+                                        //    ad.Facility_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
+                                        //    ad.AddAudit(ad);
+                                        //}
+                                    }
+                                }
+                            }
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
+                        }
+                        //}
+                        //}
+                        //else
+                        //{
+                        //    return Json(chk, JsonRequestBehavior.AllowGet);
+                        //}
+                    }
                 }
+                catch (Exception Ex)
+                {
+                    //Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+
+                }
+
             }
-            catch (Exception Ex)
+            else
             {
-                Ex.ToString();
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
             return returnNull;
         }
@@ -733,197 +744,205 @@ public HttpResponseMessage GetApp()
 
 
         [HttpPost]
-        public HttpResponseMessage AddCompanyBankL(long compsno, string compname, string pbox, string addr,
-           long rsno, long dsno, long wsno, string tin, string vat, string dname, string email, string telno,
-           string fax, string mob, bool dummy, string accno, long branch, string check_status)
+        public HttpResponseMessage AddCompanyBankL(AddCompanyBankL mc)
         {
-            try
+            if (ModelState.IsValid)
             {
-                c.CompSno = compsno;
-                c.CompName = compname;
-                c.PostBox = pbox;
-                c.Address = addr;
-                c.RegId = rsno;
-                c.DistSno = dsno;
-                c.WardSno = wsno;
-                c.TinNo = tin;
-                c.VatNo = vat;
-                c.DirectorName = dname;
-                c.Email = email;
-                c.TelNo = telno;
-                c.FaxNo = fax;
-                c.MobNo = mob;
-                c.Branch_Sno = branch;
-                c.Checker = check_status;
-                //c.CompLogo = clogo;
-                //c.DirectorSig = sig;
-                //c.Postedby = string.Empty;//Session["UserID"].ToString();
-                c.Status = "Pending";
-                long ssno = 0;
-                if (compsno == 0)
+                try
                 {
-                    //var chk = sgd.Validateduplicatechecking(long.Parse(Session["Facili_Reg_No"].ToString()), desc, dt);
-                    //if (chk == false)
-                    //{
-                    var result = c.ValidateCount(compname.ToLower(), tin);
+                    c.CompSno = mc.compsno;
+                    c.CompName = mc.compname;
+                    c.PostBox = mc.pbox;
+                    c.Address = mc.addr;
+                    c.RegId = mc.rsno;
+                    c.DistSno = mc.dsno;
+                    c.WardSno = mc.wsno;
+                    c.TinNo = mc.tin;
+                    c.VatNo = mc.vat;
+                    c.DirectorName = mc.dname;
+                    c.Email = mc.email;
+                    c.TelNo = mc.telno;
+                    c.FaxNo = mc.fax;
+                    c.MobNo = mc.mob;
+                    c.Branch_Sno = mc.branch;
+                    c.Checker = mc.check_status;
+                    //c.CompLogo = clogo;
+                    //c.DirectorSig = sig;
+                    //c.Postedby = string.Empty;//Session["UserID"].ToString();
+                    c.Status = "Pending";
+                    long ssno = 0;
+                    if (mc.compsno == 0)
+                    {
+                        //var chk = sgd.Validateduplicatechecking(long.Parse(Session["Facili_Reg_No"].ToString()), desc, dt);
+                        //if (chk == false)
+                        //{
+                        var result = c.ValidateCount(mc.compname.ToLower(), mc.tin);
 
-                    if (result == true)
-                    {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    //else
-                    //{
-
-                    if (cu.ValidateduplicateEmail1(email))
-                    {
-                        return Json("Exist", JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    if (cu.ValidateMobile(mob))
-                    {
-                        return Request.CreateResponse(new { response = "MExist", message = new List<string> { "Failed" } });
-                    }
-                    //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
-                    else if (cu.Validateduplicateuser1(mob))
-                    {
-                        return Json("UExist", JsonRequestBehavior.AllowGet);
-                    }
-                    else
-                    {
-                        ssno = c.AddCompany(c);
-                        var glang = lc.GetlocalengI();
-                        foreach (langcompany li in glang)
+                        if (result == true)
                         {
-                            lc.Loc_Eng = li.Loc_Eng;
-                            lc.Loc_Eng1 = li.Loc_Eng1;
-                            lc.Table_name = li.Table_name;
-                            lc.Col_name = li.Col_name;
-                            lc.Loc_Oth1 = li.Dyn_Swa;
-                            lc.comp_no = ssno;
-                            lc.AddLang(lc);
+                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
                         }
-                        cu.Compmassno = ssno;
-                        cu.Email = email;
-                        cu.Usertype = "001";
-                        cu.Mobile = mob;
-                        cu.Flogin = "false";
-                        //cu.Fullname = email.Split('@')[0];
-                        cu.Fullname = mob;
-                        //cu.Username = email.Split('@')[0];
-                        cu.Username = mob;
-                        pwd = CreateRandomPassword(8);
-                        cu.Password = GetEncryptedData(pwd);
-                        cu.CreatedDate = DateTime.Now;
-                        cu.PostedDate = DateTime.Now;
-                        cu.ExpiryDate = System.DateTime.Now.AddMonths(3);
-                        long adcompsno = 0;
-                        adcompsno = cu.AddCompanyUsers1(cu);
-                        if (ssno > 0)
-                        {
+                        //else
+                        //{
 
-                            //String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, Session["UserID"].ToString(), DateTime.Now.ToString() };
-                            String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, "1", DateTime.Now.ToString() };
-                            for (int i = 0; i < list.Count(); i++)
+                        if (cu.ValidateduplicateEmail1(mc.email))
+                        {
+                            return Request.CreateResponse(new { response = "Email already exist", message = new List<string> { "Failed" } });
+                        }
+                        else
+                        if (cu.ValidateMobile(mc.mob))
+                        {
+                            return Request.CreateResponse(new { response = "Mobile number already exist", message = new List<string> { "Failed" } });
+                        }
+                        //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
+                        else if (cu.Validateduplicateuser1(mc.mob))
+                        {
+                            return Request.CreateResponse(new { response = "User already exist", message = new List<string> { " Failed " } });
+                        }
+                        else
+                        {
+                            ssno = c.AddCompany(c);
+                            var glang = lc.GetlocalengI();
+                            foreach (langcompany li in glang)
                             {
-                                ad.Audit_Type = "Insert";
-                                ad.Columnsname = list[i];
-                                ad.Table_Name = "Company";
-                                ad.Newvalues = list1[i];
-                                //ad.AuditBy = Session["UserID"].ToString();
-                                ad.Audit_Date = DateTime.Now;
-                                ad.Audit_Time = DateTime.Now;
-                                ad.AddAudit(ad);
+                                lc.Loc_Eng = li.Loc_Eng;
+                                lc.Loc_Eng1 = li.Loc_Eng1;
+                                lc.Table_name = li.Table_name;
+                                lc.Col_name = li.Col_name;
+                                lc.Loc_Oth1 = li.Dyn_Swa;
+                                lc.comp_no = ssno;
+                                lc.AddLang(lc);
+                            }
+                            cu.Compmassno = ssno;
+                            cu.Email = mc.email;
+                            cu.Usertype = "001";
+                            cu.Mobile = mc.mob;
+                            cu.Flogin = "false";
+                            //cu.Fullname = email.Split('@')[0];
+                            cu.Fullname = mc.mob;
+                            //cu.Username = email.Split('@')[0];
+                            cu.Username = mc.mob;
+                            pwd = CreateRandomPassword(8);
+                            cu.Password = GetEncryptedData(pwd);
+                            cu.CreatedDate = DateTime.Now;
+                            cu.PostedDate = DateTime.Now;
+                            cu.ExpiryDate = System.DateTime.Now.AddMonths(3);
+                            long adcompsno = 0;
+                            adcompsno = cu.AddCompanyUsers1(cu);
+                            if (ssno > 0)
+                            {
+
+                                //String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, Session["UserID"].ToString(), DateTime.Now.ToString() };
+                                String[] list1 = new String[16] { ssno.ToString(), mc.compname, mc.pbox, mc.addr, mc.rsno.ToString(), mc.dsno.ToString(), mc.wsno.ToString(), mc.tin, mc.vat, mc.dname, mc.email, mc.telno, mc.fax, mc.mob, "1", DateTime.Now.ToString() };
+                                for (int i = 0; i < list.Count(); i++)
+                                {
+                                    ad.Audit_Type = "Insert";
+                                    ad.Columnsname = list[i];
+                                    ad.Table_Name = "Company";
+                                    ad.Newvalues = list1[i];
+                                    // ad.AuditBy = mc.userid.ToString();
+                                    ad.Audit_Date = DateTime.Now;
+                                    ad.Audit_Time = DateTime.Now;
+                                    ad.AddAudit(ad);
+                                }
+                            }
+
+                            if (ssno > 0)
+                            {
+                                // Sms Method goes here
+                                SendActivationEmail(mc.email, mc.mob, cu.Password, mc.mob);
                             }
                         }
-
                         if (ssno > 0)
                         {
 
-                            SendActivationEmail(email, email.Split('@')[0], pwd, email.Split('@')[0]);
+                            c.CompSno = ssno;
+                            //c.BankSno = details[i].BankSno;
+                            //c.BankName = details[i].BankName;
+                            //c.BankBranch = details[i].BankBranch;
+                            c.AccountNo = mc.accno;
+                            //c.Swiftcode = details[i].Swiftcode;
+
+                            long detsno = c.AddBank(c);
+
+
+
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                         }
                     }
-                    if (ssno > 0)
+                    else if (mc.compsno > 0)
                     {
+                        var getcom = c.EditCompany(mc.compsno);
+                        bool flag = true;
+                        bool cmp = true;
+                        if (getcom.MobNo == mc.mob)
+                        {
+                            flag = false;
+                        }
+                        if (getcom.CompName == mc.compname)
+                        {
+                            cmp = false;
+                        }
+                        if (cu.ValidateMobile(mc.mob) && flag == true)
+                        {
+                            return Request.CreateResponse(new { response = "Mobile number already exist", message = new List<string> { "Failed" } });
+                        }
+                        else if (c.ValidateCount(mc.compname.ToLower(), mc.tin) && cmp == true)
+                        {
+                            return Request.CreateResponse(new { response = "Company name already exist", message = new List<string> { "Failed" } });
+                        }
+                        else
+                        {
+                            //getcom = c.EditCompany(compsno);
+                            //var dd = des.Editdesignation(sno);
+                            if (getcom != null)
+                            {
+                                String[] list1 = new String[16] { ssno.ToString(), mc.compname, mc.pbox, mc.addr, mc.rsno.ToString(), mc.dsno.ToString(), mc.wsno.ToString(), mc.tin, mc.vat, mc.dname, mc.email, mc.telno, mc.fax, mc.mob, mc.userid.ToString(), DateTime.Now.ToString() };
+                                String[] list2 = new String[16] { getcom.CompSno.ToString(), getcom.CompName,getcom.PostBox, getcom.Address, getcom.RegId.ToString(),getcom.DistSno.ToString(),getcom.WardSno.ToString(),getcom.TinNo,getcom.VatNo,getcom.DirectorName,
+                                   getcom.Email,getcom.TelNo,getcom.FaxNo,getcom.MobNo, string.Empty, getcom.Posteddate.ToString() };//Session["UserID"].ToString()
+                                for (int i = 0; i < list.Count(); i++)
+                                {
+                                    ad.Audit_Type = "Update";
+                                    ad.Columnsname = list[i];
+                                    ad.Table_Name = "Company";
+                                    ad.Oldvalues = list2[i];
+                                    ad.Newvalues = list1[i];
+                                    ad.AuditBy = mc.userid.ToString();
+                                    ad.Audit_Date = DateTime.Now;
+                                    ad.Audit_Time = DateTime.Now;
+                                    ad.AddAudit(ad);
+                                }
+                            }
 
-                        c.CompSno = ssno;
-                        //c.BankSno = details[i].BankSno;
-                        //c.BankName = details[i].BankName;
-                        //c.BankBranch = details[i].BankBranch;
-                        c.AccountNo = accno;
-                        //c.Swiftcode = details[i].Swiftcode;
+                            c.UpdateCompany(c);
+                            ssno = mc.compsno;
+                            if (ssno > 0)
+                            {
+                                c.CompSno = ssno;
+                                c.DeleteBank(c);
 
-                        long detsno = c.AddBank(c);
-
-
-
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
+                            }
+                            return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
+                        }
+                        //}
+                        //}
+                        //else
+                        //{
+                        //    return Json(chk, JsonRequestBehavior.AllowGet);
+                        //}
                     }
                 }
-                else if (compsno > 0)
+                catch (Exception Ex)
                 {
-                    var getcom = c.EditCompany(compsno);
-                    bool flag = true;
-                    bool cmp = true;
-                    if (getcom.MobNo == mob)
-                    {
-                        flag = false;
-                    }
-                    if (getcom.CompName == compname)
-                    {
-                        cmp = false;
-                    }
-                    if (cu.ValidateMobile(mob) && flag == true)
-                    {
-                        return Request.CreateResponse(new { response = "MExist", message = new List<string> { "Failed" } });
-                    }
-                    else if (c.ValidateCount(compname.ToLower(), tin) && cmp == true)
-                    {
-                        return Request.CreateResponse(new { response = "CExist", message = new List<string> { "Failed" } });
-                    }
-                    else
-                    {
-                        //getcom = c.EditCompany(compsno);
-                        //var dd = des.Editdesignation(sno);
-                        if (getcom != null)
-                        {
-                            String[] list1 = new String[16] { ssno.ToString(), compname, pbox, addr, rsno.ToString(), dsno.ToString(), wsno.ToString(), tin, vat, dname, email, telno, fax, mob, userid.ToString(), DateTime.Now.ToString() };
-                            String[] list2 = new String[16] { getcom.CompSno.ToString(), getcom.CompName,getcom.PostBox, getcom.Address, getcom.RegId.ToString(),getcom.DistSno.ToString(),getcom.WardSno.ToString(),getcom.TinNo,getcom.VatNo,getcom.DirectorName,
-                               getcom.Email,getcom.TelNo,getcom.FaxNo,getcom.MobNo, string.Empty, getcom.Posteddate.ToString() };//Session["UserID"].ToString()
-                            for (int i = 0; i < list.Count(); i++)
-                            {
-                                ad.Audit_Type = "Update";
-                                ad.Columnsname = list[i];
-                                ad.Table_Name = "Company";
-                                ad.Oldvalues = list2[i];
-                                ad.Newvalues = list1[i];
-                                //ad.AuditBy = Session["UserID"].ToString();
-                                ad.Audit_Date = DateTime.Now;
-                                ad.Audit_Time = DateTime.Now;
-                                ad.AddAudit(ad);
-                            }
-                        }
+                    //Ex.ToString();
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
 
-                        c.UpdateCompany(c);
-                        ssno = compsno;
-                        if (ssno > 0)
-                        {
-                            c.CompSno = ssno;
-                            c.DeleteBank(c);
-
-                        }
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
-                    }
-                    //}
-                    //}
-                    //else
-                    //{
-                    //    return Json(chk, JsonRequestBehavior.AllowGet);
-                    //}
                 }
             }
-            catch (Exception Ex)
+            else
             {
-                Ex.ToString();
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
             return returnNull;
         }

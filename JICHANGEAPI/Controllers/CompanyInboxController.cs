@@ -169,7 +169,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
 

@@ -249,9 +249,11 @@
     <Compile Include="Controllers\setup\SMTPController.cs" />
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />
+    <Compile Include="Models\AddCompanyBankL.cs" />
     <Compile Include="Models\AuthLog.cs" />
     <Compile Include="Models\BranchRef.cs" />
     <Compile Include="Models\CancelRepModel.cs" />
+    <Compile Include="Models\CompanyBankAddModel.cs" />
     <Compile Include="Models\CompSnoModel.cs" />
     <Compile Include="Models\ControlNo.cs" />
     <Compile Include="Models\Desibraid.cs" />

@@ -230,6 +230,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\setup\BranchController.cs" />
     <Compile Include="Controllers\CompanyInboxController.cs" />
     <Compile Include="Controllers\setup\CurrencyController.cs" />

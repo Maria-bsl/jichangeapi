@@ -239,6 +239,31 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+
+        public CompanyUsers GetCompanyid(long uno)
+        {
+
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+
+
+                var edetails = (from c in context.company_users.Where(c => c.comp_users_sno == uno)
+                                select new CompanyUsers
+                                {
+                                    Compmassno = (long)c.comp_mas_sno,
+
+                                }).FirstOrDefault();
+                if (edetails != null)
+                    return edetails;
+
+                else
+                    return null;
+
+            }
+        }
+
+
         public CompanyUsers CheckLogin(String uname, String pwd)
         {
 

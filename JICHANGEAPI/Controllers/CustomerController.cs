@@ -16,7 +16,8 @@ namespace JichangeApi.Controllers
     public class CustomerController : SetupBaseController
     {
         CustomerMaster cm = new CustomerMaster();
-        CompanyBankMaster c = new CompanyBankMaster();
+        CompanyBankMaster cbm = new CompanyBankMaster();
+        CompanyUsers cu = new CompanyUsers();
         //COUNTRY c = new COUNTRY();
         Auditlog ad = new Auditlog();
         REGION r = new REGION();
@@ -28,37 +29,38 @@ namespace JichangeApi.Controllers
             "tin_no", "vat_no","contact_person","email_address","mobile_no", "posted_by", "posted_date", "comp_mas_sno" };
         private static readonly string tableName = "Customers";
 
-    
+
         [HttpPost]
         public HttpResponseMessage GetCusts(SingletonComp c)
         {
-            if (ModelState.IsValid) { 
-                    try
-                    {
+            if (ModelState.IsValid)
+            {
+                try
+                {
 
-                        var result = cm.CustGet(long.Parse(c.compid.ToString()));
-                        if (result != null)
-                        {
-                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                        }
-                        else
-                        {
-                            var d = 0;
-                            return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
-                        }
-
-                    }
-                    catch (Exception Ex)
+                    var result = cm.CustGet(long.Parse(c.compid.ToString()));
+                    if (result != null)
                     {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
                     }
+                    else
+                    {
+                        var d = 0;
+                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                }
             }
             else
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
                 return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+            //return returnNull;
         }
 
 
@@ -83,11 +85,12 @@ namespace JichangeApi.Controllers
         [HttpPost]
         public HttpResponseMessage GetComp(SingletonComp d)
         {
-            if (ModelState.IsValid) { 
+            if (ModelState.IsValid)
+            {
                 try
                 {
 
-                    var result = c.CompGet(long.Parse(d.compid.ToString()));
+                    var result = cbm.CompGet(long.Parse(d.compid.ToString()));
                     if (result != null)
                     {
                         return Request.CreateResponse(new { response = result, message = new List<string> { } });
@@ -95,7 +98,7 @@ namespace JichangeApi.Controllers
                     else
                     {
                         var t = 0;
-                        return Request.CreateResponse(new {response = t, message ="Failed"});
+                        return Request.CreateResponse(new { response = t, message = "Failed" });
                     }
 
                 }
@@ -107,9 +110,9 @@ namespace JichangeApi.Controllers
             else
             {
                 var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages});
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+            //return returnNull;
 
         }
 
@@ -136,7 +139,7 @@ namespace JichangeApi.Controllers
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
 
             }
@@ -144,7 +147,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
         [HttpPost]
@@ -169,7 +172,7 @@ namespace JichangeApi.Controllers
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
 
             }
@@ -177,7 +180,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
         [HttpPost]
@@ -202,7 +205,7 @@ namespace JichangeApi.Controllers
                 else
                 {
                     var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
 
             }
@@ -210,7 +213,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            //return returnNull;
         }
 
         [HttpGet]
@@ -225,7 +228,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }//need to check get methods
 
         [HttpPost]
@@ -240,7 +243,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }//need to check get methods
 
 
@@ -260,7 +263,7 @@ namespace JichangeApi.Controllers
                     if (result == null)
                     {
                         int d = 0;
-                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                     }
                     else
                     {
@@ -272,7 +275,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }
 
         [HttpPost]
@@ -284,7 +287,7 @@ namespace JichangeApi.Controllers
                 if (result == null)
                 {
                     int d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
                 else
                 {
@@ -295,7 +298,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }
 
         [HttpPost]
@@ -307,7 +310,7 @@ namespace JichangeApi.Controllers
                 if (result == null)
                 {
                     int d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed"} });
+                    return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                 }
                 else
                 {
@@ -318,7 +321,7 @@ namespace JichangeApi.Controllers
             {
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
-            return returnNull;
+            // return returnNull;
         }
 
         private CustomerMaster CreateCustomer(CustomersForm customersForm)

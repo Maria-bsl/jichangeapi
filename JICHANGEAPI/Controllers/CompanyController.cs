@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.ConstantFile;
 using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using System;
 using System.Collections.Generic;
@@ -8,12 +9,17 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace JichangeApi.Controllers
 {
-    public class CompanyController : ApiController
+
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    public class CompanyController : SetupBaseController
     {
         CompanyBankMaster c = new CompanyBankMaster();
+
+        
         REGION r = new REGION();
         CompanyUsers cu = new CompanyUsers();
         DISTRICTS d = new DISTRICTS();
@@ -196,24 +202,27 @@ public HttpResponseMessage GetApp()
         [HttpPost]
         public HttpResponseMessage GetCompanys_SU(SingletonComp com)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
             try
-            {
-                var result = c.GetCompany_Suspense((long)com.compid);
-                if (result != null)
                 {
-                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
+                    var result = c.GetCompany_Suspense((long)com.compid);
+                    if (result != null)
+                    {
+                        //return Request.CreateResponse(new { response = result, message = new List<string> { } });
+                        return GetSuccessResponse(result);
+                    }
+                    else
+                    {
+                        return GetNotFoundResponse();
+                    }
                 }
-                else
+                catch (Exception Ex)
                 {
-                    var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> {"Failed" } });
+                    // return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                    return GetServerErrorResponse(Ex.Message.ToString());
+                
                 }
-            }
-            catch (Exception Ex)
-            {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-
-            }
             //return returnNull;
         }
         [HttpPost]
@@ -270,12 +279,13 @@ public HttpResponseMessage GetApp()
             //return returnNull;
         }
         [HttpPost]
-        public HttpResponseMessage GetBanks(long sno)
+        public HttpResponseMessage GetBanks(SingletonSno sno)
         {
-                   
+            if (ModelState.IsValid)
+            {
                 try
                 {
-                    var result = c.GetBank(sno);
+                    var result = c.GetBank((long)sno.Sno);
                     if (result != null)
                     {
                         return Request.CreateResponse(new { response = result, message = new List<string> { } });
@@ -283,7 +293,7 @@ public HttpResponseMessage GetApp()
                     else
                     {
                         var d = 0;
-                        return Request.CreateResponse(new { response = d, message = new List<string> {"Failed" } });
+                        return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
                     }
                 }
                 catch (Exception Ex)
@@ -291,44 +301,65 @@ public HttpResponseMessage GetApp()
                     return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
 
                 }
+            }
+            else
+            {
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
+            }
 
 
             //return returnNull;
         }
 
+        [AllowAnonymous]
         [HttpPost]
-        public HttpResponseMessage CheckAccount(string acc)
+        public HttpResponseMessage CheckAccount(SingletonAcc a)
         {
-            try
+            if (ModelState.IsValid)
             {
-                var check = c.Validateaccount(acc);
-                if (check == true)
+                try
                 {
-                    return Request.CreateResponse(new { response = check, message = new List<string> { } });
-                }
-                else { return Request.CreateResponse(new { response = check, message = new List<string> {"Failed" } }); }
+                    var check = c.Validateaccount(a.acc);
+                    if (check == true)
+                    {
+                        return Request.CreateResponse(new { response = check, message = new List<string> { } });
+                    }
+                    else { return Request.CreateResponse(new { response = check, message = new List<string> { } }); }
 
+                }
+                catch (Exception Ex)
+                {
+                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+
+                }
+            
             }
-            catch (Exception Ex)
+            else
             {
-                Ex.ToString();
+                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
+                return Request.CreateResponse(new { response = 0, message = errorMessages });
             }
-            return returnNull;
+        
+
+            //return returnNull;
         }
 
         [HttpPost]
-        public HttpResponseMessage GetDetailsindivi(long sno)
+        public HttpResponseMessage GetDetailsindivi(SingletonSno sno)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
             try
-            {
-                var result = c.EditCompanyss(sno);
-                return Request.CreateResponse(new { response = result, message = new List<string> { } });
-            }
-            catch (Exception Ex)
-            {
-                Ex.ToString();
-            }
-            return returnNull;
+                    {
+                        var result = c.EditCompanyss((long)sno.Sno);
+                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
+                    }
+                    catch (Exception Ex)
+                    {
+                        Ex.ToString();
+                    }
+                    return returnNull;
         }
         [HttpPost]
         public HttpResponseMessage DeleteCompanyBank(long sno)
@@ -397,33 +428,37 @@ public HttpResponseMessage GetApp()
 
 
         [HttpPost]
-        public HttpResponseMessage GetDistDetails(long Sno)
+        public HttpResponseMessage GetDistDetails(SingletonSno Sno)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
             try
-            {
-                string ash = null;
-                if (Sno == Convert.ToInt64(ash))
                 {
-                    return Request.CreateResponse(new { response = Sno, message = new List<string> { } });
-                }
-                else
-                {
-                    var result = d.GetDistrictActive(Sno);
-                    if (result == null)
+                    string ash = null;
+                    if (Sno.Sno == Convert.ToInt64(ash))
                     {
-                        int d = 0;
-                        return Request.CreateResponse(new { response = d, message = new List<string> {"Failed" } });
+                        return Request.CreateResponse(new { response = Sno, message = new List<string> { } });
                     }
                     else
                     {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
+                        var result = d.GetDistrictActive((long)Sno.Sno);
+                        if (result == null)
+                        {
+                            int d = 0;
+                            return Request.CreateResponse(new { response = d, message = new List<string> { "Failed" } });
+                        }
+                        else
+                        {
+                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
+                        }
                     }
                 }
-            }
-            catch (Exception Ex)
-            {
-                Ex.ToString();
-            }
+                catch (Exception Ex)
+                {
+                    Ex.ToString();
+                }
+           
+           
             return returnNull;
         }
         [HttpPost]

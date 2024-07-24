@@ -297,6 +297,7 @@
     </Compile>
     <Compile Include="Models\JWTAuthentication\JwtAuthenticationFilter.cs" />
     <Compile Include="Models\ReportDates.cs" />
+    <Compile Include="Models\SingletonAcc.cs" />
     <Compile Include="Models\SingletonComp.cs" />
     <Compile Include="Models\SingletonCompInvid.cs" />
     <Compile Include="Models\SingletonControl.cs" />

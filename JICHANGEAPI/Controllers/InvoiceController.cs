@@ -245,38 +245,17 @@ namespace JichangeApi.Controllers
         [HttpPost]
         public HttpResponseMessage GetSignedDetails(SingletonComp s)
         {
-            if (ModelState.IsValid)
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            try
             {
-                try
-                {
-                    var result = inv.GetINVOICEMas(long.Parse(s.compid.ToString())).Where(x => x.approval_status == "2");
-                    if (result != null)
-                    {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } }); ;
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new { response = 0, message = new List<string> { "No invoice found" } });
-                    }
-
-                }
-                catch (Exception Ex)
-                {
-                    // Catch Log here for exception thrown
-
-                    Utilites.logfile("GetSignedDetails", "0", Ex.ToString());
-                    pay.Error_Text = Ex.ToString();
-                    pay.AddErrorLogs(pay);
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
+                List<INVOICE> result = inv.GetINVOICEMas(long.Parse(s.compid.ToString())).Where(x => x.approval_status == "2").ToList();
+                return this.GetList<List<INVOICE>, INVOICE>(result);
             }
-            else
+            catch (Exception ex)
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                return this.GetServerErrorResponse(ex.Message);
             }
-
-            //return null;
         }
 
         [HttpPost]

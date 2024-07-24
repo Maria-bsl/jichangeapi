@@ -84,6 +84,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new BranchM
                                 {
                                     Sno = c.sno,
+                                    Branch_Sno = c.sno,
                                     Name = c.name,
                                     Location = c.location,
                                     Status = c.status,

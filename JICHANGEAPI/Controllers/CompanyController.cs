@@ -468,10 +468,8 @@ public HttpResponseMessage GetApp()
             return encodedData;
         }
 
-     /*   [HttpPost]
-        public HttpResponseMessage AddCompanyBank(long compsno, string compname, string pbox, string addr,
-            long rsno, long dsno, long wsno, string tin, string vat, string dname, string email, string telno,
-            string fax, string mob, *//*byte[] clogo, byte[] sig,*//* bool dummy, int lastrow, List<CompanyBankMaster> details, long branch, string check_status)
+        [HttpPost]
+        public HttpResponseMessage AddCompanyBank(CompanyBankAddModel m)
         {
             try
             {
@@ -510,20 +508,20 @@ public HttpResponseMessage GetApp()
                     //else
                     //{
 
-                    *//*if (cu.ValidateduplicateEmail1(email))
+                    if (cu.ValidateduplicateEmail1(email))
                     {
                         return Json("Exist", JsonRequestBehavior.AllowGet);
                     }
-                    else*//*
+                    else
                     if (cu.ValidateMobile(mob))
                     {
                         return Request.CreateResponse(new { response = "MExist", message = new List<string> { "Failed" } });
                     }
                     //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
-                    *//*else if (cu.Validateduplicateuser1(mob))
+                    else if (cu.Validateduplicateuser1(mob))
                     {
                         return Json("UExist", JsonRequestBehavior.AllowGet);
-                    }*//*
+                    }
                     else
                     {
                         ssno = c.AddCompany(c);
@@ -629,7 +627,7 @@ public HttpResponseMessage GetApp()
                         //    ad.Facility_Sno = long.Parse(Session["Facili_Reg_No"].ToString());
                         //    ad.AddAudit(ad);
                         //}
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> {  } });
+                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                     }
                 }
                 else if (compsno > 0)
@@ -715,7 +713,7 @@ public HttpResponseMessage GetApp()
                                 }
                             }
                         }
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> {  } });
+                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                     }
                     //}
                     //}
@@ -732,8 +730,8 @@ public HttpResponseMessage GetApp()
             return returnNull;
         }
 
-        
-        
+
+
         [HttpPost]
         public HttpResponseMessage AddCompanyBankL(long compsno, string compname, string pbox, string addr,
            long rsno, long dsno, long wsno, string tin, string vat, string dname, string email, string telno,
@@ -776,20 +774,20 @@ public HttpResponseMessage GetApp()
                     //else
                     //{
 
-                    *//*if (cu.ValidateduplicateEmail1(email))
+                    if (cu.ValidateduplicateEmail1(email))
                     {
                         return Json("Exist", JsonRequestBehavior.AllowGet);
                     }
-                    else*//*
+                    else
                     if (cu.ValidateMobile(mob))
                     {
                         return Request.CreateResponse(new { response = "MExist", message = new List<string> { "Failed" } });
                     }
                     //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
-                    *//*else if (cu.Validateduplicateuser1(mob))
+                    else if (cu.Validateduplicateuser1(mob))
                     {
                         return Json("UExist", JsonRequestBehavior.AllowGet);
-                    }*//*
+                    }
                     else
                     {
                         ssno = c.AddCompany(c);
@@ -858,7 +856,7 @@ public HttpResponseMessage GetApp()
 
 
 
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> {  } });
+                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                     }
                 }
                 else if (compsno > 0)
@@ -913,7 +911,7 @@ public HttpResponseMessage GetApp()
                             c.DeleteBank(c);
 
                         }
-                        return Request.CreateResponse(new { response = ssno, message = new List<string> {  } });
+                        return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                     }
                     //}
                     //}
@@ -929,7 +927,7 @@ public HttpResponseMessage GetApp()
             }
             return returnNull;
         }
-*/
+
 
 
         private void SendActivationEmail(String email, String auname, String pwd, String uname)

@@ -12,10 +12,10 @@ namespace JichangeApi.Controllers.setup
 {
     public class SetupBaseController : ApiController
     {
-        protected static string ERROR_OCCURED_ON_SERVER_MESSAGE = "An error occured on the server.";
-        protected static string ALREADY_EXISTS_MESSAGE = "Already exists.";
-        protected static string NO_DATA_FOUND_MESSAGE = "No data found.";
-        protected static string NOT_FOUND_MESSAGE = "Not found.";
+        public static string ERROR_OCCURED_ON_SERVER_MESSAGE = "An error occured on the server.";
+        public static string ALREADY_EXISTS_MESSAGE = "Already exists.";
+        public static string NO_DATA_FOUND_MESSAGE = "No data found.";
+        public static string NOT_FOUND_MESSAGE = "Not found.";
 
         protected HttpResponseMessage GetList<T,D>(T results)
         {

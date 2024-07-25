@@ -307,6 +307,7 @@
     <Compile Include="Models\SingletonInvMas.cs" />
     <Compile Include="Models\SingletonSno.cs" />
     <Compile Include="Models\SingletonSnoUser.cs" />
+    <Compile Include="Models\Validators\RequiredList.cs" />
     <!-- <Compile Include="obj\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" /> -->
     <!-- <Compile Include="obj\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" /> -->
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -315,6 +316,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Services\CompanyBankService.cs" />
+    <Compile Include="Services\setup\DistrictService.cs" />
+    <Compile Include="Services\setup\RegionService.cs" />
+    <Compile Include="Services\setup\WardService.cs" />
+    <Compile Include="Utilities\EmailUtils.cs" />
+    <Compile Include="Utilities\PasswordGeneratorUtil.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

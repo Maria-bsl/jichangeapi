@@ -340,7 +340,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public List<CompanyBankMaster> GetCompany_A()
+        public List<CompanyBankMaster> GetCompany_A(string status = "Approved")
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -349,12 +349,30 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //join dist in context.district_master on sc.district_sno equals dist.district_sno
                                     //join ward in context.ward_master on sc.ward_sno equals ward.ward_sno
                                     //where sc.facility_reg_sno == facino
-                                where sc.status == "Approved"
+                                where !string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals(status.ToLower())
                                 select new CompanyBankMaster
                                 {
                                     CompSno = sc.comp_mas_sno,
-                                    CompName = sc.company_name
-                                    
+                                    CompName = sc.company_name,
+                                    PostBox = sc.pobox_no,
+                                    Address = sc.physical_address,
+                                    RegId = (long)sc.region_id,
+                                    //RegName=reg.region_name,
+                                    DistSno = (long)sc.district_sno,
+                                    //DistName=dist.district_name,
+                                    WardSno = (long)sc.ward_sno,
+                                    //WardName=ward.ward_name,
+                                    Branch_Sno = sc.branch_sno,
+                                    TinNo = sc.tin_no,
+                                    VatNo = sc.vat_no,
+                                    DirectorName = sc.director_name,
+                                    Email = sc.email_address,
+                                    TelNo = sc.telephone_no,
+                                    FaxNo = sc.fax_no,
+                                    MobNo = sc.mobile_no,
+                                    Status = sc.status,
+                                    Checker = sc.checker
+
 
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
@@ -378,8 +396,25 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     CompSno = sc.comp_mas_sno,
                                     CompName = sc.company_name,
                                     Sus_Ac_SNo = (long)sc.sus_acc_sno,
-                                    Sus_Acc = reg.sus_acc_no
-
+                                    Sus_Acc = reg.sus_acc_no,
+                                    PostBox = sc.pobox_no,
+                                    Address = sc.physical_address,
+                                    RegId = (long)sc.region_id,
+                                    //RegName=reg.region_name,
+                                    DistSno = (long)sc.district_sno,
+                                    //DistName=dist.district_name,
+                                    WardSno = (long)sc.ward_sno,
+                                    //WardName=ward.ward_name,
+                                    Branch_Sno = sc.branch_sno,
+                                    TinNo = sc.tin_no,
+                                    VatNo = sc.vat_no,
+                                    DirectorName = sc.director_name,
+                                    Email = sc.email_address,
+                                    TelNo = sc.telephone_no,
+                                    FaxNo = sc.fax_no,
+                                    MobNo = sc.mobile_no,
+                                    Status = sc.status,
+                                    Checker = sc.checker
 
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
@@ -823,7 +858,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     TelNo = c.telephone_no,
                                     FaxNo = c.fax_no,
                                     MobNo = c.mobile_no,
-                                    Checker = c.checker
+                                    Checker = c.checker,
+                                    Status = c.status,
+                                    Branch_Sno = c.branch_sno
                                     //CompLogo = c.comp_logo,
                                     //DirectorSig = c.director_digital_sig,
                                 }).FirstOrDefault();
@@ -1098,12 +1135,32 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             {
 
                 var validation = (from c in context.company_master
-                                  where c.company_name == name
+                                  where c.company_name.ToLower().Equals(name.ToLower())
                                   select c);
                 if (validation.Count() > 0)
                     return true;
                 else
                     return false;
+            }
+        }
+        public bool ValidateTinNumber(string tinNumber)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.company_master
+                                  where !string.IsNullOrEmpty(tinNumber) && c.tin_no.ToLower().Equals(tinNumber.ToLower())
+                                  select c);
+                return validation.Count() > 0;
+            }
+        }
+        public bool IsDuplicateTinNumber(string tinNumber,long compsno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.company_master
+                                  where !string.IsNullOrEmpty(tinNumber) && c.tin_no.ToLower().Equals(tinNumber.ToLower()) && c.comp_mas_sno != compsno
+                                  select c);
+                return validation.Count() > 0;
             }
         }
         //public bool Validateduplicatechecking(long edesc, DateTime date)//desc is edited

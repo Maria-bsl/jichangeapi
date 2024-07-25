@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Models.form;
+using JichangeApi.Models.Validators;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -17,8 +18,11 @@ namespace JichangeApi.Models
         public string compname  {get; set;} 
         public string pbox  {get; set;} 
         public string addr  {get; set;}
-        public long rsno  {get; set;} 
-        public long dsno  {get; set;} 
+        //[Required(ErrorMessage = "Missing region")]
+        public long rsno  {get; set;}
+        //[Required(ErrorMessage = "Missing distict")]
+        public long dsno  {get; set;}
+        //[Required(ErrorMessage = "Missing ward")]
         public long wsno  {get; set;} 
         public string tin  {get; set;} 
         public string vat  {get; set;} 
@@ -36,7 +40,9 @@ namespace JichangeApi.Models
         public bool dummy  {get; set;} 
         public int lastrow  {get; set;}
 
-        [Required(ErrorMessage = "Missing Bank details ", AllowEmptyStrings = false)]
+        //[Required(ErrorMessage = "Missing Bank details ")]
+        //[Required, MinLength(1, ErrorMessage = "Missing Bank details")]
+        [RequiredList(ErrorMessage = "Missing Bank details")]
         public List<CompanyBankMaster> details  {get; set;}
 
         [Required(ErrorMessage = "Missing Branch Id", AllowEmptyStrings = false)]

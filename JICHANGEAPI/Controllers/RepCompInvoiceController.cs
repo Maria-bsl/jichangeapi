@@ -169,6 +169,7 @@ namespace JichangeApi.Controllers
             {
                 INVOICE invoice = new INVOICE();
                 invRepoModel.cusid = invRepoModel.cusid.ToString().ToLower() == "all" ? "0" : invRepoModel.cusid;
+                invRepoModel.Comp = invRepoModel.Comp.ToString().ToLower() == "all" ? 0 : invRepoModel.Comp;
                 var result = inv.GetInvRep1((long)invRepoModel.Comp, long.Parse(invRepoModel.cusid), invRepoModel.stdate, invRepoModel.enddate);
                 if (result == null) { return this.GetNoDataFoundResponse();  }
                 else { return this.GetSuccessResponse(result);  }

@@ -547,17 +547,17 @@ public HttpResponseMessage GetApp()
 
                         if (cu.ValidateduplicateEmail1(m.email))
                         {
-                            return Request.CreateResponse(new { response = "Email already exist", message = new List<string> { "Failed" } });
+                            return Request.CreateResponse(new { response = "Email already exist", message = new List<string> {  } });
                         }
                         else
                         if (cu.ValidateMobile(m.mob))
                         {
-                            return Request.CreateResponse(new { response = "Mobile number already exist", message = new List<string> { "Failed" } });
+                            return Request.CreateResponse(new { response = "Mobile number already exist", message = new List<string> { } });
                         }
                         //else if (cu.Validateduplicateuser1(email.Split('@')[0]))
                         else if (cu.Validateduplicateuser1(m.mob))
                         {
-                            return Request.CreateResponse(new { response = "User already exist", message = new List<string> { "Failed" } });
+                            return Request.CreateResponse(new { response = "User already exist", message = new List<string> {  } });
                         }
                         else
                         {
@@ -781,10 +781,12 @@ public HttpResponseMessage GetApp()
         [HttpPost]
         public HttpResponseMessage AddCompanyBankL(AddCompanyBankL mc)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) 
+            { return this.GetInvalidModelStateResponse(modelStateErrors); }
+
+            try
+               {
                     c.CompSno = mc.compsno;
                     c.CompName = mc.compname;
                     c.PostBox = mc.pbox;
@@ -890,7 +892,6 @@ public HttpResponseMessage GetApp()
                         }
                         if (ssno > 0)
                         {
-
                             c.CompSno = ssno;
                             //c.BankSno = details[i].BankSno;
                             //c.BankName = details[i].BankName;
@@ -899,8 +900,6 @@ public HttpResponseMessage GetApp()
                             //c.Swiftcode = details[i].Swiftcode;
 
                             long detsno = c.AddBank(c);
-
-
 
                             return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
                         }
@@ -966,23 +965,16 @@ public HttpResponseMessage GetApp()
                         //    return Json(chk, JsonRequestBehavior.AllowGet);
                         //}
                     }
+
                 }
                 catch (Exception Ex)
                 {
                     //Ex.ToString();
                     return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-
                 }
-            }
-            else
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
-            }
+          
             return returnNull;
         }
-
-
 
         private void SendActivationEmail(String email, String auname, String pwd, String uname)
         {
@@ -1008,10 +1000,10 @@ public HttpResponseMessage GetApp()
 
                     Uri uri = urlBuilder.Uri;*/
                     //string url = "web_url";
-                    string weburl = System.Web.Configuration.WebConfigurationManager.AppSettings["web_url"].ToString();
-                    string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
+                   // string weburl = System.Web.Configuration.WebConfigurationManager.AppSettings["web_url"].ToString();
+                  //  string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
                     //location.href = '/Loginnew/Loginnew';
-                    String body = data.Local_Text.Replace("}+cName+{", uname).Replace("}+uname+{", auname).Replace("}+pwd+{", pwd).Replace("}+actLink+{", url).Replace("{", "").Replace("}", "");
+                    String body = data.Local_Text.Replace("}+cName+{", uname).Replace("}+uname+{", auname).Replace("}+pwd+{", pwd).Replace("}+ +{", "").Replace("{", "").Replace("}", "");
                     //m1(weburl);
                     mm.Body = body;
                     mm.IsBodyHtml = true;

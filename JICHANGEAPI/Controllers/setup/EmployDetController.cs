@@ -165,7 +165,7 @@ namespace JichangeApi.Controllers.setup
             employeeDetails.Created_Date = DateTime.Now;
             employeeDetails.Expiry_Date = DateTime.Now.AddMonths(3);
             employeeDetails.Detail_Id = (long)addBankUserForm.sno;
-            var password = EmployDetController.GetEncryptedData(new Password().Next());
+            var password = EmployDetController.GetEncryptedData(CreateRandomPassword(8));
             employeeDetails.Password = password;
             return employeeDetails;
         }
@@ -294,6 +294,19 @@ namespace JichangeApi.Controllers.setup
             {
                 return this.GetServerErrorResponse(ex.Message);
             }
+        }
+
+        private static string CreateRandomPassword(int length)
+        {
+
+            string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%&";
+            Random random = new Random();
+            char[] chars = new char[length];
+            for (int i = 0; i < length; i++)
+            {
+                chars[i] = validChars[random.Next(0, validChars.Length)];
+            }
+            return new string(chars);
         }
     }
 }

@@ -137,6 +137,8 @@
     <Compile Include="BusinessEntities\Masters\REGION.cs" />
     <Compile Include="BusinessEntities\Masters\REG_QSTN.cs" />
     <Compile Include="BusinessEntities\Masters\Roles.cs" />
+    <Compile Include="BusinessEntities\Masters\SMS_SETTING.cs" />
+    <Compile Include="BusinessEntities\Masters\SMS_TEXT.cs" />
     <Compile Include="BusinessEntities\Masters\S_Account.cs" />
     <Compile Include="BusinessEntities\Masters\S_SMTP.cs" />
     <Compile Include="BusinessEntities\Masters\TableDetails.cs" />

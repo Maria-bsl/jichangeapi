@@ -47,20 +47,20 @@ namespace JichangeApi.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage AddCompanyBank(long compsno, string pfx, string pwd, long ssno, string userid)
+        public HttpResponseMessage AddCompanyBank(AddCompanyApproveModel apa)
         {
             try
             {
                 C_Deposit cd = new C_Deposit();
-                c.CompSno = compsno;
-                c.Postedby = userid.ToString();
+                c.CompSno = apa.compsno;
+                c.Postedby = apa.userid.ToString();
                 c.Status = "Approved";
-                c.Sus_Ac_SNo = ssno;
+                c.Sus_Ac_SNo = apa.ssno;
 
-                cd.Deposit_Acc_No = pfx;
-                cd.Comp_Mas_Sno = compsno;
+                cd.Deposit_Acc_No = apa.pfx;
+                cd.Comp_Mas_Sno = apa.compsno;
                 //cd.Reason = 
-                cd.AuditBy = userid.ToString();
+                cd.AuditBy = apa.userid.ToString();
 
                 #region
                 /*var getTin = c.EditCompanyss(compsno);
@@ -162,7 +162,7 @@ namespace JichangeApi.Controllers
 
                 c.UpdateCompanysta(c);
                 cd.AddAccount(cd);
-                return Request.CreateResponse(new {response = compsno, message ="Success"});
+                return Request.CreateResponse(new {response = apa.compsno, message ="Success"});
 
             }
             catch (Exception Ex)

@@ -122,6 +122,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 
             }
         }
+
+
         public void Updatelang(CompanyUsers dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -137,6 +139,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
+
+
         public CompanyUsers validatelangInst(long uno, long isno, string van)
         {
 
@@ -156,6 +160,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
 
         }
+
+
+
+
         public List<CompanyUsers> GetCompanyUsers()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -263,6 +271,47 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+
+        public CompanyUsers CheckUser(string mobile)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from sc in context.company_users
+                                where sc.mobile_no == mobile
+                                select new CompanyUsers
+                                {
+                                    CompuserSno = sc.comp_users_sno,
+                                    Compmassno = (long)sc.comp_mas_sno,
+                                    Username = sc.username,
+                                    //Password = sc.password,
+                                    Usertype = sc.user_type,
+                                    //CreatedDate = (DateTime)sc.created_date,
+                                    //ExpiryDate = (DateTime)sc.expiry_date,
+                                    //Flogin = sc.f_login,
+                                    //Sno = (long)sc.sno,
+                                    //Qname = sc.q_name,
+                                    //Qans = sc.q_ans,
+                                    //Logatt = (int)sc.log_att,
+                                    //LogTime = (DateTime)sc.log_time,
+                                    //LogStatus = sc.log_status,
+                                    Fullname = sc.user_fullname,
+                                    Email = sc.email_address,
+                                    Mobile = sc.mobile_no,
+                                    //Localization = sc.localization,
+                                    //Flag = sc.flag,
+                                    //Ctime = (DateTime)sc.ctime,
+                                    Userpos = sc.user_position,
+                                    //Mail_sta = (int)sc.mail_status,
+                                    //PostedBy = sc.posted_by,
+                                    //PostedDate = (DateTime)sc.posted_date
+                                }).FirstOrDefault();
+                if (edetails != null)
+                    return edetails;
+                else
+                    return null;
+
+            }
+        }
 
         public CompanyUsers CheckLogin(String uname, String pwd)
         {

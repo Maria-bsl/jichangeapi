@@ -3,6 +3,8 @@ using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Controllers.smsservices;
 using JichangeApi.Models;
+using JichangeApi.Services;
+using JichangeApi.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,14 +30,14 @@ namespace JichangeApi.Controllers
         S_SMTP stp = new S_SMTP();
         EMAIL em = new EMAIL();
         string drt;
-       
+        private readonly CompanyUsersService companyUsersService = new CompanyUsersService();
+
 
         [HttpPost]
         public HttpResponseMessage Getemail(String Sno)
         {
             try
             {
-
                 // GET mobile
                 var result = emp.FPassword(Sno);
                 if (result == null)
@@ -45,7 +47,7 @@ namespace JichangeApi.Controllers
                 }
                 if (result != null)
                 {
-                    SendActivationEmail(result.Email_Address, result.Full_Name, DecodeFrom64(result.Password), result.User_name);
+                    //SendActivationEmail(result.Email_Address, result.Full_Name, DecodeFrom64(result.Password), result.User_name);
                     /*ch.User_SNO = result.User_SNO;
                     ch.Email = Sno;
                     ch.UpdateUsers(ch);*/
@@ -71,31 +73,99 @@ namespace JichangeApi.Controllers
         public HttpResponseMessage GetMobile(SingletonMobile m)
         {
 
-            /*
-             * Get Mobile, find if exist, if yes generate Otp, save and then send it to user
-             */
-            var result1 = cus.CheckUser(m.mobile);
+          
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try { 
+                    var result1 = cus.CheckUser(m.mobile);
 
-            if (result1 != null)
+                    if (result1 != null)
+                    {
+                        var otp = Services.OTP.GenerateOTP(6);
+                        ota.mobile_no = m.mobile;
+                        ota.code = otp;
+                        ota.AddOtp(ota);
+
+                        // send SMS
+                         sms.SendOTPSmsToDeliveryCustomer(m.mobile, otp);
+
+                        return GetSuccessResponse(ota);
+
+                    }
+            }catch(Exception ex) 
             {
-                var otp = Services.OTP.GenerateOTP(6);
-                ota.mobile_no = m.mobile;
-                ota.code = otp;
-                ota.AddOtp(ota);
-
-                // send SMS
-                 sms.SendOTPSmsToDeliveryCustomer(m.mobile);
-
-                return GetSuccessResponse(result1);
+                ex.ToString();
 
             }
 
+            return returnNull;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public HttpResponseMessage OtpValidate(SingletonVOtp m)
+        {
+
+            /*
+             * Get Mobile, find if exist, if yes generate Otp, save and then send it to user
+             */
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                var result1 = cus.CheckUser(m.mobile);
+
+                if (result1 != null)
+                {
+                    // check for OTP and validate it if less than 5minutes return response
+
+                    var validateotp = ota.ValidateUser_otp(m.otp_code);
+                    var dets = ota.GetDetails(m.otp_code);
+                    if (validateotp != false || DateTime.Now > dets.posted_date)
+                    {
+                        return GetSuccessResponse(dets);
+                    }else
+                    {
+                        return GetCustomErrorMessageResponse(new List<string> { "OTP code has expired, Try again"});
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.ToString();
+                return GetServerErrorResponse(ex.ToString());
+
+            }
 
 
             return returnNull;
         }
 
-        private void SendActivationEmail(String email, String auname, String pwd, String uname)
+
+        [HttpPost]
+        [AllowAnonymous]
+        public HttpResponseMessage ChangePwd(ChangePwdModel m)
+        {
+           
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            var checkuser = cus.CheckUser(m.mobile);
+
+            var userdet = companyUsersService.EditCompanyUser(checkuser.CompuserSno);
+            CompanyUsers user = new CompanyUsers();
+            user.Password = PasswordGeneratorUtil.GetEncryptedData(m.password);
+            user.Mobile = m.mobile;
+            user.CompuserSno = checkuser.CompuserSno;
+            var result = companyUsersService.UpdateCompanyUserPassword(user);
+            return GetSuccessResponse(result);
+
+        }
+
+
+
+        /*private void SendActivationEmail(String email, String auname, String pwd, String uname)
         {
             try
             {
@@ -113,7 +183,8 @@ namespace JichangeApi.Controllers
                         //mm.Subject = data.Subject;
                         mm.Subject = "Forgot Password Details";
                         //drt = data.Subject;
-                        /*var urlBuilder =
+                        */
+        /*var urlBuilder =
                        new System.UriBuilder(Request.Url.AbsoluteUri)
                        {
                            Path = Url.Action("Loginnew", "Loginnew"),
@@ -121,7 +192,7 @@ namespace JichangeApi.Controllers
                        };
 
                         Uri uri = urlBuilder.Uri;
-                        string url = urlBuilder.ToString();*/
+                        string url = urlBuilder.ToString();*//*
                         //String body = data.Email_Text.Replace("}+cName+{", uname).Replace("}+uname+{", auname).Replace("}+pwd+{", pwd).Replace("}+actLink+{", url).Replace("{", "").Replace("}", "");
                         String body = "Dear " + auname + "<br>";
                         body += "User Name:" + uname + "<br>";
@@ -146,7 +217,9 @@ namespace JichangeApi.Controllers
                 Utilites.logfile("Forgot", drt, Ex.ToString());
             }
 
-        }
+        }*/
+
+
         public static string DecodeFrom64(string password)
         {
             string decryptpwd = string.Empty;

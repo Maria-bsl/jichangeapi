@@ -1,4 +1,5 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace JichangeApi.Controllers
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class UserLogController : ApiController
+    public class UserLogController : SetupBaseController
     {
         private readonly dynamic returnNull = null;
         EMP_DET ed = new EMP_DET();
@@ -24,36 +25,28 @@ namespace JichangeApi.Controllers
         [HttpPost]
         public HttpResponseMessage LogtimeRep(ReportDates r)
         {
-            if (ModelState.IsValid) {
-                try
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
                 {
 
                     var result = td.Getfunctiontrackdet(r.stdate, r.enddate);
                     if (result != null)
                     {
-
-                        return Request.CreateResponse(new { response = result,  message = new List<string> { } }); 
+ 
+                        return GetSuccessResponse(result);
                     }
                     else
                     {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { "Failed" } });
+                        return GetNoDataFoundResponse();
                     }
-
 
                 }
                 catch (Exception Ex)
                 {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                    // long errorLogID = ApplicationError.ErrorHandling(Ex, Request.RequestUri.ToString(), Request.Url.ToString(), Request.Browser.Type);
+                    return GetServerErrorResponse(Ex.ToString());
                 }
-            }
-            else
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
-            }
-
-            //return returnNull;
+           
         }
 
     }

@@ -390,14 +390,14 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     update.comp_users_sno = T.CompuserSno;
                     update.comp_mas_sno = T.Compmassno;
                     update.username = T.Username;
-                    update.password = T.Password;
+                    //update.password = T.Password;
                     update.user_type = T.Usertype;
                     update.created_date = T.CreatedDate;
                     update.expiry_date = T.ExpiryDate;
                     update.f_login = T.Flogin;
                     update.sno = T.Sno;
-                    update.q_name = T.Qname;
-                    update.q_ans = T.Qans;
+                   /*update.q_name = T.Qname;
+                    update.q_ans = T.Qans;*/
                     update.log_att = T.Logatt;
                     update.log_time = T.LogTime;
                     update.log_status = T.LogStatus;
@@ -412,6 +412,23 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     update.posted_by = T.PostedBy;
                     update.posted_date = DateTime.Now;
 
+                    context.SaveChanges();
+                }
+            }
+        }
+
+        public void UpdateCompanyUsersP(CompanyUsers T)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var update = (from sc in context.company_users
+                              where sc.comp_users_sno == T.CompuserSno
+                              select sc).FirstOrDefault();
+                if (update != null)
+                {
+                    
+                    update.password = T.Password;
+                   
                     context.SaveChanges();
                 }
             }

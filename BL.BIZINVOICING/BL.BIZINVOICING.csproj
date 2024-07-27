@@ -145,6 +145,7 @@
     <Compile Include="BusinessEntities\Masters\Token.cs" />
     <Compile Include="BusinessEntities\Masters\TRACK_DET.cs" />
     <Compile Include="BusinessEntities\Masters\TRARegistration.cs" />
+    <Compile Include="BusinessEntities\Masters\User_otp.cs" />
     <Compile Include="BusinessEntities\Masters\VatPercentage.cs" />
     <Compile Include="BusinessEntities\Masters\WARD.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

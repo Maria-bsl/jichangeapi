@@ -232,6 +232,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\CompanyUsersController.cs" />
+    <Compile Include="Controllers\ForgotController.cs" />
     <Compile Include="Controllers\setup\BranchController.cs" />
     <Compile Include="Controllers\CompanyInboxController.cs" />
     <Compile Include="Controllers\setup\CurrencyController.cs" />
@@ -250,7 +251,12 @@
     <Compile Include="Controllers\setup\SMTPController.cs" />
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />
-    <Compile Include="Controllers\smsservices\SmsService.cs" />
+    <Compile Include="Controllers\SMSSETTINGController.cs" />
+    <Compile Include="Models\AddCompanyApproveModel.cs" />
+    <Compile Include="Models\form\AddSmtpModel.cs" />
+    <Compile Include="Models\SingletonMobile.cs" />
+    <Compile Include="Services\OTP.cs" />
+    <Compile Include="Services\SmsService.cs" />
     <Compile Include="Models\AddCompanyBankL.cs" />
     <Compile Include="Models\AuthLog.cs" />
     <Compile Include="Models\BranchRef.cs" />

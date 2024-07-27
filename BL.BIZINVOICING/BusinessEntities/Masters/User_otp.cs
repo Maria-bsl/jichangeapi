@@ -35,28 +35,50 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 return ps.user_otp_sno;
             }
         }
-       /* public List<User_otp> GetUser_otp(long sno)
+
+        public User_otp GetDetails(string otp)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var adetails = (from c in context.user_otp
-                                where c.User_otp_status == "Active" && c.comp_mas_sno == sno
-                                select new User_otps
-                                {
-                                    Sno = c.sno,
-                                    Compmassno = (long)c.comp_mas_sno,
-                                    Description = c.descript,
-                                    Code = c.code,
-                                    Admin1 = c.admin1,
-                                    Status = c.User_otp_status,
-                                    PostedDate = (DateTime)c.posted_date,
-                                }).OrderBy(z => z.PostedDate).ToList();
-                if (adetails != null && adetails.Count > 0)
-                    return adetails;
+                var det = (from n in context.user_otp
+                                   where n.code == otp
+                                   select
+                 new User_otp
+                {
+                    code = n.code,
+                    user_otp_sno = n.user_otp_sno,
+                    mobile_no = n.mobile_no,
+                    posted_date = DateTime.Now
+                }).FirstOrDefault();
+
+                if (det != null)
+                    return det;
                 else
                     return null;
             }
-        }*/
+        }
+        /* public List<User_otp> GetUser_otp(long sno)
+         {
+             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+             {
+                 var adetails = (from c in context.user_otp
+                                 where c.User_otp_status == "Active" && c.comp_mas_sno == sno
+                                 select new User_otps
+                                 {
+                                     Sno = c.sno,
+                                     Compmassno = (long)c.comp_mas_sno,
+                                     Description = c.descript,
+                                     Code = c.code,
+                                     Admin1 = c.admin1,
+                                     Status = c.User_otp_status,
+                                     PostedDate = (DateTime)c.posted_date,
+                                 }).OrderBy(z => z.PostedDate).ToList();
+                 if (adetails != null && adetails.Count > 0)
+                     return adetails;
+                 else
+                     return null;
+             }
+         }*/
 
         public void DeleteUser_otp(string no)
         {

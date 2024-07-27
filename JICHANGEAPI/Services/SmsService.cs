@@ -112,11 +112,11 @@ namespace JichangeApi.Controllers.smsservices
 
         }
 
-        public void SendOTPSmsToDeliveryCustomer(string Mobile_Number)
+        public void SendOTPSmsToDeliveryCustomer(string Mobile_Number, string otp)
         {
             if (Mobile_Number != null)
             {
-                var otp = OTP.GenerateOTP(6);
+                //var otp = OTP.GenerateOTP(6);
                 var mobileNumber = Mobile_Number;
 
                // var decryptedPassword = DecodeFrom64(password);
@@ -150,7 +150,8 @@ namespace JichangeApi.Controllers.smsservices
                 string password = DecodeFrom64(sm.Password);
                 string senderb = sm.From_Address;
                 //  string mess = data.SMS_Text;
-                string gsm = ReplaceFirstOccurrence(visitorMobileNumber.Trim(), "0", "255");
+                //string gsm = ReplaceFirstOccurrence(visitorMobileNumber.Trim(), "0", "255");
+                string gsm = visitorMobileNumber;
                 string body = HttpUtility.UrlEncode(SmsBody);
 
                 string url = "http://api.infobip.com/api/v3/sendsms/plain?user=" + username + "&password=" + password + "&sender=" + senderb + "&SMSText=" + body + "&GSM=" + gsm;
@@ -159,6 +160,7 @@ namespace JichangeApi.Controllers.smsservices
                 WebResponse wr = myReq.GetResponse();
                 StreamReader sr = new StreamReader(wr.GetResponseStream(), Encoding.Default);
                 string Res = sr.ReadToEnd();
+                Console.WriteLine(Res);
             }
             catch (Exception Ex)
             {

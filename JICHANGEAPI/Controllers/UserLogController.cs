@@ -31,14 +31,25 @@ namespace JichangeApi.Controllers
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
-            {
-                List<TRACK_DET> logs = userLogService.GetLoginTimesReport(reportDates.stdate, reportDates.stdate);
-                return GetSuccessResponse(logs);
-            }
-            catch (Exception ex)
-            {
-                return GetServerErrorResponse(ex.Message);
-            }
+                {
+
+                    var result = td.Getfunctiontrackdet(r.stdate, r.enddate);
+                    if (result != null)
+                    {
+ 
+                        return GetSuccessResponse(result);
+                    }
+                    else
+                    {
+                        return GetNoDataFoundResponse();
+                    }
+
+                }
+                catch (Exception Ex)
+                {
+                    return GetServerErrorResponse(Ex.ToString());
+                }
+           
         }
     }
 }

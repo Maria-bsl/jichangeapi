@@ -137,6 +137,29 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
+
+
+        public CompanyUsers UpdateCompanyUserPassword(CompanyUsers user)
+        {
+            try
+            {
+               /* CompanyUsers user = CreateCompanyUser(addCompanyUserForm);
+                CompanyUsers found = user.EditCompanyUsers((long)addCompanyUserForm.sno);
+                if (found != null) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
+                AppendUpdateAuditTrail((long)addCompanyUserForm.sno, found, user, (long)addCompanyUserForm.userid);*/
+                user.UpdateCompanyUsersP(user);
+                return EditCompanyUser((long)user.CompuserSno);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public bool IsDuplicateEmail(string email)
         {
             try

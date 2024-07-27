@@ -1,6 +1,8 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Services;
+using JichangeApi.Services.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,22 +17,21 @@ namespace JichangeApi.Controllers
     public class RepCustomerController : SetupBaseController
     {
         // GET: RepCustomer
-     
+        private readonly RepCustomerService repCustomerService = new RepCustomerService();
 
         [HttpPost]
-        public HttpResponseMessage GetcustDetReport(SingletonGetCustDetRepModel c)
+        public HttpResponseMessage GetcustDetReport(SingletonGetCustDetRepModel form)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                CustomerMaster customerMaster = new CustomerMaster();
-                var results = customerMaster.CustGetrep(c.Comp, c.reg, c.dist);
-                return this.GetList<List<CustomerMaster>, CustomerMaster>(results);
+                List<CustomerMaster> customers = repCustomerService.GetCustomerDetailsReport((long)form.Comp, (long)form.reg, (long)form.dist);
+                return GetSuccessResponse(customers);
             }
             catch (Exception ex)
             {
-                return this.GetServerErrorResponse(ex.Message);
+                return GetServerErrorResponse(ex.Message);
             }
         }
     }

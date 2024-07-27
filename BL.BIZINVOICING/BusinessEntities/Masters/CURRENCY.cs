@@ -119,24 +119,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        //public List<CURRENCY> GetCURRENCY1(long sno)
-        //{
-        //    using (BIZINVOICEEntities context = new BIZINVOICEEntities())
-        //    {
-        //        var adetails = (from c in context.currency_master join ex in context.exchange_master on c.currency_code equals ex.currency_code
-        //                        where ex.insti_reg_sno==sno
-        //                        select new CURRENCY
-        //                        {
-        //                            Currency_Code = c.currency_code,
-        //                            Currency_Name = c.currency_name,
-        //                            Audit_Date = c.posted_date,
-        //                        }).Distinct().ToList();
-        //        if (adetails != null && adetails.Count > 0)
-        //            return adetails;
-        //        else
-        //            return null;
-        //    }
-        //}
         public CURRENCY getCURRENCYText(string chsno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

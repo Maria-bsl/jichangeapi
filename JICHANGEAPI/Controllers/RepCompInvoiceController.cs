@@ -1,6 +1,8 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Services;
+using JichangeApi.Services.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,148 +18,72 @@ namespace JichangeApi.Controllers
     {
 
         // GET: RepCompInvoice
-        INVOICE inv = new INVOICE();
-        CustomerMaster cm = new CustomerMaster();
-        CompanyBankMaster c = new CompanyBankMaster();
-        private readonly dynamic returnNull = null;
+        private readonly RepCompInvoiceService repCompInvoiceService = new RepCompInvoiceService();
+        private readonly CustomerService customerService = new CustomerService();
 
         [HttpPost]
-        public HttpResponseMessage CustList(SingletonSno c)
+        public HttpResponseMessage CustList(SingletonSno singletonSno)
         {
-            if (ModelState.IsValid) { 
-                try
-                {
-
-                    var result = inv.GetCustomers1(long.Parse(c.Sno.ToString()));
-                    if (result != null)
-                    {
-
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new {response = 0, message ="Failed"});
-                    }
-
-
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
-            }
-            else
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                List<INVOICE> customers = repCompInvoiceService.GetApprovedInvoiceCustomers(singletonSno);
+                return GetSuccessResponse(customers);
             }
-
-            //return null;
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
 
 
         [HttpPost]
-        public HttpResponseMessage CompList(SingletonSno cb)
+        public HttpResponseMessage CompList(SingletonSno singletonSno)
         {
-            if (ModelState.IsValid) { 
-                try
-                {
-
-                    var result = c.CompGet(long.Parse(cb.Sno.ToString()));
-                    if (result != null)
-                    {
-
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new {response = 0, message ="Failed"});
-                    }
-
-
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
-            }
-            else
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                List<CompanyBankMaster> customers = customerService.GetCompanyNamesList((long) singletonSno.Sno);
+                return GetSuccessResponse(customers);
             }
-
-            //return null;
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
 
 
         [HttpPost]
-        public HttpResponseMessage InvList(SingletonSno c)
+        public HttpResponseMessage InvList(SingletonSno singletonSno)
         {
-            if (ModelState.IsValid) {  
-                try
-                {
-                    string ash = null;
-                    if (c.Sno == Convert.ToInt64(ash))
-                    {
-                        return Request.CreateResponse(new {response = c.Sno, message ="Failed"});
-                    }
-                    else
-                    {
-                        //long.Parse(c.Sno.ToString())GetInvoiceNos_S(a,b)
-                        var result = inv.GetInvoiceNos_(long.Parse(c.Sno.ToString()));
-                        if (result == null)
-                        {
-                            //int d = 0;
-                            return Request.CreateResponse(new {response = 0, message ="Failed"});
-                        }
-                        else
-                        {
-                            return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                        }
-                    }
-                }
-                catch (Exception Ex)
-                {
-                    //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
-            }
-            else
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                List<INVOICE> customers = repCompInvoiceService.GetInvoiceNumbersByCustomerId((long)singletonSno.Sno);
+                return GetSuccessResponse(customers);
             }
-            //return returnNull;
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
 
 
         [HttpPost]
         public HttpResponseMessage customerList()
         {
-
             try
             {
-
-                var result = cm.CustGet();
-                if (result != null)
-                {
-
-                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                }
-                else
-                {
-                    return Request.CreateResponse(new {response = 0, message ="Failed"});
-                }
-
-
+                List<CustomerMaster> customers = customerService.GetAllCustomersList();
+                return GetSuccessResponse(customers);
             }
             catch (Exception Ex)
             {
-                return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
+                return GetServerErrorResponse(Ex.Message);
             }
-
-            //return null;
         }
 
         [HttpPost]
@@ -167,12 +93,8 @@ namespace JichangeApi.Controllers
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                INVOICE invoice = new INVOICE();
-                invRepoModel.cusid = invRepoModel.cusid.ToString().ToLower() == "all" ? "0" : invRepoModel.cusid;
-                invRepoModel.Comp = invRepoModel.Comp.ToString().ToLower() == "all" ? 0 : invRepoModel.Comp;
-                var result = inv.GetInvRep1((long)invRepoModel.Comp, long.Parse(invRepoModel.cusid), invRepoModel.stdate, invRepoModel.enddate);
-                if (result == null) { return this.GetNoDataFoundResponse();  }
-                else { return this.GetSuccessResponse(result);  }
+                List<INVOICE> invoices = repCompInvoiceService.GetInvoiceReport(invRepoModel);
+                return GetSuccessResponse(invoices);    
             }
             catch (Exception ex)
             {
@@ -180,81 +102,20 @@ namespace JichangeApi.Controllers
             }
         }
 
-
-        /*[HttpPost]
-        public HttpResponseMessage GetInvReport(InvRepoModel i)
-        { 
-            
-            if(i.cusid.ToString().ToLower() == "all")
-                    {
-                        i.cusid = "0";
-                    }
-
-            if (ModelState.IsValid) { 
-                try
-                {
-                   
-                    var result = inv.GetInvRep1((long)i.Comp, long.Parse(i.cusid), i.stdate, i.enddate);
-                    if (result != null)
-                    {
-
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new {response = 0, message ="Failed"});
-                    }
-
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
-            }
-            else
-            {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
-            }
-        }*/
-
-
         [HttpPost]
-        public HttpResponseMessage GetInvDetReport(InvDetRepModel m)
+        public HttpResponseMessage GetInvDetReport(InvDetRepModel invDetRepModel)
         {
-            if (ModelState.IsValid) { 
-                try
-                {
-
-                    var result = inv.GetInvDetRep_1((long)m.Comp, m.invs.ToString(), m.stdate, m.enddate, (long)m.Cust);
-                    if (result != null)
-                    {
-
-                        return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new {response = 0, message ="Failed"});
-                    }
-
-
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                }
-            }
-            else
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                List<INVOICE> invoices = repCompInvoiceService.GetInvoiceDetailsReport(invDetRepModel);
+                return GetSuccessResponse(invoices);
             }
-            //return null;
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
         }
-
-
-
-
-
     }
 }

@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static QRCoder.PayloadGenerator;
 
-namespace JichangeApi.Services
+namespace JichangeApi.Services.Companies
 {
     public class CompanyUsersService
     {

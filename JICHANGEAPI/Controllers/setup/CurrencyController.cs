@@ -2,6 +2,7 @@
 using JichangeApi.Models.form;
 using JichangeApi.Models.form.setup.insert;
 using JichangeApi.Models.form.setup.remove;
+using JichangeApi.Services.setup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,7 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CurrencyController : SetupBaseController
     {
-        private static readonly List<string> tableColumns = new List<string> { "currency_code", "currency_name", "posted_by", "posted_date" };
-        private static readonly string tableName = "Currency";
+        private readonly CurrencyService currencyService = new CurrencyService();
 
         [HttpPost]
         public HttpResponseMessage GetCurrencyDetails()
@@ -24,80 +24,41 @@ namespace JichangeApi.Controllers.setup
             CURRENCY currency = new CURRENCY();
             try
             {
-                List<CURRENCY> currencies = currency.GetCURRENCY();
-                return this.GetList<List<CURRENCY>, CURRENCY>(currencies);
+                List<CURRENCY> currencies = currencyService.GetCurrenciesList();
+                return GetSuccessResponse(currencies);
             }
             catch (Exception ex)
             {
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
-        private CURRENCY CreateCurrency(AddCurrencyForm addCurrencyForm)
-        {
-            CURRENCY currency = new CURRENCY();
-            currency.Currency_Code = addCurrencyForm.code;
-            currency.Currency_Name = addCurrencyForm.cname;
-            currency.AuditBy = addCurrencyForm.userid.ToString();
-            return currency;
-        }
-        private void AppendInsertAuditTrail(string currencyCode, CURRENCY currency, long userid)
-        {
-            List<string> values = new List<string> { currency.Currency_Code, currency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
-            Auditlog.InsertAuditTrail(values, userid, CurrencyController.tableName, CurrencyController.tableColumns);
-        }
-        private void AppendUpdateAuditTrail(string currencyCode, CURRENCY oldCurrency, CURRENCY newCurrency, long userid)
-        {
-            List<string> oldValues = new List<string> { currencyCode, oldCurrency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
-            List<string> newValues = new List<string> { currencyCode, newCurrency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
-            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, CurrencyController.tableName, CurrencyController.tableColumns);
-
-        }
-        private void AppendDeleteAuditTrail(string currencyCode, CURRENCY currency, long userid)
-        {
-            List<string> values = new List<string> { currency.Currency_Code, currency.Currency_Name, userid.ToString(), DateTime.Now.ToString() };
-            Auditlog.deleteAuditTrail(values, userid, CurrencyController.tableName, CurrencyController.tableColumns);
-        }
-        private HttpResponseMessage InsertCurrency(CURRENCY currency,AddCurrencyForm addCurrencyForm)
-        {
-            try
-            {
-                bool exists = currency.isExistCurrencyCode(addCurrencyForm.code);
-                if (exists) return this.GetAlreadyExistsErrorResponse();
-                string currencyCode = currency.AddCURRENCY(currency);
-                AppendInsertAuditTrail(currencyCode, currency, (long) addCurrencyForm.userid);
-                return FindCurrency(currencyCode);
-            }
-            catch (Exception ex)
-            {
-                return this.GetServerErrorResponse(ex.Message);
-            }
-        }
-
-        private HttpResponseMessage UpdateCurrency(CURRENCY currency,AddCurrencyForm addCurrencyForm)
-        {
-            try
-            {
-                bool exists = currency.isExistCurrencyCode(addCurrencyForm.code);
-                if (!exists) return this.GetNotFoundResponse();
-                CURRENCY found = currency.getCURRENCYText(addCurrencyForm.code);
-                string code = currency.UpdateCURRENCY(currency);
-                AppendUpdateAuditTrail(code, found, currency, (long) addCurrencyForm.userid);
-                return FindCurrency(code);
-            }
-            catch (Exception ex)
-            {
-                return this.GetServerErrorResponse(ex.Message);
-            }
-        }
-
         [HttpPost]
         public HttpResponseMessage AddCurrency(AddCurrencyForm addCurrencyForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
-            CURRENCY currency = CreateCurrency(addCurrencyForm);
-            if (addCurrencyForm.sno == 0) { return InsertCurrency(currency,addCurrencyForm);  }
-            else { return UpdateCurrency(currency, addCurrencyForm); }
+            try
+            {
+                if (addCurrencyForm.sno == 0) 
+                { 
+                    CURRENCY currency = currencyService.InsertCurrency(addCurrencyForm); 
+                    return GetSuccessResponse(currency);
+                }
+                else
+                {
+                    CURRENCY currency = currencyService.UpdateCurrency(addCurrencyForm);
+                    return GetSuccessResponse(currency);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -105,11 +66,13 @@ namespace JichangeApi.Controllers.setup
         {
             try
             {
-                CURRENCY currency = new CURRENCY();
-                bool exists = currency.isExistCurrencyCode(code);
-                if (!exists) return this.GetNotFoundResponse();
-                CURRENCY found = currency.getCURRENCYText(code);
-                return this.GetSuccessResponse(found);
+                CURRENCY currency = currencyService.FindCurrency(code);
+                return GetSuccessResponse(currency);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
@@ -125,11 +88,13 @@ namespace JichangeApi.Controllers.setup
             CURRENCY currency = new CURRENCY();
             try
             {
-                bool isExist = currency.isExistCurrencyCode(deleteCurrencyForm.code);
-                CURRENCY found = currency.getCURRENCYText(deleteCurrencyForm.code);
-                AppendDeleteAuditTrail(deleteCurrencyForm.code, found, (long) deleteCurrencyForm.userid);
-                currency.DeleteCURRENCY(deleteCurrencyForm.code);
-                return this.GetSuccessResponse(deleteCurrencyForm.code);
+                string code = currencyService.Deletecurrency(deleteCurrencyForm);
+                return GetSuccessResponse(currency);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {

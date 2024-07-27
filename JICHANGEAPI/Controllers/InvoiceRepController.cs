@@ -2,6 +2,7 @@
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Services;
+using JichangeApi.Services.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,7 +126,7 @@ namespace JichangeApi.Controllers
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<CustomerMaster> customers = customerService.GetCompanyCustomersList(singletonComp);
+                List<CustomerMaster> customers = customerService.GetCompanyCustomersList((long) singletonComp.compid);
                 return GetSuccessResponse(customers);
             }
             catch (Exception ex)

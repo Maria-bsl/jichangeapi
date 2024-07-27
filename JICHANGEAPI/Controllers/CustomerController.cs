@@ -43,7 +43,7 @@ namespace JichangeApi.Controllers
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<CustomerMaster> customers = customerService.GetCompanyCustomersList(singletonComp);
+                List<CustomerMaster> customers = customerService.GetCompanyCustomersList((long) singletonComp.compid);
                 return GetSuccessResponse(customers);
             }
             catch (Exception ex)
@@ -81,7 +81,7 @@ namespace JichangeApi.Controllers
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<CompanyBankMaster> companies = customerService.GetCompanyNamesList(singletonComp);
+                List<CompanyBankMaster> companies = customerService.GetCompanyNamesList((long) singletonComp.compid);
                 return GetSuccessResponse(companies);
             }
             catch (Exception ex)

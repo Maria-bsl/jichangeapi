@@ -2,6 +2,7 @@
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Services;
+using JichangeApi.Services.Companies;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,5 +1,8 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Services;
+using JichangeApi.Services.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,49 +15,30 @@ namespace JichangeApi.Controllers
 {
 
     [EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class UserLogController : ApiController
+    public class UserLogController : SetupBaseController
     {
         private readonly dynamic returnNull = null;
         EMP_DET ed = new EMP_DET();
         TRACK_DET td = new TRACK_DET();
+        private readonly UserLogService userLogService = new UserLogService();
         // GET: Userlog
 
        
 
         [HttpPost]
-        public HttpResponseMessage LogtimeRep(ReportDates r)
+        public HttpResponseMessage LogtimeRep(ReportDates reportDates)
         {
-            if (ModelState.IsValid) {
-                try
-                {
-
-                    var result = td.Getfunctiontrackdet(r.stdate, r.enddate);
-                    if (result != null)
-                    {
-
-                        return Request.CreateResponse(new { response = result,  message = new List<string> { } }); 
-                    }
-                    else
-                    {
-                        return Request.CreateResponse(new { response = result, message = new List<string> { "Failed" } });
-                    }
-
-
-                }
-                catch (Exception Ex)
-                {
-                    return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
-                    // long errorLogID = ApplicationError.ErrorHandling(Ex, Request.RequestUri.ToString(), Request.Url.ToString(), Request.Browser.Type);
-                }
-            }
-            else
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
             {
-                var errorMessages = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage).ToList();
-                return Request.CreateResponse(new { response = 0, message = errorMessages });
+                List<TRACK_DET> logs = userLogService.GetLoginTimesReport(reportDates.stdate, reportDates.stdate);
+                return GetSuccessResponse(logs);
             }
-
-            //return returnNull;
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
-
     }
 }

@@ -19,6 +19,7 @@ using System.Text.Json.Nodes;
 using System.Text;
 using JichangeApi.Services;
 using JichangeApi.Services.setup;
+using JichangeApi.Services.Companies;
 
 namespace JichangeApi.Controllers
 {
@@ -408,17 +409,17 @@ namespace JichangeApi.Controllers
                 if (invoiceForm.sno == 0)
                 {
                     var invoice = invoiceService.InsertInvoice(invoiceForm);
-                    return GetSuccessResponse(invoice);
+                    return SuccessJsonResponse(invoice);
                 }
                 else if (invoiceForm.sno > 0 && !string.IsNullOrEmpty(invoiceForm.goods_status) && invoiceForm.goods_status.ToLower().Equals("approve"))
                 {
                     var invoice = invoiceService.ApproveInvoice(invoiceForm);
-                    return GetSuccessResponse(invoice);
+                    return SuccessJsonResponse(invoice);
                 }
                 else
                 {
                     var invoice = invoiceService.UpdateInvoice(invoiceForm);
-                    return GetSuccessResponse(invoice);
+                    return SuccessJsonResponse(invoice);
                 }
             }
             catch (ArgumentException ex)
@@ -442,7 +443,7 @@ namespace JichangeApi.Controllers
             try
             {
                 var amendedInvoice = invoiceService.AmendInvoice(addAmendForm);
-                return GetSuccessResponse(amendedInvoice);
+                return SuccessJsonResponse(amendedInvoice);
             }
             catch(ArgumentException ex)
             {
@@ -463,7 +464,7 @@ namespace JichangeApi.Controllers
             try
             {
                 var cancelledInvoice = invoiceService.CancelInvoice(addAmendForm);
-                return GetSuccessResponse(cancelledInvoice);
+                return SuccessJsonResponse(cancelledInvoice);
             }
             catch (ArgumentException ex)
             {
@@ -483,7 +484,8 @@ namespace JichangeApi.Controllers
             try
             {
                 var details = invoiceService.GetBriefPaymentDetail(singletonControl);
-                return GetSuccessResponse(details);
+                return SuccessJsonResponse(details);
+                //return GetSuccessResponse(details);
             }
             catch (ArgumentException ex)
             {

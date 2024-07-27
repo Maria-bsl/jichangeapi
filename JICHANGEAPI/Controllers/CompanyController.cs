@@ -3,6 +3,7 @@ using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Services;
+using JichangeApi.Services.Companies;
 using JichangeApi.Services.setup;
 using System;
 using System.Collections.Generic;

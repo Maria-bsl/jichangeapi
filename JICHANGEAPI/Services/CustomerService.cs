@@ -79,12 +79,23 @@ namespace JichangeApi.Services
             customer.Checker = customersForm.check_status;
             return customer;
         }
-        public List<CustomerMaster> GetCompanyCustomersList(SingletonComp singleton)
+        public List<CustomerMaster> GetCompanyCustomersList(long compid)
         {
             try
             {
-                CustomerMaster customerMaster = new CustomerMaster();
-                List<CustomerMaster> result = customerMaster.CustGet((long) singleton.compid);
+                List<CustomerMaster> result = new CustomerMaster().CustGet(compid);
+                return result != null ? result : new List<CustomerMaster>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<CustomerMaster> GetAllCustomersList()
+        {
+            try
+            {
+                List<CustomerMaster> result = new CustomerMaster().CustGet();
                 return result != null ? result : new List<CustomerMaster>();
             }
             catch (Exception ex)
@@ -110,12 +121,12 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
-        public List<CompanyBankMaster> GetCompanyNamesList(SingletonComp singletonComp)
+        public List<CompanyBankMaster> GetCompanyNamesList(long compid)
         {
             try
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
-                List<CompanyBankMaster> result = companyBankMaster.CompGet((long) singletonComp.compid);
+                List<CompanyBankMaster> result = companyBankMaster.CompGet(compid);
                 return result != null ? result : new List<CompanyBankMaster>();
             }
             catch (Exception ex)

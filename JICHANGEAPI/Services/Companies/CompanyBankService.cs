@@ -11,7 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace JichangeApi.Services
+namespace JichangeApi.Services.Companies
 {
     public class CompanyBankService
     {
@@ -419,7 +419,7 @@ namespace JichangeApi.Services
             try
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
-                return companyBankMaster.EditCompanyss(companyId);
+                return companyBankMaster.FindCompanyById(companyId);
             }
             catch (Exception ex)
             {

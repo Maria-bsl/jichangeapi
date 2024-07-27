@@ -8,6 +8,27 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
     public class CompanyBankMaster
     {
+        private CompanyBankMaster CreateCompanyMaster(company_master found)
+        {
+            CompanyBankMaster company = new CompanyBankMaster();
+            company.CompSno = found.comp_mas_sno;
+            company.CompanySno = found.comp_mas_sno;
+            company.CompName = found.company_name;
+            company.PostBox = found.pobox_no;
+            company.Address = found.physical_address;
+            company.RegId = (long)found.region_id;
+            company.DistSno = (long)found.district_sno;
+            company.WardSno = (long)found.ward_sno;
+            company.TinNo = found.tin_no;
+            company.VatNo = found.vat_no;
+            company.DirectorName = found.director_name;
+            company.Email = found.email_address;
+            company.TelNo = found.telephone_no;
+            company.FaxNo = found.fax_no;
+            company.MobNo = found.mobile_no;
+            company.Branch_Sno = found.branch_sno != null ? found.branch_sno : 0;
+            return company;
+        }
         #region Properties
         public long CompSno { set; get; }
         public long Sus_Ac_SNo { set; get; }
@@ -904,6 +925,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+        public CompanyBankMaster FindCompanyById(long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var found = context.company_master.Find(sno);
+                if (found != null)
+                {
+                    return CreateCompanyMaster(found);
+                }
+                return null;
+            }
+        }
         public CompanyBankMaster EditCompanyss(long sno)//according to use we can use sno
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -934,6 +967,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     TelNo = c.telephone_no,
                                     FaxNo = c.fax_no,
                                     MobNo = c.mobile_no,
+                                    Branch_Sno = c.branch_sno != null ? c.branch_sno : null,
                                     //CompLogo = c.comp_logo,
                                     //DirectorSig = c.director_digital_sig,
                                 }).FirstOrDefault();

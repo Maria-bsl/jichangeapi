@@ -101,7 +101,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage Adddesg(AddDesignationForm addDesignationForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 DESIGNATION designation = CreateDesignation(addDesignationForm);
@@ -135,7 +135,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage Deletedesg(DeleteDesignationForm deleteDesignationForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             DESIGNATION designation = new DESIGNATION();
             try
             {

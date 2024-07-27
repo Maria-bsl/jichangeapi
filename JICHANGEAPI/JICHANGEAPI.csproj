@@ -260,7 +260,9 @@
     <Compile Include="Models\ControlNo.cs" />
     <Compile Include="Models\Desibraid.cs" />
     <Compile Include="Models\form\AddAmendForm.cs" />
+    <Compile Include="Models\form\AddCompanyUserForm.cs" />
     <Compile Include="Models\form\CustomersForm.cs" />
+    <Compile Include="Models\form\DeleteCompanyUserForm.cs" />
     <Compile Include="Models\form\DeleteCustomerForm.cs" />
     <Compile Include="Models\form\GetEmployeeForm.cs" />
     <Compile Include="Models\form\InvoiceForm.cs" />
@@ -319,6 +321,17 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\CompanyBankService.cs" />
+    <Compile Include="Services\CompanyDepositService.cs" />
+    <Compile Include="Services\CompanyInboxService.cs" />
+    <Compile Include="Services\CompanyService.cs" />
+    <Compile Include="Services\CompanyUsersService.cs" />
+    <Compile Include="Services\CustomerService.cs" />
+    <Compile Include="Services\InvoiceRepService.cs" />
+    <Compile Include="Services\InvoiceService.cs" />
+    <Compile Include="Services\LoginUserService.cs" />
+    <Compile Include="Services\PaymentService.cs" />
+    <Compile Include="Services\setup\CurrencyService.cs" />
+    <Compile Include="Services\setup\DesignationService.cs" />
     <Compile Include="Services\setup\DistrictService.cs" />
     <Compile Include="Services\setup\RegionService.cs" />
     <Compile Include="Services\setup\WardService.cs" />

@@ -78,7 +78,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddBranch(AddBranchForm addBranchForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             BranchM branchM = createBranchM(addBranchForm);
             if (addBranchForm.Branch_Sno == 0) { return InsertBranch(branchM); }
             else { return UpdateBranch(branchM); }
@@ -107,7 +107,7 @@ namespace JichangeApi.Controllers.setup
             try
             {
                 List<string> modelStateErrors = this.ModelStateErrors();
-                if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+                if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
                 var branchM = new BranchM();
                 var exitsBranch = branchM.isExistBranch(long.Parse(Sno));
                 if (!exitsBranch) return this.GetNotFoundResponse();

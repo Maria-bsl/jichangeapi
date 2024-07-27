@@ -7,6 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using BL.BIZINVOICING.BusinessEntities.Masters;
+using System.Runtime.Remoting.Messaging;
 
 namespace JichangeApi.Utilities
 {
@@ -68,6 +69,42 @@ namespace JichangeApi.Utilities
                 // Utilites.logfile("lcituion user", drt, Ex.ToString());
             }
 
+        }
+        public static void SendSubjectTextBodyEmail(string email,string subject,string text,string body)
+        {
+            try
+            {
+                S_SMTP smtp = new S_SMTP();
+                SmtpClient smtpClient = new SmtpClient();
+                MailMessage mailMessage = new MailMessage();
+                var esmtp = smtp.getSMTPText();
+                if (esmtp == null) throw new ArgumentException("Error occured with the smtp");
+                int port = Int32.Parse(esmtp.SMTP_Port);
+                if (string.IsNullOrEmpty(esmtp.SMTP_UName))
+                {
+                    smtpClient = new SmtpClient(esmtp.SMTP_Address, port);
+                    mailMessage = new MailMessage(esmtp.From_Address, email, subject, body);
+                    mailMessage.IsBodyHtml = true;
+                }
+                else
+                {
+                    mailMessage = new MailMessage(esmtp.From_Address, email, subject, body);
+                    mailMessage.IsBodyHtml = true;
+                    smtpClient = new SmtpClient(esmtp.SMTP_Address, port);
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.EnableSsl = Convert.ToBoolean(esmtp.SSL_Enable);
+                    smtpClient.Credentials = new NetworkCredential(esmtp.SMTP_UName, Utilites.DecodeFrom64(esmtp.SMTP_Password));
+                }
+                smtpClient.Send(mailMessage);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

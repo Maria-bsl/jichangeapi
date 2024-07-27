@@ -97,7 +97,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddRegion(AddRegionForm addRegionForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 COUNTRY foundCountry = new COUNTRY().GETcountries().Find(c => c.SNO == addRegionForm.csno);
@@ -137,7 +137,7 @@ namespace JichangeApi.Controllers.setup
             try
             {
                 List<string> modelStateErrors = this.ModelStateErrors();
-                if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+                if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
                 REGION region = new REGION();
                 var isExistRegion = region.isExistRegion(deleteRegionForm.sno);
                 if (!isExistRegion) return this.GetNotFoundResponse();

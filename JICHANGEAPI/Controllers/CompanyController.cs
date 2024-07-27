@@ -180,7 +180,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage GetCompanys_SU(SingletonComp com)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 List<CompanyBankMaster> companies = companyBankService.GetCompanyListWithSuspenseAccountIncluded((long) com.compid);
@@ -208,7 +208,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage GetAccount(SingletonComp singletonComp)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 List<CompanyBankMaster> companies = companyBankService.GetCompanyListBankAccounts((long)singletonComp.compid);
@@ -223,7 +223,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage GetBanks(SingletonSno singletonSno)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 List<CompanyBankMaster> companies = companyBankService.GetCompanyListBankAccountDetails((long)singletonSno.Sno);
@@ -240,7 +240,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage CheckAccount(SingletonAcc singletonAcc)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 bool exists = companyBankService.IsExistAccountNumber(singletonAcc.acc);
@@ -256,7 +256,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage GetDetailsindivi(SingletonSno singletonSno)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 CompanyBankMaster company = companyBankService.GetCompanyDetail((long) singletonSno.Sno);
@@ -318,7 +318,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage GetDistDetails(SingletonSno singletonSno)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 List<DISTRICTS> results = districtService.GetActiveDistrict( (long) singletonSno.Sno);
@@ -346,7 +346,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage AddCompanyBank(CompanyBankAddModel companyBankAddModel)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             CompanyBankService companyBankService = new CompanyBankService();
             try
             {
@@ -371,7 +371,7 @@ public HttpResponseMessage GetApp()
         public HttpResponseMessage AddCompanyBankL(AddCompanyBankL addCompanyBankL)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             CompanyBankService companyBankService = new CompanyBankService();
             try
             {

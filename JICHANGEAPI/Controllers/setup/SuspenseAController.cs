@@ -91,7 +91,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddAccount(AddSuspenseAccountForm addSuspenseAccountForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 S_Account suspenseAccount = CreateSuspenseAccount(addSuspenseAccountForm);
@@ -125,7 +125,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage DeleteAccount(DeleteSuspenseAccountForm deleteSuspenseAccountForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             S_Account suspenseAccount = new S_Account();
             try
             {

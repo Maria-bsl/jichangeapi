@@ -102,7 +102,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddCountry(AddCountryForm addCountryForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             else if (addCountryForm.sno == 0) { return InsertCountry(addCountryForm); }
             else { return UpdateCountry(addCountryForm); }
         }
@@ -130,7 +130,7 @@ namespace JichangeApi.Controllers.setup
             try
             {
                 List<string> modelStateErrors = this.ModelStateErrors();
-                if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+                if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
                 COUNTRY country = new COUNTRY();
                 bool isExistSCountry = country.isExistCountry(deleteCountryForm.sno);
                 if (!isExistSCountry) return this.GetNotFoundResponse();

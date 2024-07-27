@@ -96,7 +96,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddWard(AddWardForm addWardForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 DISTRICTS foundDistrict = new DISTRICTS().GetDistrict().Find(c => c.SNO == addWardForm.district_sno);
@@ -134,7 +134,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage DeleteWard(RemoveWardForm removeWardForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 WARD ward = new WARD();

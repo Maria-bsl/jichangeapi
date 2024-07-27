@@ -1,6 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,31 +15,18 @@ namespace JichangeApi.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CompanyInboxController : SetupBaseController
     {
-        // GET: CompanyInbox
-        //string f_Path = System.Web.Configuration.WebConfigurationManager.AppSettings["FileP"].ToString();
-        CompanyBankMaster c = new CompanyBankMaster();
-        REGION r = new REGION();
-        CompanyUsers cu = new CompanyUsers();
-        DISTRICTS d = new DISTRICTS();
-        WARD w = new WARD();
-        Auditlog ad = new Auditlog();
-        TRARegistration tra = new TRARegistration();
-        APIReg areg = new APIReg();
-        private readonly dynamic returnNull = null;
-        EMAIL em = new EMAIL();
-        S_SMTP ss = new S_SMTP();
-        langcompany lc = new langcompany();
+        private readonly CompanyInboxService companyInboxService = new CompanyInboxService();
       
 
         [HttpPost]
-        public HttpResponseMessage GetCompanys(Desibraid d)
+        public HttpResponseMessage GetCompanys(Desibraid desibraid)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                var result = d.design.ToString().ToLower() == "administrator" ? c.GetCompany1() : c.GetCompany1_Branch(long.Parse(d.braid.ToString()));
-                return this.GetList<List<CompanyBankMaster>, CompanyBankMaster>(result);
+                List<CompanyBankMaster> companies = companyInboxService.GetDesingationBranchCompanyList(desibraid);
+                return GetSuccessResponse(companies);
             }
             catch (Exception ex)
             {
@@ -46,7 +34,7 @@ namespace JichangeApi.Controllers
             }
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public HttpResponseMessage AddCompanyBank(long compsno, string pfx, string pwd, long ssno, string userid)
         {
             try
@@ -63,8 +51,8 @@ namespace JichangeApi.Controllers
                 cd.AuditBy = userid.ToString();
 
                 #region
-                /*var getTin = c.EditCompanyss(compsno);
-                if(getTin != null)
+                var getTin = c.EditCompanyss(compsno);
+                if (getTin != null)
                 {
                     if (!tra.ValidateReg(Int32.Parse(getTin.TinNo)))
                     {
@@ -75,7 +63,7 @@ namespace JichangeApi.Controllers
                         for (int i = 0; i < 6; i++)
                             captcha.Append(combination[random.Next(combination.Length)]);
                         Rand = captcha.ToString();
-                        
+
                         string fileLoc1 = @f_Path + "/XML_Sub/" + Rand + "_Reg.xml";
                         string fileLoc2 = @f_Path + "/XML_Sub/" + Rand + "_INV.xml";
                         string fileLoc3 = @f_Path + "/XML_Res/" + Rand + "_Reg.xml";
@@ -156,13 +144,13 @@ namespace JichangeApi.Controllers
                             return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
                         }
                     }
-                }*/
+                }
 
                 #endregion
 
                 c.UpdateCompanysta(c);
                 cd.AddAccount(cd);
-                return Request.CreateResponse(new {response = compsno, message ="Success"});
+                return Request.CreateResponse(new { response = compsno, message = "Success" });
 
             }
             catch (Exception Ex)
@@ -170,7 +158,7 @@ namespace JichangeApi.Controllers
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server", Ex.ToString() } });
             }
             //return returnNull;
-        }
+        }*/
 
 
     }

@@ -164,7 +164,7 @@ namespace JichangeApi.Controllers
         public HttpResponseMessage GetInvReport(InvRepoModel invRepoModel)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 INVOICE invoice = new INVOICE();

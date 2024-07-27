@@ -94,7 +94,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddCurrency(AddCurrencyForm addCurrencyForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             CURRENCY currency = CreateCurrency(addCurrencyForm);
             if (addCurrencyForm.sno == 0) { return InsertCurrency(currency,addCurrencyForm);  }
             else { return UpdateCurrency(currency, addCurrencyForm); }
@@ -121,7 +121,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage Deletecurrency(DeleteCurrencyForm deleteCurrencyForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             CURRENCY currency = new CURRENCY();
             try
             {

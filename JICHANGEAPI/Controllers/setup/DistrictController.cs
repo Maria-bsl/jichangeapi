@@ -95,7 +95,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddDistrict(AddDistrictForm addDistrictForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 REGION foundRegion = new REGION().GetReg().Find(c => c.Region_SNO == addDistrictForm.region_id);
@@ -133,7 +133,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage DeleteDist(DeleteDistrictForm deleteDistrictForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 DISTRICTS district = new DISTRICTS();

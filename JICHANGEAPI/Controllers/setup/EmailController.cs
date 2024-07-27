@@ -110,7 +110,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddEmail(AddEmailForm addEmailForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 EMAIL email = CreateEmail(addEmailForm);
@@ -143,7 +143,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage DeleteEmail(DeleteEmailTextForm deleteEmailTextForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 EMAIL email = new EMAIL();

@@ -115,7 +115,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddSMTP(AddSmtpForm addSmtpForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 S_SMTP smtp = CreateSmtp(addSmtpForm);
@@ -149,7 +149,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage DeleteSMTP(DeleteSmtpForm deleteSmtpForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 S_SMTP smtp = new S_SMTP();

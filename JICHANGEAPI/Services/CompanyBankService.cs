@@ -113,7 +113,6 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
-
         private List<string> CheckCompanyBankErrors(CompanyBankMaster companyBankMaster)
         {
             try
@@ -454,6 +453,5 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
-        
     }
 }

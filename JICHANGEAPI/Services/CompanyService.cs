@@ -5,35 +5,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web.Http.Results;
 
-namespace JichangeApi.Services.setup
+namespace JichangeApi.Services
 {
-    public class RegionService
+    public class CompanyService
     {
-        public List<REGION> GetRegionsList()
+        public List<Company> GetCompanyList()
         {
             try
             {
-                REGION region = new REGION();
-                var results = region.GetReg();
-                if (results != null) { return results; }
-                return new List<REGION>();
+                Company company = new Company();
+                var result = company.GetCompanyMas();
+                return result != null ? result : new List<Company>();
             }
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
             }
         }
-        public REGION GetRegionById(long regionId)
+        public Company GetCompanyById(long compid)
         {
             try
             {
-                REGION region = new REGION();
-                bool exists = region.isExistRegion(regionId);
-                if (!exists) throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE);
-                REGION found = region.EditREGION(regionId);
-                return found;
+                Company company = new Company();
+                var result = company.GetCompanyS(compid);
+                if (result == null) throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE);
+                return result;
             }
             catch (ArgumentException ex)
             {

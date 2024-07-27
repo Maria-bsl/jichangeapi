@@ -231,7 +231,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage AddEmp(AddBankUserForm addBankUserForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 DESIGNATION designation = new DESIGNATION();
@@ -255,7 +255,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage GetEmpindivi(GetEmployeeForm getEmployeeForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             return FindEmployee((long) getEmployeeForm.sno);
         }
 
@@ -280,7 +280,7 @@ namespace JichangeApi.Controllers.setup
         public HttpResponseMessage DeleteEmployee(DeleteBankUserForm deleteBankUserForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetInvalidModelStateResponse(modelStateErrors); }
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 EMP_DET employee = new EMP_DET();

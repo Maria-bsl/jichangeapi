@@ -23,16 +23,9 @@ namespace JichangeApi.Services
             CompanyBankMaster companyBankMaster = new CompanyBankMaster();
             INVOICE invoice = new INVOICE();
             CompanyBankMaster approvedCompany = companyBankMaster.GetCompany_MStatus((long)invoiceForm.compid);
-            if (approvedCompany.Status.ToLower().ToString().Equals("no"))
+            if (!approvedCompany.Checker.ToLower().ToString().Equals("no"))
             {
-                string invoiceSno = invoiceForm.sno.ToString().PadLeft(8, '0');
-                invoice.goods_status = "Approved";
-                invoice.Control_No = "T" + invoiceSno;
-                invoice.approval_status = "2";
-                invoice.approval_date = DateTime.Now;
-            }
-            else
-            {
+             
                 invoice.Control_No = "";
                 invoice.goods_status = "Pending";
                 invoice.approval_status = "1";
@@ -188,7 +181,7 @@ namespace JichangeApi.Services
                 string subject = "Control No : " + invoicePDfData.Control_No + " Cancelled";//"Your ePermit payment receipt";
                 string btext = "Dear " + ", <br><br>";
                 //btext = btext + "Please find attachement of your payment receipt <br><br> Regards,<br>Schools<br />";
-                btext = btext + "<br><br> Regards,<br>Schools<br />";
+                btext = btext + "<br><br> Regards,<br>Jichange<br />";
                 //string body = btext;
                 string body = "Dear: " + customer.Cust_Name + "<br><br>";
                 body += "Your control no has been cancelled for following details " + "<br /><br />";
@@ -204,6 +197,20 @@ namespace JichangeApi.Services
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+        private void UpdateControlNumber(INVOICE invoice,long invoiceSno)
+        {
+            invoice.Inv_Mas_Sno = invoiceSno;
+            CompanyBankMaster approvedCompany = new CompanyBankMaster().GetCompany_MStatus(invoice.Com_Mas_Sno);
+            if (approvedCompany.Checker.ToLower().ToString().Equals("no"))
+            {
+                string control = invoice.Inv_Mas_Sno.ToString().PadLeft(8, '0');
+                invoice.goods_status = "Approved";
+                invoice.Control_No = "T" + control;
+                invoice.approval_status = "2";
+                invoice.approval_date = DateTime.Now;
+                invoice.UpdateInvoice(invoice);
             }
         }
         public List<INVOICE> GetSignedDetails(SingletonComp singletonComp)
@@ -327,6 +334,7 @@ namespace JichangeApi.Services
                 bool isExistControlNo = invoice.ValidateControl(invoice.Control_No);
                 if (isExistControlNo) throw new ArgumentException("Control number exists");
                 long invoiceSno = invoice.Addinvoi(invoice);
+                UpdateControlNumber(invoice,invoiceSno);
                 InsertInvoiceDetails(invoiceForm.details, invoiceSno);
                 return FindInvoice((long)invoiceForm.compid, invoiceSno);
             }

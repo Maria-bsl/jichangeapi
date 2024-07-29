@@ -13,6 +13,7 @@ using System.Net;
 using BL.BIZINVOICING.BusinessEntities.ConstantFile;
 using JichangeApi.Models.form;
 using JichangeApi.Models.form.setup.remove;
+using JichangeApi.Controllers.smsservices;
 
 namespace JichangeApi.Controllers.setup
 {
@@ -188,7 +189,11 @@ namespace JichangeApi.Controllers.setup
                 }
                 long addedEmployee = employee.AddEMP(employee);
                 var fullName = GetUserFullname(addBankUserForm.fname, addBankUserForm.mname, addBankUserForm.lname);
-                SendActivationEmail(employee.Email_Address, employee.Full_Name, employee.Password,employee.User_name);
+
+                SmsService sms = new SmsService();
+                sms.SendWelcomeSmsToNewUser(employee.User_name, Utilities.PasswordGeneratorUtil.DecodeFrom64(employee.Password), employee.Mobile_No);
+
+                SendActivationEmail(employee.Email_Address, employee.Full_Name,Utilities.PasswordGeneratorUtil.DecodeFrom64(employee.Password),employee.User_name);
                 AppendInsertAuditTrail(addedEmployee, employee, (long) addBankUserForm.userid);
                 return FindEmployee(addedEmployee);
             }
@@ -241,6 +246,7 @@ namespace JichangeApi.Controllers.setup
                     var messages = new List<string> { "Designation not found" };
                     this.GetCustomErrorMessageResponse(messages);
                 }
+
                 EMP_DET employeeDetail = CreateEmployeDetail(addBankUserForm,foundDesignation);
                 if ((long)addBankUserForm.sno == 0) { return InsertBankUser(employeeDetail, addBankUserForm); }
                 else { return UpdateBankUser(employeeDetail,addBankUserForm);  }

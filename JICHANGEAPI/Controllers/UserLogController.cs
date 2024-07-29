@@ -33,7 +33,7 @@ namespace JichangeApi.Controllers
             try
                 {
 
-                    var result = td.Getfunctiontrackdet(r.stdate, r.enddate);
+                    var result = td.Getfunctiontrackdet(reportDates.stdate, reportDates.enddate);
                     if (result != null)
                     {
  

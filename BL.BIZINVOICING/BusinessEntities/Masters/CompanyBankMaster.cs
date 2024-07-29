@@ -517,6 +517,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new CompanyBankMaster
                                 {
                                     Status = sc.status,
+                                    Checker = sc.checker,
                                     CompName = sc.company_name
 
 

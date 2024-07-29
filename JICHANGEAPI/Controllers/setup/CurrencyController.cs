@@ -88,8 +88,8 @@ namespace JichangeApi.Controllers.setup
             CURRENCY currency = new CURRENCY();
             try
             {
-                string code = currencyService.Deletecurrency(deleteCurrencyForm);
-                return GetSuccessResponse(currency);
+                string code = currencyService.Deletecurrency(deleteCurrencyForm.code,(long) deleteCurrencyForm.userid);
+                return GetSuccessResponse(code);
             }
             catch (ArgumentException ex)
             {

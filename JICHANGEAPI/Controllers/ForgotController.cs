@@ -4,6 +4,7 @@ using JichangeApi.Controllers.setup;
 using JichangeApi.Controllers.smsservices;
 using JichangeApi.Models;
 using JichangeApi.Services;
+using JichangeApi.Services.Companies;
 using JichangeApi.Utilities;
 using System;
 using System.Collections.Generic;

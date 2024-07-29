@@ -77,12 +77,17 @@ namespace JichangeApi.Services.setup
         {
             try
             {
-                CURRENCY currency = CreateCurrency(addCurrencyForm);
+                /*CURRENCY currency = CreateCurrency(addCurrencyForm);
                 CURRENCY found = currency.getCURRENCYText(addCurrencyForm.code);
                 if (found == null) throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE);
                 string code = currency.UpdateCURRENCY(currency);
                 AppendUpdateAuditTrail(code, found, currency, (long)addCurrencyForm.userid);
-                return FindCurrency(code);
+                return FindCurrency(code);*/
+
+                CURRENCY found = new CURRENCY().getCURRENCYText(addCurrencyForm.code);
+                if (found == null) throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE);
+                string deletedCurrency = Deletecurrency(found.Currency_Code, (long)addCurrencyForm.userid);
+                return InsertCurrency(addCurrencyForm);
             }
             catch (ArgumentException ex)
             {
@@ -110,16 +115,16 @@ namespace JichangeApi.Services.setup
                 throw new Exception(ex.Message);
             }
         }
-        public string Deletecurrency(DeleteCurrencyForm deleteCurrencyForm)
+        public string Deletecurrency(string code,long userid)
         {
             CURRENCY currency = new CURRENCY();
             try
             {
-                CURRENCY found = new CURRENCY().getCURRENCYText(deleteCurrencyForm.code);
+                CURRENCY found = new CURRENCY().getCURRENCYText(code);
                 if (found == null) throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE);
-                AppendDeleteAuditTrail(deleteCurrencyForm.code, found, (long)deleteCurrencyForm.userid);
-                currency.DeleteCURRENCY(deleteCurrencyForm.code);
-                return deleteCurrencyForm.code;
+                AppendDeleteAuditTrail(code, found, userid);
+                currency.DeleteCURRENCY(code);
+                return code;
             }
             catch (ArgumentException ex)
             {

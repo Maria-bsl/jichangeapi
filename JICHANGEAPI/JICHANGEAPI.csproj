@@ -253,8 +253,10 @@
     <Compile Include="Controllers\setup\WardController.cs" />
     <Compile Include="Controllers\SMSSETTINGController.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
+    <Compile Include="Models\ChangePwdModel.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
+    <Compile Include="Models\SingletonVOtp.cs" />
     <Compile Include="Services\OTP.cs" />
     <Compile Include="Services\Reports\RepCompInvoiceService.cs" />
     <Compile Include="Services\Reports\RepCustomerService.cs" />

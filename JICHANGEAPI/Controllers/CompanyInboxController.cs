@@ -45,11 +45,11 @@ namespace JichangeApi.Controllers
                 c.CompSno = apa.compsno;
                 c.Postedby = apa.userid.ToString();
                 c.Status = "Approved";
-                c.Sus_Ac_SNo = apa.ssno;
+                c.Sus_Ac_SNo = apa.suspenseAccSno;
 
-                cd.Deposit_Acc_No = apa.pfx;
+                cd.Deposit_Acc_No = apa.depositAccNo;
                 cd.Comp_Mas_Sno = apa.compsno;
-                //cd.Reason = 
+                cd.Reason = "Account Mapping Processed";
                 cd.AuditBy = apa.userid.ToString();
 
                 c.UpdateCompanysta(c);

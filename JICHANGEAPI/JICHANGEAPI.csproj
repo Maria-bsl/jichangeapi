@@ -261,6 +261,7 @@
     <Compile Include="Services\OTP.cs" />
     <Compile Include="Services\Reports\RepCompInvoiceService.cs" />
     <Compile Include="Services\Reports\RepCustomerService.cs" />
+    <Compile Include="Services\setup\EmailTextService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="Models\AddCompanyBankL.cs" />
     <Compile Include="Models\AuthLog.cs" />

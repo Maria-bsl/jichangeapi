@@ -69,7 +69,7 @@ namespace JichangeApi.Services
         {
             INVOICE invoice = new INVOICE();
             invoice.Invoice_No = addAmendForm.invno;
-            invoice.Invoice_Date = DateTime.ParseExact(addAmendForm.date, "dd/MM/yyyy", null); ;
+            invoice.Invoice_Date = DateTime.ParseExact(addAmendForm.date, "yyyy-MM-dd", null); ;
             if (!string.IsNullOrEmpty(addAmendForm.edate))
             {
                 invoice.Due_Date = DateTime.ParseExact(addAmendForm.edate, "dd/MM/yyyy", null);

@@ -411,7 +411,7 @@ namespace JichangeApi.Controllers
                     var invoice = invoiceService.InsertInvoice(invoiceForm);
                     return SuccessJsonResponse(invoice);
                 }
-                else if (invoiceForm.sno > 0 && !string.IsNullOrEmpty(invoiceForm.goods_status) && invoiceForm.goods_status.ToLower().Equals("approve"))
+                else if (invoiceForm.sno > 0 && !string.IsNullOrEmpty(invoiceForm.goods_status) && invoiceForm.goods_status.ToLower().Equals("approved"))
                 {
                     var invoice = invoiceService.ApproveInvoice(invoiceForm);
                     return SuccessJsonResponse(invoice);

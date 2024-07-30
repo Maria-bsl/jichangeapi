@@ -483,6 +483,41 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         //            return false;
         //    }
         //}
+
+
+        public EMP_DET CheckUserBank(string mobile)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.emp_detail
+                                    //join c1 in context.company_master on c.co
+                                where c.mobile_no == mobile
+                                select new EMP_DET
+                                {
+                                    Detail_Id = c.emp_detail_id,
+                                    Emp_Id_No = c.emp_id_no,
+                                    Full_Name = c.full_name,
+                                    First_Name = c.first_name,
+                                    Middle_name = c.middle_name,
+                                    Mobile_No = c.mobile_no,
+                                    Last_name = c.last_name,
+                                    User_name = c.username,
+                                    Desg_Id = (long)c.desg_id,
+                                    Expiry_Date = c.expiry_date,
+                                    Branch_Sno = c.branch_Sno,
+                                    Email_Address = c.email_id,
+                                    Password = c.pwd,
+                                    Created_Date = c.created_date,
+                                    F_Login = c.f_login,
+                                    Emp_Status = c.emp_status,
+                                }).FirstOrDefault();
+                if (edetails != null)
+                    return edetails;
+                else
+                    return null;
+            }
+        }
+
         public EMP_DET CheckLogin(String uname, String pwd)
         {
 

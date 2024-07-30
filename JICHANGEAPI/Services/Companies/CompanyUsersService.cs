@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
+using JichangeApi.Controllers.smsservices;
 using JichangeApi.Models;
 using JichangeApi.Models.form;
 using JichangeApi.Utilities;
@@ -92,6 +93,7 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
+
         public CompanyUsers InsertCompanyUser(AddCompanyUserForm addCompanyUserForm)
         {
             try
@@ -102,7 +104,9 @@ namespace JichangeApi.Services.Companies
                 long addedUser = user.AddCompanyUsers(user);
                 if (addedUser > 0)
                 {
-                    EmailUtils.SendActivationEmail(user.Email, user.Username, user.Password, user.Fullname);
+                    SmsService sms = new SmsService();
+                    sms.SendWelcomeSmsToNewUser(user.Username, PasswordGeneratorUtil.DecodeFrom64(user.Password), user.Mobile);
+                    EmailUtils.SendActivationEmail(user.Email, user.Username, PasswordGeneratorUtil.DecodeFrom64(user.Password), user.Fullname);
                     AppendInsertAuditTrail(addedUser, user, (long)addCompanyUserForm.userid);
                     return EditCompanyUser(addedUser);
                 }
@@ -117,6 +121,7 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(e.Message);
             }
         }
+
         public CompanyUsers UpdateCompanyUser(AddCompanyUserForm addCompanyUserForm)
         {
             try
@@ -149,6 +154,27 @@ namespace JichangeApi.Services.Companies
                 AppendUpdateAuditTrail((long)addCompanyUserForm.sno, found, user, (long)addCompanyUserForm.userid);*/
                 user.UpdateCompanyUsersP(user);
                 return EditCompanyUser((long)user.CompuserSno);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public EMP_DET UpdateBankUserPassword(EMP_DET user)
+        {
+            try
+            {
+                /* CompanyUsers user = CreateCompanyUser(addCompanyUserForm);
+                 CompanyUsers found = user.EditCompanyUsers((long)addCompanyUserForm.sno);
+                 if (found != null) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
+                 AppendUpdateAuditTrail((long)addCompanyUserForm.sno, found, user, (long)addCompanyUserForm.userid);
+                user.UpdateCompanyUsersP(user);
+                return EditCompanyUser((long)user.CompuserSno);*/
+                return null;
             }
             catch (ArgumentException ex)
             {

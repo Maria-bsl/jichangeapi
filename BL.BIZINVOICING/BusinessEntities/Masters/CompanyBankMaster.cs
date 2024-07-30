@@ -499,7 +499,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //CompLogo=sc.comp_logo,
                                     //DirectorSig=sc.director_digital_sig,
               
-                                }).ToList();
+                                }).OrderByDescending(e => e.CompSno).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else
@@ -517,6 +517,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 select new CompanyBankMaster
                                 {
                                     Status = sc.status,
+                                    Checker = sc.checker,
                                     CompName = sc.company_name
 
 
@@ -536,7 +537,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //join reg in context.region_master on sc.region_id equals reg.region_sno
                                     //join dist in context.district_master on sc.district_sno equals dist.district_sno
                                     //join ward in context.ward_master on sc.ward_sno equals ward.ward_sno
-                                where sc.status == "Pending" && sc.branch_sno == bsno
+                                    //where sc.status.ToLower().Equals("approved") && sc.branch_sno ==  0 ? sc.branch_sno == sc.branch_sno : sc.branch_sno == bsno
+                                where !string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals("approved") && bsno == 0 ? true : sc.branch_sno == bsno
                                 select new CompanyBankMaster
                                 {
                                     CompSno = sc.comp_mas_sno,

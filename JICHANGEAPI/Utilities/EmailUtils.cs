@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BL.BIZINVOICING.BusinessEntities.Masters;
 using System.Runtime.Remoting.Messaging;
+using System.Configuration;
 
 namespace JichangeApi.Utilities
 {
@@ -28,8 +29,8 @@ namespace JichangeApi.Utilities
                     var data = em.getEMAILst("1");
                     mm.To.Add(email);
                     mm.From = new MailAddress(m.From_Address);
-                    mm.Subject = data.Local_subject;
-                    string drt = data.Local_subject;
+                    mm.Subject = data.Subject;
+                    string drt = data.Email_Text;
                     /*var urlBuilder =
                    new System.UriBuilder(Request.Url.AbsoluteUri)
                    {
@@ -39,10 +40,10 @@ namespace JichangeApi.Utilities
 
                     Uri uri = urlBuilder.Uri;*/
                     //string url = "web_url";
-                    // string weburl = System.Web.Configuration.WebConfigurationManager.AppSettings["web_url"].ToString();
-                    //  string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
+                    string weburl = ConfigurationManager.AppSettings["MyWebUrl"];
+                    string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
                     //location.href = '/Loginnew/Loginnew';
-                    String body = data.Local_Text.Replace("}+cName+{", uname).Replace("}+uname+{", auname).Replace("}+pwd+{", pwd).Replace("}+ +{", "").Replace("{", "").Replace("}", "");
+                    String body = data.Email_Text.Replace("}+ cName +{", uname).Replace("}+ uname +{", auname).Replace(" }+ pwd +{", pwd).Replace("}+actLink +{", url).Replace("{", "").Replace("}", "");
                     //m1(weburl);
                     mm.Body = body;
                     mm.IsBodyHtml = true;

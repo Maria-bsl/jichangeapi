@@ -25,13 +25,11 @@ namespace JichangeApi.Controllers
         // GET: Forgot
         EMP_DET emp = new EMP_DET();
         User_otp ota = new User_otp();
+        CompanyUsers cus = new CompanyUsers();
         SmsService sms = new SmsService();
         
-        CompanyUsers cus = new CompanyUsers();
-        S_SMTP stp = new S_SMTP();
-        EMAIL em = new EMAIL();
-        string drt;
         private readonly CompanyUsersService companyUsersService = new CompanyUsersService();
+        private readonly ForgetPasswordService forgetPasswordservice = new ForgetPasswordService();
 
 
         [HttpPost]
@@ -74,7 +72,6 @@ namespace JichangeApi.Controllers
         public HttpResponseMessage GetMobile(SingletonMobile m)
         {
 
-          
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try { 
@@ -87,7 +84,6 @@ namespace JichangeApi.Controllers
                         ota.code = otp;
                         ota.AddOtp(ota);
 
-                        // send SMS
                          sms.SendOTPSmsToDeliveryCustomer(m.mobile, otp);
 
                         return GetSuccessResponse(ota);
@@ -102,36 +98,19 @@ namespace JichangeApi.Controllers
             return returnNull;
         }
 
+
         [HttpPost]
         [AllowAnonymous]
         public HttpResponseMessage OtpValidate(SingletonVOtp m)
         {
 
-            /*
-             * Get Mobile, find if exist, if yes generate Otp, save and then send it to user
-             */
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                var result1 = cus.CheckUser(m.mobile);
-
-                if (result1 != null)
-                {
-                    // check for OTP and validate it if less than 5minutes return response
-
-                    var validateotp = ota.ValidateUser_otp(m.otp_code);
-                    var dets = ota.GetDetails(m.otp_code);
-                    if (validateotp != false || DateTime.Now > dets.posted_date)
-                    {
-                        return GetSuccessResponse(dets);
-                    }else
-                    {
-                        return GetCustomErrorMessageResponse(new List<string> { "OTP code has expired, Try again"});
-                    }
-
-
-                }
+                User_otp user_Otp = new User_otp();
+                user_Otp = forgetPasswordservice.ValidateOtpHandler(m);
+                if(user_Otp != null) { return GetSuccessResponse(user_Otp); }else { return GetCustomErrorMessageResponse(new List<string> { "User Token has expired, Try Again"}); }
             }
             catch (Exception ex)
             {
@@ -140,8 +119,7 @@ namespace JichangeApi.Controllers
 
             }
 
-
-            return returnNull;
+            
         }
 
 
@@ -153,14 +131,14 @@ namespace JichangeApi.Controllers
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             var checkuser = cus.CheckUser(m.mobile);
-
-            var userdet = companyUsersService.EditCompanyUser(checkuser.CompuserSno);
+            var empuser = emp.CheckUserBank(m.mobile);
             CompanyUsers user = new CompanyUsers();
             user.Password = PasswordGeneratorUtil.GetEncryptedData(m.password);
             user.Mobile = m.mobile;
             user.CompuserSno = checkuser.CompuserSno;
             var result = companyUsersService.UpdateCompanyUserPassword(user);
             return GetSuccessResponse(result);
+           
 
         }
 

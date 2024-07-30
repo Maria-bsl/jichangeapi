@@ -1141,7 +1141,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
-                                where c.comp_mas_sno == cno && c.inv_mas_sno == invid && c.approval_status == "2"
+                                where c.comp_mas_sno == cno && c.inv_mas_sno == invid 
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
@@ -1212,13 +1212,14 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Total_Without_Vt = (decimal)c.total_without_vat,
                                     //Vat_Amount = (long)c.vat_amount,
                                     warrenty= c.warrenty,
+                                    AuditBy = c.posted_by,
+                                    p_date = (DateTime) c.posted_date,
                                     goods_status=c.goods_status,
                                     delivery_status=c.delivery_status,
                                     grand_count= (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
                                     approval_date = approval_date,
-                                    AuditBy = c.posted_by
 
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
@@ -1827,9 +1828,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (UpdateContactInfo != null)
                 {
 
-                    //UpdateContactInfo.posted_date = DateTime.Now;
+                    UpdateContactInfo.goods_status = dep.goods_status ;
                     UpdateContactInfo.grand_count = dep.grand_count;
-                    UpdateContactInfo.daily_count = dep.daily_count;
+                    //UpdateContactInfo.daily_count = dep.daily_count;
                     UpdateContactInfo.control_no = dep.Control_No;
                     context.SaveChanges();
                 }
@@ -1888,8 +1889,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (UpdateContactInfo != null)
                 {
                     UpdateContactInfo.posted_by = dep.AuditBy;
+                    UpdateContactInfo.posted_date = DateTime.Now;
                     UpdateContactInfo.approval_status = dep.approval_status;
                     UpdateContactInfo.approval_date = dep.approval_date;
+                    UpdateContactInfo.control_no = dep.Control_No;
+                    UpdateContactInfo.goods_status = dep.goods_status;
                     context.SaveChanges();
                 }
             }

@@ -433,6 +433,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
+
         public void DeleteCompany(long no)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

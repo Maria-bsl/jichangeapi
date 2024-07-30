@@ -116,10 +116,8 @@ namespace JichangeApi.Controllers.smsservices
         {
             if (Mobile_Number != null)
             {
-                //var otp = OTP.GenerateOTP(6);
                 var mobileNumber = Mobile_Number;
 
-               // var decryptedPassword = DecodeFrom64(password);
                 var formattedMessageBody = FormatOtpMessageBody(Mobile_Number, otp);
 
                 SendSMSAction(mobileNumber, formattedMessageBody);

@@ -34,7 +34,7 @@ namespace JichangeApi.Utilities
             string encodedData = Convert.ToBase64String(encData_byte);
             return encodedData;
         }
-        private static string DecodeFrom64(string password)
+        public static string DecodeFrom64(string password)
         {
             string decryptpwd = string.Empty;
             UTF8Encoding encodepwd = new UTF8Encoding();

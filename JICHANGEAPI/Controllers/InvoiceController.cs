@@ -183,6 +183,25 @@ namespace JichangeApi.Controllers
             }
         }
 
+        [HttpGet] 
+        public HttpResponseMessage FindInvoice(long compid,long inv)
+        {
+            try
+            {
+                JsonObject invoice = invoiceService.FindInvoice(compid,inv);
+                return SuccessJsonResponse(invoice);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
         #endregion
 
 
@@ -411,7 +430,7 @@ namespace JichangeApi.Controllers
                     var invoice = invoiceService.InsertInvoice(invoiceForm);
                     return SuccessJsonResponse(invoice);
                 }
-                else if (invoiceForm.sno > 0 && !string.IsNullOrEmpty(invoiceForm.goods_status) && invoiceForm.goods_status.ToLower().Equals("approve"))
+                else if (invoiceForm.sno > 0 && !string.IsNullOrEmpty(invoiceForm.goods_status) && invoiceForm.goods_status.ToLower().Equals("approved"))
                 {
                     var invoice = invoiceService.ApproveInvoice(invoiceForm);
                     return SuccessJsonResponse(invoice);

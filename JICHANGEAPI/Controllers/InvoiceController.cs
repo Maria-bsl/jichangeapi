@@ -183,6 +183,25 @@ namespace JichangeApi.Controllers
             }
         }
 
+        [HttpGet] 
+        public HttpResponseMessage FindInvoice(long compid,long inv)
+        {
+            try
+            {
+                JsonObject invoice = invoiceService.FindInvoice(compid,inv);
+                return SuccessJsonResponse(invoice);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return this.GetServerErrorResponse(ex.Message);
+            }
+        }
+
         #endregion
 
 

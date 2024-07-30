@@ -1123,7 +1123,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     grand_count = (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
-                                    approval_date = approval_date
+                                    approval_date = (DateTime) c.approval_date
 
                                 }).FirstOrDefault();
                 if (adetails != null)
@@ -1219,7 +1219,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     grand_count= (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
-                                    approval_date = approval_date
+                                    approval_date = approval_date,
+                                    AuditBy = c.posted_by
 
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)

@@ -103,8 +103,8 @@ namespace JichangeApi.Controllers.smsservices
             {
                 var mobileNumber = mobile_no;
 
-                var decryptedPassword = DecodeFrom64(password);
-                var formattedMessageBody = FormatMessageBody(username, decryptedPassword);
+                
+                var formattedMessageBody = FormatMessageBody(username, password);
 
                 SendSMSAction(mobileNumber, formattedMessageBody);
 

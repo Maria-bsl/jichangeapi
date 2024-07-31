@@ -1958,7 +1958,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var adetails = (from c in context.invoice_details.Where(c => c.inv_mas_sno == Sno)
+                var adetails = (from c in context.invoice_details where c.inv_mas_sno == Sno //context.invoice_details.Where(c => c.inv_mas_sno == Sno)
                                 select new INVOICE
                                 {
                                     Inv_Mas_Sno = (long)c.inv_mas_sno,

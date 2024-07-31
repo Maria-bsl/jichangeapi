@@ -29,7 +29,7 @@ namespace JichangeApi.Models.form
         public string ptype { get; set; }
 
         [Required(ErrorMessage = "Customer Id is missing", AllowEmptyStrings = false)]
-        public long chus { get; set; }
+        public long? chus { get; set; }
         public long comno { get; set; }
         public string ccode { get; set; }
         public string ctype { get; set; }

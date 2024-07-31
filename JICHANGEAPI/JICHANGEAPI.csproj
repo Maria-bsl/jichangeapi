@@ -255,6 +255,7 @@
     <Compile Include="Enums\CompanyState.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
     <Compile Include="Models\ChangePwdModel.cs" />
+    <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
     <Compile Include="Models\SingletonVOtp.cs" />

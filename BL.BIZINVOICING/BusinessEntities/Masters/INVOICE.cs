@@ -1220,7 +1220,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
                                     approval_date = approval_date,
-                                    
 
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)

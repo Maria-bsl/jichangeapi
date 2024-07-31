@@ -59,7 +59,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.email_text
-                                  where (c.flow_id == flow && c.sno != sno)
+                                  where c.flow_id == flow && c.sno != sno
                                   select c);
                 return validation.Count() > 0;
             }

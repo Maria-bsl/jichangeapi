@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
+using JichangeApi.Controllers.smsservices;
 using JichangeApi.Models;
 using JichangeApi.Services.setup;
 using JichangeApi.Utilities;
@@ -10,6 +11,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using static QRCoder.PayloadGenerator;
 
 namespace JichangeApi.Services.Companies
 {
@@ -29,6 +31,8 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
+
+     
         private void AppendUpdateAuditTrail(long compsno, CompanyBankMaster oldCompany, CompanyBankMaster newCompany, long userid)
         {
             List<string> old = new List<string> { oldCompany.CompSno.ToString(), oldCompany.CompName,oldCompany.PostBox, oldCompany.Address, oldCompany.RegId.ToString(),oldCompany.DistSno.ToString(),oldCompany.WardSno.ToString(),oldCompany.TinNo,oldCompany.VatNo,oldCompany.DirectorName,
@@ -84,7 +88,7 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
-        private CompanyBankMaster CreateCompanayBank(CompanyBankAddModel companyBankAddModel)
+        private CompanyBankMaster CreateCompanyBank(CompanyBankAddModel companyBankAddModel)
         {
             try
             {
@@ -106,6 +110,7 @@ namespace JichangeApi.Services.Companies
                 companyBankMaster.Branch_Sno = companyBankAddModel.branch;
                 companyBankMaster.Checker = companyBankAddModel.check_status;
                 companyBankMaster.Status = "Pending";
+                companyBankMaster.Postedby = companyBankAddModel.userid.ToString();
                 return companyBankMaster;
             }
             catch (Exception ex)
@@ -218,6 +223,7 @@ namespace JichangeApi.Services.Companies
                 companyBankMaster.Branch_Sno = addCompanyBankL.branch;
                 companyBankMaster.Checker = addCompanyBankL.check_status;
                 companyBankMaster.Status = "Pending";
+                //companyBankMaster.Postedby = addCompanyBankL.userid.ToString();
                 return companyBankMaster;
             }
             catch (Exception ex)
@@ -241,7 +247,9 @@ namespace JichangeApi.Services.Companies
                     companyBankMaster.AccountNo = addCompanyBankL.accno;
                     long detsno = companyBankMaster.AddBank(companyBankMaster);
                     AppendInsertAuditTrail(compsno, companyBankMaster, (long)addCompanyBankL.userid);
-                    EmailUtils.SendActivationEmail(companyBankMaster.Email, companyUsers.Username, companyUsers.Password, companyUsers.Username);
+                    string decodedPassword = Utilities.PasswordGeneratorUtil.DecodeFrom64(companyUsers.Password);
+                    new SmsService().SendWelcomeSmsToNewUser(addCompanyBankL.mob, decodedPassword, addCompanyBankL.mob);
+                    EmailUtils.SendActivationEmail(companyBankMaster.Email, companyUsers.Username, decodedPassword, companyUsers.Username);
                     return compsno;
                 }
                 else
@@ -277,7 +285,7 @@ namespace JichangeApi.Services.Companies
         {
             try
             {
-                CompanyBankMaster companyBankMaster = CreateCompanayBank(companyBankAddModel);
+                CompanyBankMaster companyBankMaster = CreateCompanyBank(companyBankAddModel);
                 List<string> errors = CheckCompanyBankErrors(companyBankMaster);
                 if (errors.Count > 0) { throw new Exception(errors[0]); }
                 long addedCompany = companyBankMaster.AddCompany(companyBankMaster);
@@ -285,8 +293,11 @@ namespace JichangeApi.Services.Companies
                 {
                     langcompany lang = AddCompanyLang(addedCompany);
                     CompanyUsers companyUsers = AddCompanyUser(companyBankMaster, addedCompany);
+                    AddCompanyBankDetails(addedCompany, companyBankMaster, companyBankAddModel);
                     AppendInsertAuditTrail(addedCompany, companyBankMaster, (long)companyBankAddModel.userid);
-                    EmailUtils.SendActivationEmail(companyBankMaster.Email, companyUsers.Username, companyUsers.Password, companyUsers.Username);
+                    string decodedPassword = Utilities.PasswordGeneratorUtil.DecodeFrom64(companyUsers.Password);
+                    new SmsService().SendWelcomeSmsToNewUser(companyBankAddModel.mob, decodedPassword, companyBankAddModel.mob);
+                    EmailUtils.SendActivationEmail(companyBankMaster.Email, companyUsers.Username, decodedPassword, companyUsers.Username);
                     return addedCompany;
                 }
                 else
@@ -303,7 +314,7 @@ namespace JichangeApi.Services.Companies
         {
             try
             {
-                CompanyBankMaster companyBankMaster = CreateCompanayBank(companyBankAddModel);
+                CompanyBankMaster companyBankMaster = CreateCompanyBank(companyBankAddModel);
                 List<string> errors = IsValidUpdateCompanyBank(companyBankMaster);
                 if (errors.Count > 0) { throw new Exception(errors[0]); }
                 CompanyBankMaster getcom = companyBankMaster.EditCompany(companyBankAddModel.compsno);

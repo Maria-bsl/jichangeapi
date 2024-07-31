@@ -25,13 +25,13 @@ namespace JichangeApi.Services
         {
             TRACK_DET trackDet = new TRACK_DET();
             trackDet.Full_Name = empData.Full_Name;
-            trackDet.Facility_Reg_No = 0;
+            trackDet.Facility_Reg_No = (long?)empData.Branch_Sno;
             trackDet.Ipadd = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? System.Web.HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
             //dt.Ipadd = System.Web.HttpContext.Current.Request.UserHostAddress;
             trackDet.Email = empData.Email_Address;
             trackDet.Posted_by = Convert.ToString(empData.Detail_Id);
             trackDet.Login_Time = DateTime.Now;
-            trackDet.Description = "Biz";
+            trackDet.Description = "Bank";
             trackDet.AddTrack(trackDet);
             return trackDet;
         }
@@ -45,7 +45,7 @@ namespace JichangeApi.Services
             trackDet.Email = company.Email;
             trackDet.Posted_by = Convert.ToString(company.CompuserSno);
             trackDet.Login_Time = DateTime.Now;
-            trackDet.Description = "company";
+            trackDet.Description = "Company";
             trackDet.AddTrack(trackDet);
             return trackDet;
         }
@@ -111,11 +111,13 @@ namespace JichangeApi.Services
             };
             return response;
         }
+
         public JsonObject LoginUser(AuthLog authLog)
         {
             try
             {
                 string password = PasswordGeneratorUtil.GetEncryptedData(authLog.password);
+
                 EMP_DET empdata = new EMP_DET().CheckLogin(authLog.userName, password);
                 if (empdata != null)
                 {
@@ -141,6 +143,8 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);    
             }
         }
+
+
         public long LogoutUser(long userid)
         {
             try
@@ -158,5 +162,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
+
     }
 }

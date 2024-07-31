@@ -233,6 +233,7 @@
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\CompanyUsersController.cs" />
     <Compile Include="Controllers\ForgotController.cs" />
+    <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\setup\BranchController.cs" />
     <Compile Include="Controllers\CompanyInboxController.cs" />
     <Compile Include="Controllers\setup\CurrencyController.cs" />

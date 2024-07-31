@@ -33,7 +33,7 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
-                return GetServerErrorResponse(ex.Message);
+                return GetServerErrorResponse(ex.ToString());
             }
         }
 
@@ -50,7 +50,7 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
-                return GetServerErrorResponse(ex.Message);
+                return GetServerErrorResponse(ex.ToString());
             }
         }
 

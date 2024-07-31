@@ -123,9 +123,9 @@ namespace JichangeApi.Services
             invoiceC.Amment_Amount = Decimal.Parse(addAmendForm.total);
             if (!string.IsNullOrEmpty(addAmendForm.edate))
             {
-                invoiceC.Due_Date = DateTime.ParseExact(addAmendForm.edate, "dd/MM/yyyy", null); 
+                invoiceC.Due_Date = DateTime.Parse(addAmendForm.edate); //DateTime.ParseExact(addAmendForm.edate, "dd/MM/yyyy", null); 
             }
-            invoiceC.Invoice_Expired_Date = DateTime.ParseExact(addAmendForm.iedate, "dd/MM/yyyy", null);
+            invoiceC.Invoice_Expired_Date = DateTime.Parse(addAmendForm.iedate); //DateTime.ParseExact(addAmendForm.iedate, "dd/MM/yyyy", null);
             invoiceC.Reason = addAmendForm.reason;
             invoiceC.AuditBy = addAmendForm.userid.ToString();
             invoiceC.AddAmmend(invoiceC);
@@ -409,7 +409,7 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoiMas(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
-                CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
+                //CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)
@@ -437,7 +437,7 @@ namespace JichangeApi.Services
                 invoice.UpdateStatus(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
-                CreateCancelInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData, addAmendForm);
+                //CreateCancelInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData, addAmendForm);
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)

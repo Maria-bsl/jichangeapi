@@ -128,7 +128,7 @@ namespace JichangeApi.Controllers.smsservices
 
         private static string FormatMessageBody(string customerName, string password)
         {
-            return string.Format("{0}, you have successfully registered on JICHANGE system, the URL is "+ ConfigurationManager.AppSettings["MyWebUrl"] + "and Your password is {1}", customerName, password);
+            return string.Format("{0}, you have successfully registered on JICHANGE system, the URL is " + ConfigurationManager.AppSettings["MyWebUrl"] + "  and Your password is  {1}", customerName, password);
         }
 
         private static string FormatOtpMessageBody(string cust_number, string code)

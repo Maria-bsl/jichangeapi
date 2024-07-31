@@ -41,7 +41,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 return ps.sno;
             }
         }
-        public bool ValidateEMAIL(String id)
+        public bool IsExistFlowId(String id)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -54,7 +54,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
-        public bool isDuplicateFlow(string flow,long sno)
+        public bool IsDuplicateFlow(string flow,long sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -64,7 +64,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 return validation.Count() > 0;
             }
         }
-        public List<EMAIL> GetEMAIL()
+        public List<EMAIL> GetLatestEmailTextsList()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -85,7 +85,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public EMAIL getEMAILText()
+        public EMAIL GetMostRecentEmailText()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -107,7 +107,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public EMAIL getEMAILst(String name)
+        public EMAIL GetLatestEmailTextsListByFlow(String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -129,7 +129,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public EMAIL EditEMAIL(long sno)
+        public EMAIL FindEmail(long sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -143,7 +143,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Email_Text = c.email_text1,
                                     Local_Text = c.email_text_local,
                                     Subject = c.email_sub,
-                                    Local_subject = Local_subject,
+                                    Local_subject = c.email_sub_local,
                                     Effective_Date = (DateTime)c.effective_date,
                                     AuditBy = c.posted_by,
                                     Audit_Date = c.posted_date

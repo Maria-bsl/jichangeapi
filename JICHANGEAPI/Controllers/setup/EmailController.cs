@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json.Nodes;
 using System.Web;
 using System.Web.Http;
 using System.Web.Http.Cors;
@@ -41,7 +42,7 @@ namespace JichangeApi.Controllers.setup
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                if ((long) addEmailForm.userid != 0)
+                if ((long) addEmailForm.sno == 0)
                 {
                     EMAIL email = emailTextService.InsertEmail(addEmailForm);
                     return GetSuccessResponse(email);
@@ -68,8 +69,8 @@ namespace JichangeApi.Controllers.setup
         {
             try
             {
-                var flows = emailTextService.GetFlows();
-                return GetSuccessResponse(flows);
+                JsonArray flows = emailTextService.GetFlows();
+                return SuccessJsonResponse(flows);
             }
             catch (Exception ex)
             {

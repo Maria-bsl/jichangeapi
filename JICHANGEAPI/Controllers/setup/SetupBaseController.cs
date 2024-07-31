@@ -66,6 +66,15 @@ namespace JichangeApi.Controllers.setup
             response.Content = new StringContent(json.ToJsonString(), Encoding.UTF8, "application/json");
             return response;
         }
+        protected HttpResponseMessage SuccessJsonResponse(JsonArray array)
+        {
+            JsonObject json = new JsonObject();
+            json.Add("response", array);
+            json.Add("message", new JsonArray());
+            var response = this.GetSuccessResponse(HttpStatusCode.OK);
+            response.Content = new StringContent(json.ToJsonString(), Encoding.UTF8, "application/json");
+            return response;
+        }
         protected List<string> ModelStateErrors()
         {
             if (ModelState.IsValid)

@@ -28,7 +28,7 @@ namespace BIZINVOICING.Controllers
         {
             try
             {
-                var result = cy.GetEMAIL();
+                var result = cy.GetLatestEmailTextsList();
                 if (result != null)
                 {
                     return Json(result, JsonRequestBehavior.AllowGet);
@@ -65,7 +65,7 @@ namespace BIZINVOICING.Controllers
                 long ssno = 0;
                 if (sno == 0)
                 {
-                    var result = cy.ValidateEMAIL(flow);
+                    var result = cy.IsExistFlowId(flow);
                     if (result == true)
                     {
                         return Json(result, JsonRequestBehavior.AllowGet);
@@ -94,7 +94,7 @@ namespace BIZINVOICING.Controllers
                 }
                 else if (sno > 0)
                 {
-                    var dd = cy.EditEMAIL(sno);
+                    var dd = cy.FindEmail(sno);
                     if (dd != null)
                     {
                         String[] list2 = new String[9] { dd.SNO.ToString(), dd.Flow_Id, dd.Email_Text, dd.Effective_Date.ToString(), dd.AuditBy, dd.Audit_Date.ToString(), dd.Subject, dd.Local_subject, dd.Local_Text };
@@ -132,7 +132,7 @@ namespace BIZINVOICING.Controllers
         {
             try
             {
-                var dd = cy.EditEMAIL(Sno);
+                var dd = cy.FindEmail(Sno);
                 if (dd != null)
                 {
                     String[] list2 = new String[9] { dd.SNO.ToString(), dd.Flow_Id, dd.Email_Text, dd.Effective_Date.ToString(), dd.AuditBy, dd.Audit_Date.ToString(), dd.Subject, dd.Local_subject, dd.Local_Text };

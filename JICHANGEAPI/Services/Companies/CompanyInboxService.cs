@@ -1,5 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Enums;
 using JichangeApi.Models;
+using QRCoder.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +28,31 @@ namespace JichangeApi.Services.Companies
                 }
             }
             catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public C_Deposit ApproveCompany(AddCompanyApproveModel addCompanyApproveModel)
+        {
+            try
+            {
+                CompanyBankMaster companyBankMaster = new CompanyBankMaster();
+                companyBankMaster.CompSno = addCompanyApproveModel.compsno;
+                companyBankMaster.Postedby = addCompanyApproveModel.userid.ToString();
+                companyBankMaster.Status = CompanyState.StatusType.Approved.ToString();
+                companyBankMaster.Sus_Ac_SNo = addCompanyApproveModel.suspenseAccSno;
+                companyBankMaster.UpdateCompanysta(companyBankMaster);
+
+                C_Deposit companyDeposit = new C_Deposit();
+                companyDeposit.Deposit_Acc_No = addCompanyApproveModel.depositAccNo;
+                companyDeposit.Comp_Mas_Sno = addCompanyApproveModel.compsno;
+                companyDeposit.Reason = "Account Mapping Processed";
+                companyDeposit.AuditBy = addCompanyApproveModel.userid.ToString();
+                companyDeposit.AddAccount(companyDeposit);
+                return companyDeposit;
+            }
+            catch(Exception ex)
             {
                 throw new Exception(ex.Message);
             }

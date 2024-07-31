@@ -252,6 +252,7 @@
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />
     <Compile Include="Controllers\SMSSETTINGController.cs" />
+    <Compile Include="Enums\CompanyState.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
     <Compile Include="Models\ChangePwdModel.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />

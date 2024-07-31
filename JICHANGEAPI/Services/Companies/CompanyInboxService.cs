@@ -40,7 +40,7 @@ namespace JichangeApi.Services.Companies
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
                 companyBankMaster.CompSno = addCompanyApproveModel.compsno;
                 companyBankMaster.Postedby = addCompanyApproveModel.userid.ToString();
-                companyBankMaster.Status = CompanyState.StatusType.Approved.ToString();
+                companyBankMaster.Status = GeneralStates.StatusType.Approved.ToString();
                 companyBankMaster.Sus_Ac_SNo = addCompanyApproveModel.suspenseAccSno;
                 companyBankMaster.UpdateCompanysta(companyBankMaster);
 

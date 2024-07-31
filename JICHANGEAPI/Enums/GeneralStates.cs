@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace JichangeApi.Enums
 {
-    public class CompanyState
+    public class GeneralStates
     {
         public enum StatusType
         {

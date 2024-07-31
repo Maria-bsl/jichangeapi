@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using BL.BIZINVOICING.BusinessEntities.Common;
@@ -2034,6 +2035,21 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return adetails;
                 else
                     return null;
+            }
+        }
+        public List<INVOICE> SelectActiveInvoicesByCustomer(long customerId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var invoices = (from c in context.invoice_master join cust in context.customer_master on c.cust_mas_sno equals cust.cust_mas_sno
+                                where cust.cust_mas_sno == customerId
+                                select new INVOICE
+                                {
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Chus_Name = cust.customer_name
+
+                                }).ToList();
+                return invoices != null || invoices.Count() > 0 ? invoices : new List<INVOICE>();
             }
         }
         public List<INVOICE> GetCustomers1(long sno)

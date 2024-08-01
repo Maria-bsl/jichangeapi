@@ -61,6 +61,31 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public List<Roles> GetRole()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.roles_master
+                                where c.role_status == "Active" 
+                                select new Roles
+                                {
+                                    Sno = c.sno,
+                                    Compmassno = (long)c.comp_mas_sno,
+                                    Description = c.descript,
+                                    Code = c.code,
+                                    Admin1 = c.admin1,
+                                    Status = c.role_status,
+                                    PostedDate = (DateTime)c.posted_date,
+                                }).OrderBy(z => z.PostedDate).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+
+
         public void Deleterole(string no)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

@@ -711,11 +711,51 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public List<Payment> GetReport(long Comp, string inv, string stdate, string enddate, long cust)
+        public List<Payment> GetPaymentReport(long Comp, string inv, string stdate, string enddate, long cust)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                DateTime fdate = DateTime.Parse(stdate);
+                DateTime? fdate = null;
+                if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
+                DateTime? tdate = null;
+                if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
+
+                List<Payment> payments = (from c in context.payment_details
+                                join det in context.invoice_master on c.invoice_sno equals det.invoice_no
+                                join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                where (cust == 0 ? true : c.cust_mas_sno == cust)
+                                && (!fdate.HasValue || c.posted_date >= fdate)
+                                && (!tdate.HasValue || c.posted_date >= tdate)
+                                && (Comp == 0 ? true : c.comp_mas_sno == Comp)
+                                && (!string.IsNullOrEmpty(inv) ? det.invoice_no == inv : true)
+
+                                select new Payment
+                                {
+                                    SNO = c.sno,
+                                    Payment_SNo = c.payment_sno,
+                                    Payment_Date = c.payment_date,
+                                    Payment_Time = c.payment_time,
+                                    Trans_Channel = c.trans_channel,
+                                    Payer_Name = c.payer_name,
+                                    Receipt_No = c.receipt_no,
+                                    Payment_Trans_No = c.pay_trans_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    PaidAmount = (long)c.paid_amount,
+                                    Institution_ID = c.institution_id,
+                                    Payment_Type = c.payment_type,
+                                    Amount_Type = c.amount_type,
+                                    Currency_Code = c.currency_code,
+                                    Control_No = c.control_no,
+                                    Comp_Mas_Sno = (long)c.comp_mas_sno,
+                                    //Company_Name = c.company_name,
+                                    Cust_Mas_Sno = (long)c.cust_mas_sno,
+                                    Customer_Name = cus.customer_name,
+                                    Invoice_Sno = c.invoice_sno,
+                                    Audit_Date = (DateTime)c.posted_date
+
+                                }).ToList();
+                return payments != null ? payments : new List<Payment>();
+                /*DateTime fdate = DateTime.Parse(stdate);
                 DateTime tdate = DateTime.Parse(enddate);
                 if (string.IsNullOrEmpty(inv))
                 {
@@ -794,7 +834,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                         return edetails;
                     else
                         return null;
-                }
+                }*/
             }
         }
 

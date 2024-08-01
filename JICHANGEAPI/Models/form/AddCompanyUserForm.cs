@@ -11,13 +11,13 @@ namespace JichangeApi.Models.form
     {
         [Required(ErrorMessage = "Missing pos", AllowEmptyStrings = false)]
         public string pos { get; set; }
-        [Required(ErrorMessage = "Missing auname", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Missing auname", AllowEmptyStrings = true)]
         public string auname { get; set; }
         [Required(ErrorMessage = "Missing mob", AllowEmptyStrings = false)]        
         public string mob { get; set; }
-        [Required(ErrorMessage = "Missing uname", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Missing uname", AllowEmptyStrings = true)]
         public string uname { get; set; }
-        [Required(ErrorMessage = "Missing mail", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Missing mail", AllowEmptyStrings = true)]
         [EmailAddress(ErrorMessage = "Invalid mail")]
         public string mail { get; set; }
         [Required(ErrorMessage = "Missing sno")]

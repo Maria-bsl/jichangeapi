@@ -487,7 +487,7 @@ namespace JichangeApi.Services
             try
             {
                 InvoiceC invoiceC = new InvoiceC();
-                var results = invoiceC.GetAmendRep((long)cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, cancelRepModel.cust);
+                var results = invoiceC.GetAmendRep((long)cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cancelRepModel.cust);
                 return results != null ? results : new List<InvoiceC>();
             }
             catch (Exception ex)
@@ -500,7 +500,7 @@ namespace JichangeApi.Services
             try
             {
                 InvoiceC invoiceC = new InvoiceC();
-                var results = invoiceC.GetCancelRep((long)cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, cancelRepModel.cust);
+                var results = invoiceC.GetCancelRep((long)cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cancelRepModel.cust);
                 return results != null ? results : new List<InvoiceC>();
             }
             catch (Exception ex)

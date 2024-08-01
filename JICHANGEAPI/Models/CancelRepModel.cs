@@ -8,9 +8,9 @@ namespace JichangeApi.Models
 {
     public class CancelRepModel
     {
-        [Required(ErrorMessage = "Missing Invoice Number", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Missing Invoice Number", AllowEmptyStrings = true)]
         public string invno {get; set;}
-        [Required(ErrorMessage = "Missing Start Date", AllowEmptyStrings = false)]
+        [Required(ErrorMessage = "Missing Start Date", AllowEmptyStrings = true)]
         public string stdate {get; set;}
         [Required(ErrorMessage = "Missing End date", AllowEmptyStrings = true)]
         public string enddate {get; set;}

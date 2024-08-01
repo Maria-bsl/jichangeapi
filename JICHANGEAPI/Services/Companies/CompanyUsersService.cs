@@ -40,6 +40,7 @@ namespace JichangeApi.Services.Companies
         private CompanyUsers CreateCompanyUser(AddCompanyUserForm addCompanyUserForm)
         {
             CompanyUsers user = new CompanyUsers();
+            user.CompuserSno = (long) addCompanyUserForm.sno;
             user.Compmassno = (long) addCompanyUserForm.compid;
             user.Username = addCompanyUserForm.auname;
             user.Mobile = addCompanyUserForm.mob;
@@ -127,8 +128,7 @@ namespace JichangeApi.Services.Companies
             try
             {
                 CompanyUsers user = CreateCompanyUser(addCompanyUserForm);
-                CompanyUsers found = user.EditCompanyUsers((long) addCompanyUserForm.sno);
-                if (found != null) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
+                CompanyUsers found = EditCompanyUser((long)addCompanyUserForm.sno);
                 AppendUpdateAuditTrail((long) addCompanyUserForm.sno,found,user,(long) addCompanyUserForm.userid);
                 user.UpdateCompanyUsers(user);
                 return EditCompanyUser((long)addCompanyUserForm.sno);

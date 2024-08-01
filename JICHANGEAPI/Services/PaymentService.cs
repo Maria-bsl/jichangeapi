@@ -15,7 +15,7 @@ namespace JichangeApi.Services
             try
             {
                 Payment payment = new Payment();
-                var result = payment.GetReport(cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, cancelRepModel.cust);
+                var result = payment.GetPaymentReport((long) cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cancelRepModel.cust);
                 return result != null ? result : new List<Payment>();
             }
             catch (ArgumentException ex)

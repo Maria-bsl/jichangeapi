@@ -235,7 +235,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //Localization = sc.localization,
                                     //Flag = sc.flag,
                                     //Ctime = (DateTime)sc.ctime,
-                                    //Userpos = sc.user_position,
+                                    Userpos = sc.user_position,
                                     //Mail_sta = (int)sc.mail_status,
                                     //PostedBy = sc.posted_by,
                                     //PostedDate = (DateTime)sc.posted_date
@@ -387,7 +387,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                               select sc).FirstOrDefault();
                 if (update != null)
                 {
-                    update.comp_users_sno = T.CompuserSno;
+                    /*update.comp_users_sno = T.CompuserSno;
                     update.comp_mas_sno = T.Compmassno;
                     update.username = T.Username;
                     //update.password = T.Password;
@@ -396,8 +396,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     update.expiry_date = T.ExpiryDate;
                     update.f_login = T.Flogin;
                     update.sno = T.Sno;
-                   /*update.q_name = T.Qname;
-                    update.q_ans = T.Qans;*/
+                   *//*update.q_name = T.Qname;
+                    update.q_ans = T.Qans;*//*
                     update.log_att = T.Logatt;
                     update.log_time = T.LogTime;
                     update.log_status = T.LogStatus;
@@ -410,8 +410,16 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     update.user_position = T.Userpos;
                     update.mail_status = T.Mail_sta;
                     update.posted_by = T.PostedBy;
-                    update.posted_date = DateTime.Now;
+                    update.posted_date = DateTime.Now;*/
 
+                    update.username = T.Username;
+                    update.user_type = T.Usertype;
+                    update.user_fullname = T.Fullname;
+                    update.email_address = T.Email;
+                    update.mobile_no = T.Mobile;
+                    update.user_position = T.Userpos;
+                    update.posted_by = T.PostedBy;
+                    update.posted_date = DateTime.Now;
                     context.SaveChanges();
                 }
             }

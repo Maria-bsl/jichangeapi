@@ -34,6 +34,7 @@ namespace JichangeApi.Controllers
         private readonly CustomerService customerService = new CustomerService();
         private readonly CurrencyService currencyService = new CurrencyService();
 
+        
 
         #region Get Invoice Details
         [HttpPost]
@@ -397,7 +398,7 @@ namespace JichangeApi.Controllers
         #endregion
 
 
-
+        [HttpPost]
         public HttpResponseMessage GetInvNo(SingletonInvComp singletonInvComp)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
@@ -475,7 +476,7 @@ namespace JichangeApi.Controllers
             }
         }
 
-         [HttpPost]
+        [HttpPost]
         public HttpResponseMessage AddCancel(AddAmendForm addAmendForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
@@ -495,6 +496,7 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
         }
+
         [HttpPost]
         public HttpResponseMessage GetControl(SingletonControl singletonControl)
         {
@@ -516,6 +518,7 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
         }
+
         [HttpPost]
         public HttpResponseMessage GetAmendReport(CancelRepModel cancelRepModel)
         {
@@ -537,7 +540,7 @@ namespace JichangeApi.Controllers
             }
         }
 
-         [HttpPost]
+        [HttpPost]
         public HttpResponseMessage GetPaymentReport(CancelRepModel cancelRepModel)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
@@ -557,9 +560,10 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
         }
-         [HttpPost]
-         public HttpResponseMessage GetCancelReport(CancelRepModel cancelRepModel)
-         {
+
+        [HttpPost]
+        public HttpResponseMessage GetCancelReport(CancelRepModel cancelRepModel)
+        {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
@@ -578,8 +582,116 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
         }
-         #endregion
         #endregion
+        #endregion
+
+
+        #region Consolidated Reports
+
+        [HttpPost]
+        public HttpResponseMessage GetConsoReport(ReportDates reportDates)
+        {
+
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<InvoiceC> invoiceConsolidated = invoiceService.GetConsolidatedReports(reportDates);
+                return GetSuccessResponse(invoiceConsolidated);
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+
+        }
+
+
+        [HttpPost]
+        public HttpResponseMessage GetConsoPayment(ReportDates reportDates)
+        {
+
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<InvoiceC> payConsolidated = invoiceService.GetPaymentConsolidatedReports(reportDates);
+                return GetSuccessResponse(payConsolidated);
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+
+        }
+
+
+        [HttpPost]
+        public HttpResponseMessage GetchTransact_B(TransactBankModel transact)
+        {
+
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<Payment> getTransaction = invoiceService.GetPaymentTransactReports(transact);
+                return GetSuccessResponse(getTransaction);
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+
+        }
+
+        #endregion
+
+
+        [HttpPost]
+        public HttpResponseMessage GetchTransact_Inv(TransactInvoiceNo transact)
+        {
+
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<Payment> getTransactionInvoiceDetails = invoiceService.GetPaymentTransactInvoiceDetailsReports(transact);
+                return GetSuccessResponse(getTransactionInvoiceDetails);
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+
+        }
+
+
+
+
 
     }
 

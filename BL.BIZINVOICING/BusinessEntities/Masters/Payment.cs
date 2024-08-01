@@ -726,9 +726,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     var edetails = (from c in context.payment_details
                                     join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                     join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                    where (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
-                                   && (c.posted_date >= fdate && c.posted_date <= tdate)
-                                    && (c.comp_mas_sno == Comp)
+                                    where (cust == 0 ? true : c.cust_mas_sno == cust)
+                                    && (c.posted_date >= fdate && c.posted_date <= tdate)
+                                    && (Comp == 0 ? true :   c.comp_mas_sno == Comp)
 
                                     select new Payment
                                     {
@@ -767,7 +767,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                     where (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
                                    && (c.posted_date >= fdate && c.posted_date <= tdate)
-                                    && (c.comp_mas_sno == Comp) && (c.control_no == inv)
+                                    && ( Comp == 0 ? true : c.comp_mas_sno == Comp) && (inv == "0" ? true : c.control_no == inv)
 
                                     select new Payment
                                     {
@@ -939,11 +939,13 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                         Currency_Code = c.currency_code,
                                         Control_No = c.control_no,
                                         Comp_Mas_Sno = (long)c.comp_mas_sno,
-                                        //Company_Name = c.company_name,
+                                        Company_Name = cs.company_name,
                                         Cust_Mas_Sno = (long)c.cust_mas_sno,
                                         Customer_Name = cus.customer_name,
                                         Invoice_Sno = c.invoice_sno,
                                         Amount30 = (long)c.amount30,
+                                        Status = c.status,
+                                        Payment_Desc = c.payment_desc,
                                         Balance = (long)c.amount30,
                                         Audit_Date = (DateTime)c.posted_date
 

@@ -3,6 +3,7 @@ using JichangeApi.Controllers;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Models.form;
+using JichangeApi.Services.Reports;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -200,12 +201,11 @@ namespace JichangeApi.Services
         {
             try
             {
-                CustomerMaster customerMaster = new CustomerMaster();
-                bool isExist = customerMaster.isExistCustomer((long)deleteCustomerForm.sno);
-                if (!isExist) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
-                CustomerMaster found = customerMaster.FindCustomer((long)deleteCustomerForm.sno);
+                CustomerMaster found = new CustomerMaster().FindCustomer((long)deleteCustomerForm.sno);
+                List<INVOICE> invoices = new INVOICE().SelectActiveInvoicesByCustomer((long)deleteCustomerForm.sno);
+                if (invoices.Count > 0) throw new ArgumentException("Failed to delete customer: active invoice prevents deletion.");
                 AppendDeleteAuditTrail((long)deleteCustomerForm.sno, found, (long)deleteCustomerForm.userid);
-                customerMaster.CustDelete((long)deleteCustomerForm.sno);
+                found.CustDelete((long)deleteCustomerForm.sno);
                 return (long) deleteCustomerForm.sno;
             }
             catch (ArgumentException ex)

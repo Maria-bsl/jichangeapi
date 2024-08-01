@@ -485,7 +485,7 @@ namespace BIZINVOICING.Controllers
                 using (MailMessage mm = new MailMessage())
                 {
                     var m = ss.getSMTPText();
-                    var data = em.getEMAILst("1");
+                    var data = em.GetLatestEmailTextsListByFlow("1");
                     mm.To.Add(email);
                     mm.From = new MailAddress(m.From_Address);
                     mm.Subject = data.Local_subject;

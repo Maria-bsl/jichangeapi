@@ -38,22 +38,11 @@ namespace JichangeApi.Controllers
         [HttpPost]
         public HttpResponseMessage AddCompanyBank(AddCompanyApproveModel apa)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                C_Deposit cd = new C_Deposit();
-                CompanyBankMaster c = new CompanyBankMaster();
-                c.CompSno = apa.compsno;
-                c.Postedby = apa.userid.ToString();
-                c.Status = "Approved";
-                c.Sus_Ac_SNo = apa.suspenseAccSno;
-
-                cd.Deposit_Acc_No = apa.depositAccNo;
-                cd.Comp_Mas_Sno = apa.compsno;
-                cd.Reason = "Account Mapping Processed";
-                cd.AuditBy = apa.userid.ToString();
-
-                c.UpdateCompanysta(c);
-                cd.AddAccount(cd);
+                C_Deposit cd = companyInboxService.ApproveCompany(apa);
                 return GetSuccessResponse(cd);
             }
             catch (Exception Ex)

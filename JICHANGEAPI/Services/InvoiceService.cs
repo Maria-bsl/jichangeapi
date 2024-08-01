@@ -62,12 +62,12 @@ namespace JichangeApi.Services
         {
             INVOICE invoice = new INVOICE();
             invoice.Invoice_No = addAmendForm.invno;
-            invoice.Invoice_Date = DateTime.ParseExact(addAmendForm.date, "yyyy-MM-dd", null); ;
+            invoice.Invoice_Date = DateTime.Parse(addAmendForm.date); //DateTime.ParseExact(addAmendForm.date, "yyyy-MM-dd", null); ;
             if (!string.IsNullOrEmpty(addAmendForm.edate))
             {
-                invoice.Due_Date = DateTime.ParseExact(addAmendForm.edate, "yyyy-MM-dd", null);
+                invoice.Due_Date = DateTime.Parse(addAmendForm.edate); //DateTime.ParseExact(addAmendForm.edate, "yyyy-MM-dd", null);
             }
-            invoice.Invoice_Expired_Date = DateTime.ParseExact(addAmendForm.iedate, "yyyy-MM-dd", null);
+            invoice.Invoice_Expired_Date = DateTime.Parse(addAmendForm.iedate); //DateTime.ParseExact(addAmendForm.iedate, "yyyy-MM-dd", null);
             invoice.Payment_Type = addAmendForm.ptype;
             invoice.Com_Mas_Sno = (long)addAmendForm.compid;
             invoice.Chus_Mas_No = addAmendForm.chus;
@@ -123,9 +123,9 @@ namespace JichangeApi.Services
             invoiceC.Amment_Amount = Decimal.Parse(addAmendForm.total);
             if (!string.IsNullOrEmpty(addAmendForm.edate))
             {
-                invoiceC.Due_Date = DateTime.ParseExact(addAmendForm.edate, "dd/MM/yyyy", null); 
+                invoiceC.Due_Date = DateTime.Parse(addAmendForm.edate); //DateTime.ParseExact(addAmendForm.edate, "dd/MM/yyyy", null); 
             }
-            invoiceC.Invoice_Expired_Date = DateTime.ParseExact(addAmendForm.iedate, "dd/MM/yyyy", null);
+            invoiceC.Invoice_Expired_Date = DateTime.Parse(addAmendForm.iedate); //DateTime.ParseExact(addAmendForm.iedate, "dd/MM/yyyy", null);
             invoiceC.Reason = addAmendForm.reason;
             invoiceC.AuditBy = addAmendForm.userid.ToString();
             invoiceC.AddAmmend(invoiceC);
@@ -306,11 +306,14 @@ namespace JichangeApi.Services
                 string jsonString = JsonSerializer.Serialize(found);
                 JsonObject jsonObject = JsonNode.Parse(jsonString).AsObject();
                 var detailsArray = new JsonArray();
-                for (int i = 0; i < details.Count(); i++)
+                if (details != null)
                 {
-                    var json = JsonSerializer.Serialize(details[i]);
-                    JsonObject detail = JsonNode.Parse(json).AsObject();
-                    detailsArray.Add(detail);
+                    for (int i = 0; i < details.Count(); i++)
+                    {
+                        var json = JsonSerializer.Serialize(details[i]);
+                        JsonObject detail = JsonNode.Parse(json).AsObject();
+                        detailsArray.Add(detail);
+                    }
                 }
                 jsonObject.Add("details", detailsArray);
                 return jsonObject;
@@ -406,7 +409,7 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoiMas(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
-                CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
+                //CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)
@@ -434,7 +437,7 @@ namespace JichangeApi.Services
                 invoice.UpdateStatus(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
-                CreateCancelInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData, addAmendForm);
+                //CreateCancelInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData, addAmendForm);
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)
@@ -443,7 +446,7 @@ namespace JichangeApi.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception(ex.ToString());
             }
         }
         public JsonObject GetBriefPaymentDetail(SingletonControl singletonControl)

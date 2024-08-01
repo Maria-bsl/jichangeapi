@@ -46,7 +46,7 @@ namespace JichangeApi.Controllers.setup
                 using (MailMessage mm = new MailMessage())
                 {
                     var m = stp.getSMTPText();
-                    var data = em.getEMAILst("1");
+                    var data = em.GetLatestEmailTextsListByFlow("1");
                     mm.To.Add(email);
                     mm.From = new MailAddress(m.From_Address);
                     mm.Subject = data.Subject;

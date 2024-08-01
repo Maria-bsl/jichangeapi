@@ -233,6 +233,7 @@
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\CompanyUsersController.cs" />
     <Compile Include="Controllers\ForgotController.cs" />
+    <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\setup\BranchController.cs" />
     <Compile Include="Controllers\CompanyInboxController.cs" />
     <Compile Include="Controllers\setup\CurrencyController.cs" />
@@ -252,8 +253,10 @@
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />
     <Compile Include="Controllers\SMSSETTINGController.cs" />
+    <Compile Include="Enums\GeneralStates.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
     <Compile Include="Models\ChangePwdModel.cs" />
+    <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
     <Compile Include="Models\SingletonVOtp.cs" />

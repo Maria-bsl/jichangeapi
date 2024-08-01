@@ -12,7 +12,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public long SNO { get; set; }
         
         public string Full_Name { get; set; }
-        public long Facility_Reg_No { get; set; }
+        public long? Facility_Reg_No { get; set; }
         public string Ipadd { get; set; }
         public string Email { get; set; }
         public DateTime Login_Time { get; set; }

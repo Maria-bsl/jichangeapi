@@ -10,6 +10,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
     public class InvoiceC
     {
+        private long? Receipt_amount;
         #region Properties
         public long Inv_Mas_Sno { get; set; }
         public long Inv_Det_Sno { get; set; }
@@ -52,6 +53,13 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public long Cust_Mas_No { get; set; }
         
         public string Control_No { get; set; }
+        public long? vendor_id { get;  set; }
+        public string vendor { get;  set; }
+        public long? branch_sno { get;  set; }
+        public string branch { get;  set; }
+        public int no_of_invoices { get;  set; }
+        public decimal? invoice_amount { get;  set; }
+        public int no_of_payments { get;  set; }
         #endregion Properties
         #region methods
 

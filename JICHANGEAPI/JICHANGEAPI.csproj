@@ -261,6 +261,8 @@
     <Compile Include="Models\form\AddSmtpModel.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
     <Compile Include="Models\SingletonVOtp.cs" />
+    <Compile Include="Models\TransactBankModel.cs" />
+    <Compile Include="Models\TransactInvoiceNo.cs" />
     <Compile Include="Services\ForgetPasswordService.cs" />
     <Compile Include="Services\OTP.cs" />
     <Compile Include="Services\Reports\RepCompInvoiceService.cs" />

@@ -3,6 +3,7 @@ using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
 using JichangeApi.Models.form;
+using JichangeApi.Services.Companies;
 using JichangeApi.Utilities;
 using Org.BouncyCastle.Asn1.Ocsp;
 using System;
@@ -18,6 +19,7 @@ namespace JichangeApi.Services
 {
     public class InvoiceService
     {
+        private CompanyBankService companyBankService = new CompanyBankService();
         private INVOICE CreateInvoice(InvoiceForm invoiceForm)
         {
             CompanyBankMaster companyBankMaster = new CompanyBankMaster();
@@ -482,6 +484,8 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
+
         public List<InvoiceC> GetAmendmentReports(CancelRepModel cancelRepModel)
         {
             try
@@ -495,6 +499,8 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
+
         public List<InvoiceC> GetCancelledInvoicesReport(CancelRepModel cancelRepModel)
         {
             try
@@ -508,6 +514,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public List<INVOICE> GetchDetails(SingletonComp singletonComp)
         {
             try
@@ -521,6 +528,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public List<INVOICE> GetchDetails_A(SingletonComp singletonComp)
         {
             try
@@ -573,5 +581,73 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
+
+
+        public List<InvoiceC> GetConsolidatedReports(ReportDates report)
+        {
+            try
+            {
+                InvoiceC invoiceC = new InvoiceC();
+                var results = invoiceC.InvoiceConsolidatedReport(report.stdate, report.enddate);
+                return results != null ? results : new List<InvoiceC>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<InvoiceC> GetPaymentConsolidatedReports(ReportDates report)
+        {
+            try
+            {
+                InvoiceC invoiceC = new InvoiceC();
+                var results = invoiceC.PaymentConsolidatedReport(report.stdate, report.enddate);
+                return results != null ? results : new List<InvoiceC>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public List<Payment> GetPaymentTransactReports(TransactBankModel transact)
+        {
+            try
+            {
+                Payment payment = new Payment();
+                var compid = transact.Compid.ToString() == "all" ? "0" : transact.Compid;
+                var branch = compid.Equals("0") ? 0 :companyBankService.GetCompanyDetail(long.Parse(compid)).Branch_Sno;
+                var cusid = transact.cusid.ToLower() == "all" ? "0" : transact.cusid;
+                var results = payment.GetTransactionsReport(long.Parse(compid), transact.stdate, transact.enddate, long.Parse(cusid), (long)branch);
+                return results ?? results ;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public List<Payment> GetPaymentTransactInvoiceDetailsReports(TransactInvoiceNo transact)
+        {
+            try
+            {
+                Payment payment = new Payment();
+
+                var results = payment.GetTransactionsinvoiceDetailsReport(transact.invoice_sno);
+                return results ?? results;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        
+
+
     }
 }

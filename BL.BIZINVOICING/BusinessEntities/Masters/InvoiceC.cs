@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DaL.BIZINVOICING.EDMX;
+using Org.BouncyCastle.Crypto.Macs;
 
 namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
@@ -239,196 +240,70 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                //string sdate = DateTime.ParseExact(stdate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                //string edate = DateTime.ParseExact(enddate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
-                if (string.IsNullOrEmpty(inv))
-                {
-                    List<InvoiceC> listinvoice = (from c in context.invoice_ammendment
-                                                 join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
-                                                 join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                                 where (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
-                                                && (c.posted_date >= fdate && c.posted_date <= tdate)
-                                                 && (c.comp_mas_sno == Comp)
-                                                 select new InvoiceC
-                                                 {
-                                                     Invoice_No = det.invoice_no,
-                                                     Customer_Name = cus.customer_name,
-                                                     Control_No = c.control_no,
-                                                     Invoice_Amount = (decimal)c.invoice_amount,
-                                                     Amment_Amount = (decimal)c.amment_amount,
-                                                     Audit_Date = (DateTime)c.posted_date
 
-                                                 }).ToList();
-                    return listinvoice;
-                }
-                else
-                {
-                    
-                    List<InvoiceC> listinvoice = (from c in context.invoice_ammendment
-                                                  join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
-                                                  join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                                  where (det.invoice_no == inv)
-                                                 && (c.posted_date >= fdate && c.posted_date <= tdate)
-                                                  && (c.comp_mas_sno == Comp)
-                                                  select new InvoiceC
-                                                  {
-                                                      Invoice_No = det.invoice_no,
-                                                      Customer_Name = cus.customer_name,
-                                                      Control_No = c.control_no,
-                                                      Invoice_Amount = (decimal)c.invoice_amount,
-                                                      Amment_Amount = (decimal)c.amment_amount,
-                                                      Audit_Date = (DateTime)c.posted_date
+                DateTime? fdate = null;
+                if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
+                DateTime? tdate = null;
+                if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
 
-                                                  }).ToList();
-                    return listinvoice;
-                }
+                List<InvoiceC> listinvoice = (from c in context.invoice_ammendment
+                                              join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
+                                              join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                              where (cust == 0 ? true : c.cust_mas_sno == cust) && det.approval_status != "Cancel"
+                                              && (!fdate.HasValue || c.posted_date >= fdate)
+                                              && (!tdate.HasValue || c.posted_date >= tdate)
+                                              && (Comp == 0 ? true : c.comp_mas_sno == Comp)
+                                              && (!string.IsNullOrEmpty(inv) ? det.invoice_no == inv : true)
+                                              select new InvoiceC
+                                              {
+                                                  Invoice_No = det.invoice_no,
+                                                  Customer_Name = cus.customer_name,
+                                                  Payment_Type = det.payment_type,
+                                                  Control_No = c.control_no,
+                                                  Reason = c.reason_for_amm,
+                                                  Invoice_Amount = (decimal)c.invoice_amount,
+                                                  Amment_Amount = (decimal)c.amment_amount,
+                                                  Audit_Date = (DateTime)c.posted_date,
+                                                  Invoice_Expired_Date = c.expired_date,
+                                                  Currency_Code = det.currency_code,
+                                                  Due_Date = (DateTime)c.due_date,
 
+                                              }).OrderByDescending(z => z.Audit_Date).ToList();
+                return listinvoice != null ? listinvoice : new List<InvoiceC>();
             }
         }
         public List<InvoiceC> GetCancelRep(long Comp, string inv, string stdate, string enddate, long cust)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                //string sdate = DateTime.ParseExact(stdate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                //string edate = DateTime.ParseExact(enddate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
-                if (string.IsNullOrEmpty(inv))
-                {
-                    List<InvoiceC> listinvoice = (from c in context.invoice_cancellation
-                                                  join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
-                                                  join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                                  where (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
-                                                 && (c.posted_date >= fdate && c.posted_date <= tdate)
-                                                  && (c.comp_mas_sno == Comp)
-                                                  select new InvoiceC
-                                                  {
-                                                      Invoice_No = det.invoice_no,
-                                                      Customer_Name = cus.customer_name,
-                                                      Control_No = c.control_no,
-                                                      Invoice_Amount = (decimal)c.invoice_amount,
-                                                      //Amment_Amount = (decimal)c.amment_amount,
-                                                      Audit_Date = (DateTime)c.posted_date
+                DateTime? fdate = null;
+                if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
+                DateTime? tdate = null;
+                if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
 
-                                                  }).ToList();
-                    return listinvoice;
-                }
-                else
-                {
-
-                    List<InvoiceC> listinvoice = (from c in context.invoice_ammendment
-                                                  join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
-                                                  join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                                  where (det.invoice_no == inv)
-                                                 && (c.posted_date >= fdate && c.posted_date <= tdate)
-                                                  && (c.comp_mas_sno == Comp)
-                                                  select new InvoiceC
-                                                  {
-                                                      Invoice_No = det.invoice_no,
-                                                      Customer_Name = cus.customer_name,
-                                                      Control_No = c.control_no,
-                                                      Invoice_Amount = (decimal)c.invoice_amount,
-                                                      Amment_Amount = (decimal)c.amment_amount,
-                                                      Audit_Date = (DateTime)c.posted_date
-
-                                                  }).ToList();
-                    return listinvoice;
-                }
-
+                List<InvoiceC> listinvoice = (from c in context.invoice_cancellation
+                                              join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
+                                              join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                              where (cust == 0 ? true : c.cust_mas_sno == cust) 
+                                              && (!fdate.HasValue || c.posted_date >= fdate)
+                                              && (!tdate.HasValue || c.posted_date >= tdate)
+                                              && (Comp == 0 ? true : c.comp_mas_sno == Comp)
+                                              && (!string.IsNullOrEmpty(inv) ? det.invoice_no == inv : true)
+                                              select new InvoiceC
+                                              {
+                                                  Invoice_No = det.invoice_no,
+                                                  Customer_Name = cus.customer_name,
+                                                  Payment_Type = det.payment_type,
+                                                  Control_No = c.control_no,
+                                                  Reason = c.reason_for_cancel,
+                                                  Invoice_Amount = (decimal)c.invoice_amount,
+                                                  Audit_Date = (DateTime)c.posted_date,
+                                                  Currency_Code = det.currency_code,
+                                                  p_date = (DateTime)c.posted_date,
+                                              }).OrderByDescending(z => z.Audit_Date).ToList();
+                return listinvoice != null ? listinvoice : new List<InvoiceC>();
             }
         }
-
-        public List<InvoiceC> InvoiceConsolidatedReport(string stdate, string enddate)
-        {
-            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
-            {
-                //string sdate = DateTime.ParseExact(stdate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                //string edate = DateTime.ParseExact(enddate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
-
-                var result = from a in context.invoice_master
-                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
-                             join c in context.branch_name on b.branch_sno equals c.sno
-                             where a.approval_status == "2"
-                                && a.invoice_date >= fdate
-                                && a.invoice_date <= tdate
-                             group new { a, b, c } by new
-                             {
-                                 a.comp_mas_sno,
-                                 b.company_name,
-                                 b.branch_sno,
-                                 c.name
-                             } into grouped
-                             select new InvoiceC
-                             {
-                                 vendor_id = grouped.Key.comp_mas_sno,
-                                 vendor = grouped.Key.company_name,
-                                 branch_sno = grouped.Key.branch_sno,
-                                 branch = grouped.Key.name,
-                                 no_of_invoices = grouped.Count(x => x.a.inv_mas_sno != null),
-                                 invoice_amount = grouped.Sum(x => x.a.total_amount)
-                             };
-
-                var list = result.ToList();
-
-                if (list != null && list.Count > 0)
-                    return list;
-                else
-                    return null;
-            }
-        }
-
-        public List<InvoiceC> PaymentConsolidatedReport(string stdate, string enddate)
-        {
-            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
-            {
-                //string sdate = DateTime.ParseExact(stdate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                //string edate = DateTime.ParseExact(enddate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
-
-                var result = from a in context.payment_details
-                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
-                             join c in context.branch_name on b.branch_sno equals c.sno
-                             where a.status.Contains("Passed")
-                                && a.payment_date >= fdate
-                                && a.payment_date <= tdate
-                             group new { a, b, c } by new
-                             {
-                                 a.comp_mas_sno,
-                                 b.company_name,
-                                 b.branch_sno,
-                                 c.name
-                             } into grouped
-                             select new InvoiceC
-                             {
-                                 vendor_id = grouped.Key.comp_mas_sno,
-                                 vendor = grouped.Key.company_name,
-                                 branch_sno = grouped.Key.branch_sno,
-                                 branch = grouped.Key.name,
-                                 no_of_payments = grouped.Count(x => x.a.sno != null),
-                                 Receipt_amount = grouped.Sum(x => x.a.paid_amount)
-                             };
-
-                var list = result.ToList();
-
-
-                if (list != null && list.Count > 0)
-                    return list;
-                else
-                    return null;
-            }
-        }
-
-
-
-
-
-
-
         #endregion
     }
 }

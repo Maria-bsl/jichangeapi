@@ -1270,7 +1270,7 @@ namespace BIZINVOICING.Controllers
             try
             {
                 long cno = long.Parse(Session["CompID"].ToString());
-                var result = pay.GetReport(cno, invno, stdate, enddate, cust);
+                var result = pay.GetPaymentReport(cno, invno, stdate, enddate, cust);
                 if (result != null)
                 {
 

@@ -22,7 +22,7 @@ namespace JichangeApi.Services
                 var compid = cancelRepModel.compid.ToString() == "all" ? 0 : cancelRepModel.compid;
                 var branch = compid.Equals("0") ? 0 : companyBankService.GetCompanyDetail(long.Parse(compid.ToString())).Branch_Sno;
                 var cust = cancelRepModel.cust.ToString().ToLower() == "all" ? 0 : cancelRepModel.cust;
-                var result = payment.GetPaymentReport((long) cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cust);
+                var result = payment.GetReport((long) cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cust);
                 return result ?? new List<Payment>();
             }
             catch (ArgumentException ex)

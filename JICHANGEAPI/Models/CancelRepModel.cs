@@ -14,9 +14,9 @@ namespace JichangeApi.Models
         public string stdate {get; set;}
         [Required(ErrorMessage = "Missing End date", AllowEmptyStrings = true)]
         public string enddate {get; set;}
-        [Required(ErrorMessage = "Missing Customer Id", AllowEmptyStrings = true)]
-        public long cust {get; set;}
-        [Required(ErrorMessage = "Missing Company Id", AllowEmptyStrings = false)]
-        public long compid {get; set;}
+        [Required(ErrorMessage = "Missing Customer Id")]
+        public long? cust {get; set;}
+        [Required(ErrorMessage = "Missing Company Id")]
+        public long? compid {get; set;}
     }
 }

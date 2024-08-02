@@ -10,7 +10,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
     public class InvoiceC
     {
-        private long? Receipt_amount;
         #region Properties
         public long Inv_Mas_Sno { get; set; }
         public long Inv_Det_Sno { get; set; }
@@ -60,6 +59,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public int no_of_invoices { get;  set; }
         public decimal? invoice_amount { get;  set; }
         public int no_of_payments { get;  set; }
+
+        public long? Receipt_amount;
         #endregion Properties
         #region methods
 
@@ -351,31 +352,30 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 DateTime fdate = DateTime.Parse(stdate);
                 DateTime tdate = DateTime.Parse(enddate);
 
-                var result = from a in context.payment_details
-                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
-                             join c in context.branch_name on b.branch_sno equals c.sno
-                             where a.status.Contains("Passed")
-                                && a.payment_date >= fdate
-                                && a.payment_date <= tdate
-                             group new { a, b, c } by new
+                var result = from A in context.payment_details
+                             join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
+                             join C in context.branch_name on B.branch_sno equals C.sno
+                             where A.status.Contains("Passed") &&
+                                   A.payment_date >= fdate &&
+                                   A.payment_date <= tdate
+                             group A by new
                              {
-                                 a.comp_mas_sno,
-                                 b.company_name,
-                                 b.branch_sno,
-                                 c.name
-                             } into grouped
+                                 A.comp_mas_sno,
+                                 B.company_name,
+                                 B.branch_sno,
+                                 C.name
+                             } into g
                              select new InvoiceC
                              {
-                                 vendor_id = grouped.Key.comp_mas_sno,
-                                 vendor = grouped.Key.company_name,
-                                 branch_sno = grouped.Key.branch_sno,
-                                 branch = grouped.Key.name,
-                                 no_of_payments = grouped.Count(x => x.a.sno != null),
-                                 Receipt_amount = grouped.Sum(x => x.a.paid_amount)
+                                 vendor_id = g.Key.comp_mas_sno,
+                                 vendor = g.Key.company_name,
+                                 branch_sno = g.Key.branch_sno,
+                                 branch = g.Key.name,
+                                 no_of_payments = g.Count(),
+                                 Receipt_amount = g.Sum(x => x.paid_amount)
                              };
 
                 var list = result.ToList();
-
 
                 if (list != null && list.Count > 0)
                     return list;

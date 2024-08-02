@@ -604,7 +604,7 @@ namespace JichangeApi.Services
             {
                 InvoiceC invoiceC = new InvoiceC();
                 var results = invoiceC.PaymentConsolidatedReport(report.stdate, report.enddate);
-                return results != null ? results : new List<InvoiceC>();
+                return results ?? new List<InvoiceC>();
             }
             catch (Exception ex)
             {
@@ -623,6 +623,23 @@ namespace JichangeApi.Services
                 var cusid = transact.cusid.ToLower() == "all" ? "0" : transact.cusid;
                 var results = payment.GetTransactionsReport(long.Parse(compid), transact.stdate, transact.enddate, long.Parse(cusid), (long)branch);
                 return results ?? results ;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<Payment> GetPaymentTransactReports(InvoiceDetailsForm invoiceDetailsForm)
+        {
+            try
+            {
+                List<Payment> payments = new Payment().GetTransactionsReport(invoiceDetailsForm.companyIds, invoiceDetailsForm.customerIds, invoiceDetailsForm.stdate, invoiceDetailsForm.enddate);
+                return payments ?? new List<Payment>();
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {

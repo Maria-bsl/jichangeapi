@@ -10,7 +10,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
     public class InvoiceC
     {
-        private long? Receipt_amount;
         #region Properties
         public long Inv_Mas_Sno { get; set; }
         public long Inv_Det_Sno { get; set; }
@@ -60,6 +59,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public int no_of_invoices { get;  set; }
         public decimal? invoice_amount { get;  set; }
         public int no_of_payments { get;  set; }
+
+        public long? Receipt_amount;
         #endregion Properties
         #region methods
 
@@ -305,5 +306,85 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
         #endregion
+        public List<InvoiceC> InvoiceConsolidatedReport(string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime fdate = DateTime.Parse(stdate);
+                DateTime tdate = DateTime.Parse(enddate);
+
+                var result = from a in context.invoice_master
+                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
+                             join c in context.branch_name on b.branch_sno equals c.sno
+                             where a.approval_status == "2"
+                                && a.invoice_date >= fdate
+                                && a.invoice_date <= tdate
+                             group new { a, b, c } by new
+                             {
+                                 a.comp_mas_sno,
+                                 b.company_name,
+                                 b.branch_sno,
+                                 c.name
+                             } into grouped
+                             select new InvoiceC
+                             {
+                                 vendor_id = grouped.Key.comp_mas_sno,
+                                 vendor = grouped.Key.company_name,
+                                 branch_sno = grouped.Key.branch_sno,
+                                 branch = grouped.Key.name,
+                                 no_of_invoices = grouped.Count(x => x.a.inv_mas_sno != null),
+                                 invoice_amount = grouped.Sum(x => x.a.total_amount)
+                             };
+
+                var list = result.ToList();
+
+                if (list != null && list.Count > 0)
+                    return list;
+                else
+                    return null;
+            }
+        }
+
+        public List<InvoiceC> PaymentConsolidatedReport(string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime fdate = DateTime.Parse(stdate);
+                DateTime tdate = DateTime.Parse(enddate);
+
+                var result = from A in context.payment_details
+                             join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
+                             join C in context.branch_name on B.branch_sno equals C.sno
+                             where A.status.Contains("Passed") &&
+                                   A.payment_date >= fdate &&
+                                   A.payment_date <= tdate
+                             group A by new
+                             {
+                                 A.comp_mas_sno,
+                                 B.company_name,
+                                 B.branch_sno,
+                                 C.name
+                             } into g
+                             select new InvoiceC
+                             {
+                                 vendor_id = g.Key.comp_mas_sno,
+                                 vendor = g.Key.company_name,
+                                 branch_sno = g.Key.branch_sno,
+                                 branch = g.Key.name,
+                                 no_of_payments = g.Count(),
+                                 Receipt_amount = g.Sum(x => x.paid_amount)
+                             };
+
+                var list = result.ToList();
+
+                if (list != null && list.Count > 0)
+                    return list;
+                else
+                    return null;
+            }
+        }
+
+
+
     }
 }

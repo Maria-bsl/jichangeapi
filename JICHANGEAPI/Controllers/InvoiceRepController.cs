@@ -1,6 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Models.form;
 using JichangeApi.Services;
 using JichangeApi.Services.Reports;
 using System;
@@ -59,13 +60,13 @@ namespace JichangeApi.Controllers
 
 
         [HttpPost]
-        public HttpResponseMessage GetCustDetails(SingletonSno singletonSno)
+        public HttpResponseMessage GetCustDetails(CustomerDetailsForm customerDetailsForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<CustomerMaster> customers = invoiceRepService.GetCompanyCustomers(singletonSno);
+                List<CustomerMaster> customers = invoiceRepService.GetCompanyCustomers(customerDetailsForm);
                 return GetSuccessResponse(customers);   
             }
             catch (Exception ex)
@@ -95,7 +96,7 @@ namespace JichangeApi.Controllers
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<CompanyBankMaster> companies = invoiceRepService.GetPendingCompanyListByBranch((long) branchRef.branch);
+                List<CompanyBankMaster> companies = invoiceRepService.GetCompaniesListByBranch((long) branchRef.branch);
                 return GetSuccessResponse(companies);
             }
             catch (Exception ex)
@@ -137,13 +138,13 @@ namespace JichangeApi.Controllers
 
 
         [HttpPost]
-        public HttpResponseMessage GetInvReport(InvRepoModel invRepoModel)
+        public HttpResponseMessage GetInvReport(InvoiceDetailsForm invoiceDetailsForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<INVOICE> invoices = invoiceRepService.GetInvoiceReport(invRepoModel);
+                List<INVOICE> invoices = invoiceRepService.GetInvoiceReport(invoiceDetailsForm);
                 return GetSuccessResponse(invoices);
             }
             catch (Exception ex)

@@ -2133,7 +2133,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public List<INVOICE> GetInvRep(long Comp,long cust, string stdate, string enddate)
+        public List<INVOICE> GetInvRep(long Comp, long cust, string stdate, string enddate)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -2141,7 +2141,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 {
                     List<INVOICE> listinvoice = (from c in context.invoice_master
                                                  join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
-                                                 where (c.approval_status == "2") 
+                                                 where (c.approval_status == "2")
                                                  && (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
                                                  && (Comp == 0 ? c.comp_mas_sno == c.comp_mas_sno : c.comp_mas_sno == Comp)
                                                  select new INVOICE
@@ -2199,7 +2199,49 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                  }).ToList();
                     return listinvoice;
                 }
-                
+            }
+        }
+        public List<INVOICE> GetInvRep(List<long> companyIds,List<long> customerIds, string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate);
+
+                List<INVOICE> invoices = (from c in context.invoice_master
+                                          join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                          join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
+                                          where (c.approval_status == "2")
+                                          && ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
+                                          && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
+                                          && (!fromDate.HasValue || fromDate <= c.posted_date)
+                                          && (!toDate.HasValue || toDate >= c.posted_date)
+                                          select new INVOICE
+                                          {
+                                              Invoice_No = c.invoice_no,
+                                              Chus_Mas_No = det.cust_mas_sno,
+                                              Chus_Name = det.customer_name,
+                                              Company_Name = c1.company_name,
+                                              Currency_Code = c.currency_code,
+                                              Payment_Type = c.payment_type,
+                                              Customer_ID_Type = c.customer_id_type,
+                                              Customer_ID_No = c.customer_id_no,
+                                              Total = (decimal)c.total_amount,
+                                              Total_Vt = (decimal)c.vat_amount,
+                                              Total_Without_Vt = (decimal)c.total_without_vat,
+                                              Control_No = c.control_no,
+                                              p_date = (DateTime) c.posted_date,
+                                              Invoice_Expired_Date = (DateTime) c.invoice_expired,
+                                              Due_Date = (DateTime) c.due_date,
+                                              Invoice_Date = (DateTime) c.invoice_date,
+                                              warrenty = c.warrenty,
+                                              goods_status = c.goods_status,
+                                              delivery_status = c.delivery_status,
+                                              approval_date = approval_date
+                                          }).ToList();
+                return invoices != null ? invoices : new List<INVOICE>();
             }
         }
         public List<INVOICE> GetInvRep1(long Comp,long cust, string stdate, string enddate)

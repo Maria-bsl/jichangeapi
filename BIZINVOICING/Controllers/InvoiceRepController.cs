@@ -262,7 +262,7 @@ namespace BIZINVOICING.Controllers
             return null;
         }
         [HttpPost]
-        public ActionResult GetInvReport(long Comp,long cusid, string stdate, string enddate)
+        public ActionResult GetInvReport(long Comp, long cusid,string stdate,string enddate)
         {
 
             try

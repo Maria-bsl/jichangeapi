@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Models;
+using JichangeApi.Services.Companies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,13 +11,19 @@ namespace JichangeApi.Services
 {
     public class PaymentService
     {
+
+        private CompanyBankService companyBankService = new CompanyBankService();
         public List<Payment> GetPaymentReport(CancelRepModel cancelRepModel)
         {
             try
             {
                 Payment payment = new Payment();
-                var result = payment.GetPaymentReport((long) cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cancelRepModel.cust);
-                return result != null ? result : new List<Payment>();
+
+                var compid = cancelRepModel.compid.ToString() == "all" ? 0 : cancelRepModel.compid;
+                var branch = compid.Equals("0") ? 0 : companyBankService.GetCompanyDetail(long.Parse(compid.ToString())).Branch_Sno;
+                var cust = cancelRepModel.cust.ToString().ToLower() == "all" ? 0 : cancelRepModel.cust;
+                var result = payment.GetReport((long) cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cust);
+                return result ?? new List<Payment>();
             }
             catch (ArgumentException ex)
             {

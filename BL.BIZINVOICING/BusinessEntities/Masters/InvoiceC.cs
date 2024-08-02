@@ -305,5 +305,86 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
         #endregion
+        public List<InvoiceC> InvoiceConsolidatedReport(string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime fdate = DateTime.Parse(stdate);
+                DateTime tdate = DateTime.Parse(enddate);
+
+                var result = from a in context.invoice_master
+                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
+                             join c in context.branch_name on b.branch_sno equals c.sno
+                             where a.approval_status == "2"
+                                && a.invoice_date >= fdate
+                                && a.invoice_date <= tdate
+                             group new { a, b, c } by new
+                             {
+                                 a.comp_mas_sno,
+                                 b.company_name,
+                                 b.branch_sno,
+                                 c.name
+                             } into grouped
+                             select new InvoiceC
+                             {
+                                 vendor_id = grouped.Key.comp_mas_sno,
+                                 vendor = grouped.Key.company_name,
+                                 branch_sno = grouped.Key.branch_sno,
+                                 branch = grouped.Key.name,
+                                 no_of_invoices = grouped.Count(x => x.a.inv_mas_sno != null),
+                                 invoice_amount = grouped.Sum(x => x.a.total_amount)
+                             };
+
+                var list = result.ToList();
+
+                if (list != null && list.Count > 0)
+                    return list;
+                else
+                    return null;
+            }
+        }
+
+        public List<InvoiceC> PaymentConsolidatedReport(string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime fdate = DateTime.Parse(stdate);
+                DateTime tdate = DateTime.Parse(enddate);
+
+                var result = from a in context.payment_details
+                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
+                             join c in context.branch_name on b.branch_sno equals c.sno
+                             where a.status.Contains("Passed")
+                                && a.payment_date >= fdate
+                                && a.payment_date <= tdate
+                             group new { a, b, c } by new
+                             {
+                                 a.comp_mas_sno,
+                                 b.company_name,
+                                 b.branch_sno,
+                                 c.name
+                             } into grouped
+                             select new InvoiceC
+                             {
+                                 vendor_id = grouped.Key.comp_mas_sno,
+                                 vendor = grouped.Key.company_name,
+                                 branch_sno = grouped.Key.branch_sno,
+                                 branch = grouped.Key.name,
+                                 no_of_payments = grouped.Count(x => x.a.sno != null),
+                                 Receipt_amount = grouped.Sum(x => x.a.paid_amount)
+                             };
+
+                var list = result.ToList();
+
+
+                if (list != null && list.Count > 0)
+                    return list;
+                else
+                    return null;
+            }
+        }
+
+
+
     }
 }

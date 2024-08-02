@@ -604,7 +604,7 @@ namespace JichangeApi.Services
             {
                 InvoiceC invoiceC = new InvoiceC();
                 var results = invoiceC.PaymentConsolidatedReport(report.stdate, report.enddate);
-                return results != null ? results : new List<InvoiceC>();
+                return results ?? new List<InvoiceC>();
             }
             catch (Exception ex)
             {

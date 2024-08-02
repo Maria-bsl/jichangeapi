@@ -630,6 +630,23 @@ namespace JichangeApi.Services
             }
         }
 
+        public List<Payment> GetPaymentTransactReports(InvoiceDetailsForm invoiceDetailsForm)
+        {
+            try
+            {
+                List<Payment> payments = new Payment().GetTransactionsReport(invoiceDetailsForm.companyIds, invoiceDetailsForm.customerIds, invoiceDetailsForm.stdate, invoiceDetailsForm.enddate);
+                return payments ?? new List<Payment>();
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
 
         public List<Payment> GetPaymentTransactInvoiceDetailsReports(TransactInvoiceNo transact)
         {

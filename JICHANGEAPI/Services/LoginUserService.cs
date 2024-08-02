@@ -55,7 +55,7 @@ namespace JichangeApi.Services
             string jwtToken = Authentication.GenerateJWTAuthetication(empData.User_name, role);
             //string validUserName = Authentication.ValidateToken(jwtToken);
             //string admin1 = "Bank";
-            string sessB = "BNk";
+            string userType = "BNk";
             string Username = empData.User_name;
             string UfullName = empData.First_Name + " " + empData.Last_name;
             string flogin = empData.F_Login;
@@ -72,7 +72,7 @@ namespace JichangeApi.Services
                 { "desig", desig },
                 { "braid", branchId },
                 { "Usno", userid },
-                { "sessB", sessB },
+                { "userType", userType },
                 { "role", role },
                 { "Uname", Username },
                 { "fulname", UfullName},
@@ -85,7 +85,7 @@ namespace JichangeApi.Services
             string role = "Company";
             string jwtToken = Authentication.GenerateJWTAuthetication(company.Username, role);
             //string validUserName = Authentication.ValidateToken(jwtToken);
-            string sessComp = "Comp";
+            string userType = "Comp";
             long userid = company.CompuserSno;
             long InstID = company.Compmassno;
             string admin1 = "Companys";
@@ -105,7 +105,7 @@ namespace JichangeApi.Services
                 { "braid", braid },
                 { "Usno", Usno },
                 { "desig", admin1 },
-                { "sessComp", sessComp },
+                { "userType", userType },
                 { "userid", userid },
                 { "Uname", UfullName},
             };

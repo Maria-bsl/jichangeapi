@@ -260,6 +260,7 @@
     <Compile Include="Models\CustomerDetailsForm.cs" />
     <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
+    <Compile Include="Models\form\InvoiceDetailsForm.cs" />
     <Compile Include="Models\ItemListModel.cs" />
     <Compile Include="Models\ItemListModelResponse.cs" />
     <Compile Include="Models\SessionBModel.cs" />

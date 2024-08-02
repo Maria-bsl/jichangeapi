@@ -1,6 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Models.form;
 using JichangeApi.Services;
 using JichangeApi.Services.Reports;
 using System;
@@ -87,13 +88,13 @@ namespace JichangeApi.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage GetInvReport(InvRepoModel invRepoModel)
+        public HttpResponseMessage GetInvReport(InvoiceDetailsForm invoiceDetailsForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<INVOICE> invoices = repCompInvoiceService.GetInvoiceReport(invRepoModel);
+                List<INVOICE> invoices = repCompInvoiceService.GetInvoiceReport(invoiceDetailsForm);
                 return GetSuccessResponse(invoices);    
             }
             catch (Exception ex)

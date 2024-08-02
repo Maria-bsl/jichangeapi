@@ -209,18 +209,38 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
             }
         }//if required need to join//reg need to be added/
-        public List<CustomerMaster> GetCust1(long no)
+        public List<CustomerMaster> GetCust1(long compid)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var adetails = (from c in context.customer_master
                                 join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
-                                where c.comp_mas_sno == no
+                                where (compid == 0 || c.comp_mas_sno == compid)
                                 select new CustomerMaster
                                 {
                                     Cust_Sno= c.cust_mas_sno,
                                    Cust_Name = c.customer_name,
                                     
+                                }).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        public List<CustomerMaster> SelectCustomersByCompanyIds(List<long> companyIds)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.customer_master
+                                join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
+                                where (companyIds.Contains(0) || companyIds.Contains((long) c.comp_mas_sno))
+                                select new CustomerMaster
+                                {
+                                    Cust_Sno = c.cust_mas_sno,
+                                    Cust_Name = c.customer_name,
+
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;

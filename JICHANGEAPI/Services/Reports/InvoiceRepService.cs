@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Models;
+using JichangeApi.Models.form;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,12 +37,13 @@ namespace JichangeApi.Services.Reports
                 throw new Exception(ex.Message);
             }
         }
-        public List<CustomerMaster> GetCompanyCustomers(SingletonSno singleton)
+        public List<CustomerMaster> GetCompanyCustomers(CustomerDetailsForm customerDetailsForm)
         {
             try
             {
                 CustomerMaster customerMaster = new CustomerMaster();
-                var result = customerMaster.GetCust1((long)singleton.Sno);
+                //var result = customerMaster.GetCust1((long)singleton.Sno);
+                var result = customerMaster.SelectCustomersByCompanyIds(customerDetailsForm.companyIds);
                 return result != null ? result : new List<CustomerMaster>();
             }
             catch (Exception ex)
@@ -62,12 +64,12 @@ namespace JichangeApi.Services.Reports
                 throw new Exception(ex.Message);
             }
         }
-        public List<CompanyBankMaster> GetPendingCompanyListByBranch(long branchId)
+        public List<CompanyBankMaster> GetCompaniesListByBranch(long branchId)
         {
             try
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
-                var result = companyBankMaster.GetCompany1_Branch(branchId);
+                var result = companyBankMaster.GetApprovedCompaniesByBranch(branchId);
                 return result != null ? result : new List<CompanyBankMaster>();
             }
             catch (Exception ex)
@@ -88,12 +90,12 @@ namespace JichangeApi.Services.Reports
                 throw new Exception(ex.Message);
             }
         }
-        public List<INVOICE> GetInvoiceReport(InvRepoModel invRepoModel)
+        public List<INVOICE> GetInvoiceReport(InvoiceDetailsForm invoiceDetailsForm)
         {
             try
             {
                 INVOICE invoice = new INVOICE();
-                var result = invoice.GetInvRep((long)invRepoModel.Comp, long.Parse(invRepoModel.cusid), invRepoModel.stdate, invRepoModel.enddate);
+                var result = invoice.GetInvRep(invoiceDetailsForm.customerIds, invoiceDetailsForm.customerIds, invoiceDetailsForm.stdate, invoiceDetailsForm.enddate);
                 return result != null ? result : new List<INVOICE>();
             }
             catch (Exception ex)

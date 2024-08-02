@@ -23,7 +23,7 @@ namespace JichangeApi.Services.Companies
                         List<CompanyBankMaster> pendingCompanies = companyBankMaster.GetCompany1();
                         return pendingCompanies != null ? pendingCompanies : new List<CompanyBankMaster>();
                     default:
-                        List<CompanyBankMaster> branchCompanies = companyBankMaster.GetCompany1_Branch(long.Parse(desibraid.braid.ToString()));
+                        List<CompanyBankMaster> branchCompanies = companyBankMaster.GetApprovedCompaniesByBranch(long.Parse(desibraid.braid.ToString()));
                         return branchCompanies != null ? branchCompanies : new List<CompanyBankMaster>();
                 }
             }

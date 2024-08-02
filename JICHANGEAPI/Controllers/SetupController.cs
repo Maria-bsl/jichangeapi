@@ -22,7 +22,6 @@ namespace JichangeApi.Controllers
         INVOICE innn = new INVOICE();
         Payment pay = new Payment();
         EMP_DET emp = new EMP_DET();
-        Token t = new Token();
         InvoicePDfData ipd = new InvoicePDfData();
         private readonly dynamic returnNull = null;
 
@@ -261,14 +260,32 @@ namespace JichangeApi.Controllers
 
 
         [HttpPost]
-        public HttpResponseMessage Overview()
+        public HttpResponseMessage Overview([FromBody] RequestSetupModel request)
         {
             SessionBModel ses = new SessionBModel();
+
+/*            if(request == null)
+            {
+                return GetServerErrorResponse("Request Can not be null");
+            }
+
+            if (!string.IsNullOrEmpty(request.sessB))
+            {
+                // Handle the case where sessB is provided
+                return Ok(new { Message = "Received sessB", Data = request.sessB });
+            }
+            else if (request.Compid.HasValue)
+            {
+                // Handle the case where Compid is provided
+                return Ok(new { Message = "Received Compid", Data = request.Compid.Value });
+            }
+            else
+            {
+                return BadRequest("Invalid request: Either sessB or Compid must be provided.");
+            }*/
             if (ses.sessB != null)
             {
                 var countcomp = co.GetCompanycount();
-
-
                 var countPcomp = co.GetCompanyPencount();
 
                 var idleC = 0;

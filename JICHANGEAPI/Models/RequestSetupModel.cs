@@ -7,8 +7,8 @@ namespace JichangeApi.Models
 {
     public class RequestSetupModel
     {
-            public string sessB { get; set; }
-            public long? Compid { get; set; }
+            public long? branch { get; set; }
+            public long? compid { get; set; }
        
     }
 }

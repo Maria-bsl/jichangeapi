@@ -257,8 +257,10 @@
     <Compile Include="Enums\GeneralStates.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
     <Compile Include="Models\ChangePwdModel.cs" />
+    <Compile Include="Models\CustomerDetailsForm.cs" />
     <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
+    <Compile Include="Models\form\InvoiceDetailsForm.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
     <Compile Include="Models\SingletonVOtp.cs" />
     <Compile Include="Models\TransactBankModel.cs" />

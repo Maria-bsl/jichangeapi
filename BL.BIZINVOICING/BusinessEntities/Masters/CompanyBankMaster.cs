@@ -529,7 +529,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public List<CompanyBankMaster> GetCompany1_Branch(long bsno)
+        public List<CompanyBankMaster> GetApprovedCompaniesByBranch(long bsno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -538,7 +538,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //join dist in context.district_master on sc.district_sno equals dist.district_sno
                                     //join ward in context.ward_master on sc.ward_sno equals ward.ward_sno
                                     //where sc.status.ToLower().Equals("approved") && sc.branch_sno ==  0 ? sc.branch_sno == sc.branch_sno : sc.branch_sno == bsno
-                                where !string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals("approved") && bsno == 0 ? true : sc.branch_sno == bsno
+                                where ((!string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals("approved")) && (bsno == 0 || sc.branch_sno == bsno)) //bsno == 0 ? true : sc.branch_sno == bsno
                                 select new CompanyBankMaster
                                 {
                                     CompSno = sc.comp_mas_sno,

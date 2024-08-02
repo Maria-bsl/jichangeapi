@@ -55,7 +55,7 @@ namespace BIZINVOICING.Controllers
                 }
                 else
                 {
-                    result = c.GetCompany1_Branch(long.Parse(Session["BRAID"].ToString()));
+                    result = c.GetApprovedCompaniesByBranch(long.Parse(Session["BRAID"].ToString()));
                 }
                 if (result != null)
                 {

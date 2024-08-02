@@ -638,7 +638,7 @@ namespace JichangeApi.Controllers
         }
 
 
-        [HttpPost]
+        /*[HttpPost]
         public HttpResponseMessage GetchTransact_B(TransactBankModel transact)
         {
 
@@ -660,6 +660,27 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
 
+        }*/
+
+        [HttpPost]
+        public HttpResponseMessage GetchTransact_B(InvoiceDetailsForm invoiceDetailsForm)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<Payment> getTransaction = invoiceService.GetPaymentTransactReports(invoiceDetailsForm);
+                return GetSuccessResponse(getTransaction);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
 
         #endregion

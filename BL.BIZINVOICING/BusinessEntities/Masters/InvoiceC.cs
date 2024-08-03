@@ -237,6 +237,45 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public List<InvoiceC> GetAmendRep(List<long> companyIds,List<long> customerIds,List<long> invoiceIds, string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime? fdate = null;
+                if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
+                DateTime? tdate = null;
+                if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
+
+                List<InvoiceC> invoices = (from c in context.invoice_ammendment
+                                           join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
+                                           join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                           where (det.approval_status != "Cancel")
+                                           && (companyIds.Contains(0) || companyIds.Contains((long) c.comp_mas_sno))
+                                           && (customerIds.Contains(0) || customerIds.Contains((long)c.cust_mas_sno))
+                                           && (invoiceIds.Contains(0) || invoiceIds.Contains((long)c.inv_mas_sno))
+                                           && (!fdate.HasValue || fdate <= c.posted_date)
+                                           && (!tdate.HasValue || tdate >= c.posted_date)
+                                           select new InvoiceC
+                                           {
+                                               Invoice_No = det.invoice_no,
+                                               Customer_Name = cus.customer_name,
+                                               Payment_Type = det.payment_type,
+                                               Control_No = c.control_no,
+                                               Reason = c.reason_for_amm,
+                                               Invoice_Amount = (decimal)c.invoice_amount,
+                                               Amment_Amount = (decimal)c.amment_amount,
+                                               Audit_Date = (DateTime)c.posted_date,
+                                               Invoice_Expired_Date = c.expired_date,
+                                               Currency_Code = det.currency_code,
+                                               Due_Date = (DateTime)c.due_date,
+
+                                           }).OrderByDescending(z => z.Audit_Date).ToList();
+                return invoices != null ? invoices : new List<InvoiceC>();
+
+            }
+        }
+
         public List<InvoiceC> GetAmendRep(long Comp, string inv, string stdate, string enddate, long cust)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -273,6 +312,47 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 return listinvoice != null ? listinvoice : new List<InvoiceC>();
             }
         }
+
+        public List<InvoiceC> GetCancelRep(List<long> companyIds,List<long> customerIds,List<long> invoiceIds, string stdate, string enddate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime? fdate = null;
+                if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
+                DateTime? tdate = null;
+                if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
+
+                List<InvoiceC> invoices = (from c in context.invoice_cancellation
+                                           join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
+                                           join b in context.company_master on c.comp_mas_sno equals b.comp_mas_sno
+                                           join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                           /* where (companyIds.Contains(0) || companyIds.Contains((long) c.comp_mas_sno)) 
+                                            && (customerIds.Contains(0) || customerIds.Contains((long) c.cust_mas_sno)) 
+                                            && (invoiceIds.Contains(0) && invoiceIds.Contains((long) c.inv_mas_sno))*/
+
+                                           where (!fdate.HasValue || fdate >= c.posted_date)
+                                           && (!tdate.HasValue || tdate <= c.posted_date)
+                                           && (companyIds.Contains(0) || companyIds.Contains((long)c.comp_mas_sno))
+                                           && (customerIds.Contains(0) || customerIds.Contains((long)c.cust_mas_sno))
+                                           && (invoiceIds.Contains(0) || invoiceIds.Contains((long)c.inv_mas_sno))
+                                           select new InvoiceC
+                                           {
+                                               Invoice_No = det.invoice_no,
+                                               Customer_Name = cus.customer_name,
+                                               Cmpny_Name = b.company_name,
+                                               Com_Mas_Sno = b.comp_mas_sno,
+                                               Payment_Type = det.payment_type,
+                                               Control_No = c.control_no,
+                                               Reason = c.reason_for_cancel,
+                                               Invoice_Amount = (decimal)c.invoice_amount,
+                                               Audit_Date = (DateTime)c.posted_date,
+                                               Currency_Code = det.currency_code,
+                                               p_date = (DateTime)c.posted_date,
+                                           }).OrderByDescending(z => z.Audit_Date).ToList();
+                return invoices != null ? invoices : new List<InvoiceC>();
+            }
+        }
+
         public List<InvoiceC> GetCancelRep(long Comp, string inv, string stdate, string enddate, long cust)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -286,8 +366,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
                                               join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                               where (cust == 0 ? true : c.cust_mas_sno == cust) 
-                                              && (!fdate.HasValue || c.posted_date >= fdate)
-                                              && (!tdate.HasValue || c.posted_date >= tdate)
+                                              && (!fdate.HasValue || fdate >= c.posted_date)
+                                              && (!tdate.HasValue || tdate <= c.posted_date)
                                               && (Comp == 0 ? true : c.comp_mas_sno == Comp)
                                               && (!string.IsNullOrEmpty(inv) ? det.invoice_no == inv : true)
                                               select new InvoiceC

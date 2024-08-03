@@ -262,6 +262,19 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+
+        public int GetAllCustCount()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.customer_master
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
         public CustomerMaster CustGetId(long sno, long cno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

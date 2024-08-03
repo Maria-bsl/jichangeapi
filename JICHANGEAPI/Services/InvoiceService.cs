@@ -500,6 +500,18 @@ namespace JichangeApi.Services
             }
         }
 
+        public List<InvoiceC> GetAmendmentReports(InvoiceReportDetailsForm invoiceReportDetailsForm)
+        {
+            try
+            {
+                var results = new InvoiceC().GetAmendRep(invoiceReportDetailsForm.companyIds, invoiceReportDetailsForm.customerIds, invoiceReportDetailsForm.invoiceIds, invoiceReportDetailsForm.stdate, invoiceReportDetailsForm.enddate);
+                return results != null ? results : new List<InvoiceC>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
 
         public List<InvoiceC> GetCancelledInvoicesReport(CancelRepModel cancelRepModel)
         {
@@ -509,6 +521,23 @@ namespace JichangeApi.Services
                 var results = invoiceC.GetCancelRep((long)cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cancelRepModel.cust);
                 return results != null ? results : new List<InvoiceC>();
             }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public List<InvoiceC> GetCancelledInvoicesReport(InvoiceReportDetailsForm invoiceReportDetailsForm)
+        {
+            try
+            {
+                var results = new InvoiceC().GetCancelRep(invoiceReportDetailsForm.companyIds, invoiceReportDetailsForm.customerIds, invoiceReportDetailsForm.invoiceIds, invoiceReportDetailsForm.stdate, invoiceReportDetailsForm.enddate);
+                return results != null ? results : new List<InvoiceC>();
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            } 
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);

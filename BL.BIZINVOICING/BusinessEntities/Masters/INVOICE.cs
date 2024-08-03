@@ -741,6 +741,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+
+
         public int GetEcount(long uid, string Ee, DateTime date)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -755,7 +758,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
-                public int Getinvcountnlyappind(long uid,String name)
+        public int Getinvcountnlyappind(long uid,String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -852,6 +855,66 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+        public int GetExpired_Count()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                where c.invoice_expired != null && c.invoice_expired <= DateTime.Now
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public int GetDue_Count()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
+                                where c.due_date >= DateTime.Now && (c.invoice_expired == null || c.invoice_expired > DateTime.Now)
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public int GetDueCountByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
+                                where c.due_date >= DateTime.Now && (c.invoice_expired == null || c.invoice_expired > DateTime.Now)
+                                && c.company_master.branch_sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public int GetExpiredCountByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                where c.invoice_expired != null && c.invoice_expired <= DateTime.Now && c.company_master.branch_sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
         public decimal Gettotamtwithvat(long uid,DateTime date)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -2201,7 +2264,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
-        public List<INVOICE> GetInvRep(List<long> companyIds,List<long> customerIds, string stdate, string enddate)
+        public List<INVOICE> GetInvRep(List<long> companyIds,List<long> customerIds, string stdate, string enddate,bool allowCancelInvoice)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -2213,13 +2276,14 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 List<INVOICE> invoices = (from c in context.invoice_master
                                           join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                           join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
-                                          where (c.approval_status == "2")
+                                          where (allowCancelInvoice ? allowCancelInvoice : c.approval_status == "2")
                                           && ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
                                           && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
                                           && (!fromDate.HasValue || fromDate <= c.posted_date)
                                           && (!toDate.HasValue || toDate >= c.posted_date)
                                           select new INVOICE
                                           {
+                                              Inv_Mas_Sno = c.inv_mas_sno,
                                               Invoice_No = c.invoice_no,
                                               Chus_Mas_No = det.cust_mas_sno,
                                               Chus_Name = det.customer_name,

@@ -130,6 +130,35 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+
+        public long? GetCompanyCountbyBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.company_master
+                                where c.status == "Approved" && c.branch_sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public long? GetCompanyPendingCountbyBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.company_master
+                                where c.status == "Pending" && c.branch_sno ==branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
         public int GetCompanyPencount()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -1002,6 +1031,26 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public long? ActiveCompany(long branch)//check sno
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from sc in context.company_master
+                                join cn in context.invoice_master on sc.comp_mas_sno equals cn.comp_mas_sno
+                                where sc.branch_sno == branch
+                                select new CompanyBankMaster
+                                {
+                                    CompSno = sc.comp_mas_sno
+                                }).Distinct().ToList();
+                if (adetails != null)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+
         public List<CompanyBankMaster> ActiveC()//check sno
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

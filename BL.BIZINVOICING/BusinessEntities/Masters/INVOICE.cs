@@ -2264,7 +2264,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
-        public List<INVOICE> GetInvRep(List<long> companyIds,List<long> customerIds, string stdate, string enddate)
+        public List<INVOICE> GetInvRep(List<long> companyIds,List<long> customerIds, string stdate, string enddate,bool allowCancelInvoice)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -2276,13 +2276,14 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 List<INVOICE> invoices = (from c in context.invoice_master
                                           join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                           join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
-                                          where (c.approval_status == "2")
+                                          where (allowCancelInvoice ? allowCancelInvoice : c.approval_status == "2")
                                           && ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
                                           && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
                                           && (!fromDate.HasValue || fromDate <= c.posted_date)
                                           && (!toDate.HasValue || toDate >= c.posted_date)
                                           select new INVOICE
                                           {
+                                              Inv_Mas_Sno = c.inv_mas_sno,
                                               Invoice_No = c.invoice_no,
                                               Chus_Mas_No = det.cust_mas_sno,
                                               Chus_Name = det.customer_name,

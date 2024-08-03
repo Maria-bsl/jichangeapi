@@ -34,7 +34,7 @@ namespace JichangeApi.Controllers
         private readonly CustomerService customerService = new CustomerService();
         private readonly CurrencyService currencyService = new CurrencyService();
 
-        
+
 
         #region Get Invoice Details
         [HttpPost]
@@ -107,7 +107,7 @@ namespace JichangeApi.Controllers
             try
             {
                 List<INVOICE> invoices = invoiceService.GetchDetails_Pen(singletonComp);
-                return GetSuccessResponse(invoices);    
+                return GetSuccessResponse(invoices);
             }
             catch (ArgumentException ex)
             {
@@ -184,12 +184,12 @@ namespace JichangeApi.Controllers
             }
         }
 
-        [HttpGet] 
-        public HttpResponseMessage FindInvoice(long compid,long inv)
+        [HttpGet]
+        public HttpResponseMessage FindInvoice(long compid, long inv)
         {
             try
             {
-                JsonObject invoice = invoiceService.FindInvoice(compid,inv);
+                JsonObject invoice = invoiceService.FindInvoice(compid, inv);
                 return SuccessJsonResponse(invoice);
             }
             catch (ArgumentException ex)
@@ -375,7 +375,7 @@ namespace JichangeApi.Controllers
             //return null;
         }
 
-        
+
         public HttpResponseMessage GetCurrency()
         {
             try
@@ -465,7 +465,7 @@ namespace JichangeApi.Controllers
                 var amendedInvoice = invoiceService.AmendInvoice(addAmendForm);
                 return SuccessJsonResponse(amendedInvoice);
             }
-            catch(ArgumentException ex)
+            catch (ArgumentException ex)
             {
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
@@ -519,7 +519,7 @@ namespace JichangeApi.Controllers
             }
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public HttpResponseMessage GetAmendReport(CancelRepModel cancelRepModel)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
@@ -527,6 +527,27 @@ namespace JichangeApi.Controllers
             try
             {
                 List<InvoiceC> invoiceCs = invoiceService.GetAmendmentReports(cancelRepModel);
+                return GetSuccessResponse(invoiceCs);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }*/
+
+        [HttpPost]
+        public HttpResponseMessage GetAmendReport(InvoiceReportDetailsForm invoiceReportDetailsForm)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<InvoiceC> invoiceCs = invoiceService.GetAmendmentReports(invoiceReportDetailsForm);
                 return GetSuccessResponse(invoiceCs);
             }
             catch (ArgumentException ex)
@@ -561,7 +582,7 @@ namespace JichangeApi.Controllers
             }
         }
 
-        [HttpPost]
+        /*[HttpPost]
         public HttpResponseMessage GetCancelReport(CancelRepModel cancelRepModel)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
@@ -581,7 +602,29 @@ namespace JichangeApi.Controllers
             {
                 return GetServerErrorResponse(ex.Message);
             }
+        }*/
+
+        [HttpPost]
+        public HttpResponseMessage GetCancelReport(InvoiceReportDetailsForm invoiceReportDetailsForm)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<InvoiceC> invoices = invoiceService.GetCancelledInvoicesReport(invoiceReportDetailsForm);
+                return GetSuccessResponse(invoices);
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
         }
+
         #endregion
         #endregion
 

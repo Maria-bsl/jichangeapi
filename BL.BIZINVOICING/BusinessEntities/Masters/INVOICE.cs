@@ -741,6 +741,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+
+
         public int GetEcount(long uid, string Ee, DateTime date)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -755,7 +758,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
-                public int Getinvcountnlyappind(long uid,String name)
+        public int Getinvcountnlyappind(long uid,String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -852,6 +855,66 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+        public int GetExpired_Count()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                where c.invoice_expired != null && c.invoice_expired <= DateTime.Now
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public int GetDue_Count()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
+                                where c.due_date >= DateTime.Now && (c.invoice_expired == null || c.invoice_expired > DateTime.Now)
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public int GetDueCountByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
+                                where c.due_date >= DateTime.Now && (c.invoice_expired == null || c.invoice_expired > DateTime.Now)
+                                && c.company_master.branch_sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public int GetExpiredCountByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                where c.invoice_expired != null && c.invoice_expired <= DateTime.Now && c.company_master.branch_sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
         public decimal Gettotamtwithvat(long uid,DateTime date)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

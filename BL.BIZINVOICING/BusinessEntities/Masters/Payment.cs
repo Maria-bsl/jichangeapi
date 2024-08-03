@@ -552,6 +552,26 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public long? GetPayment_PaidCounts()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.payment_details
+                                where (c.status == "Passed")
+
+                                select new Payment
+                                {
+                                    Control_No = c.control_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    Amount = (long)c.paid_amount
+                                }).ToList();
+                if (edetails != null)
+                    return edetails.Count;
+                else
+                    return 0;
+            }
+        }
         public List<Payment> GetPayment_Paid1(string fdata)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

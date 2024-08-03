@@ -342,45 +342,128 @@ namespace JichangeApi.Controllers
                             }
                         }
                     }
-                    var PaymentTransactionCount = count;
+                    var PaymentTransactionCount = pay.GetPayment_PaidCounts();
+
+                    var counts  =  count;
                     var UnpaidInvoices = ApprovedInvoices - count;
 
-                    CompanyData cd = new CompanyData();
-                    var getComp = co.GetCompany_S();
-                    if (getComp != null)
-                    {
-                        cd.CompanyItemlist = co.GetCompany_S();
-                    }
-                    else
-                    {
-                        cd.CompanyItemlist = null;
-                    }
+                    var CustomerCount = cm.GetAllCustCount();
+
+                    var ExpiredInvoiceCount = innn.GetExpired_Count();
+
+                    var DueInvoiceCount = innn.GetDue_Count();
+
 
                     var statistics = new List<ItemListModel>
                     {
                         new ItemListModel { Name = "Transaction", Statistic = PaymentTransactionCount.ToString() },
-                        new ItemListModel { Name = "Customer", Statistic = "1" },
+                        new ItemListModel { Name = "Customers", Statistic = CustomerCount.ToString() },
                         new ItemListModel { Name = "Users", Statistic = BankUserCount.ToString() },
-                        new ItemListModel { Name = "Pendings", Statistic = PendingInvoicesCount },
-                        new ItemListModel { Name = "Due", Statistic = "1" },
-                        new ItemListModel { Name = "Expired", Statistic = "1" }
+                        new ItemListModel { Name = "Pendings", Statistic = VendorPendingCount.ToString() },
+                        new ItemListModel { Name = "Vendor", Statistic = vendorCount.ToString() }
                     };
 
-                    var response = new ItemListModelResponse
-                    {
-                        Response = statistics,
-                        Message = "Success"
-                    };
-                    return GetSuccessResponse(response);
+                    return GetSuccessResponse(statistics);
                 }
 
-                // Pass Branch To get specific Branch Data here below
+                else
+                {
+                    var vendorCount = co.GetCompanyCountbyBranch((long)Bankbranch);
+                    var VendorPendingCount = co.GetCompanyPendingCountbyBranch((long) Bankbranch);
 
-                return GetSuccessResponse(0);
+                    var ActiveCompanyWithInvoices = 0;
+                    var ApprovedInvoices = 0;
+                    var PendingInvoices = 0;
+                    var CancelInvoices = 0;
+                    var CompanyWithInvoices = co.ActiveCompany((long) Bankbranch);
+                    
+                    var ActiveCompany = ActiveCompanyWithInvoices.ToString();
+                    var CompanyWithoutInvoices = vendorCount - ActiveCompanyWithInvoices;
+                    
+                    var result = innn.GetINVOICEMas1().Where(x => x.approval_status == "2" && x.approval_status != "Cancel");
+                    if (result != null)
+                    {
+                        ApprovedInvoices = result.Count();
+                    }
+                    var ApprovedInvoicesCount = ApprovedInvoices.ToString();
+
+                    var result1 = innn.GetINVOICEMas1().Where(x => x.approval_status == "1");
+                    if (result1 != null)
+                    {
+                        PendingInvoices = result1.Count();
+                    }
+                    var PendingInvoicesCount = PendingInvoices.ToString();
+
+                    var result2 = innn.GetINVOICEMas1().Where(x => x.approval_status == "Cancel");
+                    if (result2 != null)
+                    {
+                        CancelInvoices = result2.Count();
+                    }
+                    var CancelInvoicesCount = CancelInvoices.ToString();
+
+                    var BankUser = emp.GetCount();
+                    var BankUserCount = BankUser;
+
+                    var tDay = innn.GetCount_D("today");
+                    var today = tDay;
+                    var tWeek = innn.GetCount_D("week");
+                    var week = tWeek;
+                    var tMon = innn.GetCount_D("mnth");
+                    var month = tMon;
+                    var tYear = innn.GetCount_D("year");
+                    var year = tYear;
+
+                    var VendorTotalCount = vendorCount;
+                    long count = 0;
+                    var getCon = pay.GetControl_Dash();
+                    if (getCon != null)
+                    {
+
+                        long amount = 0;
+                        long ramount = 0;
+                        for (int i = 0; i < getCon.Count; i++)
+                        {
+                            var getC = pay.GetPayment_Dash(getCon[i].Control_No);
+                            if (getC != null)
+                            {
+                                amount = getC.Sum(x => x.Amount);
+                                ramount = getC.Sum(x => x.Requested_Amount);
+                                if (amount == ramount)
+                                {
+                                    count++;
+                                }
+                            }
+                        }
+                    }
+
+                    var PaymentTransactionCount = pay.GetPayment_PaidCounts();
+
+                    var counts = count;
+                    var UnpaidInvoices = ApprovedInvoices - count;
+
+                    var CustomerCount = cm.GetAllCustCount();
+
+                    var ExpiredInvoiceCount = innn.GetExpired_Count();
+
+                    var DueInvoiceCount = innn.GetDue_Count();
+
+
+                    var statistics = new List<ItemListModel>
+                    {
+                        new ItemListModel { Name = "Transaction", Statistic = PaymentTransactionCount.ToString() },
+                        new ItemListModel { Name = "Customers", Statistic = CustomerCount.ToString() },
+                        new ItemListModel { Name = "Users", Statistic = BankUserCount.ToString() },
+                        new ItemListModel { Name = "Pendings", Statistic = VendorPendingCount.ToString() },
+                        new ItemListModel { Name = "Vendor", Statistic = vendorCount.ToString() }
+                    };
+
+                    return GetSuccessResponse(statistics);
+                }
+
+
             }
             else if (request.compid.HasValue)
             {
-
                     SingletonComp company = new SingletonComp();
                     var date = DateTime.Now;
 
@@ -429,9 +512,6 @@ namespace JichangeApi.Controllers
                     CompanyData id = new CompanyData();
                     id.InvoiceItemlist = innn.GetControl_D(long.Parse(company.compid.ToString()));
 
-
-
-
                     var statistics = new List<ItemListModel>
                     {
                         new ItemListModel { Name = "Transaction", Statistic = "1" },
@@ -449,7 +529,6 @@ namespace JichangeApi.Controllers
                     };
                     return GetSuccessResponse(response);
 
-               
             }
             else
             {
@@ -671,7 +750,6 @@ namespace JichangeApi.Controllers
             /*  For Invoice: Transaction, Invoice Approved, Invoice Pending, Invoice_Cancel */
 
 
-
             var statistics = new List<ItemListModel>
                     {
                         new ItemListModel { Name = "Transaction", Statistic = "1" },
@@ -686,9 +764,14 @@ namespace JichangeApi.Controllers
                 Message = "Success"
             };
 
-            return null;
+            return GetSuccessResponse(response);
         }
 
+        [HttpPost]
+        public HttpResponseMessage LatTransList()
+        {
+            return GetSuccessResponse(0);
+        }
 
 
     }

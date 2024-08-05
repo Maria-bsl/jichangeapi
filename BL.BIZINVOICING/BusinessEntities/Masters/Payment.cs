@@ -93,6 +93,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public string Error_Text { get; set; }
         public long? Balance { get; set; }
 
+      // public string List<Company_Master> { get; set; }
+
         #endregion Properties
         #region Methods
 
@@ -553,6 +555,52 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+
+        public long? GetPayment_PaidCountsByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.payment_details
+                                join m in context.company_master on c.comp_mas_sno equals m.comp_mas_sno
+                                where (c.status == "Passed") && m.branch_sno == branch
+
+                                select new Payment
+                                {
+                                    Control_No = c.control_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    Amount = (long)c.paid_amount
+                                }).ToList();
+                if (edetails != null)
+                    return edetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+
+        public long? GetVendor_PaidCounts(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.payment_details
+                                where (c.status == "Passed") && c.comp_mas_sno == company_sno
+                                 
+
+                                select new Payment
+                                {
+                                    Control_No = c.control_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    Amount = (long)c.paid_amount,
+                                    Balance = c.amount30
+                                }).ToList();
+                if (edetails != null)
+                    return edetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+
         public long? GetPayment_PaidCounts()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -607,6 +655,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
         public List<Payment> GetControl_Dash_C(long cno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -681,6 +730,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Institution_ID = c.institution_id,
                                     Payment_Type = c.payment_type,
                                     Amount_Type = c.amount_type,
+                                    Balance = c.amount30,
+                                    Payment_Desc = c.payment_desc,
+                                    Status = c.status,
                                     Currency_Code = c.currency_code,
                                     Control_No = c.control_no,
                                     Comp_Mas_Sno = (long)c.comp_mas_sno,
@@ -733,27 +785,139 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public List<Payment> GetReport(List<long> companyIds, List<long> customerIds, List<long> invoiceIds,string stdate, string enddate)
-        {
-            DateTime? fdate = null;
-            if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
-            DateTime? tdate = null;
-            if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
 
+        public List<Payment> GetLatestTransAll()
+        {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var payments = (from c in context.payment_details
-                                join det in context.invoice_master on c.invoice_sno equals det.invoice_no
-                                join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                join b in context.company_master on c.comp_mas_sno equals b.comp_mas_sno
-                                where (!fdate.HasValue || fdate >= c.posted_date)
-                                      && (!tdate.HasValue || tdate <= c.posted_date)
-                                      && (companyIds.Contains(0) || companyIds.Contains((long)c.comp_mas_sno))
-                                      && (customerIds.Contains(0) || customerIds.Contains((long)c.cust_mas_sno))
-                                      && (invoiceIds.Contains(0) || invoiceIds.Contains((long)det.inv_mas_sno))
+                var edetails = (from c in context.payment_details
+                                where c.status == "Passed"
+                                
                                 select new Payment
                                 {
-                                    SNO = c.sno,
+                                    Payment_SNo = c.payment_sno,
+                                    Payment_Date = c.payment_date,
+                                    Payment_Time = c.payment_time,
+                                    Trans_Channel = c.trans_channel,
+                                    Payer_Name = c.payer_name,
+                                    Receipt_No = c.receipt_no,
+                                    Payment_Trans_No = c.pay_trans_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    PaidAmount = (long)c.paid_amount,
+                                    Institution_ID = c.institution_id,
+                                    Payment_Type = c.payment_type,
+                                    Amount_Type = c.amount_type,
+                                    Currency = c.currency_code,
+                                    Currency_Code = c.currency_code,
+                                    Control_No = c.control_no,
+                                    Balance = c.amount30,
+                                    Payment_Desc = c.payment_desc,
+                                    Status = c.status,
+                                    Comp_Mas_Sno = (long)c.comp_mas_sno,
+                                    //Company_Name = c.company_name,
+                                    Cust_Mas_Sno = (long)c.cust_mas_sno,
+                                    //Customer_Name = c.customer_name,
+                                    Invoice_Sno = c.invoice_sno
+                                }).OrderByDescending(x => x.Payment_SNo).Take(5).ToList();
+                if (edetails != null && edetails.Count > 0)
+                    return edetails;
+                else
+                    return null;
+            }
+        }
+
+
+        public List<Payment> GetVendorTransactionsAll(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.payment_details
+                                where c.status == "Passed" && c.comp_mas_sno == company_sno
+
+                                select new Payment
+                                {
+                                    Payment_SNo = c.payment_sno,
+                                    Payment_Date = c.payment_date,
+                                    Payment_Time = c.payment_time,
+                                    Trans_Channel = c.trans_channel,
+                                    Payer_Name = c.payer_name,
+                                    Receipt_No = c.receipt_no,
+                                    Payment_Trans_No = c.pay_trans_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    PaidAmount = (long)c.paid_amount,
+                                    Institution_ID = c.institution_id,
+                                    Payment_Type = c.payment_type,
+                                    Amount_Type = c.amount_type,
+                                    Currency_Code = c.currency_code,
+                                    Currency = c.currency_code,
+                                    Control_No = c.control_no,
+                                    Balance = c.amount30,
+                                    Payment_Desc = c.payment_desc,
+                                    Status = c.status,
+                                    Comp_Mas_Sno = (long)c.comp_mas_sno,
+                                    //Company_Name = c.company_name,
+                                    Cust_Mas_Sno = (long)c.cust_mas_sno,
+                                    //Customer_Name = c.customer_name,
+                                    Invoice_Sno = c.invoice_sno
+                                }).OrderByDescending(x => x.SNO).Take(5).ToList();
+                if (edetails != null && edetails.Count > 0)
+                    return edetails;
+                else
+                    return null;
+            }
+        }
+
+
+        public List<Payment> GetLatestTransByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.payment_details
+                                join m in context.company_master on c.comp_mas_sno equals m.comp_mas_sno
+                                where c.status == "Passed" && m.branch_sno == branch
+
+                                select new Payment
+                                {
+                                    Payment_SNo = c.payment_sno,
+                                    Payment_Date = c.payment_date,
+                                    Payment_Time = c.payment_time,
+                                    Trans_Channel = c.trans_channel,
+                                    Payer_Name = c.payer_name,
+                                    Receipt_No = c.receipt_no,
+                                    Payment_Trans_No = c.pay_trans_no,
+                                    Requested_Amount = (long)c.requested_amount,
+                                    PaidAmount = (long)c.paid_amount,
+                                    Institution_ID = c.institution_id,
+                                    Payment_Type = c.payment_type,
+                                    Amount_Type = c.amount_type,
+                                    Currency_Code = c.currency_code,
+                                    Currency= c.currency_code,
+                                    Control_No = c.control_no,
+                                    Comp_Mas_Sno = (long)c.comp_mas_sno,
+                                    Balance = c.amount30,
+                                    Payment_Desc = c.payment_desc,
+                                    Status = c.status,
+                                    //Company_Name = c.company_name,
+                                    Cust_Mas_Sno = (long)c.cust_mas_sno,
+                                    //Customer_Name = c.customer_name,
+                                    Invoice_Sno = c.invoice_sno
+                                }).OrderByDescending(x => x.Payment_SNo).Take(5).ToList();
+                if (edetails != null && edetails.Count > 0)
+                    return edetails;
+                else
+                    return null;
+            }
+        }
+
+        public List<Payment> GetLatestTransByCompany(long company)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var edetails = (from c in context.payment_details
+                                where c.status == "Passed" &&c.comp_mas_sno == company
+
+                                select new Payment
+                                {
                                     Payment_SNo = c.payment_sno,
                                     Payment_Date = c.payment_date,
                                     Payment_Time = c.payment_time,
@@ -768,15 +932,28 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Amount_Type = c.amount_type,
                                     Currency_Code = c.currency_code,
                                     Control_No = c.control_no,
+                                    Balance = c.amount30,
+                                    Payment_Desc = c.payment_desc,
+                                    Status = c.status,
                                     Comp_Mas_Sno = (long)c.comp_mas_sno,
-                                    Company_Name = b.company_name,
+                                    //Company_Name = c.company_name,
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
-                                    Customer_Name = cus.customer_name,
-                                    Invoice_Sno = c.invoice_sno,
-                                    Balance = (long)c.amount30,
-                                    Audit_Date = (DateTime)c.posted_date
-                                }).OrderByDescending(z => z.Audit_Date).ToList();
-                return payments ?? new List<Payment>();
+                                    //Customer_Name = c.customer_name,
+                                    Invoice_Sno = c.invoice_sno
+                                }).OrderByDescending(x => x.SNO).Take(5).ToList();
+                if (edetails != null && edetails.Count > 0)
+                    return edetails;
+                else
+                    return null;
+            }
+        }
+
+        public List<payment_details> GetLastestFiveTransaction()
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                return (from x in context.payment_details
+                        select x).OrderByDescending(x => x.sno).Take(5).ToList();
             }
         }
 

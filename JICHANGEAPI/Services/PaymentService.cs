@@ -1,5 +1,6 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Models;
+using JichangeApi.Models.form;
 using JichangeApi.Services.Companies;
 using System;
 using System.Collections.Generic;
@@ -24,6 +25,22 @@ namespace JichangeApi.Services
                 var cust = cancelRepModel.cust.ToString().ToLower() == "all" ? 0 : cancelRepModel.cust;
                 var result = payment.GetReport((long) cancelRepModel.compid, cancelRepModel.invno, cancelRepModel.stdate, cancelRepModel.enddate, (long) cust);
                 return result ?? new List<Payment>();
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+        public List<Payment> GetPaymentReport(InvoiceReportDetailsForm invoiceReportDetailsForm)
+        {
+            try
+            {
+                var results = new Payment().GetReport(invoiceReportDetailsForm.companyIds, invoiceReportDetailsForm.customerIds, invoiceReportDetailsForm.invoiceIds, invoiceReportDetailsForm.stdate, invoiceReportDetailsForm.enddate);
+                return results ?? new List<Payment>(); 
             }
             catch (ArgumentException ex)
             {

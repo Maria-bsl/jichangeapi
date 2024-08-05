@@ -248,7 +248,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
-        public int GetCustCount_C(long cno)
+        public long? GetCustCount_C(long cno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -275,6 +275,23 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+
+        public int GetAllBranchCustCount(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.customer_master
+                                where c.company_master.branch_sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+
         public CustomerMaster CustGetId(long sno, long cno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

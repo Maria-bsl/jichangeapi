@@ -106,6 +106,23 @@ namespace JichangeApi.Controllers
         }
 
         [HttpPost]
+        public HttpResponseMessage GetCompaniesByBranch(BranchRef branchRef)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<CompanyBankMaster> companies = invoiceRepService.GetAllCompaniesListByBranch((long) branchRef.branch);
+                return GetSuccessResponse(companies);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
+
+
+        [HttpPost]
         public HttpResponseMessage InvList(SingletonSno singletonSno)
         {
             List<string> modelStateErrors = this.ModelStateErrors();

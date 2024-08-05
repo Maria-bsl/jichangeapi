@@ -77,6 +77,21 @@ namespace JichangeApi.Services.Reports
                 throw new Exception(ex.Message);
             }
         }
+
+        public List<CompanyBankMaster> GetAllCompaniesListByBranch(long branchId)
+        {
+            try
+            {
+                List<CompanyBankMaster> companies = new CompanyBankMaster().GetCompany1_Branch_A(branchId);
+                return companies ?? new List<CompanyBankMaster>();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
         public List<INVOICE> GetInvoiceNumbersList(SingletonSno singletonSno)
         {
             try

@@ -506,7 +506,6 @@ namespace JichangeApi.Controllers
             {
                 var details = invoiceService.GetBriefPaymentDetail(singletonControl);
                 return SuccessJsonResponse(details);
-                //return GetSuccessResponse(details);
             }
             catch (ArgumentException ex)
             {
@@ -518,27 +517,6 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
         }
-
-        /*[HttpPost]
-        public HttpResponseMessage GetAmendReport(CancelRepModel cancelRepModel)
-        {
-            List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
-            try
-            {
-                List<InvoiceC> invoiceCs = invoiceService.GetAmendmentReports(cancelRepModel);
-                return GetSuccessResponse(invoiceCs);
-            }
-            catch (ArgumentException ex)
-            {
-                List<string> messages = new List<string> { ex.Message };
-                return this.GetCustomErrorMessageResponse(messages);
-            }
-            catch (Exception ex)
-            {
-                return GetServerErrorResponse(ex.Message);
-            }
-        }*/
 
         [HttpPost]
         public HttpResponseMessage GetAmendReport(InvoiceReportDetailsForm invoiceReportDetailsForm)
@@ -562,14 +540,14 @@ namespace JichangeApi.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage GetPaymentReport(CancelRepModel cancelRepModel)
+        public HttpResponseMessage GetPaymentReport(InvoiceReportDetailsForm invoiceReportDetailsForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<Payment> payments = paymentService.GetPaymentReport(cancelRepModel);
-                return GetSuccessResponse(payments);    
+                List<Payment> payments = paymentService.GetPaymentReport(invoiceReportDetailsForm);
+                return GetSuccessResponse(payments);
             }
             catch (ArgumentException ex)
             {
@@ -581,28 +559,6 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(ex.Message);
             }
         }
-
-        /*[HttpPost]
-        public HttpResponseMessage GetCancelReport(CancelRepModel cancelRepModel)
-        {
-            List<string> modelStateErrors = this.ModelStateErrors();
-            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
-            try
-            {
-                List<InvoiceC> payments = invoiceService.GetCancelledInvoicesReport(cancelRepModel);
-                return GetSuccessResponse(payments);
-
-            }
-            catch (ArgumentException ex)
-            {
-                List<string> messages = new List<string> { ex.Message };
-                return this.GetCustomErrorMessageResponse(messages);
-            }
-            catch (Exception ex)
-            {
-                return GetServerErrorResponse(ex.Message);
-            }
-        }*/
 
         [HttpPost]
         public HttpResponseMessage GetCancelReport(InvoiceReportDetailsForm invoiceReportDetailsForm)

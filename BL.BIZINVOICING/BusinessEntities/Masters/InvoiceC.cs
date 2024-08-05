@@ -390,21 +390,28 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
+                /*DateTime fdate = DateTime.Parse(stdate);
+                DateTime tdate = DateTime.Parse(enddate);*/
+                DateTime? fdate = null;
+                if (!string.IsNullOrEmpty(stdate)) fdate = DateTime.Parse(stdate);
+                DateTime? tdate = null;
+                if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
 
                 var result = from a in context.invoice_master
                              join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
                              join c in context.branch_name on b.branch_sno equals c.sno
+                             join d in context.customer_master on a.cust_mas_sno equals d.cust_mas_sno
                              where a.approval_status == "2"
-                                && a.invoice_date >= fdate
-                                && a.invoice_date <= tdate
+                                && (!fdate.HasValue || a.invoice_date >= fdate)
+                                && (!tdate.HasValue || a.invoice_date <= tdate)
                              group new { a, b, c } by new
                              {
                                  a.comp_mas_sno,
+                                 a.currency_code,
                                  b.company_name,
                                  b.branch_sno,
-                                 c.name
+                                 c.name,
+                                 d.customer_name,
                              } into grouped
                              select new InvoiceC
                              {
@@ -412,8 +419,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  vendor = grouped.Key.company_name,
                                  branch_sno = grouped.Key.branch_sno,
                                  branch = grouped.Key.name,
-                                 no_of_invoices = grouped.Count(x => x.a.inv_mas_sno != null),
-                                 invoice_amount = grouped.Sum(x => x.a.total_amount)
+                                 Currency_Code = grouped.Key.currency_code,
+                                 no_of_invoices = grouped.Count(x => x.a.inv_mas_sno > 0), /*grouped.Count(x => x.a.inv_mas_sno != null),*/
+                                 invoice_amount = grouped.Sum(x => x.a.total_amount),
+                                 Customer_Name = grouped.Key.customer_name,
                              };
 
                 var list = result.ToList();

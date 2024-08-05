@@ -230,6 +230,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AuditTrailController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\CompanyUsersController.cs" />
     <Compile Include="Controllers\ForgotController.cs" />
@@ -260,6 +261,7 @@
     <Compile Include="Models\CustomerDetailsForm.cs" />
     <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
+    <Compile Include="Models\form\AuditTrailForm.cs" />
     <Compile Include="Models\form\InvoiceDetailsForm.cs" />
     <Compile Include="Models\form\InvoiceReportDetailsForm.cs" />
     <Compile Include="Models\ItemListModel.cs" />
@@ -270,6 +272,7 @@
     <Compile Include="Models\SingletonVOtp.cs" />
     <Compile Include="Models\TransactBankModel.cs" />
     <Compile Include="Models\TransactInvoiceNo.cs" />
+    <Compile Include="Services\AuditTrailService.cs" />
     <Compile Include="Services\ForgetPasswordService.cs" />
     <Compile Include="Services\OTP.cs" />
     <Compile Include="Services\Reports\RepCompInvoiceService.cs" />

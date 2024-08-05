@@ -573,5 +573,22 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+
+    public long? GetVendorUserCounts(long company_sno)
+    {
+        using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+        {
+            var users = (from c in context.company_users
+                               where (c.comp_mas_sno == company_sno)
+                               select c);
+
+            if (users.Count() > 0)
+                return users.Count();
+            else
+                return 0;
+        }
     }
+
+    }
+
 }

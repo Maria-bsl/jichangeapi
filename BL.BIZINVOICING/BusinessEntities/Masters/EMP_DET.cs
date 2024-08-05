@@ -117,6 +117,19 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+        public int GetEmployeeUserCountByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.emp_detail
+                                where c.emp_status == "Active" && c.branch_Sno == branch
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
         public EMP_DET FPassword(String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

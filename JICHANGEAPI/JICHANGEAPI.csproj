@@ -266,6 +266,7 @@
     <Compile Include="Models\ItemListModelResponse.cs" />
     <Compile Include="Models\RequestSetupModel.cs" />
     <Compile Include="Models\SessionBModel.cs" />
+    <Compile Include="Models\SingletonBranch.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
     <Compile Include="Models\SingletonVOtp.cs" />
     <Compile Include="Models\TransactBankModel.cs" />

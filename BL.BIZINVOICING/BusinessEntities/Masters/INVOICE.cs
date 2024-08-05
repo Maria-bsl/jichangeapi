@@ -816,7 +816,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
-        public int GetCount()
+        public long? GetCount()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -829,7 +829,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
-        public int GetCount_C(long cno)
+        public long? GetCount_C(long cno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -855,6 +855,55 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
+        public long? GetExpired_VendorCount(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                where c.invoice_expired != null && c.invoice_expired <= DateTime.Now && c.comp_mas_sno == company_sno
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+        public long? GetDue_VendorCount(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
+                                where c.due_date >= DateTime.Now && (c.invoice_expired == null || c.invoice_expired > DateTime.Now)
+                                && c.comp_mas_sno == company_sno
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+
+
+        public long? GetPendingInvoice_VendorCount(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                where c.approval_status.Contains("Pending") && c.comp_mas_sno == company_sno
+                                select c).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails.Count;
+                else
+                    return 0;
+            }
+        }
+
+
+
 
         public int GetExpired_Count()
         {
@@ -1429,6 +1478,100 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     approval_date = approval_date
 
                                 }).OrderByDescending(a => a.Com_Mas_Sno).Take(5).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        public List<INVOICE> GetINVOICEMasterByVendor(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
+                                join cur in context.currency_master on c.currency_code equals cur.currency_code
+                                where c.comp_mas_sno == company_sno
+                                select new INVOICE
+                                {
+                                    Com_Mas_Sno = c.company_master.comp_mas_sno,
+                                    Company_Name = cmp.company_name,
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    Invoice_No = c.invoice_no,
+                                    Invoice_Date = c.invoice_date,
+                                    Due_Date = c.due_date,
+                                    Invoice_Expired_Date = c.invoice_expired,
+                                    Payment_Type = c.payment_type,
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Chus_Name = det.customer_name,
+                                    Currency_Code = c.currency_code,
+                                    Currency_Name = cur.currency_name,
+                                    Remarks = c.inv_remarks,
+                                    Customer_ID_Type = c.customer_id_type,
+                                    Customer_ID_No = c.customer_id_no,
+                                    Total = (decimal)c.total_amount,
+                                    Total_Vt = (decimal)c.vat_amount,
+                                    Total_Without_Vt = (decimal)c.total_without_vat,
+                                    //Vat_Amount= (long)c.vat_amount,
+                                    warrenty = c.warrenty,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    grand_count = (int)c.grand_count,
+                                    daily_count = (int)c.daily_count,
+                                    approval_status = c.approval_status,
+
+                                    approval_date = approval_date
+
+                                }).ToList();
+                if (adetails != null && adetails.Count > 0)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        public List<INVOICE> GetINVOICEMasterByBranch(long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
+                                join cur in context.currency_master on c.currency_code equals cur.currency_code
+                                where cmp.branch_sno == branch
+                                select new INVOICE
+                                {
+                                    Com_Mas_Sno = c.company_master.comp_mas_sno,
+                                    Company_Name = cmp.company_name,
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    Invoice_No = c.invoice_no,
+                                    Invoice_Date = c.invoice_date,
+                                    Due_Date = c.due_date,
+                                    Invoice_Expired_Date = c.invoice_expired,
+                                    Payment_Type = c.payment_type,
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Chus_Name = det.customer_name,
+                                    Currency_Code = c.currency_code,
+                                    Currency_Name = cur.currency_name,
+                                    Remarks = c.inv_remarks,
+                                    Customer_ID_Type = c.customer_id_type,
+                                    Customer_ID_No = c.customer_id_no,
+                                    Total = (decimal)c.total_amount,
+                                    Total_Vt = (decimal)c.vat_amount,
+                                    Total_Without_Vt = (decimal)c.total_without_vat,
+                                    //Vat_Amount= (long)c.vat_amount,
+                                    warrenty = c.warrenty,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    grand_count = (int)c.grand_count,
+                                    daily_count = (int)c.daily_count,
+                                    approval_status = c.approval_status,
+
+                                    approval_date = approval_date
+
+                                }).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else

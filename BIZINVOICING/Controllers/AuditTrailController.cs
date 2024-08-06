@@ -44,11 +44,11 @@ namespace BIZINVOICING.Controllers
                         {
 
                             ovalue = c.Oldvalues,
-                            nvalue = c.Newvalues*//*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*//*,
-                            atype = c.Audit_Type,
-                            colname = c.Columnsname,
-                            aby = c.AuditBy,
-                            adate = c.Audit_Date,
+                            nvalue = c.Newvalues//*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*//*,
+                            //atype = c.Audit_Type,
+                            //colname = c.Columnsname,
+                            //aby = c.AuditBy,
+                            //adate = c.Audit_Date,
 
                         });
                     }
@@ -89,11 +89,11 @@ namespace BIZINVOICING.Controllers
                         {
 
                             ovalue = c.Oldvalues,
-                            nvalue = c.Newvalues*//*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*//*,
-                            atype = c.Audit_Type,
-                            colname = c.Columnsname,
-                            aby = c.AuditBy,
-                            adate = c.Audit_Date,
+                            nvalue = c.Newvalues//*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*//*,
+                            //atype = c.Audit_Type,
+                            //colname = c.Columnsname,
+                            //aby = c.AuditBy,
+                            //adate = c.Audit_Date,
 
                         });
                     }

@@ -268,10 +268,10 @@ namespace JichangeApi.Controllers
             try
             {
                 
-                if (request.branch == null && request.compid == null)
+           /*     if (request.branch == null && request.compid == null)
                 {
                     return GetServerErrorResponse("Bad request: Value must be provided.");
-                }
+                }*/
                  if (request.compid.HasValue && !string.IsNullOrEmpty(request.compid.ToString()))
                     {
                         SingletonComp company = new SingletonComp();

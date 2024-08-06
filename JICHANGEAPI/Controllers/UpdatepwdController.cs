@@ -30,7 +30,7 @@ namespace JichangeApi.Controllers
             try
             {
 
-                if (updatePassModel.pwd == updatePassModel.confirmPwd)
+                if (updatePassModel.pwd != updatePassModel.confirmPwd)
                 {
                     return GetCustomErrorMessageResponse(new List<string> {"Password does not match."});
                 }

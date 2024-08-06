@@ -969,6 +969,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 List<Payment> payments = (from c in context.payment_details
                                           join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                           join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                          join d in context.company_master on det.comp_mas_sno equals d.comp_mas_sno
                                           where (companyIds.Contains(0) || companyIds.Contains((long) det.comp_mas_sno)) 
                                           && (customerIds.Contains(0) || customerIds.Contains((long) cus.cust_mas_sno))
                                           && (invoiceIds.Contains(0) || invoiceIds.Contains((long) det.inv_mas_sno))
@@ -990,7 +991,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Currency_Code = c.currency_code,
                                               Control_No = c.control_no,
                                               Comp_Mas_Sno = (long)c.comp_mas_sno,
-                                              //Company_Name = c.company_name,
+                                              Company_Name = d.company_name,
+                                              Balance = (long)c.amount30,
                                               Cust_Mas_Sno = (long)c.cust_mas_sno,
                                               Customer_Name = cus.customer_name,
                                               Invoice_Sno = c.invoice_sno,

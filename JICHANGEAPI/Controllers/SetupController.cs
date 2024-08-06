@@ -262,83 +262,24 @@ namespace JichangeApi.Controllers
 
 
         [HttpPost]
-        public HttpResponseMessage Overview([FromBody] RequestSetupModel request)
+        public HttpResponseMessage Overview(RequestSetupModel request)
         {
 
             try
             {
-                
-           /*     if (request.branch == null && request.compid == null)
+               /* int? nullableInt = null;
+                int value = nullableInt ?? 0;*/
+               /* var data = request.compid;
+                if (!data.HasValue)
+                {
+                    return GetServerErrorResponse("Bad request: Value must be provided.");
+                }
+                */
+                /*if (request.branch == null && request.compid == null)
                 {
                     return GetServerErrorResponse("Bad request: Value must be provided.");
                 }*/
-                 if (request.compid.HasValue && !string.IsNullOrEmpty(request.compid.ToString()))
-                    {
-                        SingletonComp company = new SingletonComp();
-                        var date = DateTime.Now;
-
-                        var ApprovedInvoices = innn.GetCount_C((long)company.compid);
-                        long count = 0;
-                        long pi = 0;
-                        var getCon = pay.GetControl_Dash_C((long)company.compid);
-                        if (getCon != null)
-                        {
-
-                            long amount = 0;
-                            long ramount = 0;
-                            for (int i = 0; i < getCon.Count; i++)
-                            {
-                                var getC = pay.GetPayment_Dash(getCon[i].Control_No);
-                                if (getC != null)
-                                {
-                                    amount = getC.Sum(x => x.Amount);
-                                    ramount = getC.Sum(x => x.Requested_Amount);
-                                    if (amount == ramount)
-                                    {
-                                        count++;
-                                    }
-                                }
-                            }
-                            pi = getCon.Count;
-                        }
-                        var getP = innn.GetINVOICEMas_D((long)company.compid);
-                        if (getP != null)
-                        {
-                            pi = getP.Count;
-                        }
-                        var dInv = innn.GetINVOICEMas_Pen((long)company.compid);
-                        if (dInv != null)
-                        {
-                            count = dInv.Count;
-                        }
-                        var pi1 = count;
-                        var di1 = count;
-                        var pa1 = pi;
-                        var ExpiredInvoices = innn.GetExpired_VendorCount((long)company.compid);
-                        var DueInvoices = innn.GetDue_VendorCount((long)company.compid);
-                        var PendingVendorInvoices = innn.GetPendingInvoice_VendorCount((long)company.compid);
-
-                        var VendorPayment = pay.GetVendor_PaidCounts((long)company.compid);
-                        var VendorUsers = cu.GetVendorUserCounts((long)company.compid);
-
-                        var VendorCustomerCount = cm.GetCustCount_C((long)company.compid);
-
-                        CompanyData id = new CompanyData();
-                        id.InvoiceItemlist = innn.GetControl_D((long)company.compid);
-
-                        var statistics = new List<ItemListModel>
-                        {
-                            new ItemListModel { Name = "Transaction", Statistic = VendorPayment.ToString() },
-                            new ItemListModel { Name = "Customer", Statistic = VendorCustomerCount.ToString() },
-                            new ItemListModel { Name = "Users", Statistic = VendorUsers.ToString() },
-                            new ItemListModel { Name = "Pendings", Statistic = PendingVendorInvoices.ToString() },
-                            new ItemListModel { Name = "Due", Statistic = DueInvoices.ToString() },
-                            new ItemListModel { Name = "Expired", Statistic = ExpiredInvoices.ToString() }
-                        };
-
-                        return GetSuccessResponse(statistics);
-
-                    }
+               
                
                 if (request.branch.HasValue && !string.IsNullOrEmpty(request.branch.ToString()))
                 {
@@ -535,7 +476,73 @@ namespace JichangeApi.Controllers
 
 
                 }
+                 /*else*/ if (request.compid.HasValue)
+                {
+                    SingletonComp company = new SingletonComp();
+                    var date = DateTime.Now;
 
+                    var ApprovedInvoices = innn.GetCount_C((long)company.compid);
+                    long count = 0;
+                    long pi = 0;
+                    var getCon = pay.GetControl_Dash_C((long)company.compid);
+                    if (getCon != null)
+                    {
+
+                        long amount = 0;
+                        long ramount = 0;
+                        for (int i = 0; i < getCon.Count; i++)
+                        {
+                            var getC = pay.GetPayment_Dash(getCon[i].Control_No);
+                            if (getC != null)
+                            {
+                                amount = getC.Sum(x => x.Amount);
+                                ramount = getC.Sum(x => x.Requested_Amount);
+                                if (amount == ramount)
+                                {
+                                    count++;
+                                }
+                            }
+                        }
+                        pi = getCon.Count;
+                    }
+                    var getP = innn.GetINVOICEMas_D((long)company.compid);
+                    if (getP != null)
+                    {
+                        pi = getP.Count;
+                    }
+                    var dInv = innn.GetINVOICEMas_Pen((long)company.compid);
+                    if (dInv != null)
+                    {
+                        count = dInv.Count;
+                    }
+                    var pi1 = count;
+                    var di1 = count;
+                    var pa1 = pi;
+                    var ExpiredInvoices = innn.GetExpired_VendorCount((long)company.compid);
+                    var DueInvoices = innn.GetDue_VendorCount((long)company.compid);
+                    var PendingVendorInvoices = innn.GetPendingInvoice_VendorCount((long)company.compid);
+
+                    var VendorPayment = pay.GetVendor_PaidCounts((long)company.compid);
+                    var VendorUsers = cu.GetVendorUserCounts((long)company.compid);
+
+                    var VendorCustomerCount = cm.GetCustCount_C((long)company.compid);
+
+                    CompanyData id = new CompanyData();
+                    id.InvoiceItemlist = innn.GetControl_D((long)company.compid);
+
+                    var statistics = new List<ItemListModel>
+                        {
+                            new ItemListModel { Name = "Transaction", Statistic = VendorPayment.ToString() },
+                            new ItemListModel { Name = "Customer", Statistic = VendorCustomerCount.ToString() },
+                            new ItemListModel { Name = "Users", Statistic = VendorUsers.ToString() },
+                            new ItemListModel { Name = "Pendings", Statistic = PendingVendorInvoices.ToString() },
+                            new ItemListModel { Name = "Due", Statistic = DueInvoices.ToString() },
+                            new ItemListModel { Name = "Expired", Statistic = ExpiredInvoices.ToString() }
+                        };
+
+                    return GetSuccessResponse(statistics);
+
+                }
 
                 return GetServerErrorResponse("Invalid request: Body parameter must be provided.");
 
@@ -763,7 +770,7 @@ namespace JichangeApi.Controllers
                 
                 int? nullableInt = null;
                 int value = nullableInt ?? 0;
-                if (request.branch == null && request.compid == null)
+                if (request.branch == value && request.compid == value)
                 {
                     return GetServerErrorResponse("Bad request: Value must be provided.");
                 }
@@ -1022,7 +1029,9 @@ namespace JichangeApi.Controllers
         {
             try
             {
-                if (request.branch == null && request.compid == null)
+                int? nullableInt = null;
+                int value = nullableInt ?? 0;
+                if (request.branch == value && request.compid == value)
                 {
                     return GetServerErrorResponse("Bad request: Value must be provided.");
                 }

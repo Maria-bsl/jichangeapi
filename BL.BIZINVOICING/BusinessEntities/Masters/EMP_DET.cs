@@ -89,7 +89,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
-        public bool Validatepwdbank(String name, long Userid)
+        public bool Validatepwdbank(string name, long Userid)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -663,9 +663,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                 if (UpdateContactInfo != null)
                 {
-                    UpdateContactInfo.sno = dep.SNO;
+                  /*  UpdateContactInfo.sno = dep.SNO;
                     UpdateContactInfo.q_name = dep.Q_Name;
-                    UpdateContactInfo.q_ans = dep.Q_Ans;
+                    UpdateContactInfo.q_ans = dep.Q_Ans;*/
                     UpdateContactInfo.pwd = dep.Password;
                     UpdateContactInfo.f_login = dep.F_Login;
                     UpdateContactInfo.posted_by = dep.AuditBy;

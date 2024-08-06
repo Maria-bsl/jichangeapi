@@ -255,6 +255,7 @@
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />
     <Compile Include="Controllers\SMSSETTINGController.cs" />
+    <Compile Include="Controllers\UpdatepwdController.cs" />
     <Compile Include="Enums\GeneralStates.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
     <Compile Include="Models\ChangePwdModel.cs" />
@@ -273,6 +274,7 @@
     <Compile Include="Models\SingletonVOtp.cs" />
     <Compile Include="Models\TransactBankModel.cs" />
     <Compile Include="Models\TransactInvoiceNo.cs" />
+    <Compile Include="Models\UpdatePassModel.cs" />
     <Compile Include="Services\AuditTrailService.cs" />
     <Compile Include="Services\ForgetPasswordService.cs" />
     <Compile Include="Services\OTP.cs" />

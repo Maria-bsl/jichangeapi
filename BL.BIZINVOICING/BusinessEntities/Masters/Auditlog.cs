@@ -95,6 +95,165 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public List<Auditlog> GetBloglist(DateTime frm, DateTime to, string tn, string ac, String name,long branch)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                if (ac == "All")
+                {
+                    var det = (from v in context.audit_log
+                               join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                               where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to
+                               && v.audit_type == v.audit_type
+                               select new Auditlog
+                               {
+                                   Audit_Sno = v.audit_sno,
+                                   Audit_Type = v.audit_type,
+                                   Table_Name = v.table_name,
+                                   Columnsname = v.column_name,
+                                   Oldvalues = v.old_value,
+                                   Newvalues = v.new_value,
+                                   AuditBy = dets.full_name,
+                                   Audit_Date = v.posted_date,
+                                   Audit_Time = v.posted_time,
+                               }).ToList();
+                    return det ?? new List<Auditlog>();
+                }
+                else
+                {
+                    var det = (from v in context.audit_log
+                               join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                               where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to
+                               && v.audit_type == ac
+                               select new Auditlog
+                               {
+                                   Audit_Sno = v.audit_sno,
+                                   Audit_Type = v.audit_type,
+                                   Table_Name = v.table_name,
+                                   Columnsname = v.column_name,
+                                   Oldvalues = v.old_value,
+                                   Newvalues = v.new_value,
+                                   AuditBy = dets.full_name,
+                                   Audit_Date = v.posted_date,
+                                   Audit_Time = v.posted_time,
+                               }).ToList();
+                    return det ?? new List<Auditlog>();
+                }
+                /*if (name == "Company")
+                {
+                    if (ac == "All")
+                    {
+                        var det = (from v in context.audit_log
+                                   join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                                   where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to 
+                                   && v.audit_type == v.audit_type
+                                   && dets.branch_Sno == branch
+                                   select new Auditlog
+                                   {
+                                       Audit_Sno = v.audit_sno,
+                                       Audit_Type = v.audit_type,
+                                       Table_Name = v.table_name,
+                                       Columnsname = v.column_name,
+                                       Oldvalues = v.old_value,
+                                       Newvalues = v.new_value,
+                                       AuditBy = dets.full_name,
+                                       Audit_Date = v.posted_date,
+                                       Audit_Time = v.posted_time,
+                                   }).ToList();
+
+                        if (det != null && det.Count > 0)
+                        {
+                            return det;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                    else
+                    {
+                        var det = (from v in context.audit_log
+                                   join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                                   where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to 
+                                   && v.audit_type == ac
+                                   && dets.branch_Sno == branch
+                                   select new Auditlog
+                                   {
+                                       Audit_Sno = v.audit_sno,
+                                       Audit_Type = v.audit_type,
+                                       Table_Name = v.table_name,
+                                       Columnsname = v.column_name,
+                                       Oldvalues = v.old_value,
+                                       Newvalues = v.new_value,
+                                       AuditBy = dets.full_name,
+                                       Audit_Date = v.posted_date,
+                                       Audit_Time = v.posted_time,
+                                   }).ToList();
+
+                        if (det != null && det.Count > 0)
+                        {
+                            return det;
+                        }
+                        else
+                        {
+                            return null;
+                        }
+                    }
+                }
+                else 
+                {
+                    if (ac == "All")
+                    {
+                        var det = (from v in context.audit_log
+                                   join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                                   where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to 
+                                   && v.audit_type == v.audit_type
+                                   && dets.branch_Sno == branch
+                                   select new Auditlog
+                                   {
+                                       Audit_Sno = v.audit_sno,
+                                       Audit_Type = v.audit_type,
+                                       Table_Name = v.table_name,
+                                       Columnsname = v.column_name,
+                                       Oldvalues = v.old_value,
+                                       Newvalues = v.new_value,
+                                       AuditBy = dets.full_name,
+                                       Audit_Date = v.posted_date,
+                                       Audit_Time = v.posted_time,
+                                   }).ToList();
+                        if (det != null && det.Count > 0)
+                            return det;
+                        else
+                            return null;
+                    }
+                    else
+                    {
+                        var det = (from v in context.audit_log
+                                   join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                                   where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to 
+                                   && v.audit_type == ac
+                                   && dets.branch_Sno == branch
+                                   select new Auditlog
+                                   {
+                                       Audit_Sno = v.audit_sno,
+                                       Audit_Type = v.audit_type,
+                                       Table_Name = v.table_name,
+                                       Columnsname = v.column_name,
+                                       Oldvalues = v.old_value,
+                                       Newvalues = v.new_value,
+                                       AuditBy = dets.full_name,
+                                       Audit_Date = v.posted_date,
+                                       Audit_Time = v.posted_time,
+                                   }).ToList();
+                        if (det != null && det.Count > 0)
+                            return det;
+                        else
+                            return null;
+                    }
+                }*/
+            }
+        }
         public List<Auditlog> GetBloglist(DateTime frm, DateTime to, string tn, string ac, String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

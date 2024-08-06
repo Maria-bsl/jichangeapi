@@ -729,7 +729,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //join reg in context.region_master on sc.region_id equals reg.region_sno
                                     //join dist in context.district_master on sc.district_sno equals dist.district_sno
                                     //join ward in context.ward_master on sc.ward_sno equals ward.ward_sno
-                                where sc.branch_sno == bsno//sc.status == "Pending" && 
+                                where bsno == 0 || sc.branch_sno == bsno//sc.status == "Pending" && 
                                 select new CompanyBankMaster
                                 {
                                     CompSno = sc.comp_mas_sno,
@@ -754,7 +754,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Checker = sc.checker
                                     //CompLogo=sc.comp_logo,
                                     //DirectorSig=sc.director_digital_sig,
-
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;

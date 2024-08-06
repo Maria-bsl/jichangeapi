@@ -44,7 +44,7 @@ namespace BIZINVOICING.Controllers
                         {
 
                             ovalue = c.Oldvalues,
-                            nvalue = c.Newvalues/*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*/,
+                            nvalue = c.Newvalues*//*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*//*,
                             atype = c.Audit_Type,
                             colname = c.Columnsname,
                             aby = c.AuditBy,
@@ -89,7 +89,7 @@ namespace BIZINVOICING.Controllers
                         {
 
                             ovalue = c.Oldvalues,
-                            nvalue = c.Newvalues/*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*/,
+                            nvalue = c.Newvalues*//*.Split(' ')[1] == "12:00:00" ? c.Newvalues: c.Newvalues*//*,
                             atype = c.Audit_Type,
                             colname = c.Columnsname,
                             aby = c.AuditBy,

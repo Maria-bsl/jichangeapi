@@ -19,9 +19,9 @@ namespace JichangeApi.Services.Companies
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
                 switch (desibraid.design.ToLower()) 
                 {
-                    case "administrator":
+                    /*case "administrator":
                         List<CompanyBankMaster> pendingCompanies = companyBankMaster.GetCompany1();
-                        return pendingCompanies != null ? pendingCompanies : new List<CompanyBankMaster>();
+                        return pendingCompanies != null ? pendingCompanies : new List<CompanyBankMaster>();*/
                     default:
                         List<CompanyBankMaster> branchCompanies = companyBankMaster.GetApprovedCompaniesByBranch(long.Parse(desibraid.braid.ToString()));
                         return branchCompanies != null ? branchCompanies : new List<CompanyBankMaster>();

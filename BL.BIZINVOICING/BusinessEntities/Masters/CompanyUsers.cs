@@ -394,7 +394,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     update.user_type = T.Usertype;
                     update.created_date = T.CreatedDate;
                     update.expiry_date = T.ExpiryDate;
-                    update.f_login = T.Flogin;
                     update.sno = T.Sno;
                    *//*update.q_name = T.Qname;
                     update.q_ans = T.Qans;*//*
@@ -414,6 +413,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                     update.username = T.Username;
                     update.user_type = T.Usertype;
+                    update.f_login = T.Flogin;
                     update.user_fullname = T.Fullname;
                     update.email_address = T.Email;
                     update.mobile_no = T.Mobile;
@@ -523,7 +523,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var UpdateContactInfo = (from u in context.company_users
-                                         where u.comp_users_sno == dep.CompuserSno && u.f_login == "false"
+                                         where u.comp_users_sno == dep.CompuserSno //&& u.f_login == "false"
                                          select u).FirstOrDefault();
 
                 if (UpdateContactInfo != null)
@@ -532,7 +532,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.q_name = dep.Qname;
                     UpdateContactInfo.q_ans = dep.Qans;*/
                     UpdateContactInfo.password = dep.Password;
-                    UpdateContactInfo.f_login = dep.Flogin;
+                    //UpdateContactInfo.f_login = dep.Flogin;
                     UpdateContactInfo.posted_by = dep.PostedBy;
                     UpdateContactInfo.posted_date = DateTime.Now;
                     context.SaveChanges();

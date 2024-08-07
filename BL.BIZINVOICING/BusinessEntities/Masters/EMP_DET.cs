@@ -658,7 +658,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var UpdateContactInfo = (from u in context.emp_detail
-                                         where u.emp_detail_id == dep.Detail_Id && u.f_login == "false"
+                                         where u.emp_detail_id == dep.Detail_Id //&& u.f_login == "false"
                                          select u).FirstOrDefault();
 
                 if (UpdateContactInfo != null)
@@ -667,13 +667,14 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     UpdateContactInfo.q_name = dep.Q_Name;
                     UpdateContactInfo.q_ans = dep.Q_Ans;*/
                     UpdateContactInfo.pwd = dep.Password;
-                    UpdateContactInfo.f_login = dep.F_Login;
+                    //UpdateContactInfo.f_login = dep.F_Login;
                     UpdateContactInfo.posted_by = dep.AuditBy;
                     UpdateContactInfo.posted_date = DateTime.Now;
                     context.SaveChanges();
                 }
             }
         }
+
         //public void UpdateOnlyflsg(EMP_DET dep)
         //{
         //    using (BIZINVOICEEntities context = new BIZINVOICEEntities())

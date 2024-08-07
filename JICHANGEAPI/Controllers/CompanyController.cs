@@ -368,6 +368,8 @@ public HttpResponseMessage GetApp()
                 return this.GetCustomErrorMessageResponse(messages);
             }
         }
+
+        [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage AddCompanyBankL(AddCompanyBankL addCompanyBankL)
         {

@@ -144,13 +144,13 @@ namespace JichangeApi.Controllers
 
         #region Get Signed Invoices
         [HttpPost]
-        public HttpResponseMessage GetSignedDetails(SingletonComp singletonComp)
+        public HttpResponseMessage GetSignedDetails(SingletonComp singletonComp,int? page, int? limit)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<INVOICE> invoices = invoiceService.GetSignedDetails(singletonComp);
+                List<INVOICE> invoices = invoiceService.GetSignedDetails(singletonComp,page, limit);
                 return GetSuccessResponse(invoices);
             }
             catch (Exception ex)

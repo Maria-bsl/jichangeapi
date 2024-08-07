@@ -215,12 +215,12 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoice(invoice);
             }
         }
-        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp)
+        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
         {
             try
             {
                 INVOICE invoice = new INVOICE();
-                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2").ToList();
+                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid,page,limit).Where(x => x.approval_status == "2").ToList();
                 return invoices != null ? invoices : new List<INVOICE>();
             }
             catch (Exception ex)

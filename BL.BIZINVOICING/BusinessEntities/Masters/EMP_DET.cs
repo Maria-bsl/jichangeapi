@@ -658,7 +658,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var UpdateContactInfo = (from u in context.emp_detail
-                                         where u.emp_detail_id == dep.Detail_Id //&& u.f_login == "false"
+                                         where u.emp_detail_id == dep.Detail_Id 
                                          select u).FirstOrDefault();
 
                 if (UpdateContactInfo != null)

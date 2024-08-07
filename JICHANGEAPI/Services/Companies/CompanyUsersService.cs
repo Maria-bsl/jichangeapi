@@ -107,7 +107,7 @@ namespace JichangeApi.Services.Companies
                 {
                     SmsService sms = new SmsService();
                     sms.SendWelcomeSmsToNewUser(user.Username, PasswordGeneratorUtil.DecodeFrom64(user.Password), user.Mobile);
-                    EmailUtils.SendActivationEmail(user.Email, user.Username, PasswordGeneratorUtil.DecodeFrom64(user.Password), user.Fullname);
+                    EmailUtils.SendActivationEmail(user.Email, user.Fullname, PasswordGeneratorUtil.DecodeFrom64(user.Password), user.Username);
                     AppendInsertAuditTrail(addedUser, user, (long)addCompanyUserForm.userid);
                     return EditCompanyUser(addedUser);
                 }

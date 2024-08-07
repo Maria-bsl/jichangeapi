@@ -15,6 +15,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public long Compmassno { get; set; }
         public String Username { get; set; }
         public String Loc_Name { get; set; }
+        public string pwd { get; set; }
         public String Password { get; set; }
         public String Descript { get; set; }
         public String  Usertype { get; set; }
@@ -162,6 +163,31 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         }
 
 
+        public CompanyUsers GetCompanyUsers(long company_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from sc in context.company_users
+                                where sc.comp_mas_sno == company_sno
+                                select new CompanyUsers
+                                {
+                                    CompuserSno = sc.comp_users_sno,
+                                    Username = sc.username,
+                                    //Descript=c.descript,
+                                    Password = sc.password,
+                                    Usertype = sc.user_type,
+                                    Fullname = sc.user_fullname,
+                                    Email = sc.email_address,
+                                    Mobile = sc.mobile_no,
+                                    Userpos = sc.user_position
+
+                                }).FirstOrDefault();
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
 
 
         public List<CompanyUsers> GetCompanyUsers()
@@ -321,7 +347,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                 var edetails = (from c in context.company_users
                                     join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
-                                where c.username == uname && c.password == pwd /*&& c.emp_status == "Active"*/ && c.log_status == null
+                                where c.username == uname && c.password == pwd && c1.status.ToLower().Equals("approved") && c.log_status == null
                                 select new CompanyUsers
                                 {
                                     Compmassno = (long)c.comp_mas_sno,
@@ -518,12 +544,13 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
+
         public void UpdateQuestionEMP(CompanyUsers dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var UpdateContactInfo = (from u in context.company_users
-                                         where u.comp_users_sno == dep.CompuserSno //&& u.f_login == "false"
+                                         where u.comp_users_sno == dep.CompuserSno 
                                          select u).FirstOrDefault();
 
                 if (UpdateContactInfo != null)
@@ -539,6 +566,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
+
+
         public bool Validateduplicateuser(String name)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

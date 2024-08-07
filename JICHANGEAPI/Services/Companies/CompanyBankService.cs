@@ -247,9 +247,11 @@ namespace JichangeApi.Services.Companies
                     companyBankMaster.AccountNo = addCompanyBankL.accno;
                     long detsno = companyBankMaster.AddBank(companyBankMaster);
                     AppendInsertAuditTrail(compsno, companyBankMaster, (long)addCompanyBankL.userid);
-                    string decodedPassword = Utilities.PasswordGeneratorUtil.DecodeFrom64(companyUsers.Password);
-                    new SmsService().SendWelcomeSmsToNewUser(addCompanyBankL.mob, decodedPassword, addCompanyBankL.mob);
-                    EmailUtils.SendActivationEmail(companyBankMaster.Email, companyUsers.Username, decodedPassword, companyUsers.Username);
+
+                    new SmsService().SendSuccessSmsToNewUser(addCompanyBankL.mob, addCompanyBankL.mob);
+                    EmailUtils.SendSuccessEmail(companyBankMaster.Email);
+
+                  
                     return compsno;
                 }
                 else
@@ -295,9 +297,10 @@ namespace JichangeApi.Services.Companies
                     CompanyUsers companyUsers = AddCompanyUser(companyBankMaster, addedCompany);
                     AddCompanyBankDetails(addedCompany, companyBankMaster, companyBankAddModel);
                     AppendInsertAuditTrail(addedCompany, companyBankMaster, (long)companyBankAddModel.userid);
-                    string decodedPassword = Utilities.PasswordGeneratorUtil.DecodeFrom64(companyUsers.Password);
-                    new SmsService().SendWelcomeSmsToNewUser(companyBankAddModel.mob, decodedPassword, companyBankAddModel.mob);
-                    EmailUtils.SendActivationEmail(companyBankMaster.Email, companyUsers.Username, decodedPassword, companyUsers.Username);
+
+                    new SmsService().SendSuccessSmsToNewUser(companyBankAddModel.mob, companyBankAddModel.mob);
+                    EmailUtils.SendSuccessEmail(companyBankMaster.Email);
+
                     return addedCompany;
                 }
                 else

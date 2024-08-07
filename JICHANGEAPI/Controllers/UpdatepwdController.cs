@@ -34,7 +34,7 @@ namespace JichangeApi.Controllers
                     return GetCustomErrorMessageResponse(new List<string> {"Password does not match."});
                 }
 
-                if (updatePassModel.type == "Emp")
+                if (updatePassModel.type == "EMP")
                 {
                     var check = Emp.Validatepwdbank(GetEncryptedData(updatePassModel.pwd), long.Parse(updatePassModel.userid.ToString()));
 
@@ -52,7 +52,7 @@ namespace JichangeApi.Controllers
                         return GetNotFoundResponse();
                     }
                 }
-                else
+                    else
                 {
                     var check1 = cu.Validatepwdbank(GetEncryptedData(updatePassModel.pwd), long.Parse(updatePassModel.userid.ToString()));
                     if (check1 == false)

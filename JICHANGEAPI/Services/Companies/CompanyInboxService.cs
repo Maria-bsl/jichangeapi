@@ -1,6 +1,8 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
+using JichangeApi.Controllers.smsservices;
 using JichangeApi.Enums;
 using JichangeApi.Models;
+using JichangeApi.Utilities;
 using QRCoder.Extensions;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,8 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyInboxService
     {
+
+        
         public List<CompanyBankMaster> GetDesingationBranchCompanyList(Desibraid desibraid)
         {
             try
@@ -23,7 +27,8 @@ namespace JichangeApi.Services.Companies
                         List<CompanyBankMaster> pendingCompanies = companyBankMaster.GetCompany1();
                         return pendingCompanies != null ? pendingCompanies : new List<CompanyBankMaster>();*/
                     default:
-                        List<CompanyBankMaster> branchCompanies = companyBankMaster.GetApprovedCompaniesByBranch(long.Parse(desibraid.braid.ToString()));
+                        long branch = long.Parse(desibraid.braid.ToString());
+                        List<CompanyBankMaster> branchCompanies = companyBankMaster.GetApprovedCompaniesByBranch(branch,"pending");
                         return branchCompanies != null ? branchCompanies : new List<CompanyBankMaster>();
                 }
             }
@@ -50,6 +55,13 @@ namespace JichangeApi.Services.Companies
                 companyDeposit.Reason = "Account Mapping Processed";
                 companyDeposit.AuditBy = addCompanyApproveModel.userid.ToString();
                 companyDeposit.AddAccount(companyDeposit);
+                var companydetails = new CompanyUsers().GetCompanyUsers(companyBankMaster.CompSno);
+
+                string decodedPassword = Utilities.PasswordGeneratorUtil.DecodeFrom64(companydetails.Password);
+                new SmsService().SendWelcomeSmsToNewUser(companydetails.Mobile, decodedPassword, companydetails.Mobile);
+                EmailUtils.SendActivationEmail(companydetails.Email, companydetails.Username, decodedPassword, companydetails.Username);
+
+
                 return companyDeposit;
             }
             catch(Exception ex)

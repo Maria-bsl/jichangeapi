@@ -1343,7 +1343,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
                 else
                 {
-                    var results = invoices.Skip(((int)page - 1) * (int) limit).Take((int) limit);
+                    var results = invoices.Skip((int)page).Take((int)limit); 
                     return results.ToList() ?? new List<INVOICE>();
                 }
             }

@@ -11,6 +11,6 @@ namespace JichangeApi.Models
         [Required(ErrorMessage ="Missing invoice number", AllowEmptyStrings =false)]
         public string sno { get; set; }
         [Required(ErrorMessage = "Missing code", AllowEmptyStrings = false)]
-        public long? code { get; set; }
+        public long? userid { get; set; }
     }
 }

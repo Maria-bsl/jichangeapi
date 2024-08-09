@@ -47,7 +47,7 @@ namespace JichangeApi.Utilities
                     //String body = data.Email_Text.Replace("}+cName+{", uname).Replace("}+uname+{", auname).Replace("}+pwd+{", pwd).Replace("}+actLink+{", url).Replace("{", "").Replace("}", "");
 
                     
-                    string body = data.Email_Text.Replace("}+ uname +{", username).Replace(" }+pwd+{", pwd).Replace("}+actLink +{", url).Replace("{", "").Replace("}", "");
+                    string body = data.Email_Text.Replace("}+uname+{", username).Replace(" }+pwd+{", pwd).Replace("}+actLink+{", url).Replace("{", "").Replace("}", "");
                     //m1(weburl);
                     mm.Body = body;
                     mm.IsBodyHtml = true;
@@ -76,7 +76,7 @@ namespace JichangeApi.Utilities
 
         }
 
-        public static void SendSuccessEmail(string email)
+        public static void SendSuccessEmail(string email, string company)
         {
             EMAIL em = new EMAIL();
             S_SMTP ss = new S_SMTP();
@@ -105,7 +105,7 @@ namespace JichangeApi.Utilities
                     string weburl = ConfigurationManager.AppSettings["MyWebUrl"];
                     string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
                    
-                    string body = string.Format("{0},You have Successfully registered on JICHANGE Portal, Your account is pending for approval.", email);
+                    string body = string.Format("{0},You have Successfully registered on JICHANGE Portal, {1} Your account is pending for approval. ", company, email);
                     mm.Body = body;
                     mm.IsBodyHtml = true;
                     if (string.IsNullOrEmpty(m.SMTP_UName))

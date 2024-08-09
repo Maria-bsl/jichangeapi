@@ -464,5 +464,6 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
+
     }
 }

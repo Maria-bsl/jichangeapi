@@ -710,6 +710,52 @@ namespace JichangeApi.Controllers
         }
 
 
+        [HttpPost]
+        public HttpResponseMessage AddDCode(SingletonAddCode singleton)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                /*List<Payment> getTransactionInvoiceDetails = invoiceService.AddDeliveryCode(singleton);
+                return GetSuccessResponse(getTransactionInvoiceDetails);*/
+
+                return GetNoDataFoundResponse();
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage ConfirmDel(SingletonDeliveryCode singleton)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                /*List<Payment> getTransactionInvoiceDetails = invoiceService.ConfirmDelivery(singleton);
+                return GetSuccessResponse(getTransactionInvoiceDetails);*/
+                return GetNoDataFoundResponse();
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
 
 
 

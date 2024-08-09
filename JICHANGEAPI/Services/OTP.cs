@@ -7,8 +7,6 @@ namespace JichangeApi.Services
 {
     public class OTP
     {
-
-
         public static string GenerateOTP(int a)
         {
             int length = a;

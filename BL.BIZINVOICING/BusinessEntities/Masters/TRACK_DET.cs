@@ -286,6 +286,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (UpdateContactInfo != null)
                 {
                     UpdateContactInfo.logout_time = DateTime.Now;
+                    
                     context.SaveChanges();
                 }
                 //int count = context.institution_registration.Count(p => p.insti_reg_sno == name);

@@ -69,7 +69,7 @@ namespace JichangeApi.Services.Reports
             try
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
-                var result = companyBankMaster.GetApprovedCompaniesByBranch(branchId);
+                var result = companyBankMaster.GetApprovedCompaniesByBranch(branchId,"approved");
                 return result != null ? result : new List<CompanyBankMaster>();
             }
             catch (Exception ex)

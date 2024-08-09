@@ -36,6 +36,7 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(Ex.Message);
             }
         }
+
         [HttpPost]
         public HttpResponseMessage EditCompanyUserss(SingletonSno Sno)
         {
@@ -52,6 +53,7 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(Ex.Message);
             }
         }
+
         [HttpPost]
         public HttpResponseMessage AddCompanyUser(AddCompanyUserForm addCompanyUserForm)
         {
@@ -94,6 +96,7 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(Ex.Message);
             }
         }
+
         [HttpPost]
         public HttpResponseMessage Checkdupliacte(String name)
         {
@@ -107,6 +110,7 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(Ex.Message);
             }
         }
+
         [HttpPost]
         public HttpResponseMessage DeleteCompanyUser(DeleteCompanyUserForm deleteCompanyUserForm)
         {

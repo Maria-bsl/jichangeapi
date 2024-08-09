@@ -560,16 +560,17 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public List<CompanyBankMaster> GetApprovedCompaniesByBranch(long bsno)
+        public List<CompanyBankMaster> GetApprovedCompaniesByBranch(long bsno,string status)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var adetails = (from sc in context.company_master
                                     //join reg in context.region_master on sc.region_id equals reg.region_sno
+                                    join bank in context.company_bank_details on sc.comp_mas_sno equals bank.comp_mas_sno
                                     //join dist in context.district_master on sc.district_sno equals dist.district_sno
                                     //join ward in context.ward_master on sc.ward_sno equals ward.ward_sno
                                     //where sc.status.ToLower().Equals("approved") && sc.branch_sno ==  0 ? sc.branch_sno == sc.branch_sno : sc.branch_sno == bsno
-                                where ((!string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals("approved")) && (bsno == 0 || sc.branch_sno == bsno)) //bsno == 0 ? true : sc.branch_sno == bsno
+                                where ((!string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals(status.ToLower())) && (bsno == 0 || sc.branch_sno == bsno)) //bsno == 0 ? true : sc.branch_sno == bsno
                                 select new CompanyBankMaster
                                 {
                                     CompSno = sc.comp_mas_sno,
@@ -577,6 +578,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     PostBox = sc.pobox_no,
                                     Address = sc.physical_address,
                                     RegId = (long)sc.region_id,
+                                    AccountNo = bank.account_no,
+
                                     //RegName=reg.region_name,
                                     DistSno = (long)sc.district_sno,
                                     Branch_Sno = sc.branch_sno,
@@ -731,6 +734,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     //join reg in context.region_master on sc.region_id equals reg.region_sno
                                     //join dist in context.district_master on sc.district_sno equals dist.district_sno
                                     //join ward in context.ward_master on sc.ward_sno equals ward.ward_sno
+                                    join bank in context.company_bank_details on sc.comp_mas_sno equals bank.comp_mas_sno
                                 where bsno == 0 || sc.branch_sno == bsno//sc.status == "Pending" && 
                                 select new CompanyBankMaster
                                 {
@@ -740,6 +744,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Address = sc.physical_address,
                                     RegId = (long)sc.region_id,
                                     //RegName=reg.region_name,
+                                    AccountNo = bank.account_no,
                                     DistSno = (long)sc.district_sno,
                                     Branch_Sno = sc.branch_sno,
                                     //DistName=dist.district_name,

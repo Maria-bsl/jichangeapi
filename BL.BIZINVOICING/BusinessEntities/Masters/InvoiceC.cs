@@ -250,6 +250,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 List<InvoiceC> invoices = (from c in context.invoice_ammendment
                                            join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
                                            join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                           join d in context.company_master on det.comp_mas_sno equals d.comp_mas_sno
                                            where (det.approval_status != "Cancel")
                                            && (companyIds.Contains(0) || companyIds.Contains((long) c.comp_mas_sno))
                                            && (customerIds.Contains(0) || customerIds.Contains((long)c.cust_mas_sno))
@@ -269,6 +270,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                Invoice_Expired_Date = c.expired_date,
                                                Currency_Code = det.currency_code,
                                                Due_Date = (DateTime)c.due_date,
+                                               Cmpny_Name = d.company_name
 
                                            }).OrderByDescending(z => z.Audit_Date).ToList();
                 return invoices != null ? invoices : new List<InvoiceC>();

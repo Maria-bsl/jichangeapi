@@ -42,18 +42,32 @@ namespace JichangeApi.Services.Companies
         {
             try
             {
-                CompanyBankMaster companyBankMaster = new CompanyBankMaster();
-                companyBankMaster.CompSno = addCompanyApproveModel.compsno;
-                companyBankMaster.Postedby = addCompanyApproveModel.userid.ToString();
-                companyBankMaster.Status = GeneralStates.StatusType.Approved.ToString();
-                companyBankMaster.Sus_Ac_SNo = addCompanyApproveModel.suspenseAccSno;
-                companyBankMaster.UpdateCompanysta(companyBankMaster);
+                CompanyBankMaster companyBankMaster = new CompanyBankMaster
+                {
+                    CompSno = addCompanyApproveModel.compsno,
+                    Postedby = addCompanyApproveModel.userid.ToString(),
+                    Status = GeneralStates.StatusType.Approved.ToString(),
+                    Sus_Ac_SNo = addCompanyApproveModel.suspenseAccSno
+                };
+                var checkSuspenseAccount = companyBankMaster.Check_Suspense_Acc(companyBankMaster.Sus_Ac_SNo);
 
-                C_Deposit companyDeposit = new C_Deposit();
-                companyDeposit.Deposit_Acc_No = addCompanyApproveModel.depositAccNo;
-                companyDeposit.Comp_Mas_Sno = addCompanyApproveModel.compsno;
-                companyDeposit.Reason = "Account Mapping Processed";
-                companyDeposit.AuditBy = addCompanyApproveModel.userid.ToString();
+                if(checkSuspenseAccount != null)
+                {
+                    companyBankMaster.UpdateCompanysta(companyBankMaster);
+
+                }
+                else
+                {
+                    companyBankMaster.UpdateCompanystatus(companyBankMaster);
+                }
+               
+                C_Deposit companyDeposit = new C_Deposit
+                {
+                    Deposit_Acc_No = addCompanyApproveModel.depositAccNo,
+                    Comp_Mas_Sno = addCompanyApproveModel.compsno,
+                    Reason = "Account Mapping Processed",
+                    AuditBy = addCompanyApproveModel.userid.ToString()
+                };
                 companyDeposit.AddAccount(companyDeposit);
                 var companydetails = new CompanyUsers().GetCompanyUsers(companyBankMaster.CompSno);
 

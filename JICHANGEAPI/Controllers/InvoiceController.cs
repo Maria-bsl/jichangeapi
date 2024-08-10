@@ -20,6 +20,7 @@ using System.Text;
 using JichangeApi.Services;
 using JichangeApi.Services.setup;
 using JichangeApi.Services.Companies;
+using JichangeApi.Controllers.smsservices;
 
 namespace JichangeApi.Controllers
 {
@@ -497,6 +498,7 @@ namespace JichangeApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage GetControl(SingletonControl singletonControl)
         {
@@ -720,8 +722,25 @@ namespace JichangeApi.Controllers
                 /*List<Payment> getTransactionInvoiceDetails = invoiceService.AddDeliveryCode(singleton);
                 return GetSuccessResponse(getTransactionInvoiceDetails);*/
 
-                return GetNoDataFoundResponse();
+                INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails(singleton.sno);
+                INVOICE invoice = new INVOICE();
 
+                if (getinvoicedata != null)
+                {
+                    var otp = Services.OTP.GenerateOTP(6);
+
+                    invoice.Inv_Mas_Sno = getinvoicedata.Inv_Mas_Sno;
+                    invoice.AuditBy = singleton.userid.ToString();
+                    invoice.delivery_status = "Pending";
+                    invoice.grand_count = (int?)Int64.Parse(otp);
+                    invoice.UpdateInvoiceDeliveryCode(invoice);
+                    SmsService sms = new SmsService();
+                    sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);
+
+                    return GetSuccessResponse(invoice);
+
+                }
+                    return GetNoDataFoundResponse();
             }
             catch (ArgumentException ex)
             {
@@ -743,6 +762,23 @@ namespace JichangeApi.Controllers
             {
                 /*List<Payment> getTransactionInvoiceDetails = invoiceService.ConfirmDelivery(singleton);
                 return GetSuccessResponse(getTransactionInvoiceDetails);*/
+
+                INVOICE getinvoicedata = new INVOICE().GetInvoiceCodeDetails((long)singleton.code);
+                INVOICE invoice = new INVOICE();
+
+                if (getinvoicedata != null)
+                {
+
+                    invoice.Inv_Mas_Sno = getinvoicedata.Inv_Mas_Sno;
+                    invoice.delivery_status = "Delivered";
+                    invoice.UpdateInvoiceStatusDeliveryCode(invoice);
+
+                   /* SmsService sms = new SmsService();
+                    sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);*/
+
+                    return GetSuccessResponse(invoice);
+
+                }
                 return GetNoDataFoundResponse();
 
             }

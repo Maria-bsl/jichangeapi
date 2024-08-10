@@ -249,7 +249,7 @@ namespace JichangeApi.Services.Companies
                     AppendInsertAuditTrail(compsno, companyBankMaster, (long)addCompanyBankL.userid);
 
                     new SmsService().SendSuccessSmsToNewUser(addCompanyBankL.mob, addCompanyBankL.mob);
-                    EmailUtils.SendSuccessEmail(companyBankMaster.Email);
+                    EmailUtils.SendSuccessEmail(companyBankMaster.Email, companyBankMaster.CompName);
 
                   
                     return compsno;
@@ -299,7 +299,7 @@ namespace JichangeApi.Services.Companies
                     AppendInsertAuditTrail(addedCompany, companyBankMaster, (long)companyBankAddModel.userid);
 
                     new SmsService().SendSuccessSmsToNewUser(companyBankAddModel.mob, companyBankAddModel.mob);
-                    EmailUtils.SendSuccessEmail(companyBankMaster.Email);
+                    EmailUtils.SendSuccessEmail(companyBankMaster.Email, companyBankMaster.CompName);
 
                     return addedCompany;
                 }

@@ -968,9 +968,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             {
                 //var found = context.company_master.Find(sno);
                 var found = (from c in context.company_master
-                             join reg in context.region_master on c.region_id equals reg.region_sno
+                             /*join reg in context.region_master on c.region_id equals reg.region_sno
                              join dist in context.district_master on c.district_sno equals dist.district_sno
-                             join ward in context.ward_master on c.ward_sno equals ward.ward_sno
+                             join ward in context.ward_master on c.ward_sno equals ward.ward_sno*/
                              join d in context.company_bank_details on sno equals d.comp_mas_sno
                              where c.comp_mas_sno == sno
                              select new CompanyBankMaster
@@ -981,7 +981,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  PostBox = c.pobox_no,
                                  Address = c.physical_address,
                                  RegId = (long)c.region_id,
-                                 RegName = reg.region_name,
+                                 //RegName = c.reg,
                                  DistSno = (long)c.district_sno,
                                  WardSno = (long)c.ward_sno,
                                  TinNo = c.tin_no,

@@ -114,8 +114,8 @@ namespace JichangeApi.Services
         private InvoiceC AddInvoiceAmendment(AddAmendForm addAmendForm,InvoicePDfData invoicePDfData)
         {
             InvoiceC invoiceC = new InvoiceC();
-            bool isSameAmount = Decimal.Parse(addAmendForm.total) == invoicePDfData.Item_Total_Amount;
-            if (isSameAmount) throw new ArgumentException("Modify items for amendments");
+            //bool isSameAmount = Decimal.Parse(addAmendForm.total) == invoicePDfData.Item_Total_Amount;
+            //if (isSameAmount) throw new ArgumentException("Modify items for amendments");
             invoiceC.Control_No = invoicePDfData.Control_No;
             invoiceC.Com_Mas_Sno = invoicePDfData.CompanySno;
             invoiceC.Cust_Mas_No = invoicePDfData.Cust_Sno;

@@ -970,9 +970,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                           join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                           join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                           join d in context.company_master on det.comp_mas_sno equals d.comp_mas_sno
-                                          where (companyIds.Contains(0) || companyIds.Contains((long) det.comp_mas_sno)) 
+                                          where ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
+                                          && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
+                                          && ((invoiceIds.Contains(0)) || (invoiceIds.Contains(det.inv_mas_sno)))
+                                          && (!fromDate.HasValue || fromDate <= c.posted_date)
+                                          && (!toDate.HasValue || toDate >= c.posted_date)
+                                          /*where (companyIds.Contains(0) || companyIds.Contains((long) det.comp_mas_sno)) 
                                           && (customerIds.Contains(0) || customerIds.Contains((long) cus.cust_mas_sno))
-                                          && (invoiceIds.Contains(0) || invoiceIds.Contains((long) det.inv_mas_sno))
+                                          && (invoiceIds.Contains(0) || invoiceIds.Contains((long) det.inv_mas_sno))*/
+                                          where true
                                           select new Payment
                                           {
                                               SNO = c.sno,
@@ -995,7 +1001,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Balance = (long)c.amount30,
                                               Cust_Mas_Sno = (long)c.cust_mas_sno,
                                               Customer_Name = cus.customer_name,
-                                              Invoice_Sno = c.invoice_sno,
+                                              Invoice_Sno = det.invoice_no, //c.invoice_sno,
                                               Audit_Date = (DateTime)c.posted_date
                                           }).OrderByDescending(e => e.Audit_Date).ToList();
                 return payments ?? new List<Payment>();

@@ -263,13 +263,16 @@
     <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
     <Compile Include="Models\form\AuditTrailForm.cs" />
+    <Compile Include="Models\form\CustomersDetailsForm.cs" />
     <Compile Include="Models\form\InvoiceDetailsForm.cs" />
     <Compile Include="Models\form\InvoiceReportDetailsForm.cs" />
     <Compile Include="Models\ItemListModel.cs" />
     <Compile Include="Models\ItemListModelResponse.cs" />
     <Compile Include="Models\RequestSetupModel.cs" />
     <Compile Include="Models\SessionBModel.cs" />
+    <Compile Include="Models\SingletonAddCode.cs" />
     <Compile Include="Models\SingletonBranch.cs" />
+    <Compile Include="Models\SingletonDeliveryCode.cs" />
     <Compile Include="Models\SingletonMobile.cs" />
     <Compile Include="Models\SingletonVOtp.cs" />
     <Compile Include="Models\TransactBankModel.cs" />

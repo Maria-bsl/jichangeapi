@@ -29,22 +29,6 @@ namespace JichangeApi.Controllers.smsservices
 
         #region for SMS Text template
 
-        private string GetInviteeWelcomeText(string inviteeName, string qrCodeIdentity, int? card_size)
-        {
-            var textInfo = new CultureInfo("en-US", false).TextInfo;
-
-            var invitee_name = textInfo.ToTitleCase(inviteeName.ToLower());
-
-            var qr_code = qrCodeIdentity.Substring(9);
-
-            if (card_size == 1)
-            {
-                return string.Format($"ID: {qr_code}. {invitee_name} karibu katika sherehe ya harusi ya Hilary & Erminia, 2/7/2022, KKKT mbezi Beach & Sea Breeze Hall.");
-            }
-
-            return string.Format($"ID: {qr_code}. {invitee_name} karibuni katika sherehe ya harusi ya Hilary & Erminia, 2/7/2022, KKKT mbezi Beach & Sea Breeze Hall.");
-        }
-
         private static bool IsLocalMobileNumber(string mobile_number)
         {
             return mobile_number.Replace("+", "").Substring(0, 3) == "255";
@@ -96,6 +80,18 @@ namespace JichangeApi.Controllers.smsservices
         #endregion
 
         #region SMS methods
+        public void SendSuccessSmsToNewUser(string username,string mobile_no)
+        {
+            if (username != null)
+            {
+                var mobileNumber = mobile_no;
+                var formattedMessageBody = FormatWelcomeMessageBody(username);
+
+                SendSMSAction(mobileNumber, formattedMessageBody);
+
+            }
+
+        }
 
         public void SendWelcomeSmsToNewUser(string username, string password, string mobile_no)
         {
@@ -126,14 +122,40 @@ namespace JichangeApi.Controllers.smsservices
 
         }
 
+        public void SendCustomerDeliveryCode(string Mobile_Number, string otp)
+        {
+            if (Mobile_Number != null)
+            {
+                var mobileNumber = Mobile_Number;
+
+                var formattedMessageBody = FormatOtpDeliveryMessageBody(Mobile_Number, otp);
+
+                SendSMSAction(mobileNumber, formattedMessageBody);
+
+            }
+
+        }
+
+        private static string FormatWelcomeMessageBody(string customerName)
+        {
+            return string.Format("{0}, you have successfully been registered on JICHANGE system, your account is Pending for approval and the URL is " + ConfigurationManager.AppSettings["MyWebUrl"] + "",  customerName);
+        }
+
         private static string FormatMessageBody(string customerName, string password)
         {
-            return string.Format("{0}, you have successfully registered on JICHANGE system, the URL is " + ConfigurationManager.AppSettings["MyWebUrl"] + "  and Your password is  {1}", customerName, password);
+            return string.Format("{0}, Your account have successfully been approved on JICHANGE system, the URL is " + ConfigurationManager.AppSettings["MyWebUrl"] + "  and Your password is  {1}", customerName, password);
         }
 
         private static string FormatOtpMessageBody(string cust_number, string code)
         {
-            return string.Format("{0},JICHANGE verification code is  {1}", cust_number, code);
+            return string.Format("{0},JICHANGE verification code is {1}", cust_number, code);
+        }
+
+
+        private static string FormatOtpDeliveryMessageBody(string cust_number, string code)
+        {
+            var linkurl = "";
+            return string.Format("{0},JICHANGE Confirmation code for delivery is {1}, verify through this link: {2}", cust_number, code, linkurl);
         }
 
         private void SendSMSAction(string visitorMobileNumber, string SmsBody)

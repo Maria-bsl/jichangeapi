@@ -756,7 +756,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                                 select new Payment
                                 {
-                                    SNO = c.sno,
+                                   
                                     Payment_SNo = c.payment_sno,
                                     Payment_Date = c.payment_date,
                                     Payment_Time = c.payment_time,
@@ -818,7 +818,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     //Customer_Name = c.customer_name,
                                     Invoice_Sno = c.invoice_sno
-                                }).OrderByDescending(x => x.Payment_SNo).Take(5).ToList();
+                                }).ToList();
                 if (edetails != null && edetails.Count > 0)
                     return edetails;
                 else
@@ -836,6 +836,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                                 select new Payment
                                 {
+                                    SNO = c.sno,
                                     Payment_SNo = c.payment_sno,
                                     Payment_Date = c.payment_date,
                                     Payment_Time = c.payment_time,
@@ -901,7 +902,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     //Customer_Name = c.customer_name,
                                     Invoice_Sno = c.invoice_sno
-                                }).OrderByDescending(x => x.Payment_SNo).Take(5).ToList();
+                                }).OrderByDescending(x => x.Payment_SNo).ToList();
                 if (edetails != null && edetails.Count > 0)
                     return edetails;
                 else
@@ -914,10 +915,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var edetails = (from c in context.payment_details
-                                where c.status == "Passed" &&c.comp_mas_sno == company
+                                where c.status == "Passed" && c.comp_mas_sno == company
 
                                 select new Payment
                                 {
+                                    SNO = c.sno,
                                     Payment_SNo = c.payment_sno,
                                     Payment_Date = c.payment_date,
                                     Payment_Time = c.payment_time,
@@ -940,7 +942,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     //Customer_Name = c.customer_name,
                                     Invoice_Sno = c.invoice_sno
-                                }).OrderByDescending(x => x.SNO).Take(5).ToList();
+                                }).OrderByDescending(x => x.SNO).ToList();
                 if (edetails != null && edetails.Count > 0)
                     return edetails;
                 else
@@ -957,6 +959,56 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public List<Payment> GetReport(List<long> companyIds,List<long> customerIds,List<long> invoiceIds,string startDate,string endDate)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(startDate)) fromDate = DateTime.Parse(startDate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(endDate)) toDate = DateTime.Parse(endDate);
+
+                List<Payment> payments = (from c in context.payment_details
+                                          join det in context.invoice_master on c.invoice_sno equals det.invoice_no
+                                          join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                          join d in context.company_master on det.comp_mas_sno equals d.comp_mas_sno
+                                          where ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
+                                          && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
+                                          && ((invoiceIds.Contains(0)) || (invoiceIds.Contains(det.inv_mas_sno)))
+                                          && (!fromDate.HasValue || fromDate <= c.posted_date)
+                                          && (!toDate.HasValue || toDate >= c.posted_date)
+                                          /*where (companyIds.Contains(0) || companyIds.Contains((long) det.comp_mas_sno)) 
+                                          && (customerIds.Contains(0) || customerIds.Contains((long) cus.cust_mas_sno))
+                                          && (invoiceIds.Contains(0) || invoiceIds.Contains((long) det.inv_mas_sno))*/
+                                          where true
+                                          select new Payment
+                                          {
+                                              SNO = c.sno,
+                                              Payment_SNo = c.payment_sno,
+                                              Payment_Date = c.payment_date,
+                                              Payment_Time = c.payment_time,
+                                              Trans_Channel = c.trans_channel,
+                                              Payer_Name = c.payer_name,
+                                              Receipt_No = c.receipt_no,
+                                              Payment_Trans_No = c.pay_trans_no,
+                                              Requested_Amount = (long)c.requested_amount,
+                                              PaidAmount = (long)c.paid_amount,
+                                              Institution_ID = c.institution_id,
+                                              Payment_Type = c.payment_type,
+                                              Amount_Type = c.amount_type,
+                                              Currency_Code = c.currency_code,
+                                              Control_No = c.control_no,
+                                              Comp_Mas_Sno = (long)c.comp_mas_sno,
+                                              Company_Name = d.company_name,
+                                              Balance = (long)c.amount30,
+                                              Cust_Mas_Sno = (long)c.cust_mas_sno,
+                                              Customer_Name = cus.customer_name,
+                                              Invoice_Sno = det.invoice_no, //c.invoice_sno,
+                                              Audit_Date = (DateTime)c.posted_date
+                                          }).OrderByDescending(e => e.Audit_Date).ToList();
+                return payments ?? new List<Payment>();
+            }
+        }
 
 
         public List<Payment> GetReport(long Comp, string inv, string stdate, string enddate, long cust)
@@ -1178,8 +1230,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }*/
             }
         }
-
-
 
         public List<Payment> GetTransactionsReports(long Compid, string stdate, string enddate, long cust, long branch)
         {

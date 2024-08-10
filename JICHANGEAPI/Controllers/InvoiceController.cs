@@ -20,6 +20,7 @@ using System.Text;
 using JichangeApi.Services;
 using JichangeApi.Services.setup;
 using JichangeApi.Services.Companies;
+using JichangeApi.Controllers.smsservices;
 
 namespace JichangeApi.Controllers
 {
@@ -144,13 +145,13 @@ namespace JichangeApi.Controllers
 
         #region Get Signed Invoices
         [HttpPost]
-        public HttpResponseMessage GetSignedDetails(SingletonComp singletonComp)
+        public HttpResponseMessage GetSignedDetails(SingletonComp singletonComp,int? page = null, int? limit = null)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<INVOICE> invoices = invoiceService.GetSignedDetails(singletonComp);
+                List<INVOICE> invoices = invoiceService.GetSignedDetails(singletonComp,page, limit);
                 return GetSuccessResponse(invoices);
             }
             catch (Exception ex)
@@ -497,6 +498,7 @@ namespace JichangeApi.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage GetControl(SingletonControl singletonControl)
         {
@@ -710,6 +712,86 @@ namespace JichangeApi.Controllers
         }
 
 
+        [HttpPost]
+        public HttpResponseMessage AddDCode(SingletonAddCode singleton)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                /*List<Payment> getTransactionInvoiceDetails = invoiceService.AddDeliveryCode(singleton);
+                return GetSuccessResponse(getTransactionInvoiceDetails);*/
+
+                INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails(singleton.sno);
+                INVOICE invoice = new INVOICE();
+
+                if (getinvoicedata != null)
+                {
+                    var otp = Services.OTP.GenerateOTP(6);
+
+                    invoice.Inv_Mas_Sno = getinvoicedata.Inv_Mas_Sno;
+                    invoice.AuditBy = singleton.userid.ToString();
+                    invoice.delivery_status = "Pending";
+                    invoice.grand_count = (int?)Int64.Parse(otp);
+                    invoice.UpdateInvoiceDeliveryCode(invoice);
+                    SmsService sms = new SmsService();
+                    sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);
+
+                    return GetSuccessResponse(invoice);
+
+                }
+                    return GetNoDataFoundResponse();
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage ConfirmDel(SingletonDeliveryCode singleton)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                /*List<Payment> getTransactionInvoiceDetails = invoiceService.ConfirmDelivery(singleton);
+                return GetSuccessResponse(getTransactionInvoiceDetails);*/
+
+                INVOICE getinvoicedata = new INVOICE().GetInvoiceCodeDetails((long)singleton.code);
+                INVOICE invoice = new INVOICE();
+
+                if (getinvoicedata != null)
+                {
+
+                    invoice.Inv_Mas_Sno = getinvoicedata.Inv_Mas_Sno;
+                    invoice.delivery_status = "Delivered";
+                    invoice.UpdateInvoiceStatusDeliveryCode(invoice);
+
+                   /* SmsService sms = new SmsService();
+                    sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);*/
+
+                    return GetSuccessResponse(invoice);
+
+                }
+                return GetNoDataFoundResponse();
+
+            }
+            catch (ArgumentException ex)
+            {
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
 
 
 

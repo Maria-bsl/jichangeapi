@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BL.BIZINVOICING.BusinessEntities.Common;
 using DaL.BIZINVOICING.EDMX;
+using iTextSharp.text;
 
 namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
@@ -67,6 +68,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public string Control_No { get; set; }
         public String Reason { get; set; }
         public string Status { get; set; }
+        public string Mobile { get;  set; }
         #endregion Properties
 
 
@@ -1293,20 +1295,20 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public List<INVOICE> GetINVOICEMas(long cno) 
+        public List<INVOICE> GetINVOICEMas(long cno, int? page,int? limit)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var adetails = (from c in context.invoice_master
-                                join det in context.customer_master  on c.cust_mas_sno equals det.cust_mas_sno
+                var invoices = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
                                 where c.comp_mas_sno == cno
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
-                                    Company_Name= cmp.company_name,
-                                    Inv_Mas_Sno =c.inv_mas_sno,
+                                    Company_Name = cmp.company_name,
+                                    Inv_Mas_Sno = c.inv_mas_sno,
                                     Invoice_No = c.invoice_no,
                                     Invoice_Date = c.invoice_date,
                                     Due_Date = c.due_date,
@@ -1315,26 +1317,83 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Chus_Mas_No = (long)c.cust_mas_sno,
                                     Chus_Name = det.customer_name,
                                     Currency_Code = c.currency_code,
-                                    Currency_Name= cur.currency_name,
+                                    Currency_Name = cur.currency_name,
                                     Control_No = c.control_no,
-                                    Remarks= c.inv_remarks,
+                                    Remarks = c.inv_remarks,
                                     Customer_ID_Type = c.customer_id_type,
                                     Customer_ID_No = c.customer_id_no,
                                     Total = (decimal)c.total_amount,
                                     Total_Vt = (decimal)c.vat_amount,
                                     Total_Without_Vt = (decimal)c.total_without_vat,
                                     //Vat_Amount = (long)c.vat_amount,
-                                    warrenty= c.warrenty,
+                                    warrenty = c.warrenty,
                                     AuditBy = c.posted_by,
-                                    p_date = (DateTime) c.posted_date,
-                                    goods_status=c.goods_status,
-                                    delivery_status=c.delivery_status,
-                                    grand_count= (int)c.grand_count,
+                                    p_date = (DateTime)c.posted_date,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    grand_count = (int)c.grand_count,
+                                    daily_count = (int)c.daily_count,
+                                    approval_status = c.approval_status,
+                                    approval_date = approval_date,
+
+                                }).OrderBy(i => i.p_date);
+
+                if (page == null && limit == null)
+                {
+                    return invoices.ToList() ?? new List<INVOICE>();
+                }
+                else
+                {
+                    var results = invoices.Skip(((int)page - 1) * (int) limit).Take((int)limit); 
+                    return results.ToList() ?? new List<INVOICE>();
+                }
+            }
+        }
+
+        public List<INVOICE> GetINVOICEMas(long cno) 
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
+                                join cur in context.currency_master on c.currency_code equals cur.currency_code
+                                where c.comp_mas_sno == cno
+                                select new INVOICE
+                                {
+                                    Com_Mas_Sno = c.company_master.comp_mas_sno,
+                                    Company_Name = cmp.company_name,
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    Invoice_No = c.invoice_no,
+                                    Invoice_Date = c.invoice_date,
+                                    Due_Date = c.due_date,
+                                    Invoice_Expired_Date = c.invoice_expired,
+                                    Payment_Type = c.payment_type,
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Chus_Name = det.customer_name,
+                                    Currency_Code = c.currency_code,
+                                    Currency_Name = cur.currency_name,
+                                    Control_No = c.control_no,
+                                    Remarks = c.inv_remarks,
+                                    Customer_ID_Type = c.customer_id_type,
+                                    Customer_ID_No = c.customer_id_no,
+                                    Total = (decimal)c.total_amount,
+                                    Total_Vt = (decimal)c.vat_amount,
+                                    Total_Without_Vt = (decimal)c.total_without_vat,
+                                    //Vat_Amount = (long)c.vat_amount,
+                                    warrenty = c.warrenty,
+                                    AuditBy = c.posted_by,
+                                    p_date = (DateTime)c.posted_date,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    grand_count = (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
                                     approval_date = approval_date,
 
                                 }).ToList();
+
+
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else
@@ -2085,6 +2144,46 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
+
+        public void UpdateInvoiceStatusDeliveryCode(INVOICE dep)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var UpdateContactInfo = (from u in context.invoice_master
+                                         where u.inv_mas_sno == dep.Inv_Mas_Sno
+                                         select u).FirstOrDefault();
+
+                if (UpdateContactInfo != null)
+                {
+                    UpdateContactInfo.posted_date = DateTime.Now;
+                    UpdateContactInfo.delivery_status = dep.delivery_status;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+
+        public void UpdateInvoiceDeliveryCode(INVOICE dep)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var UpdateContactInfo = (from u in context.invoice_master
+                                         where u.inv_mas_sno == dep.Inv_Mas_Sno
+                                         select u).FirstOrDefault();
+
+                if (UpdateContactInfo != null)
+                {
+                    UpdateContactInfo.posted_by = dep.AuditBy;
+                    UpdateContactInfo.posted_date = DateTime.Now;
+                    UpdateContactInfo.delivery_status = dep.delivery_status;
+                    UpdateContactInfo.grand_count = dep.grand_count;
+                    context.SaveChanges();
+                }
+            }
+        }
+
+
+
         public void UpdateInvoice(INVOICE dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -2105,6 +2204,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
+
         public void UpdateInvoiceDate(INVOICE dep)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -2317,6 +2417,67 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+
+        public INVOICE GetInvoiceCDetails(string invoice_sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                where c.invoice_no == invoice_sno && c.delivery_status != "Delivered"
+                                select new INVOICE
+                                {
+                                    Chus_Name = cus.customer_name,
+                                    Control_No = c.control_no,
+                                    goods_status = c.goods_status,
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Inv_Mas_Sno = (long)c.inv_mas_sno,
+                                    Total = (decimal)c.total_amount,
+                                    Mobile = cus.mobile_no,
+                                    AuditBy = c.posted_by,
+                                    Audit_Date = (DateTime)c.posted_date
+                                }).FirstOrDefault();
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        
+
+
+        public INVOICE GetInvoiceCodeDetails(long code)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
+                                where c.grand_count == code && c.delivery_status == "Pending"
+                                select new INVOICE
+                                {
+                                    Chus_Name = cus.customer_name,
+                                    Control_No = c.control_no,
+                                    grand_count = (int)c.grand_count,
+                                    delivery_status = c.delivery_status,
+                                    approval_status = c.approval_status,
+                                    goods_status = c.goods_status,
+                                    Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Inv_Mas_Sno = (long)c.inv_mas_sno,
+                                    Total = (decimal)c.total_amount,
+                                    Mobile = cus.mobile_no,
+                                    AuditBy = c.posted_by,
+                                    Audit_Date = (DateTime)c.posted_date
+                                }).FirstOrDefault();
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+
 
         public List<INVOICE> GetInvoiceNos_(long Sno)
         {

@@ -49,6 +49,38 @@ namespace JichangeApi.Services
             trackDet.AddTrack(trackDet);
             return trackDet;
         }
+      /*  private JsonObject GetBankSuperUserProfile(AuthLog empData)
+        {
+            string role = "Bank";
+            string jwtToken = Authentication.GenerateJWTAuthetication(empData.User_name, role);
+            //string validUserName = Authentication.ValidateToken(jwtToken);
+            //string admin1 = "Bank";
+            string userType = "BNk";
+            string Username = empData.User_name;
+            string UfullName = empData.First_Name + " " + empData.Last_name;
+            string flogin = empData.F_Login;
+            long userid = empData.Detail_Id;
+            DESIGNATION designation = new DESIGNATION().Editdesignation(empData.Desg_Id);
+            string desig = designation.Desg_Name;
+            long branchId = empData.Branch_Sno != null ? (long)empData.Branch_Sno : 0;
+            TRACK_DET tracDet = TrackBankUserDetails(empData);
+            JsonObject response = new JsonObject
+            {
+                { "Token", jwtToken },
+                { "check", "Emp" },
+                { "flogin", flogin },
+                { "desig", desig },
+                { "braid", branchId },
+                { "Usno", userid },
+                { "userType", userType },
+                { "role", role },
+                { "Uname", Username },
+                { "fulname", UfullName},
+                { "userid", userid},
+            };
+            return response;
+        }*/
+
         private JsonObject GetBankUserProfile(EMP_DET empData)
         {
             string role = "Bank";
@@ -92,7 +124,7 @@ namespace JichangeApi.Services
             string flogin = company.Flogin;
             string UfullName = company.Username;
             var d = companyBankService.GetCompanyDetail(InstID);
-            long braid = (long) d.Branch_Sno; //company.Sno;
+            long braid = d.Branch_Sno ?? 0; //company.Sno;
             long Usno = company.CompuserSno;
             TRACK_DET trackDet = TrackCompanyUserDetails(company);
             JsonObject response = new JsonObject
@@ -128,6 +160,13 @@ namespace JichangeApi.Services
                 {
                     return GetCompanyUserProfile(company);
                 }
+
+                if(authLog.userName.ToLower().Equals("super") && password.Equals(""))
+                {
+                    //return GetBankUserProfile(authLog);
+                    return GetBankUserProfile(empdata);
+                }
+
                 JsonObject response = new JsonObject 
                 {
                     { "check", "Username or password is incorrect" }

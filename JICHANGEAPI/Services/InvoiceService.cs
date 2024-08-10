@@ -25,7 +25,7 @@ namespace JichangeApi.Services
             CompanyBankMaster companyBankMaster = new CompanyBankMaster();
             INVOICE invoice = new INVOICE();
             CompanyBankMaster approvedCompany = companyBankMaster.GetCompany_MStatus((long)invoiceForm.compid);
-            if (!approvedCompany.Checker.ToLower().ToString().Equals("no"))
+            if (approvedCompany != null && !approvedCompany.Checker.ToLower().ToString().Equals("no"))
             {
              
                 invoice.Control_No = "";
@@ -114,8 +114,8 @@ namespace JichangeApi.Services
         private InvoiceC AddInvoiceAmendment(AddAmendForm addAmendForm,InvoicePDfData invoicePDfData)
         {
             InvoiceC invoiceC = new InvoiceC();
-            bool isSameAmount = Decimal.Parse(addAmendForm.total) == invoicePDfData.Item_Total_Amount;
-            if (isSameAmount) throw new ArgumentException("Modify items for amendments");
+            //bool isSameAmount = Decimal.Parse(addAmendForm.total) == invoicePDfData.Item_Total_Amount;
+            //if (isSameAmount) throw new ArgumentException("Modify items for amendments");
             invoiceC.Control_No = invoicePDfData.Control_No;
             invoiceC.Com_Mas_Sno = invoicePDfData.CompanySno;
             invoiceC.Cust_Mas_No = invoicePDfData.Cust_Sno;
@@ -205,7 +205,7 @@ namespace JichangeApi.Services
         {
             invoice.Inv_Mas_Sno = invoiceSno;
             CompanyBankMaster approvedCompany = new CompanyBankMaster().GetCompany_MStatus(invoice.Com_Mas_Sno);
-            if (approvedCompany.Checker.ToLower().ToString().Equals("no"))
+            if (approvedCompany != null && approvedCompany.Checker.ToLower().ToString().Equals("no"))
             {
                 string control = invoice.Inv_Mas_Sno.ToString().PadLeft(8, '0');
                 invoice.goods_status = "Approved";
@@ -215,12 +215,12 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoice(invoice);
             }
         }
-        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp)
+        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
         {
             try
             {
                 INVOICE invoice = new INVOICE();
-                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2").ToList();
+                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid,page,limit).Where(x => x.approval_status == "2").ToList();
                 return invoices != null ? invoices : new List<INVOICE>();
             }
             catch (Exception ex)
@@ -691,6 +691,9 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
+        
+        //Add delivery code and Confirm Del
 
         
 

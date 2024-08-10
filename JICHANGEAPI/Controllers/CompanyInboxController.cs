@@ -47,7 +47,7 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
-                return GetServerErrorResponse(Ex.Message);
+                return GetServerErrorResponse(Ex.ToString());
             }
         }
     }

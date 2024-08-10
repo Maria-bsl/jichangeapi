@@ -396,8 +396,5 @@ public HttpResponseMessage GetApp()
                 return this.GetCustomErrorMessageResponse(messages);
             }
         }
-
-
-
     }
 }

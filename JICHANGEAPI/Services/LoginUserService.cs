@@ -124,7 +124,7 @@ namespace JichangeApi.Services
             string flogin = company.Flogin;
             string UfullName = company.Username;
             var d = companyBankService.GetCompanyDetail(InstID);
-            long braid = (long) d.Branch_Sno; //company.Sno;
+            long braid = d.Branch_Sno ?? 0; //company.Sno;
             long Usno = company.CompuserSno;
             TRACK_DET trackDet = TrackCompanyUserDetails(company);
             JsonObject response = new JsonObject

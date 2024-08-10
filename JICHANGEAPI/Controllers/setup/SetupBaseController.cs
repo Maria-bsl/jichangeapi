@@ -50,7 +50,7 @@ namespace JichangeApi.Controllers.setup
         }
         protected HttpResponseMessage GetNotFoundResponse()
         {
-            return Request.CreateResponse(new { response = new List<string>(), message = new List<string> { SetupBaseController.NOT_FOUND_MESSAGE } });
+            return Request.CreateResponse(new { response = 0, message = new List<string> { SetupBaseController.NOT_FOUND_MESSAGE } });
         }
         protected HttpResponseMessage GetCustomErrorMessageResponse(List<string> messages)
         {

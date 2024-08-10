@@ -263,6 +263,7 @@
     <Compile Include="Models\form\AddCancelInvoiceForm.cs" />
     <Compile Include="Models\form\AddSmtpModel.cs" />
     <Compile Include="Models\form\AuditTrailForm.cs" />
+    <Compile Include="Models\form\CustomersDetailsForm.cs" />
     <Compile Include="Models\form\InvoiceDetailsForm.cs" />
     <Compile Include="Models\form\InvoiceReportDetailsForm.cs" />
     <Compile Include="Models\ItemListModel.cs" />

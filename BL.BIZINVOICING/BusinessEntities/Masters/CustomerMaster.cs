@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using DaL.BIZINVOICING.EDMX;
@@ -449,6 +450,40 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
 
         }
+        public List<CustomerMaster> GetCustomerReportByCompanies(List<long> companies)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var customers = (from c in context.customer_master
+                                 join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
+                                 where ((companies.Contains(0)) || (companies.Contains((long)c.comp_mas_sno)))
+                                 //&& ((regions.Contains(0)) || (regions.Contains((long)c.region_id)))
+                                 //&& ((districts.Contains(0)) || (districts.Contains((long)c.district_sno)))
+                                 select new CustomerMaster
+                                 {
+                                     Cust_Sno = c.cust_mas_sno,
+                                     Cust_Name = c.customer_name,
+                                     PostboxNo = c.pobox_no,
+                                     Address = c.physical_address,
+                                     Region_SNO = c.region_id,
+                                     //Region_Name=a.region_name,
+                                     DistSno = c.district_sno,
+                                     //DistName = b.district_name,
+                                     WardSno = c.ward_sno,
+                                     //WardName=d.ward_name,
+                                     TinNo = c.tin_no,
+                                     VatNo = c.vat_no,
+                                     ConPerson = c.contact_person,
+                                     Email = c.email_address,
+                                     Phone = c.mobile_no,
+                                     Checker = c.checker,
+                                     Posted_Date = (DateTime)c.posted_date
+                                 }).OrderByDescending(z => z.Cust_Sno).ToList();
+                return customers ?? new List<CustomerMaster>();
+            }
+        }
+
+
         public List<CustomerMaster> CustGetrep(long Comp,long reg, long dist)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -477,7 +512,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     ConPerson = c.contact_person,
                                     Email = c.email_address,
                                     Phone = c.mobile_no,
-                                    Checker = c.checker
+                                    Checker = c.checker,
+                                    Posted_Date = (DateTime) c.posted_date
                                 }).OrderByDescending(z => z.Cust_Sno).ToList();
                     return list;
                 }

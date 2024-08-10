@@ -1,6 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
 using JichangeApi.Models;
+using JichangeApi.Models.form;
 using JichangeApi.Services;
 using JichangeApi.Services.Reports;
 using System;
@@ -20,13 +21,27 @@ namespace JichangeApi.Controllers
         private readonly RepCustomerService repCustomerService = new RepCustomerService();
 
         [HttpPost]
-        public HttpResponseMessage GetcustDetReport(SingletonGetCustDetRepModel form)
+        /*public HttpResponseMessage GetcustDetReport(SingletonGetCustDetRepModel form)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
                 List<CustomerMaster> customers = repCustomerService.GetCustomerDetailsReport((long)form.Comp, (long)form.reg, (long)form.dist);
+                return GetSuccessResponse(customers);
+            }
+            catch (Exception ex)
+            {
+                return GetServerErrorResponse(ex.Message);
+            }
+        }*/
+        public HttpResponseMessage GetcustDetReport(CustomersDetailsForm form)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<CustomerMaster> customers = repCustomerService.GetCustomerDetailsReport(form.vendors);
                 return GetSuccessResponse(customers);
             }
             catch (Exception ex)

@@ -1,6 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Models.form;
 using JichangeApi.Services;
+using JichangeApi.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -154,7 +155,9 @@ namespace JichangeApi.Controllers.smsservices
 
         private static string FormatOtpDeliveryMessageBody(string cust_number, string code)
         {
-            var linkurl = "";
+
+            string encrypt = PasswordGeneratorUtil.GetEncryptedData(cust_number);// MjU1NzUzNjg4ODY3
+            var linkurl = ConfigurationManager.AppSettings["MyCodeUrl"] + encrypt;
             return string.Format("{0},JICHANGE Confirmation code for delivery is {1}, verify through this link: {2}", cust_number, code, linkurl);
         }
 

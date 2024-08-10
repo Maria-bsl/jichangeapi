@@ -69,6 +69,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public String Reason { get; set; }
         public string Status { get; set; }
         public string Mobile { get;  set; }
+        public string Email { get; set; }
         #endregion Properties
 
 
@@ -2419,19 +2420,20 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         }
 
 
-        public INVOICE GetInvoiceCDetails(string invoice_sno)
+        public INVOICE GetInvoiceCDetails(long invoice_sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var adetails = (from c in context.invoice_master
                                 join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                where c.invoice_no == invoice_sno && c.delivery_status != "Delivered"
+                                where c.inv_mas_sno == invoice_sno //&& c.delivery_status != "Delivered"
                                 select new INVOICE
                                 {
                                     Chus_Name = cus.customer_name,
                                     Control_No = c.control_no,
                                     goods_status = c.goods_status,
                                     Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Email = cus.email_address,
                                     Inv_Mas_Sno = (long)c.inv_mas_sno,
                                     Total = (decimal)c.total_amount,
                                     Mobile = cus.mobile_no,

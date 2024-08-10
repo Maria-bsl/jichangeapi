@@ -9,8 +9,8 @@ namespace JichangeApi.Models
     public class SingletonAddCode
     {
         [Required(ErrorMessage ="Missing invoice number", AllowEmptyStrings =false)]
-        public string sno { get; set; }
-        [Required(ErrorMessage = "Missing code", AllowEmptyStrings = false)]
-        public long? userid { get; set; }
+        public long? sno { get; set; }
+        [Required(ErrorMessage = "Missing user id", AllowEmptyStrings = false)]
+        public long? user_id { get; set; }
     }
 }

@@ -21,6 +21,7 @@ using JichangeApi.Services;
 using JichangeApi.Services.setup;
 using JichangeApi.Services.Companies;
 using JichangeApi.Controllers.smsservices;
+using JichangeApi.Utilities;
 
 namespace JichangeApi.Controllers
 {
@@ -722,7 +723,7 @@ namespace JichangeApi.Controllers
                 /*List<Payment> getTransactionInvoiceDetails = invoiceService.AddDeliveryCode(singleton);
                 return GetSuccessResponse(getTransactionInvoiceDetails);*/
 
-                INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails(singleton.sno);
+                INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails((long)singleton.sno);
                 INVOICE invoice = new INVOICE();
 
                 if (getinvoicedata != null)
@@ -730,13 +731,14 @@ namespace JichangeApi.Controllers
                     var otp = Services.OTP.GenerateOTP(6);
 
                     invoice.Inv_Mas_Sno = getinvoicedata.Inv_Mas_Sno;
-                    invoice.AuditBy = singleton.userid.ToString();
+                    invoice.AuditBy = singleton.user_id.ToString();
                     invoice.delivery_status = "Pending";
                     invoice.grand_count = (int?)Int64.Parse(otp);
                     invoice.UpdateInvoiceDeliveryCode(invoice);
                     SmsService sms = new SmsService();
                     sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);
-
+                    if(!string.IsNullOrEmpty(getinvoicedata.Email)) { EmailUtils.SendCustomerDeliveryCodeEmail(getinvoicedata.Email , otp, getinvoicedata.Mobile);}
+                    
                     return GetSuccessResponse(invoice);
 
                 }
@@ -773,8 +775,6 @@ namespace JichangeApi.Controllers
                     invoice.delivery_status = "Delivered";
                     invoice.UpdateInvoiceStatusDeliveryCode(invoice);
 
-                   /* SmsService sms = new SmsService();
-                    sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);*/
 
                     return GetSuccessResponse(invoice);
 

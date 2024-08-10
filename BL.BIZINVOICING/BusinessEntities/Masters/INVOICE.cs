@@ -1303,7 +1303,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
-                                where c.comp_mas_sno == cno
+                                where !(from d in context.payment_details
+                                        select d.invoice_sno).Contains(c.invoice_no) && 
+                                (c.comp_mas_sno == cno)
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
@@ -1358,7 +1360,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
-                                where c.comp_mas_sno == cno
+                                where !(from d in context.payment_details
+                                        select d.invoice_sno).Contains(c.invoice_no)
+                                && (c.comp_mas_sno == cno)
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,

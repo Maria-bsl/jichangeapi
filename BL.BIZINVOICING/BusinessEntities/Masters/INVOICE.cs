@@ -69,6 +69,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public String Reason { get; set; }
         public string Status { get; set; }
         public string Mobile { get;  set; }
+        public string Email { get; set; }
         #endregion Properties
 
 
@@ -186,7 +187,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.invoice_master
-                                  where c.invoice_no == no && c.comp_mas_sno == cno //&& c.comp_mas_sno == comno
+                                  where (!string.IsNullOrEmpty(c.approval_status) && !c.approval_status.ToLower().Equals("cancel")) 
+                                  && (c.invoice_no == no) 
+                                  && (c.comp_mas_sno == cno) //&& c.comp_mas_sno == comno
                                   select c);
                 if (validation.Count() > 0)
                     return true;
@@ -1238,7 +1241,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     grand_count = (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
-                                    approval_date = (DateTime) c.approval_date
+                                    approval_date = (DateTime) c.approval_date,
+                                    AuditBy = c.posted_by
 
                                 }).FirstOrDefault();
                 if (adetails != null)
@@ -1304,8 +1308,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
                                 where !(from d in context.payment_details
-                                        select d.invoice_sno).Contains(c.invoice_no) && 
-                                (c.comp_mas_sno == cno)
+                                        select d.invoice_sno).Contains(c.invoice_no) &&
+                                        ((string.IsNullOrEmpty(c.delivery_status)) || (!c.delivery_status.ToLower().Equals("delivered"))) 
+                                        && (c.comp_mas_sno == cno)
+                                        && c.invoice_expired >= DateTime.Today
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,
@@ -2423,19 +2429,21 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         }
 
 
-        public INVOICE GetInvoiceCDetails(string invoice_sno)
+        public INVOICE GetInvoiceCDetails(long invoice_sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var adetails = (from c in context.invoice_master
                                 join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                where c.invoice_no == invoice_sno && c.delivery_status != "Delivered"
+                                where c.inv_mas_sno == invoice_sno //&& c.delivery_status != "Delivered"
                                 select new INVOICE
                                 {
                                     Chus_Name = cus.customer_name,
+                                    Com_Mas_Sno = (long) c.comp_mas_sno,
                                     Control_No = c.control_no,
                                     goods_status = c.goods_status,
                                     Chus_Mas_No = (long)c.cust_mas_sno,
+                                    Email = cus.email_address,
                                     Inv_Mas_Sno = (long)c.inv_mas_sno,
                                     Total = (decimal)c.total_amount,
                                     Mobile = cus.mobile_no,

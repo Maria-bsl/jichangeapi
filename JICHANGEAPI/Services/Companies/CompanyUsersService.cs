@@ -66,6 +66,10 @@ namespace JichangeApi.Services.Companies
             {
                 return new List<string> { "User already exist" };
             }
+            else if (user.IsExistMobileNumber(user.Mobile))
+            {
+                return new List<string> { "Mobile number already exist" };
+            }
             else { return new List<string>(); }
         }
         public List<CompanyUsers> GetCompanyUsersList(SingletonComp singletonComp)

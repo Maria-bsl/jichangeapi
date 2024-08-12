@@ -496,6 +496,28 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
+        public CompanyBankMaster Check_Suspense_Acc(long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.suspense_account
+                                where c.sus_acc_status == "Active"
+                                && c.sus_acc_sno == sno
+                                select new CompanyBankMaster
+                                {
+                                    Sus_Ac_SNo = (long)c.sus_acc_sno,
+                                    Sus_Acc = c.sus_acc_no
+
+
+                                }).FirstOrDefault();
+                if (adetails != null )
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
         public List<CompanyBankMaster> GetCompany1()
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -1131,6 +1153,27 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 }
             }
         }
+
+        public void UpdateCompanystatus(CompanyBankMaster T)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var update = (from u in context.company_master
+                              where u.comp_mas_sno == T.CompSno && u.status == "Pending"
+                              select u).FirstOrDefault();
+                if (update != null)
+                {
+                    update.status = T.Status;
+                    //update.sus_acc_sno = T.Sus_Ac_SNo;
+                    //update.comp_logo = T.CompLogo;
+                    //update.director_digital_sig = T.DirectorSig;
+                    update.posted_by = T.Postedby;
+                    update.posted_date = DateTime.Now;
+                    context.SaveChanges();
+                }
+            }
+        }
+
         public void UpdateCompanysta(CompanyBankMaster T)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())

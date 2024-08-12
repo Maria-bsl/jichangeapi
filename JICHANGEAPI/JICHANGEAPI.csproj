@@ -279,6 +279,7 @@
     <Compile Include="Models\TransactInvoiceNo.cs" />
     <Compile Include="Models\UpdatePassModel.cs" />
     <Compile Include="Services\AuditTrailService.cs" />
+    <Compile Include="Services\DashboardServices.cs" />
     <Compile Include="Services\ForgetPasswordService.cs" />
     <Compile Include="Services\OTP.cs" />
     <Compile Include="Services\Reports\RepCompInvoiceService.cs" />

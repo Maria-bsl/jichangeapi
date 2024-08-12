@@ -1311,6 +1311,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                         select d.invoice_sno).Contains(c.invoice_no) &&
                                         ((string.IsNullOrEmpty(c.delivery_status)) || (!c.delivery_status.ToLower().Equals("delivered"))) 
                                         && (c.comp_mas_sno == cno)
+                                        && c.invoice_expired >= DateTime.Today
                                 select new INVOICE
                                 {
                                     Com_Mas_Sno = c.company_master.comp_mas_sno,

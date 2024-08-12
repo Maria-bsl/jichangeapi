@@ -328,15 +328,12 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                            join det in context.invoice_master on c.inv_mas_sno equals det.inv_mas_sno
                                            join b in context.company_master on c.comp_mas_sno equals b.comp_mas_sno
                                            join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
-                                           /* where (companyIds.Contains(0) || companyIds.Contains((long) c.comp_mas_sno)) 
-                                            && (customerIds.Contains(0) || customerIds.Contains((long) c.cust_mas_sno)) 
-                                            && (invoiceIds.Contains(0) && invoiceIds.Contains((long) c.inv_mas_sno))*/
-
-                                           where (!fdate.HasValue || fdate >= c.posted_date)
-                                           && (!tdate.HasValue || tdate <= c.posted_date)
-                                           && (companyIds.Contains(0) || companyIds.Contains((long)c.comp_mas_sno))
+                                           where (companyIds.Contains(0) || companyIds.Contains((long)c.comp_mas_sno))
                                            && (customerIds.Contains(0) || customerIds.Contains((long)c.cust_mas_sno))
                                            && (invoiceIds.Contains(0) || invoiceIds.Contains((long)c.inv_mas_sno))
+                                           && (!fdate.HasValue || fdate <= c.posted_date)
+                                           && (!tdate.HasValue || tdate >= c.posted_date)
+
                                            select new InvoiceC
                                            {
                                                Invoice_No = det.invoice_no,

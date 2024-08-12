@@ -158,7 +158,7 @@ namespace JichangeApi.Services
             try
             {
                 CustomerMaster customerMaster = CreateCustomer(customersForm);
-                string errors = customerMaster.IsDuplicateCustomer(customerMaster.Cust_Name, customerMaster.Phone, customerMaster.Email, customerMaster.TinNo);
+                string errors = customerMaster.IsDuplicateCustomer(customerMaster.Phone, customerMaster.Email, customerMaster.TinNo);
                 if (errors.Length > 0) throw new ArgumentException(errors);
                 long addedCustomer = customerMaster.CustAdd(customerMaster);
                 AppendInsertAuditTrail(addedCustomer, customerMaster, (long)customersForm.userid);
@@ -180,7 +180,7 @@ namespace JichangeApi.Services
                 CustomerMaster customerMaster = CreateCustomer(customersForm);
                 CustomerMaster found = FindCustomer((long) customersForm.compid, (long) customersForm.CSno);
                 if (found == null) throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE);
-                string exists = customerMaster.IsDuplicateCustomer(customerMaster.Cust_Name, customerMaster.Phone, customerMaster.Email, customerMaster.TinNo, customerMaster.Cust_Sno);
+                string exists = customerMaster.IsDuplicateCustomer(customerMaster.Phone, customerMaster.Email, customerMaster.TinNo, customerMaster.Cust_Sno);
                 if (exists != null && exists.Length > 0) throw new ArgumentException(exists);
                 AppendUpdateAuditTrail(customerMaster.Cust_Sno, found, customerMaster, (long)customersForm.userid);
                 customerMaster.CustUpdate(customerMaster);

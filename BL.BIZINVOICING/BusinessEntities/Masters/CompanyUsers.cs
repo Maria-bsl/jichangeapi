@@ -603,6 +603,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public bool IsExistMobileNumber(string mobileNumber)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.company_users where c.mobile_no.ToLower().Equals(mobileNumber.ToLower()) select c);
+                return validation.Count() > 0;
+            }
+        }
+
     public long? GetVendorUserCounts(long company_sno)
     {
         using (BIZINVOICEEntities context = new BIZINVOICEEntities())

@@ -17,7 +17,7 @@ namespace JichangeApi.Controllers
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class CustomerController : SetupBaseController
     {
-        CustomerMaster cm = new CustomerMaster();
+        /*CustomerMaster cm = new CustomerMaster();
         CompanyBankMaster cbm = new CompanyBankMaster();
         CompanyUsers cu = new CompanyUsers();
         //COUNTRY c = new COUNTRY();
@@ -28,7 +28,7 @@ namespace JichangeApi.Controllers
         private readonly dynamic returnNull = null;
         //AuditLogs al = new AuditLogs();
         private static readonly List<string> tableColumns = new List<string> { "cust_mas_sno", "customer_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno",
-            "tin_no", "vat_no","contact_person","email_address","mobile_no", "posted_by", "posted_date", "comp_mas_sno" };
+            "tin_no", "vat_no","contact_person","email_address","mobile_no", "posted_by", "posted_date", "comp_mas_sno" };*/
         private static readonly string tableName = "Customers";
         private readonly CustomerService customerService = new CustomerService();
         private readonly RegionService regionService = new RegionService();

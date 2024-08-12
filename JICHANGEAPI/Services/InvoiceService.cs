@@ -1,6 +1,7 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.Common;
 using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
+using JichangeApi.Controllers.smsservices;
 using JichangeApi.Models;
 using JichangeApi.Models.form;
 using JichangeApi.Services.Companies;
@@ -357,7 +358,7 @@ namespace JichangeApi.Services
             try
             {
                 INVOICE invoice = CreateEditInvoice(invoiceForm);
-                if (invoice == null) { throw new ArgumentException("Invoice number exists"); }
+                if (invoice == null) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
                 invoice.UpdateInvoiMas(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(invoiceForm.details, invoice.Inv_Mas_Sno);
@@ -694,7 +695,35 @@ namespace JichangeApi.Services
 
         
         //Add delivery code and Confirm Del
-
+        public JsonObject MarkInvoiceDelivery(long sno,long userid)
+        {
+            try
+            {
+                INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails(sno);
+                if (getinvoicedata == null) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
+                INVOICE invoice = new INVOICE();
+                var otp = Services.OTP.GenerateOTP(6);
+                invoice.Inv_Mas_Sno = getinvoicedata.Inv_Mas_Sno;
+                invoice.AuditBy = userid.ToString();
+                invoice.delivery_status = "Pending";
+                invoice.grand_count = (int?)Int64.Parse(otp);
+                invoice.UpdateInvoiceDeliveryCode(invoice);
+                SmsService sms = new SmsService();
+                sms.SendCustomerDeliveryCode(getinvoicedata.Mobile, otp);
+                if (!string.IsNullOrEmpty(getinvoicedata.Email)) { 
+                    EmailUtils.SendCustomerDeliveryCodeEmail(getinvoicedata.Email, otp, getinvoicedata.Mobile); 
+                }
+                return FindInvoice(getinvoicedata.Com_Mas_Sno, getinvoicedata.Inv_Mas_Sno);
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
         
 
 

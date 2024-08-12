@@ -767,12 +767,12 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return false;
             }
         }
-        public string IsDuplicateCustomer(string customerName,string mobileNumber,string email,string tinNumber)
+        public string IsDuplicateCustomer(string mobileNumber,string email,string tinNumber)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var existsName = from c in context.customer_master where c.customer_name.ToLower().Equals(customerName.ToLower()) select c;
-                if (existsName.Count() > 0) return "Exists name";
+                /*var existsName = from c in context.customer_master where c.customer_name.ToLower().Equals(customerName.ToLower()) select c;
+                if (existsName.Count() > 0) return "Exists name";*/
                 var existsMobile = from c in context.customer_master where c.mobile_no.ToLower().Equals(mobileNumber.ToLower()) select c;
                 if (existsMobile.Count() > 0) return "Exists phone";
                 else if (tinNumber != null && tinNumber.Length > 0)
@@ -793,12 +793,12 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public string IsDuplicateCustomer(string customerName, string mobileNumber, string email, string tinNumber,long sno)
+        public string IsDuplicateCustomer(string mobileNumber, string email, string tinNumber,long sno)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var existsName = from c in context.customer_master where (c.customer_name.ToLower().Equals(customerName.ToLower()) && c.cust_mas_sno != sno) select c;
-                if (existsName.Count() > 0) return "Exists name";
+                /*var existsName = from c in context.customer_master where (c.customer_name.ToLower().Equals(customerName.ToLower()) && c.cust_mas_sno != sno) select c;
+                if (existsName.Count() > 0) return "Exists name";*/
                 var existsMobile = from c in context.customer_master where (c.mobile_no.ToLower().Equals(mobileNumber.ToLower()) && c.cust_mas_sno != sno) select c;
                 if (existsMobile.Count() > 0) return "Exists phone";
                 else if (tinNumber != null && tinNumber.Length > 0)

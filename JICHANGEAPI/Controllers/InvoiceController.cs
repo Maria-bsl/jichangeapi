@@ -723,7 +723,7 @@ namespace JichangeApi.Controllers
                 /*List<Payment> getTransactionInvoiceDetails = invoiceService.AddDeliveryCode(singleton);
                 return GetSuccessResponse(getTransactionInvoiceDetails);*/
 
-                INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails((long)singleton.sno);
+                /*INVOICE getinvoicedata = new INVOICE().GetInvoiceCDetails((long)singleton.sno);
                 INVOICE invoice = new INVOICE();
 
                 if (getinvoicedata != null)
@@ -742,7 +742,9 @@ namespace JichangeApi.Controllers
                     return GetSuccessResponse(invoice);
 
                 }
-                    return GetNoDataFoundResponse();
+                    return GetNoDataFoundResponse();*/
+                var invoice = invoiceService.MarkInvoiceDelivery((long)singleton.sno, (long)singleton.user_id);
+                return SuccessJsonResponse(invoice);
             }
             catch (ArgumentException ex)
             {

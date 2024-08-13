@@ -46,7 +46,29 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                if (stdate == "" && enddate == "")
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate);
+
+                List<TRACK_DET> listlogtime = (from td in context.track_details
+                                               where td.comp_mas_sno == 0 
+                                               && (!fromDate.HasValue || fromDate <= td.login_time)
+                                                && (!toDate.HasValue || toDate >= td.login_time)
+                                               select new TRACK_DET
+                                               {
+                                                   Full_Name = td.full_name,
+                                                   Ipadd = td.ipadd,
+                                                   Login_Time = (DateTime)td.login_time,
+                                                   Description = td.descrip,
+                                                   Logout_Time = (DateTime)td.logout_time
+                                               }).ToList();
+                return listlogtime ?? new List<TRACK_DET>();
+
+
+
+
+                /*if (stdate == "" && enddate == "")
                 {
                     List<TRACK_DET> listlogtime = (from td in context.track_details
                                                    where td.comp_mas_sno == 0 && td.descrip == "Biz"
@@ -86,7 +108,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return listlogtime;
 
 
-                }
+                }*/
 
             }
 

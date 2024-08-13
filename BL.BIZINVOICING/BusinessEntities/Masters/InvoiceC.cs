@@ -348,6 +348,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                Audit_Date = (DateTime)c.posted_date,
                                                Currency_Code = det.currency_code,
                                                p_date = (DateTime)c.posted_date,
+                                               goods_status = det.approval_status
                                            }).OrderByDescending(z => z.Audit_Date).ToList();
                 return invoices != null ? invoices : new List<InvoiceC>();
             }
@@ -438,13 +439,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate);
+
 
                 var result = from A in context.payment_details
                              join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
                              join C in context.branch_name on B.branch_sno equals C.sno
                              where A.status == "Passed"
+                                   && (!fromDate.HasValue || fromDate <= A.payment_date)
+                                   && (!toDate.HasValue || toDate >= A.payment_date)
                              group A by new
                              {
                                  A.comp_mas_sno,

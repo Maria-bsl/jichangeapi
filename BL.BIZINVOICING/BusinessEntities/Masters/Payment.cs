@@ -1429,10 +1429,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 DateTime? fromDate = null;
-                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate);
+                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate).AddHours(00).AddMinutes(59).AddSeconds(58);
                 DateTime? toDate = null;
-                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate);
-
+                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate).AddHours(11).AddMinutes(59).AddSeconds(58); //.AddHours(11).AddMinutes(59).AddSeconds(58);
                 List<Payment> payments = (from c in context.payment_details
                                           join cs in context.company_master on c.comp_mas_sno equals cs.comp_mas_sno
                                           join det in context.invoice_master on c.invoice_sno equals det.invoice_no

@@ -1242,8 +1242,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
                                     approval_date = (DateTime) c.approval_date,
-                                    AuditBy = c.posted_by
-
+                                    AuditBy = c.posted_by,
+                                    Status = c.delivery_status.ToLower() == "delivered" ? "Completed" :
+                                                       c.due_date < DateTime.Today && c.invoice_expired < DateTime.Today ? "Expired" :
+                                                       c.due_date < DateTime.Today ? "Overdue" :
+                                                       "Active"
                                 }).FirstOrDefault();
                 if (adetails != null)
                     return adetails;
@@ -1343,7 +1346,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
                                     approval_date = approval_date,
-
+                                    //Status = GetInvoiceStatus(c.delivery_status,c.due_date,c.invoice_expired) //c.due_date >= DateTime.Today ? "On Time" : "Overdue"
+                                    Status = c.delivery_status.ToLower() == "delivered" ? "Completed" :
+                                                       c.due_date < DateTime.Today && c.invoice_expired < DateTime.Today ? "Expired" :
+                                                       c.due_date < DateTime.Today ? "Overdue" :
+                                                       "Active"
                                 }).OrderBy(i => i.p_date);
 
                 if (page == null && limit == null)
@@ -2595,8 +2602,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                           where (allowCancelInvoice ? allowCancelInvoice : c.approval_status == "2")
                                           && ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
                                           && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
-                                          && (!fromDate.HasValue || fromDate <= c.posted_date)
-                                          && (!toDate.HasValue || toDate >= c.posted_date)
+                                          && (!fromDate.HasValue || fromDate <= c.invoice_date)
+                                          && (!toDate.HasValue || toDate >= c.invoice_date)
                                           select new INVOICE
                                           {
                                               Inv_Mas_Sno = c.inv_mas_sno,
@@ -2619,8 +2626,12 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               warrenty = c.warrenty,
                                               goods_status = c.goods_status,
                                               delivery_status = c.delivery_status,
-                                              approval_date = approval_date
-                                          }).ToList();
+                                              approval_date = approval_date,
+                                              Status = c.delivery_status.ToLower() == "delivered" ? "Completed" :
+                                                       c.due_date < DateTime.Today && c.invoice_expired < DateTime.Today ? "Expired" :
+                                                       c.due_date < DateTime.Today ? "Overdue" :
+                                                       "Active"
+                                          }).OrderBy(e => e.Company_Name).ToList();
                 return invoices != null ? invoices : new List<INVOICE>();
             }
         }

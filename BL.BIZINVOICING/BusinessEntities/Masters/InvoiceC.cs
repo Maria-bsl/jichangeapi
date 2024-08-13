@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL.BIZINVOICING.BusinessEntities.Common;
 using DaL.BIZINVOICING.EDMX;
 using Org.BouncyCastle.Crypto.Macs;
 
@@ -60,7 +61,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public decimal? invoice_amount { get;  set; }
         public int no_of_payments { get;  set; }
 
-        public long? Receipt_amount;
+        public long? receipt_amount;
         #endregion Properties
         #region methods
 
@@ -270,9 +271,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                Invoice_Expired_Date = c.expired_date,
                                                Currency_Code = det.currency_code,
                                                Due_Date = (DateTime)c.due_date,
-                                               Cmpny_Name = d.company_name
-
-                                           }).OrderByDescending(z => z.Audit_Date).ToList();
+                                               Cmpny_Name = d.company_name,
+                                               Invoice_Date = det.invoice_date
+                                           }).OrderBy(z => z.Cmpny_Name).ThenBy(z => z.Invoice_No).ToList();
                 return invoices != null ? invoices : new List<InvoiceC>();
 
             }
@@ -347,6 +348,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                Audit_Date = (DateTime)c.posted_date,
                                                Currency_Code = det.currency_code,
                                                p_date = (DateTime)c.posted_date,
+                                               goods_status = det.approval_status
                                            }).OrderByDescending(z => z.Audit_Date).ToList();
                 return invoices != null ? invoices : new List<InvoiceC>();
             }
@@ -396,33 +398,33 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 DateTime? tdate = null;
                 if (!string.IsNullOrEmpty(enddate)) tdate = DateTime.Parse(enddate);
 
-                var result = from a in context.invoice_master
-                             join b in context.company_master on a.comp_mas_sno equals b.comp_mas_sno
-                             join c in context.branch_name on b.branch_sno equals c.sno
-                             join d in context.customer_master on a.cust_mas_sno equals d.cust_mas_sno
-                             where a.approval_status == "2"
-                                && (!fdate.HasValue || a.invoice_date >= fdate)
-                                && (!tdate.HasValue || a.invoice_date <= tdate)
-                             group new { a, b, c } by new
+
+                var result = from A in context.invoice_master
+                             join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
+                             join C in context.branch_name on B.branch_sno equals C.sno
+                             where A.approval_status == "2"
+                             && (!fdate.HasValue || fdate <= A.invoice_date) 
+                             && (!tdate.HasValue || tdate >= A.invoice_date)
+                             group new { A, B, C } by new
                              {
-                                 a.comp_mas_sno,
-                                 a.currency_code,
-                                 b.company_name,
-                                 b.branch_sno,
-                                 c.name,
-                                 d.customer_name,
-                             } into grouped
+                                 A.comp_mas_sno,
+                                 A.currency_code,
+                                 B.company_name,
+                                 B.branch_sno,
+                                 C.name
+                             } into g
                              select new InvoiceC
                              {
-                                 vendor_id = grouped.Key.comp_mas_sno,
-                                 vendor = grouped.Key.company_name,
-                                 branch_sno = grouped.Key.branch_sno,
-                                 branch = grouped.Key.name,
-                                 Currency_Code = grouped.Key.currency_code,
-                                 no_of_invoices = grouped.Count(x => x.a.inv_mas_sno > 0), /*grouped.Count(x => x.a.inv_mas_sno != null),*/
-                                 invoice_amount = grouped.Sum(x => x.a.total_amount),
-                                 Customer_Name = grouped.Key.customer_name,
+                                 vendor_id = g.Key.comp_mas_sno,
+                                 vendor = g.Key.company_name,
+                                 branch_sno = g.Key.branch_sno,
+                                 Currency_Code = g.Key.currency_code,
+                                 branch = g.Key.name,
+                                 no_of_invoices = g.Count(x => (x.A.inv_mas_sno).ToString() != null),
+                                 invoice_amount = g.Sum(x => x.A.total_amount)
                              };
+
+            
 
                 var list = result.ToList();
 
@@ -437,10 +439,39 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                DateTime fdate = DateTime.Parse(stdate);
-                DateTime tdate = DateTime.Parse(enddate);
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate);
+
 
                 var result = from A in context.payment_details
+                             join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
+                             join C in context.branch_name on B.branch_sno equals C.sno
+                             where A.status == "Passed"
+                                   && (!fromDate.HasValue || fromDate <= A.payment_date)
+                                   && (!toDate.HasValue || toDate >= A.payment_date)
+                             group A by new
+                             {
+                                 A.comp_mas_sno,
+                                 A.currency_code,
+                                 B.company_name,
+                                 B.branch_sno,
+                                 C.name
+                             } into g
+                             select new InvoiceC
+                             {
+                                 vendor_id = g.Key.comp_mas_sno,
+                                 vendor = g.Key.company_name,
+                                 branch_sno = g.Key.branch_sno,
+                                 Currency_Code = g.Key.currency_code,
+                                 branch = g.Key.name,
+                                 no_of_payments = g.Count(),
+                                 receipt_amount = g.Sum(x => x.paid_amount)
+                             };
+
+
+               /* var result = from A in context.payment_details
                              join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
                              join C in context.branch_name on B.branch_sno equals C.sno
                              where A.status.Contains("Passed") &&
@@ -461,7 +492,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  branch = g.Key.name,
                                  no_of_payments = g.Count(),
                                  Receipt_amount = g.Sum(x => x.paid_amount)
-                             };
+                             };*/
 
                 var list = result.ToList();
 

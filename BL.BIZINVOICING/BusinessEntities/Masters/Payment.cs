@@ -975,8 +975,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                           where ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
                                           && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
                                           && ((invoiceIds.Contains(0)) || (invoiceIds.Contains(det.inv_mas_sno)))
-                                          && (!fromDate.HasValue || fromDate <= c.posted_date)
-                                          && (!toDate.HasValue || toDate >= c.posted_date)
+                                          && (!fromDate.HasValue || fromDate <= c.payment_date)
+                                          && (!toDate.HasValue || toDate >= c.payment_date)
                                           /*where (companyIds.Contains(0) || companyIds.Contains((long) det.comp_mas_sno)) 
                                           && (customerIds.Contains(0) || customerIds.Contains((long) cus.cust_mas_sno))
                                           && (invoiceIds.Contains(0) || invoiceIds.Contains((long) det.inv_mas_sno))*/
@@ -1023,7 +1023,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                     join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                     where (cust == 0 ? true : c.cust_mas_sno == cust)
-                                     && (c.posted_date >= fdate && c.posted_date <= tdate)
+                                     && (c.payment_date >= fdate && c.payment_date <= tdate)
                                      && (Comp == 0 ? true : c.comp_mas_sno == Comp)
                                     select new Payment
                                     {
@@ -1060,7 +1060,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                     join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                     where (cust == 0 ? true : c.cust_mas_sno == cust)
-                                   && (c.posted_date >= fdate && c.posted_date <= tdate)
+                                   && (c.payment_date >= fdate && c.payment_date <= tdate)
                                     && (Comp == 0 ? true :c.comp_mas_sno == Comp) && (inv == "0" ? true : c.control_no == inv)
                                     select new Payment
                                     {
@@ -1106,8 +1106,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                 join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                 where (cust == 0 ? true : c.cust_mas_sno == cust)
-                                && (!fdate.HasValue || c.posted_date >= fdate)
-                                && (!tdate.HasValue || c.posted_date >= tdate)
+                                && (!fdate.HasValue || c.payment_date >= fdate)
+                                && (!tdate.HasValue || c.payment_date >= tdate)
                                 && (Comp == 0 ? true : c.comp_mas_sno == Comp)
                                 && (!string.IsNullOrEmpty(inv) ? det.invoice_no == inv : true)
                /* DateTime fdate = DateTime.Parse(stdate);
@@ -1296,7 +1296,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                 join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                 where (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
-                                && (c.posted_date >= fdate && c.posted_date <= tdate)
+                                && (c.payment_date >= fdate && c.payment_date <= tdate)
                                 && (Compid == 0 ? true : c.comp_mas_sno == Compid)
                                 && (branch == 0 ? true : cs.branch_sno == branch)
 
@@ -1439,8 +1439,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                           join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                           where ((companyIds.Contains(0)) || (companyIds.Contains((long)c.comp_mas_sno)))
                                           && ((customerIds.Contains(0)) || (customerIds.Contains((long)c.cust_mas_sno)))
-                                          && (!fromDate.HasValue || fromDate <= c.posted_date)
-                                          && (!toDate.HasValue || toDate >= c.posted_date)
+                                          && (!fromDate.HasValue || fromDate <= c.payment_date)
+                                          && (!toDate.HasValue || toDate >= c.payment_date)
                                           select new Payment
                                           {
                                               SNO = c.sno,
@@ -1536,7 +1536,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     join det in context.invoice_master on c.invoice_sno equals det.invoice_no
                                     join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                     where (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
-                                    && (c.posted_date >= fdate && c.posted_date <= tdate)
+                                    && (c.payment_date >= fdate && c.payment_date <= tdate)
                                     && (Compid == 0 ? true : c.comp_mas_sno == Compid)
                                     && (branch == 0 ? true : cs.branch_sno == branch)
 

@@ -400,7 +400,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 var result = from A in context.invoice_master
                              join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
                              join C in context.branch_name on B.branch_sno equals C.sno
-                             where A.approval_status == "2"
+                             where A.approval_status == "2" &&
+                                   A.invoice_date >= fdate &&
+                                   A.invoice_date <= tdate
                              group new { A, B, C } by new
                              {
                                  A.comp_mas_sno,
@@ -441,7 +443,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 var result = from A in context.payment_details
                              join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
                              join C in context.branch_name on B.branch_sno equals C.sno
-                             where A.status == "Passed"
+                             where A.status == "Passed" &&
+                                   A.payment_date >= fdate &&
+                                   A.payment_date <= tdate
                              group A by new
                              {
                                  A.comp_mas_sno,

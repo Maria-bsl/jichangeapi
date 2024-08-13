@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL.BIZINVOICING.BusinessEntities.Common;
 using DaL.BIZINVOICING.EDMX;
 using Org.BouncyCastle.Crypto.Macs;
 
@@ -270,9 +271,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                Invoice_Expired_Date = c.expired_date,
                                                Currency_Code = det.currency_code,
                                                Due_Date = (DateTime)c.due_date,
-                                               Cmpny_Name = d.company_name
-
-                                           }).OrderByDescending(z => z.Audit_Date).ToList();
+                                               Cmpny_Name = d.company_name,
+                                               Invoice_Date = det.invoice_date
+                                           }).OrderBy(z => z.Cmpny_Name).ThenBy(z => z.Invoice_No).ToList();
                 return invoices != null ? invoices : new List<InvoiceC>();
 
             }
@@ -401,6 +402,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                              join B in context.company_master on A.comp_mas_sno equals B.comp_mas_sno
                              join C in context.branch_name on B.branch_sno equals C.sno
                              where A.approval_status == "2"
+                             && (!fdate.HasValue || fdate <= A.invoice_date) 
+                             && (!tdate.HasValue || tdate >= A.invoice_date)
                              group new { A, B, C } by new
                              {
                                  A.comp_mas_sno,

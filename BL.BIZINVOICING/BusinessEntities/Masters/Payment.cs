@@ -1004,8 +1004,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Cust_Mas_Sno = (long)c.cust_mas_sno,
                                               Customer_Name = cus.customer_name,
                                               Invoice_Sno = det.invoice_no, //c.invoice_sno,
-                                              Audit_Date = (DateTime)c.posted_date
-                                          }).OrderByDescending(e => e.Audit_Date).ToList();
+                                              Audit_Date = (DateTime)c.posted_date,
+                                              Status = ((long)c.amount30 > 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
+                                                        det.invoice_expired < DateTime.Today && (long)c.amount30 > 0 ? "Expired" : det.due_date < DateTime.Today && (long)c.amount30 > 0 ? "Overdue" : "Completed"
+                                          }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();
             }
         }
@@ -1468,7 +1470,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Balance = (long)c.amount30,
                                               Audit_Date = (DateTime)c.posted_date
 
-                                          }).ToList();
+                                          }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();
             }
         }

@@ -1005,8 +1005,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Customer_Name = cus.customer_name,
                                               Invoice_Sno = det.invoice_no, //c.invoice_sno,
                                               Audit_Date = (DateTime)c.posted_date,
-                                              Status = ((long)c.amount30 > 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
-                                                        det.invoice_expired < DateTime.Today && (long)c.amount30 > 0 ? "Expired" : det.due_date < DateTime.Today && (long)c.amount30 > 0 ? "Overdue" : "Completed"
+                                              Status = det.delivery_status
                                           }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();
             }
@@ -1467,7 +1466,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Invoice_Sno = c.invoice_sno,
                                               Amount30 = (long)c.amount30,
                                               Balance = (long)c.amount30,
-                                              Audit_Date = (DateTime)c.posted_date
+                                              Audit_Date = (DateTime)c.posted_date,
+                                              Status = ((long)c.amount30 > 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
+                                                        det.invoice_expired < DateTime.Today && (long)c.amount30 > 0 ? "Expired" : det.due_date < DateTime.Today && (long)c.amount30 > 0 ? "Overdue" : "Completed"
 
                                           }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();

@@ -1299,6 +1299,26 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        private string GetInvoiceStatus(string deliveryStatus, DateTime? dueDate, DateTime? invoiceExpired)
+        {
+            if (deliveryStatus.ToLower() == "delivered")
+            {
+                return "Completed";
+            }
+            else if (dueDate <= DateTime.Today)
+            {
+                return "Overdue";
+            }
+            else if (invoiceExpired <= DateTime.Today)
+            {
+                return "Expired";
+            }
+            else
+            {
+                return "Active";
+            }
+        }
+
         public List<INVOICE> GetINVOICEMas(long cno, int? page,int? limit)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -1343,7 +1363,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
                                     approval_date = approval_date,
-
+                                    //Status = GetInvoiceStatus(c.delivery_status,c.due_date,c.invoice_expired) //c.due_date >= DateTime.Today ? "On Time" : "Overdue"
+                                    Status = c.delivery_status.ToLower() == "delivered" ? "Completed" :
+                                             c.due_date < DateTime.Today ? "Overdue" :
+                                             c.invoice_expired < DateTime.Today ? "Expired" :
+                                             "Active"
                                 }).OrderBy(i => i.p_date);
 
                 if (page == null && limit == null)

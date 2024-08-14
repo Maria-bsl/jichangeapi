@@ -818,7 +818,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     //Customer_Name = c.customer_name,
                                     Invoice_Sno = c.invoice_sno
-                                }).ToList();
+                                }).OrderByDescending(x => x.Payment_SNo).Take(5).ToList();
                 if (edetails != null && edetails.Count > 0)
                     return edetails;
                 else
@@ -902,7 +902,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     //Customer_Name = c.customer_name,
                                     Invoice_Sno = c.invoice_sno
-                                }).OrderByDescending(x => x.Payment_SNo).ToList();
+                                }).OrderByDescending(x => x.Payment_SNo).Take(5).ToList();
                 if (edetails != null && edetails.Count > 0)
                     return edetails;
                 else
@@ -942,7 +942,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     //Customer_Name = c.customer_name,
                                     Invoice_Sno = c.invoice_sno
-                                }).OrderByDescending(x => x.SNO).ToList();
+                                }).OrderByDescending(x => x.SNO).Take(5).ToList();
                 if (edetails != null && edetails.Count > 0)
                     return edetails;
                 else

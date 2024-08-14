@@ -105,9 +105,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                 service_error_logs pt = new service_error_logs()
                 {
-                    error = py.Error_Text,
+                    error = py.Error_Text ?? py.Message,
                     posted_date = DateTime.Now
-
 
                 };
                 context.service_error_logs.Add(pt);

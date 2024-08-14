@@ -22,6 +22,21 @@ namespace JichangeApi.Services
     {
         private CompanyBankService companyBankService = new CompanyBankService();
         Payment pay = new Payment();
+
+        private TRACK_DET TrackBankSuperUserDetails(AuthLog empData)
+        {
+            TRACK_DET trackDet = new TRACK_DET();
+            trackDet.Full_Name = "Super User";
+            trackDet.Facility_Reg_No = 0;
+            trackDet.Ipadd = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"] ?? System.Web.HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+            //dt.Ipadd = System.Web.HttpContext.Current.Request.UserHostAddress;
+            trackDet.Email = "";
+            trackDet.Posted_by = "0";
+            trackDet.Login_Time = DateTime.Now;
+            trackDet.Description = "Bank";
+            trackDet.AddTrack(trackDet);
+            return trackDet;
+        }
         private TRACK_DET TrackBankUserDetails(EMP_DET empData)
         {
             TRACK_DET trackDet = new TRACK_DET();
@@ -50,21 +65,21 @@ namespace JichangeApi.Services
             trackDet.AddTrack(trackDet);
             return trackDet;
         }
-      /*  private JsonObject GetBankSuperUserProfile(AuthLog empData)
+        private JsonObject GetBankSuperUserProfile(AuthLog empData)
         {
             string role = "Bank";
-            string jwtToken = Authentication.GenerateJWTAuthetication(empData.User_name, role);
+            string jwtToken = Authentication.GenerateJWTAuthetication(empData.userName, role);
             //string validUserName = Authentication.ValidateToken(jwtToken);
             //string admin1 = "Bank";
             string userType = "BNk";
-            string Username = empData.User_name;
-            string UfullName = empData.First_Name + " " + empData.Last_name;
-            string flogin = empData.F_Login;
-            long userid = empData.Detail_Id;
-            DESIGNATION designation = new DESIGNATION().Editdesignation(empData.Desg_Id);
-            string desig = designation.Desg_Name;
-            long branchId = empData.Branch_Sno != null ? (long)empData.Branch_Sno : 0;
-            TRACK_DET tracDet = TrackBankUserDetails(empData);
+            string Username = empData.userName;
+            string UfullName = "Super User";
+            string flogin = "true";
+            long userid = 1;
+            //DESIGNATION designation = new DESIGNATION().Editdesignation(empData.Desg_Id);
+            string desig = "Administrator";
+            long branchId = 0;
+            _ = TrackBankSuperUserDetails(empData);
             JsonObject response = new JsonObject
             {
                 { "Token", jwtToken },
@@ -80,7 +95,7 @@ namespace JichangeApi.Services
                 { "userid", userid},
             };
             return response;
-        }*/
+        }
 
         private JsonObject GetBankUserProfile(EMP_DET empData)
         {
@@ -162,11 +177,12 @@ namespace JichangeApi.Services
                     return GetCompanyUserProfile(company);
                 }
 
-                if(authLog.userName.ToLower().Equals("super") && password.Equals("1234")) // $pKwG1rq
+                if(authLog.userName.ToLower().Equals("super") && authLog.password.Equals("1234")) // $pKwG1rq
                 {
-                    //return GetBankUserProfile(authLog);
-                    return GetBankUserProfile(empdata);
+                    
+                    return GetBankSuperUserProfile(authLog);
                 }
+
 
                 JsonObject response = new JsonObject 
                 {

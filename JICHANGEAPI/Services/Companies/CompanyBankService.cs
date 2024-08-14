@@ -17,6 +17,7 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyBankService
     {
+        Payment pay = new Payment();
         private static readonly List<string> TABLE_COLUMNS = new List<string> { "comp_mas_sno", "company_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno", "tin_no","vat_no","director_name","email_address","telephone_no","fax_no","mobile_no", "posted_by", "posted_date" };
         private static readonly string TABLE_NAME = "Company";
         private void AppendInsertAuditTrail(long compsno, CompanyBankMaster companyBankMaster, long userid)
@@ -28,6 +29,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -61,6 +65,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -85,6 +92,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -115,6 +125,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -150,6 +163,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -179,6 +195,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -198,6 +217,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -228,6 +250,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -261,6 +286,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -280,6 +308,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -310,6 +341,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -336,6 +370,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -350,6 +387,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -364,6 +404,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -378,6 +421,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -392,6 +438,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -406,6 +455,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -420,6 +472,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -433,6 +488,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -445,6 +503,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -457,6 +518,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -472,6 +536,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

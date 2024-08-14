@@ -19,6 +19,7 @@ namespace JichangeApi.Controllers
     {
         // GET: RepCustomer
         private readonly RepCustomerService repCustomerService = new RepCustomerService();
+        Payment pay = new Payment();
 
         [HttpPost]
         /*public HttpResponseMessage GetcustDetReport(SingletonGetCustDetRepModel form)
@@ -46,6 +47,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }

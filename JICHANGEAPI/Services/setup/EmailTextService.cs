@@ -15,6 +15,7 @@ namespace JichangeApi.Services.setup
 {
     public class EmailTextService
     {
+        Payment pay = new Payment();
         private static readonly List<string> TABLE_COLUMNS = new List<string> { "sno", "flow_id", "email_text", "effective_date", "posted_by", "posted_date", "email_sub", "email_sub_local", "email_text_local" };
         private static readonly string TABLE_NAME = "Email Text";
         public static readonly List<string> FLOWS = new List<string> { "On Registration", "On Invoice Generation", "On Receipt", "On Invoice Cancellation", "On Invoice Ammendent", "On OTP", "On User Registration" };
@@ -60,10 +61,16 @@ namespace JichangeApi.Services.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         } 
@@ -81,10 +88,16 @@ namespace JichangeApi.Services.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -103,10 +116,16 @@ namespace JichangeApi.Services.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -128,6 +147,9 @@ namespace JichangeApi.Services.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -141,6 +163,9 @@ namespace JichangeApi.Services.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -155,10 +180,16 @@ namespace JichangeApi.Services.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

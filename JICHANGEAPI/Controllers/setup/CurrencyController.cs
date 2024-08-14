@@ -17,6 +17,7 @@ namespace JichangeApi.Controllers.setup
     public class CurrencyController : SetupBaseController
     {
         private readonly CurrencyService currencyService = new CurrencyService();
+        Payment pay = new Payment();
 
         [HttpPost]
         public HttpResponseMessage GetCurrencyDetails()
@@ -29,6 +30,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -52,11 +56,17 @@ namespace JichangeApi.Controllers.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -71,11 +81,17 @@ namespace JichangeApi.Controllers.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -93,11 +109,17 @@ namespace JichangeApi.Controllers.setup
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }

@@ -18,6 +18,7 @@ namespace JichangeApi.Controllers.setup
     {
         private static readonly List<string> tableColumns = new List<string> { "country_sno", "country_name" };
         private static readonly string tableName = "Country";
+        Payment pay = new Payment();
 
         [HttpPost]
         public HttpResponseMessage GetCountries()
@@ -30,6 +31,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -55,6 +59,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -94,6 +101,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -120,6 +130,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -141,6 +154,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }

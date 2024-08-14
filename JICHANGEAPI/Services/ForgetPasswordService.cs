@@ -11,6 +11,7 @@ namespace JichangeApi.Services
 {
     public class ForgetPasswordService 
     {
+        Payment pay = new Payment();
 
         User_otp ota = new User_otp();
         CompanyUsers cus = new CompanyUsers();
@@ -61,7 +62,7 @@ namespace JichangeApi.Services
             }
             catch (Exception ex)
             {
-                Payment pay = new Payment();
+                
                 pay.Error_Text = ex.ToString();
                 pay.AddErrorLogs(pay);
 

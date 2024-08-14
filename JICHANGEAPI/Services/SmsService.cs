@@ -23,6 +23,7 @@ namespace JichangeApi.Controllers.smsservices
         S_SMTP stp = new S_SMTP();
         EMAIL em = new EMAIL();
         CustomerMaster cu = new CustomerMaster();
+        Payment pay = new Payment();
         
 
         #endregion;
@@ -60,6 +61,9 @@ namespace JichangeApi.Controllers.smsservices
                 }
                 catch (Exception Ex)
                 {
+                    pay.Message = Ex.ToString();
+                    pay.AddErrorLogs(pay);
+
                     Ex.Message.ToString();
                 }
             }
@@ -187,6 +191,9 @@ namespace JichangeApi.Controllers.smsservices
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 Ex.Message.ToString();
             }
 

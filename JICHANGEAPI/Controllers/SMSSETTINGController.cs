@@ -16,6 +16,7 @@ namespace JichangeApi.Controllers
         // GET: SMSSETNGS
         SMS_SETTING smtp = new SMS_SETTING();
         EMP_DET ed = new EMP_DET();
+        Payment pay = new Payment();
         private readonly dynamic returnNull = null;
         //Arights act = new Arights();
       
@@ -50,6 +51,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 ex.ToString();
             }
 
@@ -72,6 +76,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 Ex.Message.ToString();
             }
 
@@ -95,6 +102,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 Ex.Message.ToString();
             }
 

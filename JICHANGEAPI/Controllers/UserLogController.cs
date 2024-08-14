@@ -20,6 +20,7 @@ namespace JichangeApi.Controllers
         private readonly dynamic returnNull = null;
         EMP_DET ed = new EMP_DET();
         TRACK_DET td = new TRACK_DET();
+        Payment pay = new Payment();
         private readonly UserLogService userLogService = new UserLogService();
         // GET: Userlog
 
@@ -47,7 +48,10 @@ namespace JichangeApi.Controllers
                 }
                 catch (Exception Ex)
                 {
-                    return GetServerErrorResponse(Ex.ToString());
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                return GetServerErrorResponse(Ex.ToString());
                 }
            
         }

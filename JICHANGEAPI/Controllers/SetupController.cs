@@ -535,6 +535,9 @@ namespace JichangeApi.Controllers
         }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.ToString());
             }
         }
@@ -787,6 +790,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.ToString());
             }
 
@@ -815,6 +821,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.ToString());
             }
 

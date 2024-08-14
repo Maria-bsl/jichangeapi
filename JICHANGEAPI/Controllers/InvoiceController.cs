@@ -35,6 +35,7 @@ namespace JichangeApi.Controllers
         private readonly CompanyDepositService companyDepositService = new CompanyDepositService();
         private readonly CustomerService customerService = new CustomerService();
         private readonly CurrencyService currencyService = new CurrencyService();
+        Payment pay = new Payment();
 
 
 
@@ -51,11 +52,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -79,11 +86,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -100,11 +113,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -121,11 +140,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -142,11 +167,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -165,6 +196,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -182,6 +216,9 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
@@ -190,6 +227,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetSignedInvoiceById", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -204,11 +244,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -230,6 +276,9 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
@@ -238,6 +287,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetInvoiceDetailsbyid", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -260,6 +312,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetInvoicedetails", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -280,6 +335,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetCompany", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -296,6 +354,9 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
@@ -304,6 +365,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetSignedInvoiceById", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -319,6 +383,9 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
@@ -327,6 +394,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetSignedInvoiceById", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -343,6 +413,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -359,6 +432,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -375,6 +451,8 @@ namespace JichangeApi.Controllers
             catch (Exception Ex)
             {
                 // Catch Log here for exception thrown
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
 
                 Utilites.logfile("GetCustomers", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
@@ -396,6 +474,8 @@ namespace JichangeApi.Controllers
             catch (Exception Ex)
             {
                 // Catch Log here for exception thrown
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
 
                 Utilites.logfile("GetCurrency", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
@@ -425,6 +505,9 @@ namespace JichangeApi.Controllers
                 //Utilites.logfile("GetInvNo", "0", Ex.ToString());
                 //pay.Error_Text = Ex.ToString();
                 //pay.AddErrorLogs(pay);
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -454,11 +537,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -477,11 +566,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -498,11 +593,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -520,11 +621,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -541,11 +648,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -562,11 +675,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -583,11 +702,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -612,11 +737,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
 
@@ -637,11 +768,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
 
@@ -685,11 +822,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -711,11 +854,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
 
@@ -757,11 +906,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -795,11 +950,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }

@@ -17,6 +17,7 @@ namespace JichangeApi.Controllers
     public class AuditTrailController : SetupBaseController
     {
         private readonly AuditTrailService auditTrailService = new AuditTrailService();
+        Payment pay = new Payment();
 
         [HttpPost]
         public HttpResponseMessage report(AuditTrailForm auditTrailForm)
@@ -28,6 +29,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }

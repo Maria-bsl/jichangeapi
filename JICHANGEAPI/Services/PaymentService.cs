@@ -14,6 +14,7 @@ namespace JichangeApi.Services
     {
 
         private CompanyBankService companyBankService = new CompanyBankService();
+        Payment pay = new Payment();
         public List<Payment> GetPaymentReport(CancelRepModel cancelRepModel)
         {
             try
@@ -28,10 +29,16 @@ namespace JichangeApi.Services
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -44,10 +51,16 @@ namespace JichangeApi.Services
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

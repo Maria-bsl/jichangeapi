@@ -11,6 +11,7 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyService
     {
+        Payment pay = new Payment();
         public List<Company> GetCompanyList()
         {
             try
@@ -21,6 +22,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -35,10 +39,16 @@ namespace JichangeApi.Services.Companies
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

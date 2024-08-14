@@ -15,6 +15,7 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SuspenseAController : SetupBaseController
     {
+        Payment pay = new Payment();
         [HttpPost]
         public HttpResponseMessage GetAccount()
         {
@@ -26,6 +27,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -41,6 +45,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -66,6 +73,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -83,6 +93,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -100,6 +113,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -117,6 +133,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -136,6 +155,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }

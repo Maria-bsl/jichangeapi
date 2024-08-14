@@ -21,6 +21,7 @@ namespace JichangeApi.Services
     public class LoginUserService : ApiController
     {
         private CompanyBankService companyBankService = new CompanyBankService();
+        Payment pay = new Payment();
         private TRACK_DET TrackBankUserDetails(EMP_DET empData)
         {
             TRACK_DET trackDet = new TRACK_DET();
@@ -175,10 +176,16 @@ namespace JichangeApi.Services
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);    
             }
         }
@@ -198,6 +205,9 @@ namespace JichangeApi.Services
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

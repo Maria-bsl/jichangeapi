@@ -28,6 +28,7 @@ namespace JichangeApi.Controllers
         private readonly RegionService regionService = new RegionService();
         private readonly DistrictService districtService = new DistrictService();
         private readonly WardService wardService = new WardService();
+        Payment pay = new Payment();
         // GET: Company
 
 
@@ -160,6 +161,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -174,6 +178,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -189,6 +196,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -202,6 +212,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -217,6 +230,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -232,6 +248,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -249,6 +268,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -266,6 +288,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -281,6 +306,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -299,6 +327,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -312,6 +343,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -327,6 +361,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -340,6 +377,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -364,6 +404,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
@@ -392,6 +435,9 @@ public HttpResponseMessage GetApp()
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }

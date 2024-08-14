@@ -19,6 +19,7 @@ namespace JichangeApi.Controllers
     public class LoginUserController : SetupBaseController
     {
         private readonly LoginUserService loginUserService = new LoginUserService();
+        Payment pay = new Payment();
 
         [AllowAnonymous]
         [HttpPost]
@@ -33,6 +34,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.ToString());
             }
         }
@@ -50,6 +54,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.ToString());
             }
         }

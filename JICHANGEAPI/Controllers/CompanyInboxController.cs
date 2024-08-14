@@ -17,6 +17,7 @@ namespace JichangeApi.Controllers
     public class CompanyInboxController : SetupBaseController
     {
         private readonly CompanyInboxService companyInboxService = new CompanyInboxService();
+        Payment pay = new Payment();
       
 
         [HttpPost]
@@ -31,6 +32,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -47,6 +51,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.ToString());
             }
         }

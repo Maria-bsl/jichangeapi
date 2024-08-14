@@ -20,6 +20,7 @@ namespace JichangeApi.Controllers
     public class CompanyUsersController : SetupBaseController
     {
         private readonly CompanyUsersService companyUsersService = new CompanyUsersService();
+        Payment pay = new Payment();
        
         [HttpPost]
         public HttpResponseMessage GetCompanyUserss(SingletonComp singletonComp)
@@ -33,6 +34,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -50,6 +54,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -74,11 +81,17 @@ namespace JichangeApi.Controllers
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 List<string> messages = new List<string> { ex.Message };
                 return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.Message);
             }
         }
@@ -93,6 +106,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -107,6 +123,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }
@@ -123,6 +142,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }

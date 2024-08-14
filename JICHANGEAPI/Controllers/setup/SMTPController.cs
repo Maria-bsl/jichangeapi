@@ -15,6 +15,7 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SMTPController : SetupBaseController
     {
+        Payment pay = new Payment();
         private static readonly List<string> tableColumns = new List<string> { "sno", "from_address", "smtp_address", "smtp_port", "username", "ssl_enable", "effective_date", "posted_by", "posted_date" };
         private static readonly string tableName = "Smtp Settings"; 
 
@@ -29,6 +30,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -90,6 +94,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch(Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -107,6 +114,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -124,6 +134,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch(Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -141,6 +154,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
@@ -162,6 +178,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return this.GetServerErrorResponse(ex.Message);
             }
         }

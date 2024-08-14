@@ -12,6 +12,7 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class DepositAController : ApiController
     {
+        Payment pay = new Payment();
         [HttpPost]
         public HttpResponseMessage Getdeposits()
         {
@@ -30,6 +31,9 @@ namespace JichangeApi.Controllers.setup
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return Request.CreateResponse(new { response = 0, message = new List<string> { "An error occured on the server." } });
             }
         }

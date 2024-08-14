@@ -11,6 +11,7 @@ namespace JichangeApi.Services.Reports
 {
     public class InvoiceRepService
     {
+        Payment pay = new Payment();
         public List<INVOICE> GetApprovedCustomers(SingletonSno singleton)
         {
             try
@@ -21,6 +22,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -34,6 +38,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -48,6 +55,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -61,6 +71,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -74,6 +87,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -87,6 +103,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -102,6 +121,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -115,6 +137,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -128,6 +153,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

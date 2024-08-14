@@ -9,6 +9,7 @@ namespace JichangeApi.Services.Reports
 {
     public class UserLogService
     {
+        Payment pay = new Payment();
         public List<TRACK_DET> GetLoginTimesReport(string startDate,string endDate)
         {
             try
@@ -18,6 +19,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             } 
         }

@@ -11,6 +11,7 @@ namespace JichangeApi.Services.Reports
 {
     public class RepCustomerService
     {
+        Payment pay = new Payment();
         public List<CustomerMaster> GetCustomerDetailsReport(long compid,long regionId,long districtId)
         {
             try
@@ -20,6 +21,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -33,6 +37,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

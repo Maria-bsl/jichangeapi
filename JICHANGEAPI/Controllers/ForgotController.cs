@@ -27,6 +27,7 @@ namespace JichangeApi.Controllers
         User_otp ota = new User_otp();
         CompanyUsers cus = new CompanyUsers();
         SmsService sms = new SmsService();
+        Payment pay = new Payment();
         
         private readonly CompanyUsersService companyUsersService = new CompanyUsersService();
         private readonly ForgetPasswordService forgetPasswordservice = new ForgetPasswordService();
@@ -60,6 +61,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 Ex.ToString();
             }
 
@@ -91,6 +95,9 @@ namespace JichangeApi.Controllers
                     }
             }catch(Exception ex) 
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 ex.ToString();
 
             }
@@ -114,6 +121,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 ex.ToString();
                 return GetServerErrorResponse(ex.ToString());
 

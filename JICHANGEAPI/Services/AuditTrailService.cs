@@ -10,6 +10,7 @@ namespace JichangeApi.Services
 {
     public class AuditTrailService
     {
+        Payment pay = new Payment();
         public List<Object> GetAuditTrailReport(AuditTrailForm auditTrailForm)
         {
             try
@@ -43,6 +44,9 @@ namespace JichangeApi.Services
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

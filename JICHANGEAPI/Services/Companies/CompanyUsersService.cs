@@ -17,6 +17,7 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyUsersService
     {
+        Payment pay = new Payment();
         private static readonly List<string> TABLE_COLUMNS = new List<string> { "comp_users_sno", "comp_mas_sno", "username",  "user_type", "created_date", "expiry_date",
              "posted_by", "posted_date"};
         public static readonly string TABLE_NAME = "Companyusers";
@@ -82,6 +83,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -95,6 +99,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -119,11 +126,16 @@ namespace JichangeApi.Services.Companies
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                throw new Exception(e.Message);
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+                throw new Exception(ex.Message);
             }
         }
 
@@ -139,10 +151,16 @@ namespace JichangeApi.Services.Companies
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -161,10 +179,16 @@ namespace JichangeApi.Services.Companies
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -182,10 +206,16 @@ namespace JichangeApi.Services.Companies
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -200,6 +230,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -213,6 +246,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -229,10 +265,16 @@ namespace JichangeApi.Services.Companies
             }
             catch (ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

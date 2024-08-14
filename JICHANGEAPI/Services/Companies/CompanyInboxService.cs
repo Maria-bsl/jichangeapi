@@ -14,8 +14,7 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyInboxService
     {
-
-        
+        Payment pay = new Payment();
         public List<CompanyBankMaster> GetDesingationBranchCompanyList(Desibraid desibraid)
         {
             try
@@ -34,6 +33,9 @@ namespace JichangeApi.Services.Companies
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -80,6 +82,9 @@ namespace JichangeApi.Services.Companies
             }
             catch(Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

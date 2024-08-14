@@ -18,6 +18,7 @@ namespace JichangeApi.Controllers
         REG_QSTN q = new REG_QSTN();
         EMP_DET Emp = new EMP_DET();
         CompanyUsers cu = new CompanyUsers();
+        Payment pay = new Payment();
         private readonly dynamic returnNull = null;
 
 
@@ -76,6 +77,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(ex.ToString());
             }
 

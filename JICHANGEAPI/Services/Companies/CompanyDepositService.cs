@@ -10,6 +10,7 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyDepositService
     {
+        Payment pay = new Payment();
         public C_Deposit GetCompanyDepositAccount(long compid)
         {
             try
@@ -21,10 +22,16 @@ namespace JichangeApi.Services.Companies
             }
             catch(ArgumentException ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new ArgumentException(ex.Message);
             }
             catch(Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

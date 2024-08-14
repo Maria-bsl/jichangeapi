@@ -16,6 +16,7 @@ namespace JichangeApi.Controllers
     public class RoleController : SetupController
     {
         private readonly RoleService roleService = new RoleService();
+        Payment pay = new Payment();
 
         public HttpResponseMessage GetRolesAct()
         {
@@ -26,6 +27,9 @@ namespace JichangeApi.Controllers
             }
             catch (Exception Ex)
             {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 return GetServerErrorResponse(Ex.Message);
             }
         }

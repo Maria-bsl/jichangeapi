@@ -11,6 +11,7 @@ namespace JichangeApi.Services.Reports
 {
     public class RepCompInvoiceService
     {
+        Payment pay = new Payment();
         public List<INVOICE> GetApprovedInvoiceCustomers(SingletonSno singletonSno)
         {
             try
@@ -21,6 +22,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -34,6 +38,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -48,6 +55,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -61,6 +71,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }
@@ -73,6 +86,9 @@ namespace JichangeApi.Services.Reports
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

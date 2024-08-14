@@ -9,6 +9,7 @@ namespace JichangeApi.Services
 {
     public class RoleService
     {
+        Payment pay = new Payment();
         public List<Roles> GetRoleList()
         {
             try
@@ -18,6 +19,9 @@ namespace JichangeApi.Services
             }
             catch (Exception ex)
             {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
                 throw new Exception(ex.Message);
             }
         }

@@ -15,15 +15,12 @@ namespace JichangeApi.Services
         {
             try
             {
-                TableDetails tb = new TableDetails();
-                EMP_DET ed = new EMP_DET();
-                Auditlog ad = new Auditlog();
-                string startDate = DateTime.ParseExact(auditTrailForm.Startdate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                string enddate = DateTime.ParseExact(auditTrailForm.Enddate, "dd/MM/yyyy", null).ToString("MM/dd/yyyy");
-                DateTime FromDateVal = DateTime.Parse(startDate);
-                DateTime toDateVal = DateTime.Parse(enddate);
-                var dd = tb.Getlog(auditTrailForm.tbname);
-                var objlistmem = ad.GetBloglist(FromDateVal, toDateVal, auditTrailForm.tbname, auditTrailForm.act, dd.Relation,(long) auditTrailForm.branch);
+                //TableDetails tb = new TableDetails();
+                //Auditlog ad = new Auditlog();
+                DateTime FromDateVal = DateTime.Parse(auditTrailForm.Startdate);
+                DateTime toDateVal = DateTime.Parse(auditTrailForm.Enddate);
+                var dd = new TableDetails().Getlog(auditTrailForm.tbname);
+                var objlistmem = new Auditlog().GetBloglist(FromDateVal, toDateVal, auditTrailForm.tbname, auditTrailForm.act, dd.Relation,(long) auditTrailForm.branch);
                 if (objlistmem != null)
                 {
                     List<Object> Time = new List<Object>();

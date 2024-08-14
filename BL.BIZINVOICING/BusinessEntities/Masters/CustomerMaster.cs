@@ -463,6 +463,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  {
                                      Cust_Sno = c.cust_mas_sno,
                                      Cust_Name = c.customer_name,
+                                     
                                      PostboxNo = c.pobox_no,
                                      Address = c.physical_address,
                                      Region_SNO = c.region_id,

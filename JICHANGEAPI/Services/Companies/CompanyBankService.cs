@@ -325,6 +325,14 @@ namespace JichangeApi.Services.Companies
                 companyBankMaster.UpdateCompany(companyBankMaster);
                 companyBankMaster.DeleteBank(companyBankMaster);
                 AddCompanyBankDetails(companyBankMaster.CompSno, companyBankMaster, companyBankAddModel);
+                if (!getcom.Email.ToLower().Equals(companyBankAddModel.email))
+                {
+                    EmailUtils.SendSuccessEmail(companyBankMaster.Email, companyBankMaster.CompName);
+                }
+                else if (getcom.MobNo.Equals(companyBankAddModel.mob))
+                {
+                    new SmsService().SendSuccessSmsToNewUser(companyBankAddModel.mob, companyBankAddModel.mob);
+                }
             }
             catch (Exception ex)
             {

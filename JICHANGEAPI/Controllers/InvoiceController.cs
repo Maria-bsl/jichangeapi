@@ -66,6 +66,14 @@ namespace JichangeApi.Controllers
                 return this.GetServerErrorResponse(ex.Message);
             }
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        public HttpResponseMessage GetName(string name)
+        {
+            return GetSuccessResponse(name);
+        }
+
         [HttpPost]
         public HttpResponseMessage GetchDetails_A(SingletonComp singletonComp)
         {

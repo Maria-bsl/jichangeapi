@@ -856,7 +856,6 @@ namespace JichangeApi.Services
         }
 
         
-        //Add delivery code and Confirm Del
         public JsonObject MarkInvoiceDelivery(long sno,long userid)
         {
             try

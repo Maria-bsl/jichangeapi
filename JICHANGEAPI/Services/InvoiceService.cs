@@ -233,6 +233,10 @@ namespace JichangeApi.Services
                 invoice.approval_status = "2";
                 invoice.approval_date = DateTime.Now;
                 invoice.UpdateInvoice(invoice);
+
+                // Send Approved Invoice to Customer
+
+
             }
         }
         public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
@@ -354,6 +358,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public JsonObject FindInvoice(long companySno, long invoiceSno)
         {
             try
@@ -393,6 +398,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public JsonObject InsertInvoice(InvoiceForm invoiceForm)
         {
             try
@@ -405,6 +411,7 @@ namespace JichangeApi.Services
                 long invoiceSno = invoice.Addinvoi(invoice);
                 UpdateControlNumber(invoice,invoiceSno);
                 InsertInvoiceDetails(invoiceForm.details, invoiceSno);
+
                 return FindInvoice((long)invoiceForm.compid, invoiceSno);
             }
             catch (ArgumentException ex)

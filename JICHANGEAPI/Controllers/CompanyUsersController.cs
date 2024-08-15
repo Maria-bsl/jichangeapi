@@ -20,7 +20,7 @@ namespace JichangeApi.Controllers
     public class CompanyUsersController : SetupBaseController
     {
         private readonly CompanyUsersService companyUsersService = new CompanyUsersService();
-        Payment pay = new Payment();
+        private readonly Payment pay = new Payment();
        
         [HttpPost]
         public HttpResponseMessage GetCompanyUserss(SingletonComp singletonComp)

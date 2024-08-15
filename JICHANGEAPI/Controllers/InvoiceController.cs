@@ -35,7 +35,7 @@ namespace JichangeApi.Controllers
         private readonly CompanyDepositService companyDepositService = new CompanyDepositService();
         private readonly CustomerService customerService = new CustomerService();
         private readonly CurrencyService currencyService = new CurrencyService();
-        Payment pay = new Payment();
+        private readonly Payment pay = new Payment();
 
 
 

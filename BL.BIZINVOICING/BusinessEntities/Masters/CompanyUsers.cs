@@ -376,7 +376,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     CompuserSno = sc.comp_users_sno,
                                     Compmassno = (long)sc.comp_mas_sno,
                                     Username = sc.username,
-                                    //Password = sc.password,
+                                    Password = sc.password,
                                     Usertype = sc.user_type,
                                     //CreatedDate = (DateTime)sc.created_date,
                                     //ExpiryDate = (DateTime)sc.expiry_date,

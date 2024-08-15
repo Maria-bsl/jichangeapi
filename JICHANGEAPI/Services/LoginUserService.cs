@@ -211,8 +211,10 @@ namespace JichangeApi.Services
         {
             try
             {
-                EMP_DET empdata = new EMP_DET();
-                empdata.Detail_Id = Convert.ToInt64(userid.ToString());
+                EMP_DET empdata = new EMP_DET
+                {
+                    Detail_Id = Convert.ToInt64(userid.ToString())
+                };
                 TRACK_DET trackDet = new TRACK_DET().EditTRACK(userid.ToString());
                 trackDet.SNO = trackDet.SNO;
                 trackDet.Posted_by = userid.ToString();

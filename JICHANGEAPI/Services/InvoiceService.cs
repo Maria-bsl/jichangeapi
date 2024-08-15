@@ -55,14 +55,17 @@ namespace JichangeApi.Services
         }
         private INVOICE CreateEditInvoice(InvoiceForm invoiceForm)
         {
-            INVOICE invoice = new INVOICE();
-            INVOICE found = invoice.GetINVOICEMas1((long)invoiceForm.compid, (long)invoiceForm.sno);
-            if (found == null) return null;
-            found.Due_Date = DateTime.Parse(invoiceForm.edate);
-            found.Invoice_Expired_Date = DateTime.Parse(invoiceForm.edate);
-            found.Payment_Type = invoiceForm.ptype;
-            found.Inv_Remarks = invoiceForm.Inv_remark;
-            return found;
+            //INVOICE invoice = new INVOICE();
+            INVOICE invoice = new INVOICE().GetINVOICEMas1((long)invoiceForm.compid, (long)invoiceForm.sno);
+            if (invoice == null) return null;
+            invoice.Due_Date = DateTime.Parse(invoiceForm.edate);
+            invoice.Invoice_Expired_Date = DateTime.Parse(invoiceForm.iedate);
+            invoice.Payment_Type = invoiceForm.ptype;
+            invoice.Currency_Code = invoiceForm.ccode;
+            invoice.Total = Decimal.Parse(invoiceForm.total);
+            invoice.Inv_Remarks = invoiceForm.Inv_remark;
+            invoice.AuditBy = invoiceForm.userid.ToString();
+            return invoice;
         }
         private INVOICE CreateAmendInvoice(AddAmendForm addAmendForm)
         {

@@ -619,6 +619,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return 0;
             }
         }
+
         public List<Payment> GetPayment_Paid1(string fdata)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
@@ -783,7 +784,18 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+        /*
+        var balances = from payment in context.payment_details
+                       group payment by payment.control_no into paymentGroup
+                       select new
+                       {
+                           ControlNo = paymentGroup.Key,
+                           TotalPaid = paymentGroup.Sum(p => p.paid_amount),
+                           // Assuming there is a total amount or expected amount to compare with.
+                           Balance = paymentGroup.Key - paymentGroup.Sum(p => p.paid_amount)
+                       };
 
+        */
 
         public List<Payment> GetLatestTransAll()
         {
@@ -809,7 +821,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Currency = c.currency_code,
                                     Currency_Code = c.currency_code,
                                     Control_No = c.control_no,
-                                    Balance = c.amount30,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Payment_Desc = c.payment_desc,
                                     Status = c.status,
                                     Comp_Mas_Sno = (long)c.comp_mas_sno,
@@ -851,7 +863,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Currency_Code = c.currency_code,
                                     Currency = c.currency_code,
                                     Control_No = c.control_no,
-                                    Balance = c.amount30,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Payment_Desc = c.payment_desc,
                                     Status = c.status,
                                     Comp_Mas_Sno = (long)c.comp_mas_sno,
@@ -894,7 +906,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Currency= c.currency_code,
                                     Control_No = c.control_no,
                                     Comp_Mas_Sno = (long)c.comp_mas_sno,
-                                    Balance = c.amount30,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Payment_Desc = c.payment_desc,
                                     Status = c.status,
                                     //Company_Name = c.company_name,
@@ -933,7 +945,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Amount_Type = c.amount_type,
                                     Currency_Code = c.currency_code,
                                     Control_No = c.control_no,
-                                    Balance = c.amount30,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Payment_Desc = c.payment_desc,
                                     Status = c.status,
                                     Comp_Mas_Sno = (long)c.comp_mas_sno,
@@ -999,7 +1011,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Control_No = c.control_no,
                                               Comp_Mas_Sno = (long)c.comp_mas_sno,
                                               Company_Name = d.company_name,
-                                              Balance = (long)c.amount30,
+                                              Balance = (c.requested_amount - c.paid_amount),
                                               Cust_Mas_Sno = (long)c.cust_mas_sno,
                                               Customer_Name = cus.customer_name,
                                               Invoice_Sno = det.invoice_no, //c.invoice_sno,
@@ -1042,6 +1054,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                         Amount_Type = c.amount_type,
                                         Currency_Code = c.currency_code,
                                         Control_No = c.control_no,
+                                        Balance = (c.requested_amount - c.paid_amount),
                                         Comp_Mas_Sno = (long)c.comp_mas_sno,
                                         //Company_Name = c.company_name,
                                         Cust_Mas_Sno = (long)c.cust_mas_sno,
@@ -1079,6 +1092,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                         Amount_Type = c.amount_type,
                                         Currency_Code = c.currency_code,
                                         Control_No = c.control_no,
+                                        Balance = (c.requested_amount - c.paid_amount),
                                         Comp_Mas_Sno = (long)c.comp_mas_sno,
                                         //Company_Name = c.company_name,
                                         Cust_Mas_Sno = (long)c.cust_mas_sno,
@@ -1272,8 +1286,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     Customer_Name = cus.customer_name,
                                     Invoice_Sno = c.invoice_sno,
-                                    Amount30 = (long)c.amount30,
-                                    Balance = (long)c.amount30,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Audit_Date = (DateTime)c.posted_date
 
                                 }).ToList();
@@ -1352,7 +1365,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                         Amount30 = (long)c.amount30,
                                         Status = c.status,
                                         Payment_Desc = c.payment_desc,
-                                        Balance = (long)c.amount30,
+                                        Balance = (c.requested_amount - c.paid_amount),
                                         Audit_Date = (DateTime)c.posted_date
 
                                 }).ToList();
@@ -1388,6 +1401,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Payment_Type = c.payment_type,
                                     Amount_Type = c.amount_type,
                                     Currency_Code = c.currency_code,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Token = c.token,
                                     Chksum = c.chksum,
                                     Control_No = c.control_no,
@@ -1463,11 +1477,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Cust_Mas_Sno = (long)c.cust_mas_sno,
                                               Customer_Name = cus.customer_name,
                                               Invoice_Sno = c.invoice_sno,
-                                              Amount30 = (long)c.amount30,
-                                              Balance = (long)c.amount30,
+                                              Balance = (c.requested_amount - c.paid_amount),
                                               Audit_Date = (DateTime)c.posted_date,
-                                              Status = ((long)c.amount30 > 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
-                                                        det.invoice_expired < DateTime.Today && (long)c.amount30 > 0 ? "Expired" : det.due_date < DateTime.Today && (long)c.amount30 > 0 ? "Overdue" : "Completed"
+                                              Status = ((long)Balance > 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
+                                                        det.invoice_expired < DateTime.Today && (long)Balance > 0 ? "Expired" : det.due_date < DateTime.Today && (long)Balance > 0 ? "Overdue" : "Completed"
 
                                           }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();
@@ -1563,8 +1576,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                         Cust_Mas_Sno = (long)c.cust_mas_sno,
                                         Customer_Name = cus.customer_name,
                                         Invoice_Sno = c.invoice_sno,
-                                        Amount30 = (long)c.amount30,
-                                        Balance = (long)c.amount30,
+                                        Balance = (c.requested_amount - c.paid_amount),
                                         Audit_Date = (DateTime)c.posted_date
 
                                     }).ToList();
@@ -1590,7 +1602,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join cus in context.customer_master on c.cust_mas_sno equals cus.cust_mas_sno
                                 where det.invoice_no == inv
 
-
                                 select new Payment
                                 {
                                     SNO = c.sno,
@@ -1615,8 +1626,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Cust_Mas_Sno = (long)c.cust_mas_sno,
                                     Customer_Name = cus.customer_name,
                                     Invoice_Sno = c.invoice_sno,
-                                    Amount30 = (long)c.amount30,
-                                    Balance = (long)c.amount30,
+                                    Balance = (c.requested_amount - c.paid_amount),
                                     Audit_Date = (DateTime)c.posted_date
 
                                 }).ToList();

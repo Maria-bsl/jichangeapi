@@ -880,7 +880,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var adetails = (from c in context.invoice_master
-                                join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
+                                //join c1 in context.invoice_details on c.inv_mas_sno equals c1.inv_mas_sno
                                 where c.due_date >= DateTime.Now && (c.invoice_expired == null || c.invoice_expired > DateTime.Now)
                                 && c.comp_mas_sno == company_sno
                                 select c).ToList();
@@ -2616,6 +2616,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Customer_ID_Type = c.customer_id_type,
                                               Customer_ID_No = c.customer_id_no,
                                               Total = (decimal)c.total_amount,
+                                              AuditBy = c.posted_by,
+                                              Audit_Date = (DateTime)c.posted_date,
                                               Total_Vt = (decimal)c.vat_amount,
                                               Total_Without_Vt = (decimal)c.total_without_vat,
                                               Control_No = c.control_no,

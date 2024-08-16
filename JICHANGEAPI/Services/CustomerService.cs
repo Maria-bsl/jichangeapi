@@ -92,7 +92,7 @@ namespace JichangeApi.Services
             try
             {
                 List<CustomerMaster> result = new CustomerMaster().CustGet(compid);
-                return result != null ? result : new List<CustomerMaster>();
+                return result ?? new List<CustomerMaster>();
             }
             catch (Exception ex)
             {
@@ -107,7 +107,7 @@ namespace JichangeApi.Services
             try
             {
                 List<CustomerMaster> result = new CustomerMaster().CustGet();
-                return result != null ? result : new List<CustomerMaster>();
+                return result ?? new List<CustomerMaster>();
             }
             catch (Exception ex)
             {
@@ -190,6 +190,7 @@ namespace JichangeApi.Services
                 if (errors.Length > 0) throw new ArgumentException(errors);
                 long addedCustomer = customerMaster.CustAdd(customerMaster);
                 AppendInsertAuditTrail(addedCustomer, customerMaster, (long)customersForm.userid);
+                
                 return FindCustomer(customerMaster.CompanySno, addedCustomer);
             }
             catch (ArgumentException ex)

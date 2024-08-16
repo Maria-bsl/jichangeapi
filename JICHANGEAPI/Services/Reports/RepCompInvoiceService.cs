@@ -67,7 +67,7 @@ namespace JichangeApi.Services.Reports
             {
                 INVOICE invoice = new INVOICE();
                 var result = invoice.GetInvRep(invoiceDetailsForm.companyIds, invoiceDetailsForm.customerIds, invoiceDetailsForm.stdate, invoiceDetailsForm.enddate,invoiceDetailsForm.allowCancelInvoice);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {

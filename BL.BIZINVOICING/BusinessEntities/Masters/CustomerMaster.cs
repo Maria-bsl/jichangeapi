@@ -241,6 +241,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 {
                                     Cust_Sno = c.cust_mas_sno,
                                     Cust_Name = c.customer_name,
+                                    Phone = c.mobile_no
 
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)

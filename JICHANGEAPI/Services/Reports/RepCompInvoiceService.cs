@@ -51,7 +51,7 @@ namespace JichangeApi.Services.Reports
                 /*invRepoModel.cusid = invRepoModel.cusid.ToString().ToLower() == "all" ? "0" : invRepoModel.cusid;
                 invRepoModel.Comp = invRepoModel.Comp.ToString().ToLower() == "all" ? 0 : invRepoModel.Comp;*/
                 var result = new INVOICE().GetInvRep1((long)invRepoModel.Comp, long.Parse(invRepoModel.cusid), invRepoModel.stdate, invRepoModel.enddate);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {

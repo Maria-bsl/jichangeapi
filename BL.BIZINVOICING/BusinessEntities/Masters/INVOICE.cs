@@ -2526,6 +2526,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (stdate == "" && enddate == "")
                 {
                     List<INVOICE> listinvoice = (from c in context.invoice_master
+                                                 join cu in context.company_users on c.posted_by equals cu.comp_users_sno.ToString()
                                                  join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                                  where (c.approval_status == "2")
                                                  && (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
@@ -2536,6 +2537,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      Invoice_Date = c.invoice_date,
                                                      Chus_Mas_No = det.cust_mas_sno,
                                                      Chus_Name = det.customer_name,
+                                                     Audit_Date = (DateTime)c.posted_date,
+                                                     AuditBy = cu.username,
                                                      Customer_ID_Type = c.customer_id_type,
                                                      Customer_ID_No = c.customer_id_no,
                                                      Total = (decimal)c.total_amount,
@@ -2561,6 +2564,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     //DateTime tdate = DateTime.Parse(edate).AddHours(23).AddMinutes(59).AddSeconds(59);
                     DateTime tdate = DateTime.Parse(enddate);
                     List<INVOICE> listinvoice = (from c in context.invoice_master
+                                                 join cu in context.company_users on c.posted_by equals cu.comp_users_sno.ToString()
                                                  join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                                  where (c.approval_status == "2") && (c.invoice_date >= fdate && c.invoice_date <= tdate) &&
                                                  (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
@@ -2571,6 +2575,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      Invoice_Date = c.invoice_date,
                                                      Chus_Mas_No = det.cust_mas_sno,
                                                      Chus_Name = det.customer_name,
+                                                     Audit_Date = (DateTime)c.posted_date,
+                                                     AuditBy = cu.username,
                                                      Customer_ID_Type = c.customer_id_type,
                                                      Customer_ID_No = c.customer_id_no,
                                                      Total = (decimal)c.total_amount,
@@ -2597,6 +2603,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate);
 
                 List<INVOICE> invoices = (from c in context.invoice_master
+                                          join cu in context.company_users on c.posted_by equals cu.comp_users_sno.ToString()
                                           join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                           join c1 in context.company_master on c.comp_mas_sno equals c1.comp_mas_sno
                                           where (allowCancelInvoice ? allowCancelInvoice : c.approval_status == "2")
@@ -2616,7 +2623,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Customer_ID_Type = c.customer_id_type,
                                               Customer_ID_No = c.customer_id_no,
                                               Total = (decimal)c.total_amount,
-                                              AuditBy = c.posted_by,
+                                              AuditBy = cu.username,
                                               Audit_Date = (DateTime)c.posted_date,
                                               Total_Vt = (decimal)c.vat_amount,
                                               Total_Without_Vt = (decimal)c.total_without_vat,
@@ -2644,6 +2651,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (stdate == "" && enddate == "")
                 {
                     List<INVOICE> listinvoice = (from c in context.invoice_master
+                                                 join cu in context.company_users on c.posted_by equals cu.comp_users_sno.ToString()
                                                  join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                                  where (c.approval_status == "2") 
                                                  && (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
@@ -2659,7 +2667,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      Total = (decimal)c.total_amount,
                                                      Total_Vt = (decimal)c.vat_amount,
                                                      Total_Without_Vt = (decimal)c.total_without_vat,
-                                                     //Vat_Amount= (long)c.vat_amount,
+                                                     // Vat_Amount= (long)c.vat_amount,
+                                                     AuditBy = cu.username,
+                                                     Audit_Date = (DateTime)c.posted_date,
                                                      warrenty = c.warrenty,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
@@ -2687,6 +2697,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     //DateTime tdate = DateTime.Parse(edate).AddHours(23).AddMinutes(59).AddSeconds(59);
                     DateTime tdate = DateTime.Parse(enddate);
                     List<INVOICE> listinvoice = (from c in context.invoice_master
+                                                 join u in context.company_users on c.posted_by equals u.comp_users_sno.ToString()
                                                  join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                                  where (c.approval_status == "2") && (c.invoice_date >= fdate && c.invoice_date <= tdate) &&
                                                  (cust == 0 ? c.cust_mas_sno == c.cust_mas_sno : c.cust_mas_sno == cust)
@@ -2704,6 +2715,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                      Total_Without_Vt = (decimal)c.total_without_vat,
                                                      //Vat_Amount= (long)c.vat_amount,
                                                      warrenty = c.warrenty,
+                                                     AuditBy = u.username,
+                                                     Audit_Date = (DateTime)c.posted_date,
                                                      goods_status = c.goods_status,
                                                      delivery_status = c.delivery_status,
                                                      approval_date = approval_date,

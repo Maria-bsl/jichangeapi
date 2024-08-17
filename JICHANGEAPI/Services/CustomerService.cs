@@ -69,12 +69,14 @@ namespace JichangeApi.Services
         }
         private CustomerMaster CreateCustomer(CustomersForm customersForm)
         {
-            CustomerMaster customer = new CustomerMaster();
-            customer.Cust_Sno = customersForm.CSno;
-            customer.Cust_Name = customersForm.CName;
-            customer.PostboxNo = customersForm.PostboxNo;
-            customer.Address = customersForm.Address;
-            customer.CompanySno = long.Parse((customersForm.compid).ToString());
+            CustomerMaster customer = new CustomerMaster
+            {
+                Cust_Sno = customersForm.CSno,
+                Cust_Name = customersForm.CName,
+                PostboxNo = customersForm.PostboxNo,
+                Address = customersForm.Address,
+                CompanySno = long.Parse((customersForm.compid).ToString())
+            };
             if (customersForm.regid > 0) { customer.Region_SNO = customersForm.regid; }
             if (customersForm.distsno > 0) { customer.DistSno = customersForm.distsno; }
             if (customersForm.wardsno > 0) { customer.WardSno = customersForm.wardsno; }
@@ -147,7 +149,7 @@ namespace JichangeApi.Services
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
                 List<CompanyBankMaster> result = companyBankMaster.CompGet(compid);
-                return result != null ? result : new List<CompanyBankMaster>();
+                return result ?? new List<CompanyBankMaster>();
             }
             catch (Exception ex)
             {
@@ -268,7 +270,7 @@ namespace JichangeApi.Services
             {
                 Customers customers =  new Customers();
                 var result = customers.GetCustomersS(compid);
-                return result != null ? result : new List<Customers>();
+                return result ?? new List<Customers>();
             }
             catch (Exception ex)
             {

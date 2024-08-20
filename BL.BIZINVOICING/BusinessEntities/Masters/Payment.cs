@@ -1443,9 +1443,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 DateTime? fromDate = null;
-                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate).AddHours(00).AddMinutes(59).AddSeconds(58);
+                if (!string.IsNullOrEmpty(stdate)) fromDate = DateTime.Parse(stdate); //.AddHours(00).AddMinutes(59).AddSeconds(58);
                 DateTime? toDate = null;
-                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate).AddHours(11).AddMinutes(59).AddSeconds(58); //.AddHours(11).AddMinutes(59).AddSeconds(58);
+                if (!string.IsNullOrEmpty(enddate)) toDate = DateTime.Parse(enddate); //.AddHours(11).AddMinutes(59).AddSeconds(58); //.AddHours(11).AddMinutes(59).AddSeconds(58);
+                //Func<int, int> square = x => x * x;
                 List<Payment> payments = (from c in context.payment_details
                                           join cs in context.company_master on c.comp_mas_sno equals cs.comp_mas_sno
                                           join det in context.invoice_master on c.invoice_sno equals det.invoice_no
@@ -1479,8 +1480,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Invoice_Sno = c.invoice_sno,
                                               Balance = (c.requested_amount - c.paid_amount),
                                               Audit_Date = (DateTime)c.posted_date,
-                                              Status = ((long)Balance > 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
-                                                        det.invoice_expired < DateTime.Today && (long)Balance > 0 ? "Expired" : det.due_date < DateTime.Today && (long)Balance > 0 ? "Overdue" : "Completed"
+                                            // Status = square(7,8)//((long)Balance >= 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
+                                                            //  det.invoice_expired < DateTime.Today && (long)Balance >= 0 ? "Expired" : det.due_date < DateTime.Today && (long)Balance >= 0 ? "Overdue" : "Completed"
 
                                           }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();

@@ -230,5 +230,189 @@ namespace JichangeApi.Utilities
                 throw new Exception(ex.Message);
             }
         }
+
+
+        #region  Invoice Mails Section
+        public static void SendCustomerNewInvoiceEmail(string email, string otp, string mobile)
+        {
+            EMAIL em = new EMAIL();
+            S_SMTP ss = new S_SMTP();
+            try
+            {
+                Guid activationCode = Guid.NewGuid();
+                SmtpClient smtp = new SmtpClient();
+
+                using (MailMessage mm = new MailMessage())
+                {
+                    var m = ss.getSMTPText();
+                    var data = em.GetLatestEmailTextsListByFlow("1");
+                    mm.To.Add(email);
+                    mm.From = new MailAddress(m.From_Address);
+                    mm.Subject = data.Subject;
+                    string drt = data.Email_Text;
+                    /*var urlBuilder =
+                   new System.UriBuilder(Request.Url.AbsoluteUri)
+                   {
+                       Path = Url.Action("Loginnew", "Loginnew"),
+                       Query = null,
+                   };
+
+                    Uri uri = urlBuilder.Uri;*/
+                    //string url = "web_url";
+                    string weburl = ConfigurationManager.AppSettings["MyWebUrl"];
+                    string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
+                    string encrypt = PasswordGeneratorUtil.GetEncryptedData(mobile);// MjU1NzUzNjg4ODY3
+                    var linkurl = ConfigurationManager.AppSettings["MyCodeUrl"] + encrypt;
+                    string body = string.Format("{0},JICHANGE Confirmation code for delivery is {1}, verify through this link: {2}", email, otp, linkurl);
+                    mm.Body = body;
+                    mm.IsBodyHtml = true;
+                    if (string.IsNullOrEmpty(m.SMTP_UName))
+                    {
+                        smtp.Port = Convert.ToInt16(m.SMTP_Port);
+                        smtp.Host = m.SMTP_Address;
+                    }
+                    else
+                    {
+                        smtp.Host = m.SMTP_Address;
+                        smtp.Port = Convert.ToInt16(m.SMTP_Port);
+                        smtp.EnableSsl = Convert.ToBoolean(m.SSL_Enable);
+                        NetworkCredential NetworkCred = new NetworkCredential(m.SMTP_UName, Utilites.DecodeFrom64(m.SMTP_Password));
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = NetworkCred;
+                    }
+                    smtp.Send(mm);
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw new Exception(Ex.ToString());
+                //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
+                // Utilites.logfile("lcituion user", drt, Ex.ToString());
+            }
+
+        }
+
+
+        public static void SendCustomerAmmendedInvoiceEmail(string email, string otp, string mobile)
+        {
+            EMAIL em = new EMAIL();
+            S_SMTP ss = new S_SMTP();
+            try
+            {
+                Guid activationCode = Guid.NewGuid();
+                SmtpClient smtp = new SmtpClient();
+
+                using (MailMessage mm = new MailMessage())
+                {
+                    var m = ss.getSMTPText();
+                    var data = em.GetLatestEmailTextsListByFlow("1");
+                    mm.To.Add(email);
+                    mm.From = new MailAddress(m.From_Address);
+                    mm.Subject = data.Subject;
+                    string drt = data.Email_Text;
+                    /*var urlBuilder =
+                   new System.UriBuilder(Request.Url.AbsoluteUri)
+                   {
+                       Path = Url.Action("Loginnew", "Loginnew"),
+                       Query = null,
+                   };
+
+                    Uri uri = urlBuilder.Uri;*/
+                    //string url = "web_url";
+                    string weburl = ConfigurationManager.AppSettings["MyWebUrl"];
+                    string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
+                    string encrypt = PasswordGeneratorUtil.GetEncryptedData(mobile);// MjU1NzUzNjg4ODY3
+                    var linkurl = ConfigurationManager.AppSettings["MyCodeUrl"] + encrypt;
+                    string body = string.Format("{0},JICHANGE Confirmation code for delivery is {1}, verify through this link: {2}", email, otp, linkurl);
+                    mm.Body = body;
+                    mm.IsBodyHtml = true;
+                    if (string.IsNullOrEmpty(m.SMTP_UName))
+                    {
+                        smtp.Port = Convert.ToInt16(m.SMTP_Port);
+                        smtp.Host = m.SMTP_Address;
+                    }
+                    else
+                    {
+                        smtp.Host = m.SMTP_Address;
+                        smtp.Port = Convert.ToInt16(m.SMTP_Port);
+                        smtp.EnableSsl = Convert.ToBoolean(m.SSL_Enable);
+                        NetworkCredential NetworkCred = new NetworkCredential(m.SMTP_UName, Utilites.DecodeFrom64(m.SMTP_Password));
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = NetworkCred;
+                    }
+                    smtp.Send(mm);
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw new Exception(Ex.ToString());
+                //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
+                // Utilites.logfile("lcituion user", drt, Ex.ToString());
+            }
+
+        }
+
+
+        public static void SendCustomerCancelledInvoiceEmail(string email, string otp, string mobile)
+        {
+            EMAIL em = new EMAIL();
+            S_SMTP ss = new S_SMTP();
+            try
+            {
+                Guid activationCode = Guid.NewGuid();
+                SmtpClient smtp = new SmtpClient();
+
+                using (MailMessage mm = new MailMessage())
+                {
+                    var m = ss.getSMTPText();
+                    var data = em.GetLatestEmailTextsListByFlow("1");
+                    mm.To.Add(email);
+                    mm.From = new MailAddress(m.From_Address);
+                    mm.Subject = data.Subject;
+                    string drt = data.Email_Text;
+                    /*var urlBuilder =
+                   new System.UriBuilder(Request.Url.AbsoluteUri)
+                   {
+                       Path = Url.Action("Loginnew", "Loginnew"),
+                       Query = null,
+                   };
+
+                    Uri uri = urlBuilder.Uri;*/
+                    //string url = "web_url";
+                    string weburl = ConfigurationManager.AppSettings["MyWebUrl"];
+                    string url = "<a href='" + weburl + "' target='_blank'>" + weburl + "</a>";
+                    string encrypt = PasswordGeneratorUtil.GetEncryptedData(mobile);// MjU1NzUzNjg4ODY3
+                    var linkurl = ConfigurationManager.AppSettings["MyCodeUrl"] + encrypt;
+                    string body = string.Format("{0},JICHANGE Confirmation code for delivery is {1}, verify through this link: {2}", email, otp, linkurl);
+                    mm.Body = body;
+                    mm.IsBodyHtml = true;
+                    if (string.IsNullOrEmpty(m.SMTP_UName))
+                    {
+                        smtp.Port = Convert.ToInt16(m.SMTP_Port);
+                        smtp.Host = m.SMTP_Address;
+                    }
+                    else
+                    {
+                        smtp.Host = m.SMTP_Address;
+                        smtp.Port = Convert.ToInt16(m.SMTP_Port);
+                        smtp.EnableSsl = Convert.ToBoolean(m.SSL_Enable);
+                        NetworkCredential NetworkCred = new NetworkCredential(m.SMTP_UName, Utilites.DecodeFrom64(m.SMTP_Password));
+                        smtp.UseDefaultCredentials = false;
+                        smtp.Credentials = NetworkCred;
+                    }
+                    smtp.Send(mm);
+                }
+            }
+            catch (Exception Ex)
+            {
+                throw new Exception(Ex.ToString());
+                //long errorLogID = ApplicationError.ErrorHandling(Ex, Request.Url.ToString(), Request.Browser.Type);
+                // Utilites.logfile("lcituion user", drt, Ex.ToString());
+            }
+
+        }
+
+
+        #endregion
     }
 }

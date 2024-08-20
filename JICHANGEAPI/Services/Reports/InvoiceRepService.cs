@@ -18,7 +18,7 @@ namespace JichangeApi.Services.Reports
             {
                 INVOICE invoice = new INVOICE();
                 var result = invoice.GetCustomers((long)singleton.Sno);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {
@@ -34,7 +34,7 @@ namespace JichangeApi.Services.Reports
             {
                 INVOICE invoice = new INVOICE();
                 var result = invoice.GetCustomers111((long)singleton.Sno);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {
@@ -51,7 +51,7 @@ namespace JichangeApi.Services.Reports
                 CustomerMaster customerMaster = new CustomerMaster();
                 //var result = customerMaster.GetCust1((long)singleton.Sno);
                 var result = customerMaster.SelectCustomersByCompanyIds(customerDetailsForm.companyIds);
-                return result != null ? result : new List<CustomerMaster>();
+                return result ?? new List<CustomerMaster>();
             }
             catch (Exception ex)
             {
@@ -67,7 +67,7 @@ namespace JichangeApi.Services.Reports
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
                 var result = companyBankMaster.CompGet1();
-                return result != null ? result : new List<CompanyBankMaster> ();
+                return result ?? new List<CompanyBankMaster> ();
             }
             catch (Exception ex)
             {
@@ -83,7 +83,25 @@ namespace JichangeApi.Services.Reports
             {
                 CompanyBankMaster companyBankMaster = new CompanyBankMaster();
                 var result = companyBankMaster.GetApprovedCompaniesByBranch(branchId,"approved");
-                return result != null ? result : new List<CompanyBankMaster>();
+                return result ?? new List<CompanyBankMaster>();
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                throw new Exception(ex.Message);
+            }
+        }
+
+
+        public List<CompanyBankMaster> GetLatestCompaniesListByBranch(long branchId)
+        {
+            try
+            {
+                CompanyBankMaster companyBankMaster = new CompanyBankMaster();
+                var result = companyBankMaster.GetLatestApprovedCompaniesByBranch(branchId, "approved");
+                return result ?? new List<CompanyBankMaster>();
             }
             catch (Exception ex)
             {
@@ -117,7 +135,7 @@ namespace JichangeApi.Services.Reports
             {
                 INVOICE invoice = new INVOICE();
                 var result = invoice.GetInvoiceNos((long)singletonSno.Sno);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {
@@ -133,7 +151,7 @@ namespace JichangeApi.Services.Reports
             {
                 INVOICE invoice = new INVOICE();
                 var result = invoice.GetInvRep(invoiceDetailsForm.customerIds, invoiceDetailsForm.customerIds, invoiceDetailsForm.stdate, invoiceDetailsForm.enddate,invoiceDetailsForm.allowCancelInvoice);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {
@@ -149,7 +167,7 @@ namespace JichangeApi.Services.Reports
             {
                 INVOICE invoice = new INVOICE();
                 var result = invoice.GetInvDetRep((long)invDetRepModel.Comp, invDetRepModel.invs, invDetRepModel.stdate, invDetRepModel.enddate, (long)invDetRepModel.Cust);
-                return result != null ? result : new List<INVOICE>();
+                return result ?? new List<INVOICE>();
             }
             catch (Exception ex)
             {

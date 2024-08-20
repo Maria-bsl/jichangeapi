@@ -784,6 +784,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     return null;
             }
         }
+
         /*
         var balances = from payment in context.payment_details
                        group payment by payment.control_no into paymentGroup
@@ -1480,8 +1481,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                               Invoice_Sno = c.invoice_sno,
                                               Balance = (c.requested_amount - c.paid_amount),
                                               Audit_Date = (DateTime)c.posted_date,
-                                            // Status = square(7,8)//((long)Balance >= 0 && ((string.IsNullOrEmpty(det.delivery_status)) || (det.delivery_status.ToLower().Equals("pending")))) ? "Awaiting Payment" :
-                                                            //  det.invoice_expired < DateTime.Today && (long)Balance >= 0 ? "Expired" : det.due_date < DateTime.Today && (long)Balance >= 0 ? "Overdue" : "Completed"
+                                              Status = (Balance >= 0 && (string.IsNullOrEmpty(det.delivery_status) || det.delivery_status.ToLower().Equals("pending"))) ? "Awaiting Payment" :
+                                                           det.invoice_expired < DateTime.Today && Balance >= 0 ? "Expired" : det.due_date < DateTime.Today && Balance >= 0 ? "Overdue" : "Completed"
 
                                           }).OrderBy(e => e.Company_Name).ToList();
                 return payments ?? new List<Payment>();

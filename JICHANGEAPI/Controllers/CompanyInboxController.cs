@@ -17,7 +17,7 @@ namespace JichangeApi.Controllers
     public class CompanyInboxController : SetupBaseController
     {
         private readonly CompanyInboxService companyInboxService = new CompanyInboxService();
-        Payment pay = new Payment();
+        private readonly Payment pay = new Payment();
       
 
         [HttpPost]

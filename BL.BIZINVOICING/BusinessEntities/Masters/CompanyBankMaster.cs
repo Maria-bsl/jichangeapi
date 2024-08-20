@@ -1015,7 +1015,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  MobNo = c.mobile_no,
                                  Branch_Sno = c.branch_sno != null ? c.branch_sno : 0,
                                  Checker = c.checker,
-                                 AccountNo = d.account_no
+                                 AccountNo = d.account_no,
+                                 Status = c.status,
                              }).FirstOrDefault();
                 return found ?? null;
             }

@@ -21,8 +21,7 @@ namespace JichangeApi.Services
     public class InvoiceService
     {
         private CompanyBankService companyBankService = new CompanyBankService();
-
-        Payment pay = new Payment();
+        readonly Payment pay = new Payment();
         
         private INVOICE CreateInvoice(InvoiceForm invoiceForm)
         {
@@ -234,9 +233,16 @@ namespace JichangeApi.Services
                 invoice.approval_date = DateTime.Now;
                 invoice.UpdateInvoice(invoice);
 
-                // Send Approved Invoice to Customer
-
-
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails  = customer.CustGetId(invoice.Chus_Mas_No, invoice.Com_Mas_Sno);
+                var total = invoice.Total + invoice.Currency_Code;
+                // Send Approved Invoice to Customer EMAIL & SMS
+                new SmsService().SendCustomerInvoiceSMS(invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString(), customerdetails.Phone);
+               
+                
+                EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email ,invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString());
+           
+            
             }
         }
         public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
@@ -468,6 +474,18 @@ namespace JichangeApi.Services
                 invoice.approval_status = "2";
                 invoice.approval_date = System.DateTime.Now;
                 invoice.UpdateInvoice(invoice);
+
+
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Chus_Mas_No, invoice.Com_Mas_Sno);
+                var total = invoice.Total + invoice.Currency_Code;
+                // Send Approved Invoice to Customer
+                new SmsService().SendCustomerInvoiceSMS(invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString(), customerdetails.Phone);
+
+
+                EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString());
+
                 return FindInvoice((long)invoiceForm.compid, invoiceForm.sno);
             }
             catch (ArgumentException ex)

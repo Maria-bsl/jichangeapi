@@ -227,13 +227,13 @@ namespace JichangeApi.Controllers.setup
                 if (isDuplicateEmployeeId)
                 {
                     var messages = new List<string> { "Employee Id exists" };
-                    this.GetCustomErrorMessageResponse(messages);
+                    return this.GetCustomErrorMessageResponse(messages);
                 }
                 bool isDuplicateUsername = employee.isDuplicateEmployeeUsername(addBankUserForm.user, (long)addBankUserForm.sno);
                 if (isDuplicateUsername)
                 {
                     var messages = new List<string> { "Username exists" };
-                    this.GetCustomErrorMessageResponse(messages);
+                    return this.GetCustomErrorMessageResponse(messages);
                 }
 
                 EMP_DET found = employee.FindEmployee((long)addBankUserForm.sno);

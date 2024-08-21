@@ -121,6 +121,27 @@ namespace JichangeApi.Controllers
             }
         }
 
+
+        [HttpPost]
+        public HttpResponseMessage LatestCompanyListBranch(BranchRef branchRef)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                List<CompanyBankMaster> companies = invoiceRepService.GetLatestCompaniesListByBranch((long)branchRef.branch);
+                return GetSuccessResponse(companies);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
+
+
         [HttpPost]
         public HttpResponseMessage GetCompaniesByBranch(BranchRef branchRef)
         {

@@ -206,6 +206,71 @@ namespace JichangeApi.Controllers.smsservices
             return result;
         }
 
+
+
+
+        public void SendCustomerInvoiceSMS(string username, string password, string mobile_no)
+        {
+            if (username != null)
+            {
+                var mobileNumber = mobile_no;
+
+
+                var formattedMessageBody = FormatMessageInvoiceBody(username, password);
+
+                SendSMSAction(mobileNumber, formattedMessageBody);
+
+            }
+
+        }
+
+        public void SendCustomerInvoiceAmmendedSMS(string Mobile_Number, string otp)
+        {
+            if (Mobile_Number != null)
+            {
+                var mobileNumber = Mobile_Number;
+
+                var formattedMessageBody = FormatInvoiceAmmendMessageBody(Mobile_Number, otp);
+
+                SendSMSAction(mobileNumber, formattedMessageBody);
+
+            }
+
+        }
+
+        public void SendCustomerCancelInvoiceSMS(string Mobile_Number, string otp)
+        {
+            if (Mobile_Number != null)
+            {
+                var mobileNumber = Mobile_Number;
+
+                var formattedMessageBody = FormatInvoiceCancelMessageBody(Mobile_Number, otp);
+
+                SendSMSAction(mobileNumber, formattedMessageBody);
+
+            }
+
+        }
+
+        private static string FormatInvoiceCancelMessageBody(string customerName, string otp)
+        {
+            return string.Format("{0}, you have successfully been registered on JICHANGE system, your account is Pending for approval and the URL is " + ConfigurationManager.AppSettings["MyWebUrl"] + "", customerName);
+        }
+
+        private static string FormatMessageInvoiceBody(string customerName, string password)
+        {
+            return string.Format("{0}, Your account have successfully been approved on JICHANGE system, the URL is " + ConfigurationManager.AppSettings["MyWebUrl"] + "  and Your password is  {1}", customerName, password);
+        }
+
+        private static string FormatInvoiceAmmendMessageBody(string cust_number, string code)
+        {
+            return string.Format("{0},JICHANGE verification code is {1}", cust_number, code);
+        }
+
+
+
+
+
         #endregion;
 
 

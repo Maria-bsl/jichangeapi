@@ -573,9 +573,50 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Checker = sc.checker,
                                     CompName = sc.company_name
 
-
                                 }).FirstOrDefault();
                 if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        public List<CompanyBankMaster> GetLatestApprovedCompaniesByBranch(long bsno, string status)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from sc in context.company_master
+                                join bank in context.company_bank_details on sc.comp_mas_sno equals bank.comp_mas_sno
+                                where !string.IsNullOrEmpty(sc.status) && sc.status.ToLower().Equals(status.ToLower()) && (bsno == 0 || sc.branch_sno == bsno) //bsno == 0 ? true : sc.branch_sno == bsno
+                                select new CompanyBankMaster
+                                {
+                                    CompSno = sc.comp_mas_sno,
+                                    CompName = sc.company_name,
+                                    PostBox = sc.pobox_no,
+                                    Address = sc.physical_address,
+                                    RegId = (long)sc.region_id,
+                                    AccountNo = bank.account_no,
+
+                                    //RegName=reg.region_name,
+                                    DistSno = (long)sc.district_sno,
+                                    Branch_Sno = sc.branch_sno,
+                                    //DistName=dist.district_name,
+                                    WardSno = (long)sc.ward_sno,
+                                    //WardName=ward.ward_name,
+                                    TinNo = sc.tin_no,
+                                    VatNo = sc.vat_no,
+                                    DirectorName = sc.director_name,
+                                    Email = sc.email_address,
+                                    TelNo = sc.telephone_no,
+                                    FaxNo = sc.fax_no,
+                                    MobNo = sc.mobile_no,
+                                    Status = sc.status,
+                                    Checker = sc.checker
+                                    //CompLogo=sc.comp_logo,
+                                    //DirectorSig=sc.director_digital_sig,
+
+                                }).OrderByDescending(x=> x.CompSno).Take(5).ToList();
+                if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else
                     return null;

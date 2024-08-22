@@ -9,6 +9,11 @@ using System.Threading.Tasks;
 using BL.BIZINVOICING.BusinessEntities.Masters;
 using System.Runtime.Remoting.Messaging;
 using System.Configuration;
+using System.IO;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+using System.Web.Hosting;
+using iTextSharp.text.pdf.draw;
 
 namespace JichangeApi.Utilities
 {
@@ -161,7 +166,7 @@ namespace JichangeApi.Utilities
                 using (MailMessage mm = new MailMessage())
                 {
                     var m = ss.getSMTPText();
-                    var data = em.GetLatestEmailTextsListByFlow("1");
+                    var data = em.GetLatestEmailTextsListByFlow("6"); // OTP
                     mm.To.Add(email);
                     mm.From = new MailAddress(m.From_Address);
                     mm.Subject = data.Subject;
@@ -286,7 +291,7 @@ namespace JichangeApi.Utilities
                     var m = ss.getSMTPText();
                     var data = em.GetLatestEmailTextsListByFlow("2"); // Invoice Generation
 
-                    mm.Body = string.Format("Hello {0}, Kindly pay {1} for invoice number {2}.Payment reference number is {3}. Regards,{4} ", customername, amount, invoiceno, controlno, vendor);
+                    mm.Body = string.Format("Hello {0}, \n Kindly pay {1} for invoice number {2}.Payment reference number is {3}.\n Regards,\n{4} ", customername, amount, invoiceno, controlno, vendor);
                     mm.Subject = "INVOICE";
 
                     if (data != null)
@@ -295,16 +300,22 @@ namespace JichangeApi.Utilities
                         
                         /*  Hello "}+customername+{", Kindly pay "}+amount+{" for invoice number "}+invno+{". Payment reference number is "}+controlno+{". Regards, "}+vendor+{" */
 
-                       string content = data.Email_Text.Replace("}+customername+{", customername + "\n").Replace("}+amount+{", amount).Replace("}+invno+{", invoiceno).Replace("}+controlno+{", controlno + "\n").Replace("}+vendor+{", vendor);
+                       string content = data.Email_Text.Replace("}+customername+{", customername ).Replace("}+amount+{", amount).Replace("}+invno+{", invoiceno).Replace("}+controlno+{", controlno).Replace("}+vendor+{", vendor);
 
                         mm.Body = content;
                     }
                     mm.To.Add(email);
                     mm.From = new MailAddress(m.From_Address);
-                    
+
                     //string body = string.Format("Hello {0}, Kindly pay {1} for invoice number {2}.Payment reference number is {3}. Regards,{4} ", customername, amount, invoiceno, controlno, vendor);
-                    
-                    
+
+
+                    /* Attach PDF Invoice here */
+                    string pdfPath = GenerateCustomizedInvoicePdf(invoiceno);
+                    Attachment pdfAttachment = new Attachment(pdfPath);
+                    mm.Attachments.Add(pdfAttachment);
+
+
                     mm.IsBodyHtml = true;
                     if (string.IsNullOrEmpty(m.SMTP_UName))
                     {
@@ -455,6 +466,189 @@ namespace JichangeApi.Utilities
                 pay.AddErrorLogs(pay);
             }
 
+        }
+
+
+        #endregion
+
+
+        #region  Invoice Pdf
+        public static string GenerateCustomizedInvoicePdf(string invoiceno)
+        {
+
+            // Get Invoice and Invoice Items from Invoiceno here
+
+            var invoice = new INVOICE().GetInvoiceByInvoiceNo(invoiceno);
+            var invoiceitems = new INVOICE().GetInvoiceDetails(invoice.Inv_Mas_Sno);
+
+            var companyinfo = new CompanyBankMaster().FindCompanyById(invoice.CompanySno);
+
+            //string path = "/Invoices/";
+
+            // Set the file path for the PDF
+            string filePath = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"], $"{invoice.Cust_Name}_{invoice.Invoice_No}.pdf");
+            string filePath1 = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath(), $"Invoice_{invoice.Invoice_No}.pdf");
+
+            string filePath2 = ConfigurationManager.AppSettings["invoices"] + $"Invoice_{invoice.Invoice_No}.pdf";
+
+            // Create a new PDF document
+            Document document = new Document(PageSize.A4, 25, 25, 10, 10);
+            PdfWriter.GetInstance(document, new FileStream(filePath, FileMode.Create));
+            document.Open();
+
+            // Step 1: Add Company Logo
+            string logoPath = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"], "logo.png"); // Path to your logo image
+
+            string logoPath1 = HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"] + "logo.png"; // Path to your logo image
+            if (File.Exists(logoPath))
+            {
+                Image logo = Image.GetInstance(logoPath);
+                logo.ScalePercent(24f); // Resize the logo if needed
+                logo.Alignment = Element.ALIGN_CENTER;
+                document.Add(logo);
+            }
+
+            // Add a blank line after the logo
+            //document.Add(new Paragraph("\n"));
+            // Step 1: Create a Paragraph
+            Paragraph paragraph = new Paragraph();
+
+            // Step 2: Add Left-Aligned Content
+            Chunk leftContent = new Chunk("Left Content");
+
+            // Step 3: Add a Tab to Push Content to the Right
+            Chunk tab = new Chunk(new VerticalPositionMark()); // Acts as a spacer to the right
+
+            // Step 4: Add Right-Aligned Content
+            Chunk rightContent = new Chunk("Right Content");
+
+            // Step 5: Add Content to the Paragraph
+            paragraph.Add(leftContent);
+            paragraph.Add(tab);  // Adds a "tab" space
+            paragraph.Add(rightContent);
+            // Step 2: Add Invoice Header
+            Font headerFont = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 18, BaseColor.GRAY);
+            Font headerFontbelow = FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.GRAY);
+            Paragraph header = new Paragraph("INVOICE", headerFont);
+            header.Alignment = Element.ALIGN_CENTER;
+            Paragraph header1 = new Paragraph("Company Name : " + companyinfo.CompName, headerFontbelow);
+            header1.Alignment = Element.ALIGN_LEFT;
+            header1.Add(leftContent);
+            header1.Add(tab);
+            Paragraph header2 = new Paragraph("Company Address : " + companyinfo.Address, headerFontbelow);
+            header2.Alignment = Element.ALIGN_LEFT;
+            Paragraph header3 = new Paragraph("Company Tin : " + companyinfo.TinNo, headerFontbelow);
+            header3.Alignment = Element.ALIGN_LEFT;
+            Paragraph header4 = new Paragraph("Company Mobile : " + companyinfo.MobNo, headerFontbelow);
+            header4.Alignment = Element.ALIGN_LEFT;
+            Paragraph header5 = new Paragraph("Customer Name : " + invoice.Cust_Name, headerFontbelow);
+            header5.Alignment = Element.ALIGN_RIGHT;
+            Paragraph header6 = new Paragraph("Control Number : " + invoice.Control_No, headerFontbelow);
+            header6.Alignment = Element.ALIGN_RIGHT;
+            Paragraph header7 = new Paragraph("Invoice No : " + invoice.Invoice_No, headerFontbelow);
+            header7.Alignment = Element.ALIGN_RIGHT;
+            Paragraph header8 = new Paragraph("Date Created : " + invoice.Invoice_Date, headerFontbelow);
+            header8.Alignment = Element.ALIGN_RIGHT;
+
+            document.Add(header);
+            document.Add(header1);
+            document.Add(header2);
+            document.Add(header3);
+            document.Add(header4);
+            document.Add(header5);
+            document.Add(header6);
+            document.Add(header7);
+            document.Add(header8);
+
+            // Add a blank line after the header
+            document.Add(new Paragraph("\n"));
+
+            // Step 3: Create Table for Invoice Details
+            PdfPTable table = new PdfPTable(4); // 4 columns
+            table.WidthPercentage = 100; // Table width as percentage of page width
+            table.SpacingBefore = 20f;
+            table.SpacingAfter = 30f;
+
+            // Set column widths
+            float[] columnWidths = { 2f, 1f, 2f, 1f };
+            table.SetWidths(columnWidths);
+
+            // Add table headers
+            AddTableHeader(table, "Description");
+            AddTableHeader(table, "Quantity");
+            AddTableHeader(table, "Unit Price");
+            AddTableHeader(table, "Amount");
+
+            // Step 4: Add Invoice Items
+            foreach (var item in invoiceitems)
+            {
+                AddTableCell(table, item.Item_Description);
+                AddTableCell(table, item.Item_Qty.ToString());
+                AddTableCell(table, item.Item_Unit_Price.ToString("N2"));
+                AddTableCell(table, (item.Item_Qty * item.Item_Unit_Price).ToString("N2"));
+            }
+
+            // Step 5: Add Total Row
+            PdfPCell totalCell = new PdfPCell(new Phrase("Total", new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE)));
+            totalCell.BackgroundColor = BaseColor.GRAY;
+            totalCell.Colspan = 3;
+            totalCell.HorizontalAlignment = Element.ALIGN_RIGHT;
+            totalCell.Padding = 8f;
+            table.AddCell(totalCell);
+
+            PdfPCell totalValueCell = new PdfPCell(new Phrase(invoice.Item_Total_Amount.ToString("N2") +" "+ invoice.Currency_Code, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD)))
+            {
+                HorizontalAlignment = Element.ALIGN_RIGHT,
+                Padding = 8f
+            };
+            table.AddCell(totalValueCell);
+
+            // Add the table to the document
+            document.Add(table);
+
+            // Step 6: Add Footer with Thank You Message
+            Paragraph footer = new Paragraph("System Generated Invoice." + " Date : " + System.DateTime.Now, FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.GRAY))
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingBefore = 12f
+            };
+            document.Add(footer);
+
+            /*Paragraph footer2 = new Paragraph("Thank you for your business!", FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.GRAY))
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingBefore = 12f
+            };
+            document.Add(footer2);
+
+            Paragraph footer1 = new Paragraph("Thank you for your business!", FontFactory.GetFont(FontFactory.HELVETICA, 12, BaseColor.GRAY))
+            {
+                Alignment = Element.ALIGN_CENTER,
+                SpacingBefore = 12f
+            };
+            document.Add(footer1);
+            */
+            // Close the document
+            document.Close();
+
+            return filePath;
+        }
+
+        private static void AddTableHeader(PdfPTable table, string headerText)
+        {
+            PdfPCell headerCell = new PdfPCell(new Phrase(headerText, new Font(Font.FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.WHITE)));
+            headerCell.BackgroundColor = BaseColor.GRAY;
+            headerCell.HorizontalAlignment = Element.ALIGN_CENTER;
+            headerCell.Padding = 8f;
+            table.AddCell(headerCell);
+        }
+
+        private static void AddTableCell(PdfPTable table, string text)
+        {
+            PdfPCell cell = new PdfPCell(new Phrase(text, new Font(Font.FontFamily.HELVETICA, 12)));
+            cell.HorizontalAlignment = Element.ALIGN_CENTER;
+            cell.Padding = 8f;
+            table.AddCell(cell);
         }
 
 

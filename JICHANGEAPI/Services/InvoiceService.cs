@@ -234,24 +234,29 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoice(invoice);
 
                 CustomerMaster customer = new CustomerMaster();
-                var customerdetails  = customer.CustGetId(invoice.Chus_Mas_No, invoice.Com_Mas_Sno);
-                var total = invoice.Total + invoice.Currency_Code;
+                var customerdetails = customer.CustGetId( invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total + " /= "+ invoice.Currency_Code;
                 // Send Approved Invoice to Customer EMAIL & SMS
-                new SmsService().SendCustomerInvoiceSMS(invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString(), customerdetails.Phone);
-               
-                
-                EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email ,invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString());
-           
+                if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    //if (customerdetails.Phone != null)
+                        smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                }
+                if (customerdetails.Email != null) 
+                { 
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                }
             
             }
         }
-        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
+        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp)
         {
             try
             {
                 INVOICE invoice = new INVOICE();
-                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid,page,limit).Where(x => x.approval_status == "2").ToList();
-                return invoices != null ? invoices : new List<INVOICE>();
+                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2").ToList();
+                return (invoices ?? new List<INVOICE>());
             }
             catch (Exception ex)
             {
@@ -478,14 +483,20 @@ namespace JichangeApi.Services
 
 
                 CustomerMaster customer = new CustomerMaster();
-                var customerdetails = customer.CustGetId(invoice.Chus_Mas_No, invoice.Com_Mas_Sno);
-                var total = invoice.Total + invoice.Currency_Code;
-                // Send Approved Invoice to Customer
-                new SmsService().SendCustomerInvoiceSMS(invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString(), customerdetails.Phone);
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No );
+                var total = invoice.Total + " /= " + invoice.Currency_Code;
+                // Send Approved Invoice to Customer EMAIL & SMS
+                /*if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                }*/
+                if (customerdetails.Email != null)
+                {
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                }
 
-
-                EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, invoice.Chus_Name, invoice.Invoice_No, invoice.Control_No, invoice.Company_Name, total.ToString());
-
+    
                 return FindInvoice((long)invoiceForm.compid, invoiceForm.sno);
             }
             catch (ArgumentException ex)

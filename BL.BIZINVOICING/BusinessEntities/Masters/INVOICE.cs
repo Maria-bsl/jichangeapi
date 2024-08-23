@@ -2773,7 +2773,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                                        c.due_date < DateTime.Today ? "Overdue" :
                                                        "Active"
                                           }).OrderBy(e => e.Company_Name).ToList();
-                return invoices != null ? invoices : new List<INVOICE>();
+                return invoices ?? new List<INVOICE>();
             }
         }
         public List<INVOICE> GetInvRep1(long Comp,long cust, string stdate, string enddate)

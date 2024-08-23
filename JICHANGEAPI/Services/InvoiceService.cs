@@ -255,8 +255,8 @@ namespace JichangeApi.Services
             try
             {
                 INVOICE invoice = new INVOICE();
-                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2").ToList();
-                return (invoices ?? new List<INVOICE>());
+                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2");
+                return invoices != null ? invoices.ToList() : new List<INVOICE>(); ;
             }
             catch (Exception ex)
             {
@@ -486,11 +486,11 @@ namespace JichangeApi.Services
                 var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No );
                 var total = invoice.Total + " /= " + invoice.Currency_Code;
                 // Send Approved Invoice to Customer EMAIL & SMS
-                /*if (customerdetails.Phone != null)
+                if (customerdetails.Phone != null)
                 {
                     SmsService smsService = new SmsService();
                     smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
-                }*/
+                }
                 if (customerdetails.Email != null)
                 {
                     EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());

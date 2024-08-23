@@ -574,7 +574,8 @@ namespace JichangeApi.Services
                     { "Cust_Name", invoicePDfData.Cust_Name },
                     { "Payment_Type", invoicePDfData.Payment_Type },
                     { "Item_Total_Amount", invoicePDfData.Item_Total_Amount },
-                    { "Balance", balance }
+                    { "Balance", balance },
+                    { "Currency_Code",invoicePDfData.Currency_Code },
                 };
                 return response;
             }

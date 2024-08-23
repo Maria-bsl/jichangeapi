@@ -1915,8 +1915,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     delivery_status = c.delivery_status,
                                     Invoice_Date = c.invoice_date,
                                     Remarks = c.inv_remarks,
-                                    Inv_Mas_Sno = c.inv_mas_sno
-                           
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+
                                 }).FirstOrDefault();
 
 

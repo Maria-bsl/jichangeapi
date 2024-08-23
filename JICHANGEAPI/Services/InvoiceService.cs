@@ -21,8 +21,7 @@ namespace JichangeApi.Services
     public class InvoiceService
     {
         private CompanyBankService companyBankService = new CompanyBankService();
-
-        Payment pay = new Payment();
+        readonly Payment pay = new Payment();
         
         private INVOICE CreateInvoice(InvoiceForm invoiceForm)
         {
@@ -234,18 +233,30 @@ namespace JichangeApi.Services
                 invoice.approval_date = DateTime.Now;
                 invoice.UpdateInvoice(invoice);
 
-                // Send Approved Invoice to Customer
-
-
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId( invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total + " /= "+ invoice.Currency_Code;
+                // Send Approved Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    //if (customerdetails.Phone != null)
+                        smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                }
+                if (customerdetails.Email != null) 
+                { 
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                }
+            
             }
         }
-        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
+        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp)
         {
             try
             {
                 INVOICE invoice = new INVOICE();
-                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid,page,limit).Where(x => x.approval_status == "2").ToList();
-                return invoices != null ? invoices : new List<INVOICE>();
+                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2");
+                return invoices != null ? invoices.ToList() : new List<INVOICE>(); ;
             }
             catch (Exception ex)
             {
@@ -468,6 +479,24 @@ namespace JichangeApi.Services
                 invoice.approval_status = "2";
                 invoice.approval_date = System.DateTime.Now;
                 invoice.UpdateInvoice(invoice);
+
+
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No );
+                var total = invoice.Total + " /= " + invoice.Currency_Code;
+                // Send Approved Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                }
+                if (customerdetails.Email != null)
+                {
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                }
+
+    
                 return FindInvoice((long)invoiceForm.compid, invoiceForm.sno);
             }
             catch (ArgumentException ex)

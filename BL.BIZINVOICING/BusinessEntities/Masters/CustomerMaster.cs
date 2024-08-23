@@ -31,10 +31,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
         public string Posted_by { get; set; }
         public DateTime Posted_Date { get; set; }
+        public string Company_Name { get;  set; }
 
 
         #endregion Properties
-         
+
         #region method
         public long CustAdd(CustomerMaster T)
         {
@@ -115,7 +116,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
         
-                public void CustUpdate(CustomerMaster T)
+        public void CustUpdate(CustomerMaster T)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -304,14 +305,15 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                             {
                                 Cust_Sno = c.cust_mas_sno,
                                 Cust_Name = c.customer_name,
-                                PostboxNo = c.pobox_no,
+                                Company_Name = c.company_master.company_name,
+                               /* PostboxNo = c.pobox_no,
                                 Address = c.physical_address,
                                 Region_SNO = c.region_id,
                                 DistSno = c.district_sno,
                                 WardSno = c.ward_sno,
                                 TinNo = c.tin_no,
                                 VatNo = c.vat_no,
-                                ConPerson = c.contact_person,
+                                ConPerson = c.contact_person,*/
                                 Email = c.email_address,
                                 Phone = c.mobile_no,
                                 Checker = c.checker

@@ -312,6 +312,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (UpdateContactInfo != null)
                 {
                     UpdateContactInfo.approval_status = dep.approval_status;
+                    UpdateContactInfo.goods_status = "Cancel";
                     UpdateContactInfo.posted_by = dep.AuditBy;
                     //UpdateContactInfo.posted_date = DateTime.Now;
                     context.SaveChanges();
@@ -1896,6 +1897,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     CompFaxNo = c.company_master.fax_no,
                                     Control_No = c.control_no,
                                     Due_Date = c.due_date,
+                                    Payment_Type = c.payment_type,
                                     Invoice_Expired_Date = c.invoice_expired,
                                     CompMobNo = c.company_master.mobile_no,
                                     CompEmail = c.company_master.email_address,
@@ -1918,6 +1920,142 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     CustAddress = det.physical_address,
                                     CustomerPostboxNo = det.pobox_no,
                                     warrenty = c.warrenty,
+                                    Reason = c.warrenty,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    Invoice_Date = c.invoice_date,
+                                    Remarks = c.inv_remarks,
+                                    Customer_ID_Type = c.customer_id_type,
+                                    Customer_ID_No = c.customer_id_no,
+                                    grand_count = (int)c.grand_count,
+                                    daily_count = (int)c.daily_count,
+                                    approval_status = c.approval_status == null ? "0" : c.approval_status.ToString(),
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    approval_date = approval_date
+
+
+                                }).FirstOrDefault();
+
+
+
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+        public InvoicePDfData GetInvoiceByInvoiceNoAmend(string invoicenumber)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                join am in context.invoice_ammendment on c.inv_mas_sno equals am.inv_mas_sno
+                                join dets in context.company_master on c.comp_mas_sno equals dets.comp_mas_sno
+                                join bks in context.company_bank_details on dets.comp_mas_sno equals bks.comp_mas_sno
+                                where c.invoice_no == invoicenumber
+                                select new InvoicePDfData
+                                {
+                                    CompName = c.company_master.company_name,
+                                    CompPostBox = c.company_master.pobox_no,
+                                    CompAddress = c.company_master.physical_address,
+                                    CompTelNo = c.company_master.telephone_no,
+                                    CompFaxNo = c.company_master.fax_no,
+                                    Control_No = c.control_no,
+                                    Due_Date = c.due_date,
+                                    Payment_Type = c.payment_type,
+                                    Invoice_Expired_Date = c.invoice_expired,
+                                    CompMobNo = c.company_master.mobile_no,
+                                    CompEmail = c.company_master.email_address,
+                                    CompVatNo = c.company_master.vat_no,
+                                    TinNo = c.company_master.tin_no,
+                                    Posteddate = (DateTime)c.posted_date,
+                                    Cust_Sno = (long)c.cust_mas_sno,
+                                    CompanySno = (long)c.comp_mas_sno,
+                                    Invoice_No = c.invoice_no,
+                                    BankName = bks.bank_name,
+                                    AccountNo = bks.account_no,
+                                    Cust_Name = det.customer_name,
+                                    CompContactPerson = dets.director_name,
+                                    CustPhone = det.mobile_no,
+                                    ConPerson = det.contact_person,
+                                    Item_Total_Amount = (decimal)c.total_amount,
+                                    Vat_Amount = (decimal)c.vat_amount,
+                                    Total_Without_Vt = (decimal)c.total_without_vat,
+                                    Currency_Code = c.currency_code,
+                                    CustAddress = det.physical_address,
+                                    CustomerPostboxNo = det.pobox_no,
+                                    warrenty = c.warrenty,
+                                    Reason = am.reason_for_amm,
+                                    goods_status = c.goods_status,
+                                    delivery_status = c.delivery_status,
+                                    Invoice_Date = c.invoice_date,
+                                    Remarks = c.inv_remarks,
+                                    Customer_ID_Type = c.customer_id_type,
+                                    Customer_ID_No = c.customer_id_no,
+                                    grand_count = (int)c.grand_count,
+                                    daily_count = (int)c.daily_count,
+                                    approval_status = c.approval_status == null ? "0" : c.approval_status.ToString(),
+                                    Inv_Mas_Sno = c.inv_mas_sno,
+                                    approval_date = approval_date
+
+
+                                }).FirstOrDefault();
+
+
+
+                if (adetails != null)
+                    return adetails;
+                else
+                    return null;
+            }
+        }
+
+
+        public InvoicePDfData GetInvoiceByInvoiceNoCancelled(string invoicenumber)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var adetails = (from c in context.invoice_master
+                                join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
+                                join ca in context.invoice_cancellation on c.inv_mas_sno equals ca.inv_mas_sno
+                                join dets in context.company_master on c.comp_mas_sno equals dets.comp_mas_sno
+                                join bks in context.company_bank_details on dets.comp_mas_sno equals bks.comp_mas_sno
+                                where c.invoice_no == invoicenumber
+                                select new InvoicePDfData
+                                {
+                                    CompName = c.company_master.company_name,
+                                    CompPostBox = c.company_master.pobox_no,
+                                    CompAddress = c.company_master.physical_address,
+                                    CompTelNo = c.company_master.telephone_no,
+                                    CompFaxNo = c.company_master.fax_no,
+                                    Control_No = c.control_no,
+                                    Due_Date = c.due_date,
+                                    Payment_Type = c.payment_type,
+                                    Invoice_Expired_Date = c.invoice_expired,
+                                    CompMobNo = c.company_master.mobile_no,
+                                    CompEmail = c.company_master.email_address,
+                                    CompVatNo = c.company_master.vat_no,
+                                    TinNo = c.company_master.tin_no,
+                                    Posteddate = (DateTime)c.posted_date,
+                                    Cust_Sno = (long)c.cust_mas_sno,
+                                    CompanySno = (long)c.comp_mas_sno,
+                                    Invoice_No = c.invoice_no,
+                                    BankName = bks.bank_name,
+                                    AccountNo = bks.account_no,
+                                    Cust_Name = det.customer_name,
+                                    CompContactPerson = dets.director_name,
+                                    CustPhone = det.mobile_no,
+                                    ConPerson = det.contact_person,
+                                    Item_Total_Amount = (decimal)c.total_amount,
+                                    Vat_Amount = (decimal)c.vat_amount,
+                                    Total_Without_Vt = (decimal)c.total_without_vat,
+                                    Currency_Code = c.currency_code,
+                                    CustAddress = det.physical_address,
+                                    CustomerPostboxNo = det.pobox_no,
+                                    warrenty = c.warrenty,
+                                    Reason = ca.reason_for_cancel,
                                     goods_status = c.goods_status,
                                     delivery_status = c.delivery_status,
                                     Invoice_Date = c.invoice_date,

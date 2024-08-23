@@ -235,7 +235,7 @@ namespace JichangeApi.Services
 
                 CustomerMaster customer = new CustomerMaster();
                 var customerdetails = customer.CustGetId( invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
-                var total = invoice.Total + " /= "+ invoice.Currency_Code;
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
                 // Send Approved Invoice to Customer EMAIL & SMS
                 if (customerdetails.Phone != null)
                 {
@@ -449,6 +449,23 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoiMas(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(invoiceForm.details, invoice.Inv_Mas_Sno);
+
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Updated Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                }
+                if (customerdetails.Email != null)
+                {
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                }
+
+
                 return FindInvoice((long)invoiceForm.compid, invoice.Inv_Mas_Sno);
             }
             catch (ArgumentException ex)
@@ -480,20 +497,32 @@ namespace JichangeApi.Services
                 invoice.approval_date = System.DateTime.Now;
                 invoice.UpdateInvoice(invoice);
 
-
-
                 CustomerMaster customer = new CustomerMaster();
                 var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No );
-                var total = invoice.Total + " /= " + invoice.Currency_Code;
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
                 // Send Approved Invoice to Customer EMAIL & SMS
                 if (customerdetails.Phone != null)
                 {
+                    try { 
                     SmsService smsService = new SmsService();
                     smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
                 }
                 if (customerdetails.Email != null)
                 {
+                    try { 
                     EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
                 }
 
     
@@ -532,6 +561,35 @@ namespace JichangeApi.Services
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
                 //CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
+
+
+                
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Amended Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    try { 
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceAmmendedSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }catch(Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null)
+                {
+                    try { 
+                    EmailUtils.SendCustomerAmmendedInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoicePdfData.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)
@@ -566,6 +624,36 @@ namespace JichangeApi.Services
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
                 //CreateCancelInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData, addAmendForm);
+
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Cancelled Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    try { 
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerCancelInvoiceSMS( customerdetails.Phone, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null)
+                {
+                    try
+                    {
+                        EmailUtils.SendCustomerCancelledInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)

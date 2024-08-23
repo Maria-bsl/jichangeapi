@@ -248,7 +248,7 @@ namespace JichangeApi.Controllers.smsservices
             {
                 var mobileNumber = Mobile_Number;
 
-                var formattedMessageBody = string.Format("Hello {0}, Invoice number {1} has been amended, New invoice amount is {2}, reference number for payment is {3}. Regards,{4} ", customername,  invoiceno, amount, controlno, vendor);
+                var formattedMessageBody = string.Format("Hello {0}, Invoice number {1} has been amended. New invoice amount is {2}, reference number for payment is {3}. Regards,{4} ", customername,  invoiceno, amount, controlno, vendor);
 
                 SendSMSAction(mobileNumber, formattedMessageBody);
 

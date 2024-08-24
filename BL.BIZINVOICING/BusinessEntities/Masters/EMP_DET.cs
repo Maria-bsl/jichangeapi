@@ -293,7 +293,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.emp_detail
-                                  where (c.emp_id_no.ToLower().Equals(employeeId.ToLower()) && c.sno != sno)
+                                  where (c.emp_id_no.ToLower().Equals(employeeId.ToLower()) && c.emp_detail_id != sno)
                                   select c);
                 return validation.Count() > 0;
             }

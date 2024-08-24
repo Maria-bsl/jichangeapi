@@ -220,22 +220,35 @@ namespace JichangeApi.Controllers.setup
         {
             try
             {
+
                 bool isExist = employee.isExistEmployee((long) addBankUserForm.sno);
                 if (!isExist) return this.GetNotFoundResponse();
                 bool isDuplicateEmployeeId = employee.isDuplicateEmployeeId(addBankUserForm.empid, (long)addBankUserForm.sno);
                 if (isDuplicateEmployeeId)
                 {
                     var messages = new List<string> { "Employee Id exists" };
-                    this.GetCustomErrorMessageResponse(messages);
+                    return this.GetCustomErrorMessageResponse(messages);
                 }
                 bool isDuplicateUsername = employee.isDuplicateEmployeeUsername(addBankUserForm.user, (long)addBankUserForm.sno);
                 if (isDuplicateUsername)
                 {
                     var messages = new List<string> { "Username exists" };
-                    this.GetCustomErrorMessageResponse(messages);
+                    return this.GetCustomErrorMessageResponse(messages);
                 }
+
                 EMP_DET found = employee.FindEmployee((long)addBankUserForm.sno);
                 long updatedEmployee = employee.UpdateEmployee(employee);
+
+                if (!String.IsNullOrEmpty(employee.Email_Address) && employee.Email_Address != found.Email_Address)
+                {
+                    SendActivationEmail(employee.Email_Address, employee.Full_Name, Utilities.PasswordGeneratorUtil.DecodeFrom64(employee.Password), employee.User_name);
+                }
+
+                if (employee.Mobile_No != found.Mobile_No)
+                {
+                    new SmsService().SendWelcomeSmsToNewUser(employee.User_name, Utilities.PasswordGeneratorUtil.DecodeFrom64(employee.Password), employee.Mobile_No);
+                }
+
                 AppendUpdateAuditTrail(updatedEmployee, found, employee, (long)addBankUserForm.userid);
                 return FindEmployee(updatedEmployee);
             }

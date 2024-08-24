@@ -21,8 +21,7 @@ namespace JichangeApi.Services
     public class InvoiceService
     {
         private CompanyBankService companyBankService = new CompanyBankService();
-
-        Payment pay = new Payment();
+        readonly Payment pay = new Payment();
         
         private INVOICE CreateInvoice(InvoiceForm invoiceForm)
         {
@@ -55,14 +54,17 @@ namespace JichangeApi.Services
         }
         private INVOICE CreateEditInvoice(InvoiceForm invoiceForm)
         {
-            INVOICE invoice = new INVOICE();
-            INVOICE found = invoice.GetINVOICEMas1((long)invoiceForm.compid, (long)invoiceForm.sno);
-            if (found == null) return null;
-            found.Due_Date = DateTime.Parse(invoiceForm.edate);
-            found.Invoice_Expired_Date = DateTime.Parse(invoiceForm.edate);
-            found.Payment_Type = invoiceForm.ptype;
-            found.Inv_Remarks = invoiceForm.Inv_remark;
-            return found;
+            //INVOICE invoice = new INVOICE();
+            INVOICE invoice = new INVOICE().GetINVOICEMas1((long)invoiceForm.compid, (long)invoiceForm.sno);
+            if (invoice == null) return null;
+            invoice.Due_Date = DateTime.Parse(invoiceForm.edate);
+            invoice.Invoice_Expired_Date = DateTime.Parse(invoiceForm.iedate);
+            invoice.Payment_Type = invoiceForm.ptype;
+            invoice.Currency_Code = invoiceForm.ccode;
+            invoice.Total = Decimal.Parse(invoiceForm.total);
+            invoice.Inv_Remarks = invoiceForm.Inv_remark;
+            invoice.AuditBy = invoiceForm.userid.ToString();
+            return invoice;
         }
         private INVOICE CreateAmendInvoice(AddAmendForm addAmendForm)
         {
@@ -230,15 +232,46 @@ namespace JichangeApi.Services
                 invoice.approval_status = "2";
                 invoice.approval_date = DateTime.Now;
                 invoice.UpdateInvoice(invoice);
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId( invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Approved Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    try {
+                    //if (customerdetails.Phone != null)
+                        smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null && !customerdetails.Email.Equals("")) 
+                {
+                    try { 
+                    
+                        EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+            
             }
         }
-        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp,int? page,int? limit)
+        public List<INVOICE> GetSignedDetails(SingletonComp singletonComp)
         {
             try
             {
                 INVOICE invoice = new INVOICE();
-                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid,page,limit).Where(x => x.approval_status == "2").ToList();
-                return invoices != null ? invoices : new List<INVOICE>();
+                var invoices = invoice.GetINVOICEMas((long)singletonComp.compid).Where(x => x.approval_status == "2");
+                return invoices != null ? invoices.ToList() : new List<INVOICE>(); ;
             }
             catch (Exception ex)
             {
@@ -351,6 +384,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public JsonObject FindInvoice(long companySno, long invoiceSno)
         {
             try
@@ -390,6 +424,7 @@ namespace JichangeApi.Services
                 throw new Exception(ex.Message);
             }
         }
+
         public JsonObject InsertInvoice(InvoiceForm invoiceForm)
         {
             try
@@ -402,6 +437,7 @@ namespace JichangeApi.Services
                 long invoiceSno = invoice.Addinvoi(invoice);
                 UpdateControlNumber(invoice,invoiceSno);
                 InsertInvoiceDetails(invoiceForm.details, invoiceSno);
+
                 return FindInvoice((long)invoiceForm.compid, invoiceSno);
             }
             catch (ArgumentException ex)
@@ -428,6 +464,37 @@ namespace JichangeApi.Services
                 invoice.UpdateInvoiMas(invoice);
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(invoiceForm.details, invoice.Inv_Mas_Sno);
+
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Updated Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    try { 
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null && !customerdetails.Email.Equals(""))
+                {
+                    try { 
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+
+
                 return FindInvoice((long)invoiceForm.compid, invoice.Inv_Mas_Sno);
             }
             catch (ArgumentException ex)
@@ -458,6 +525,36 @@ namespace JichangeApi.Services
                 invoice.approval_status = "2";
                 invoice.approval_date = System.DateTime.Now;
                 invoice.UpdateInvoice(invoice);
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No );
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Approved Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    try { 
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null && !customerdetails.Email.Equals(""))
+                {
+                    try { 
+                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+
+    
                 return FindInvoice((long)invoiceForm.compid, invoiceForm.sno);
             }
             catch (ArgumentException ex)
@@ -493,6 +590,34 @@ namespace JichangeApi.Services
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
                 //CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
+
+                
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Amended Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    try { 
+                    SmsService smsService = new SmsService();
+                    smsService.SendCustomerInvoiceAmmendedSMS(customerdetails.Phone, customerdetails.Cust_Name, total.ToString(), invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name );
+                    }catch(Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null)
+                {
+                    try { 
+                    EmailUtils.SendCustomerAmmendedInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name, total.ToString());
+                    }catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)
@@ -527,6 +652,36 @@ namespace JichangeApi.Services
                 invoice.DeleteInvoicedet(invoice);
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
                 //CreateCancelInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData, addAmendForm);
+
+
+                CustomerMaster customer = new CustomerMaster();
+                var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
+                var total = invoice.Total.ToString("N2") + " /= " + invoice.Currency_Code;
+                // Send Cancelled Invoice to Customer EMAIL & SMS
+                if (customerdetails.Phone != null)
+                {
+                    SmsService smsService = new SmsService();
+                    try { 
+                    smsService.SendCustomerCancelInvoiceSMS( customerdetails.Phone, customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
+                if (customerdetails.Email != null && !customerdetails.Email.Equals(""))
+                {
+                    try
+                    {
+                        EmailUtils.SendCustomerCancelledInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
+                }
                 return FindInvoice((long)addAmendForm.compid, addAmendForm.sno);
             }
             catch (ArgumentException ex)
@@ -564,7 +719,8 @@ namespace JichangeApi.Services
                     { "Cust_Name", invoicePDfData.Cust_Name },
                     { "Payment_Type", invoicePDfData.Payment_Type },
                     { "Item_Total_Amount", invoicePDfData.Item_Total_Amount },
-                    { "Balance", balance }
+                    { "Balance", balance },
+                    { "Currency_Code",invoicePDfData.Currency_Code },
                 };
                 return response;
             }
@@ -853,7 +1009,6 @@ namespace JichangeApi.Services
         }
 
         
-        //Add delivery code and Confirm Del
         public JsonObject MarkInvoiceDelivery(long sno,long userid)
         {
             try
@@ -890,7 +1045,28 @@ namespace JichangeApi.Services
             }
         }
         
+        public bool IsExistInvoice(long compid,string invno)
+        {
+            try
+            {
+                bool exists = new INVOICE().ValidateNo(invno, compid);
+                return exists;
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
 
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                throw new Exception(ex.Message);
+            }
+        }
 
     }
 }

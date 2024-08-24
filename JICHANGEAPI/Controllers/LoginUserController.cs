@@ -34,7 +34,7 @@ namespace JichangeApi.Controllers
             }
             catch (Exception ex)
             {
-                pay.Message = ex.ToString();
+                pay.Error_Text = ex.ToString();
                 pay.AddErrorLogs(pay);
 
                 return GetServerErrorResponse(ex.ToString());

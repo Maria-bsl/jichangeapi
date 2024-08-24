@@ -40,18 +40,20 @@ namespace JichangeApi.Services.Companies
 
         private CompanyUsers CreateCompanyUser(AddCompanyUserForm addCompanyUserForm)
         {
-            CompanyUsers user = new CompanyUsers();
-            user.CompuserSno = (long) addCompanyUserForm.sno;
-            user.Compmassno = (long) addCompanyUserForm.compid;
-            user.Username = addCompanyUserForm.auname;
-            user.Mobile = addCompanyUserForm.mob;
-            user.Userpos = addCompanyUserForm.pos;
-            user.Email = addCompanyUserForm.mail;
-            user.Fullname = addCompanyUserForm.uname;
-            user.Flogin = "false";
-            user.CreatedDate = System.DateTime.Now;
-            user.ExpiryDate = System.DateTime.Now.AddMonths(3);
-            user.Usertype = addCompanyUserForm.chname;
+            CompanyUsers user = new CompanyUsers
+            {
+                CompuserSno = (long)addCompanyUserForm.sno,
+                Compmassno = (long)addCompanyUserForm.compid,
+                Username = addCompanyUserForm.auname,
+                Mobile = addCompanyUserForm.mob,
+                Userpos = addCompanyUserForm.pos,
+                Email = addCompanyUserForm.mail,
+                Fullname = addCompanyUserForm.uname,
+                Flogin = "false",
+                CreatedDate = System.DateTime.Now,
+                ExpiryDate = System.DateTime.Now.AddMonths(3),
+                Usertype = addCompanyUserForm.chname
+            };
             string password = PasswordGeneratorUtil.CreateRandomPassword(8);
             user.Password = PasswordGeneratorUtil.GetEncryptedData(password);
             user.PostedBy = addCompanyUserForm.userid.ToString();
@@ -79,7 +81,7 @@ namespace JichangeApi.Services.Companies
             {
                 CompanyUsers companyUsers = new CompanyUsers();
                 List<CompanyUsers> result = companyUsers.GetCompanyUsers1((long) singletonComp.compid);
-                return result != null ? result : new List<CompanyUsers>();
+                return result ?? new List<CompanyUsers>();
             }
             catch (Exception ex)
             {
@@ -95,7 +97,7 @@ namespace JichangeApi.Services.Companies
             {
                 CompanyUsers companyUsers = new CompanyUsers();
                 CompanyUsers user = companyUsers.EditCompanyUsers(companyUserId);
-                return user != null ? user : null;
+                return user ?? null;
             }
             catch (Exception ex)
             {
@@ -147,6 +149,18 @@ namespace JichangeApi.Services.Companies
                 CompanyUsers found = EditCompanyUser((long)addCompanyUserForm.sno);
                 AppendUpdateAuditTrail((long) addCompanyUserForm.sno,found,user,(long) addCompanyUserForm.userid);
                 user.UpdateCompanyUsers(user);
+
+                if(!String.IsNullOrEmpty(user.Email) && user.Email != found.Email)
+                {
+                    EmailUtils.SendActivationEmail(user.Email, user.Fullname, PasswordGeneratorUtil.DecodeFrom64(found.Password), user.Username);
+                }
+
+                if(user.Mobile != found.Mobile)
+                {
+                    SmsService sms = new SmsService();
+                    sms.SendWelcomeSmsToNewUser(user.Username, PasswordGeneratorUtil.DecodeFrom64(found.Password), user.Mobile);
+                }
+
                 return EditCompanyUser((long)addCompanyUserForm.sno);
             }
             catch (ArgumentException ex)
@@ -164,7 +178,6 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
-
 
         public CompanyUsers UpdateCompanyUserPassword(CompanyUsers user)
         {

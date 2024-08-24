@@ -14,7 +14,7 @@ namespace JichangeApi.Services.Companies
 {
     public class CompanyInboxService
     {
-        Payment pay = new Payment();
+        readonly Payment pay = new Payment();
         public List<CompanyBankMaster> GetDesingationBranchCompanyList(Desibraid desibraid)
         {
             try
@@ -28,7 +28,7 @@ namespace JichangeApi.Services.Companies
                     default:
                         long branch = long.Parse(desibraid.braid.ToString());
                         List<CompanyBankMaster> branchCompanies = companyBankMaster.GetApprovedCompaniesByBranch(branch,"pending");
-                        return branchCompanies != null ? branchCompanies : new List<CompanyBankMaster>();
+                        return branchCompanies ?? new List<CompanyBankMaster>();
                 }
             }
             catch (Exception ex)
@@ -56,7 +56,6 @@ namespace JichangeApi.Services.Companies
                 if(checkSuspenseAccount != null)
                 {
                     companyBankMaster.UpdateCompanysta(companyBankMaster);
-
                 }
                 else
                 {

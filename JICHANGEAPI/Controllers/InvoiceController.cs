@@ -35,7 +35,7 @@ namespace JichangeApi.Controllers
         private readonly CompanyDepositService companyDepositService = new CompanyDepositService();
         private readonly CustomerService customerService = new CustomerService();
         private readonly CurrencyService currencyService = new CurrencyService();
-        Payment pay = new Payment();
+        private readonly Payment pay = new Payment();
 
 
 
@@ -185,13 +185,13 @@ namespace JichangeApi.Controllers
 
         #region Get Signed Invoices
         [HttpPost]
-        public HttpResponseMessage GetSignedDetails(SingletonComp singletonComp,int? page = null, int? limit = null)
+        public HttpResponseMessage GetSignedDetails(SingletonComp singletonComp)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<INVOICE> invoices = invoiceService.GetSignedDetails(singletonComp,page, limit);
+                List<INVOICE> invoices = invoiceService.GetSignedDetails(singletonComp);
                 return GetSuccessResponse(invoices);
             }
             catch (Exception ex)
@@ -966,7 +966,21 @@ namespace JichangeApi.Controllers
         }
 
 
-
+        [HttpGet]
+        public HttpResponseMessage IsExistInvoice(long compid,string invno)
+        {
+            try
+            {
+                bool exists = invoiceService.IsExistInvoice(compid, invno);
+                return GetSuccessResponse(exists);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+                return GetServerErrorResponse(ex.Message);
+            } 
+        }
     }
 
 }

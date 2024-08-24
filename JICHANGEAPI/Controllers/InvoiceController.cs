@@ -966,7 +966,21 @@ namespace JichangeApi.Controllers
         }
 
 
-
+        [HttpGet]
+        public HttpResponseMessage IsExistInvoice(long compid,string invno)
+        {
+            try
+            {
+                bool exists = invoiceService.IsExistInvoice(compid, invno);
+                return GetSuccessResponse(exists);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+                return GetServerErrorResponse(ex.Message);
+            } 
+        }
     }
 
 }

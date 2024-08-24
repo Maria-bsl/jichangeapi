@@ -929,7 +929,28 @@ namespace JichangeApi.Services
             }
         }
         
+        public bool IsExistInvoice(long compid,string invno)
+        {
+            try
+            {
+                bool exists = new INVOICE().ValidateNo(invno, compid);
+                return exists;
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
 
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                throw new Exception(ex.Message);
+            }
+        }
 
     }
 }

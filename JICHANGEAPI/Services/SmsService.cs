@@ -185,7 +185,7 @@ namespace JichangeApi.Controllers.smsservices
                 string gsm = visitorMobileNumber;
                 string body = HttpUtility.UrlEncode(SmsBody);
 
-                string url = "http://api.infobip.com/api/v3/sendsms/plain?user=" + username + "&password=" + password + "&sender=" + senderb + "&SMSText=" + body + "&GSM=" + gsm;
+                string url = "http://api.infobip.com/api/v3/sendsms/plain?user=" + username + "&password=" + password + "&sender=" + senderb + "&SMSText=" + body + "&GSM=" + gsm + "&type=longSMS";
                 WebRequest myReq = WebRequest.Create(url);
                 myReq.Method = "POST";
                 WebResponse wr = myReq.GetResponse();

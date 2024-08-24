@@ -240,12 +240,27 @@ namespace JichangeApi.Services
                 if (customerdetails.Phone != null)
                 {
                     SmsService smsService = new SmsService();
+                    try {
                     //if (customerdetails.Phone != null)
                         smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
                 }
-                if (customerdetails.Email != null) 
-                { 
-                    EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                if (customerdetails.Email != null && !customerdetails.Email.Equals("")) 
+                {
+                    try { 
+                    
+                        EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
                 }
             
             }
@@ -457,12 +472,26 @@ namespace JichangeApi.Services
                 // Send Updated Invoice to Customer EMAIL & SMS
                 if (customerdetails.Phone != null)
                 {
+                    try { 
                     SmsService smsService = new SmsService();
                     smsService.SendCustomerInvoiceSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
                 }
-                if (customerdetails.Email != null)
+                if (customerdetails.Email != null && !customerdetails.Email.Equals(""))
                 {
+                    try { 
                     EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    }
+                    catch (Exception ex)
+                    {
+                        pay.Message = ex.ToString();
+                        pay.AddErrorLogs(pay);
+                    }
                 }
 
 
@@ -513,7 +542,7 @@ namespace JichangeApi.Services
                         pay.AddErrorLogs(pay);
                     }
                 }
-                if (customerdetails.Email != null)
+                if (customerdetails.Email != null && !customerdetails.Email.Equals(""))
                 {
                     try { 
                     EmailUtils.SendCustomerNewInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
@@ -562,7 +591,6 @@ namespace JichangeApi.Services
                 InsertInvoiceDetails(addAmendForm.details, addAmendForm.sno);
                 //CreateAmendInvoiceEmailContent(invoicePdfData.Cust_Sno, invoicePdfData,addAmendForm);
 
-
                 
                 CustomerMaster customer = new CustomerMaster();
                 var customerdetails = customer.CustGetId(invoice.Com_Mas_Sno, invoice.Chus_Mas_No);
@@ -572,7 +600,7 @@ namespace JichangeApi.Services
                 {
                     try { 
                     SmsService smsService = new SmsService();
-                    smsService.SendCustomerInvoiceAmmendedSMS(customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name, total.ToString(), customerdetails.Phone);
+                    smsService.SendCustomerInvoiceAmmendedSMS(customerdetails.Phone, customerdetails.Cust_Name, total.ToString(), invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name );
                     }catch(Exception ex)
                     {
                         pay.Message = ex.ToString();
@@ -582,7 +610,7 @@ namespace JichangeApi.Services
                 if (customerdetails.Email != null)
                 {
                     try { 
-                    EmailUtils.SendCustomerAmmendedInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoicePdfData.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                    EmailUtils.SendCustomerAmmendedInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name, total.ToString());
                     }catch (Exception ex)
                     {
                         pay.Message = ex.ToString();
@@ -632,9 +660,9 @@ namespace JichangeApi.Services
                 // Send Cancelled Invoice to Customer EMAIL & SMS
                 if (customerdetails.Phone != null)
                 {
-                    try { 
                     SmsService smsService = new SmsService();
-                    smsService.SendCustomerCancelInvoiceSMS( customerdetails.Phone, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name);
+                    try { 
+                    smsService.SendCustomerCancelInvoiceSMS( customerdetails.Phone, customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name);
                     }
                     catch (Exception ex)
                     {
@@ -642,11 +670,11 @@ namespace JichangeApi.Services
                         pay.AddErrorLogs(pay);
                     }
                 }
-                if (customerdetails.Email != null)
+                if (customerdetails.Email != null && !customerdetails.Email.Equals(""))
                 {
                     try
                     {
-                        EmailUtils.SendCustomerCancelledInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoice.Control_No, customerdetails.Company_Name, total.ToString());
+                        EmailUtils.SendCustomerCancelledInvoiceEmail(customerdetails.Email, customerdetails.Cust_Name, invoice.Invoice_No, invoicePdfData.Control_No, customerdetails.Company_Name);
                     }
                     catch (Exception ex)
                     {

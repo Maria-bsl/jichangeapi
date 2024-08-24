@@ -312,7 +312,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (UpdateContactInfo != null)
                 {
                     UpdateContactInfo.approval_status = dep.approval_status;
-                    UpdateContactInfo.goods_status = "Cancel";
+                    //UpdateContactInfo.goods_status = "Cancel";
                     UpdateContactInfo.posted_by = dep.AuditBy;
                     //UpdateContactInfo.posted_date = DateTime.Now;
                     context.SaveChanges();
@@ -1374,9 +1374,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 join det in context.customer_master on c.cust_mas_sno equals det.cust_mas_sno
                                 join cmp in context.company_master on c.comp_mas_sno equals cmp.comp_mas_sno
                                 join cur in context.currency_master on c.currency_code equals cur.currency_code
-                               where !(from d in context.payment_details
-                                        select d.invoice_sno).Contains(c.invoice_no) &&
-                                         ((string.IsNullOrEmpty(c.delivery_status)) || (!c.delivery_status.ToLower().Equals("delivered")))
+                               where 
+                              /* !(from d in context.payment_details
+                                        select d.invoice_sno).Contains(c.invoice_no) &&*/
+                                         (string.IsNullOrEmpty(c.delivery_status) || (!c.delivery_status.ToLower().Equals("delivered")))
                                          && (c.comp_mas_sno == cno)
                                          && c.invoice_expired >= DateTime.Today
                                 select new INVOICE

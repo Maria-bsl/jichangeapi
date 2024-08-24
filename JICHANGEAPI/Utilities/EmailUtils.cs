@@ -363,8 +363,7 @@ namespace JichangeApi.Utilities
                 {
                     var m = ss.getSMTPText();
                     var data = em.GetLatestEmailTextsListByFlow("5"); // Invoice Amendment
-                    mm.To.Add(email);
-                    mm.From = new MailAddress(m.From_Address);
+                 
                     mm.Subject = "Invoice Amendment";
                     mm.Body = string.Format("Hello {0},<br /> Invoice number {1} has been amended.<br /> New invoice amount is {2}, reference number for payment is {3}. <br /><br />Regards, <br />{4} ", customername, invoiceno, amount, controlno, vendor);
 
@@ -378,6 +377,11 @@ namespace JichangeApi.Utilities
 
                         mm.Body = content;
                     }
+
+
+                    mm.To.Add(email);
+                    mm.From = new MailAddress(m.From_Address);
+
 
                     /* Attach PDF Invoice here */
                     string pdfPath = AmmendedInvoicePdf(invoiceno);
@@ -432,9 +436,7 @@ namespace JichangeApi.Utilities
                 {
                     var m = ss.getSMTPText();
                     var data = em.GetLatestEmailTextsListByFlow("4"); // Invoice Cancellation
-                    mm.To.Add(email);
-                    mm.From = new MailAddress(m.From_Address);
-                    mm.Subject = data.Subject;
+
                     mm.Subject = "Invoice Cancellation";
                     mm.Body = string.Format("Hello {0}, <br /> invoice number {1} with reference number {2} has been cancelled.<br /> Reach out for new order and invoice.<br /><br /> Regards, <br />{3}", customername, invoiceno, controlno, vendor);
 
@@ -449,6 +451,8 @@ namespace JichangeApi.Utilities
                         mm.Body = content;
                     }
 
+                    mm.To.Add(email);
+                    mm.From = new MailAddress(m.From_Address);
 
                     /* Attach PDF Invoice here */
                     string pdfPath = CancelledInvoicePdf(invoiceno);
@@ -501,7 +505,7 @@ namespace JichangeApi.Utilities
             //string path = "/Invoices/";
 
             // Set the file path for the PDF
-            string filePath = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"], $"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}.pdf");
+            string filePath = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"], $"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}_new.pdf");
             string filePath1 = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath(), $"Invoice_{invoice.Invoice_No}.pdf");
 
             string filePath2 = ConfigurationManager.AppSettings["invoices"] + $"Invoice_{invoice.Invoice_No}.pdf";
@@ -676,7 +680,7 @@ namespace JichangeApi.Utilities
             //string path = "/Invoices/";
 
             // Set the file path for the PDF
-            string filePath = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"], $"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}.pdf");
+            string filePath = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath() + ConfigurationManager.AppSettings["invoices"], $"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}_amended.pdf");
             string filePath1 = Path.Combine(HostingEnvironment.ApplicationHost.GetPhysicalPath(), $"Invoice_{invoice.Invoice_No}.pdf");
 
             string filePath2 = ConfigurationManager.AppSettings["invoices"] + $"Invoice_{invoice.Invoice_No}.pdf";
@@ -748,16 +752,16 @@ namespace JichangeApi.Utilities
             paragraph3.Alignment = Element.ALIGN_RIGHT;
 
 
-            Paragraph reason = new Paragraph("Reason For Amendment : " + invoice.Reason, headerFontbelow);
-            header.Alignment = Element.ALIGN_LEFT;
-
-            document.Add(reason);
             document.Add(header);
             document.Add(paragraph);
             document.Add(paragraph2);
             document.Add(paragraph3);
             document.Add(paragraph1);
 
+            Paragraph reason = new Paragraph("Reason For Amendment : " + invoice.Reason, headerFontbelow);
+            header.Alignment = Element.ALIGN_LEFT;
+
+            document.Add(reason);
             // Add a blank line after the header
             document.Add(new Paragraph("\n"));
 
@@ -881,7 +885,7 @@ namespace JichangeApi.Utilities
             BaseColor HeaderColor = new BaseColor(12, 98, 133, 255); // for table header and total background
             BaseColor tableColor = new BaseColor(11, 99, 133);
             BaseColor ShadesColor = new BaseColor(12, 103, 148);
-            BaseColor textColor = new BaseColor(20, 36, 44);
+            BaseColor textColor = new BaseColor(20, 36, 44);  // RED Color
 
             // Step 1.0: Create a Paragraph
             Paragraph paragraph = new Paragraph();
@@ -988,20 +992,6 @@ namespace JichangeApi.Utilities
             // Add the table to the document
             document.Add(table);
 
-            // Step 6: How to Pay
-          /*  Paragraph footer_how = new Paragraph("How to Pay:", FontFactory.GetFont(FontFactory.HELVETICA, 10, textColor))
-            {
-                Alignment = Element.ALIGN_LEFT,
-                SpacingBefore = 12f
-            };
-            document.Add(footer_how);
-            // Lipia kwa kupiga *150 * 03# au SimBanking App, Tawi lolote la CRDB, CRDB Wakala au mitandao ya simu.
-            Paragraph footer_pay = new Paragraph("Pay by dialing *150*03# or SimBanking App, any CRDB Branch, CRDB Agency or mobile networks.", FontFactory.GetFont(FontFactory.HELVETICA, 10, textColor))
-            {
-                Alignment = Element.ALIGN_LEFT,
-                SpacingBefore = 12f
-            };
-            document.Add(footer_pay);*/
 
             document.Add(new Paragraph("\n"));
 
@@ -1019,7 +1009,9 @@ namespace JichangeApi.Utilities
 
             // Step 1: Open the created PDF and prepare to add the watermark
             PdfReader reader = new PdfReader(filePath);
-            PdfStamper stamper = new PdfStamper(reader, new FileStream(filePath.Replace($"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}_Cancelled.pdf", $"{ invoice.Cust_Name }_{ invoice.Inv_Mas_Sno }_Cancelled_watermarked.pdf"), FileMode.Create));
+            PdfStamper stamper = new PdfStamper(reader, new FileStream(filePath.Replace($"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}_Cancelled.pdf", $"{ invoice.Cust_Name }_{ invoice.Inv_Mas_Sno }_Cancelled.pdf"), FileMode.Create));
+
+           // PdfStamper stamper = new PdfStamper(reader, new FileStream(filePath.Replace($"{invoice.Cust_Name}_{invoice.Inv_Mas_Sno}_Cancelled.pdf", $"{ invoice.Cust_Name }_{ invoice.Inv_Mas_Sno }_Cancelled_watermarked.pdf"), FileMode.Create));
 
             int totalPages = reader.NumberOfPages;
             PdfContentByte content;
@@ -1031,8 +1023,8 @@ namespace JichangeApi.Utilities
             float xPosition, yPosition;
             float rotationAngle = 45f;
 
-            // Define the custom color (Example: semi-transparent blue)
-            BaseColor customColor = new BaseColor(0, 0, 255, 100); // RGB with transparency
+            // Define the custom color (Example:0, 0, 255, 100 semi-transparent blue)
+            BaseColor customColor = new BaseColor(255, 0, 0, 128); // RED - RGB with transparency
 
             // Step 3: Loop through each page and add the watermark
             for (int i = 1; i <= totalPages; i++)

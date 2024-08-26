@@ -10,9 +10,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace JichangeApi.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SMSSETTINGController : SetupBaseController
     {
         private readonly SmsSettingsService smsSettingsService = new SmsSettingsService();

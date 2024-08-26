@@ -255,6 +255,7 @@
     <Compile Include="Controllers\setup\SuspenseAController.cs" />
     <Compile Include="Controllers\setup\WardController.cs" />
     <Compile Include="Controllers\SMSSETTINGController.cs" />
+    <Compile Include="Controllers\SmsTextController.cs" />
     <Compile Include="Controllers\UpdatepwdController.cs" />
     <Compile Include="Enums\GeneralStates.cs" />
     <Compile Include="Models\AddCompanyApproveModel.cs" />
@@ -372,6 +373,8 @@
     <Compile Include="Services\setup\RegionService.cs" />
     <Compile Include="Services\setup\WardService.cs" />
     <Compile Include="Services\Reports\UserLogService.cs" />
+    <Compile Include="Services\SmsSettingsService.cs" />
+    <Compile Include="Services\SmsTextService.cs" />
     <Compile Include="Utilities\EmailUtils.cs" />
     <Compile Include="Utilities\PasswordGeneratorUtil.cs" />
   </ItemGroup>

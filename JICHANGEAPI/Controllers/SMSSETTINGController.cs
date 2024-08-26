@@ -1,7 +1,9 @@
 ﻿using BL.BIZINVOICING.BusinessEntities.ConstantFile;
 using BL.BIZINVOICING.BusinessEntities.Masters;
 using JichangeApi.Controllers.setup;
+using JichangeApi.Controllers.smsservices;
 using JichangeApi.Models.form;
+using JichangeApi.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,66 +15,68 @@ namespace JichangeApi.Controllers
 {
     public class SMSSETTINGController : SetupBaseController
     {
+        private readonly SmsSettingsService smsSettingsService = new SmsSettingsService();
         // GET: SMSSETNGS
         SMS_SETTING smtp = new SMS_SETTING();
         EMP_DET ed = new EMP_DET();
         Payment pay = new Payment();
         private readonly dynamic returnNull = null;
         //Arights act = new Arights();
-      
-
 
         [HttpPost]
-        public HttpResponseMessage AddSMTP(AddSmtpModel addsm)
+        public HttpResponseMessage AddSMTP(AddSmtpModel addSmtpModel)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                smtp.From_Address = addsm.from_address;
-                smtp.USER_Name = addsm.smtp_uname;
-                smtp.Password = Utilites.GetEncryptedData(addsm.smtp_pwd);
-                smtp.Mobile_Service = addsm.smtp_mob;
-                smtp.AuditBy = addsm.userid.ToString();
-                smtp.SNO = addsm.sno;
-                long ssno = 0;
-                if (addsm.sno == 0)
+                if (addSmtpModel.sno == 0)
                 {
-                    ssno = smtp.AddSMS(smtp);
-                    return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
-
+                    var sms = smsSettingsService.InsertSmsSetting(addSmtpModel);
+                    return GetSuccessResponse(sms);
                 }
-                else if (addsm.sno > 0)
+                else
                 {
-                    smtp.UpdateSMS(smtp);
-                    ssno = addsm.sno;
-                    return Request.CreateResponse(new { response = ssno, message = new List<string> { } });
+                    
+                    var sms = smsSettingsService.UpdateSmsSetting(addSmtpModel);
+                    return GetSuccessResponse(sms);
                 }
+            }
+            catch (ArgumentException Ex)
+            {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
 
-
+                Ex.Message.ToString();
+                List<string> messages = new List<string> { Ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
                 pay.Message = ex.ToString();
                 pay.AddErrorLogs(pay);
-
                 ex.ToString();
+                return GetServerErrorResponse(ex.Message);
             }
-
-            return returnNull;
         }
-        [HttpPost]
-        public HttpResponseMessage DeleteSMTP(long sno)
+
+        [HttpGet]
+        public HttpResponseMessage DeleteSMTP(long sno,long userid)
         {
             try
             {
 
-                smtp.SNO = sno;
-                if (sno > 0)
-                {
-                    smtp.DeleteSMS(sno);
-                }
-                var result = sno;
+                var p = smsSettingsService.DeleteSmsSetting(sno,userid);
+                return GetSuccessResponse(sno);
+            }
+            catch (ArgumentException Ex)
+            {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
 
-                return Request.CreateResponse(new { response = result, message = new List<string> { } });
+                Ex.Message.ToString();
+                List<string> messages = new List<string> { Ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception Ex)
             {
@@ -80,6 +84,7 @@ namespace JichangeApi.Controllers
                 pay.AddErrorLogs(pay);
 
                 Ex.Message.ToString();
+                return GetServerErrorResponse(Ex.Message);
             }
 
             return returnNull;
@@ -89,16 +94,8 @@ namespace JichangeApi.Controllers
         {
             try
             {
-                var result = smtp.GetSMS();
-                if (result != null)
-                {
-                    return Request.CreateResponse(new { response = result, message = new List<string> { } });
-                }
-                else
-                {
-                    var d = 0;
-                    return Request.CreateResponse(new { response = d, message = new List<string> {"Failed" } });
-                }
+                List<SMS_SETTING> response = smsSettingsService.GetSmsSettingsList();
+                return GetSuccessResponse(response);
             }
             catch (Exception Ex)
             {
@@ -106,11 +103,38 @@ namespace JichangeApi.Controllers
                 pay.AddErrorLogs(pay);
 
                 Ex.Message.ToString();
+                return GetServerErrorResponse(Ex.Message);
             }
 
             return returnNull;
         }
 
+        [HttpGet]
+        public HttpResponseMessage FindSmsSetting(long sno)
+        {
+            try
+            {
+                SMS_SETTING smsSetting = smsSettingsService.FindSmsSetting(sno);
+                return GetSuccessResponse(smsSetting);
+            }
+            catch (ArgumentException Ex)
+            {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                Ex.Message.ToString();
+                List<string> messages = new List<string> { Ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception Ex)
+            {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                Ex.Message.ToString();
+                return GetServerErrorResponse(Ex.Message);
+            }
+        }
 
     }
 }

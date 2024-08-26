@@ -76,8 +76,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Password = c.password,
                                     From_Address = c.from_address,
                                     Mobile_Service = c.mobile_service,
-                                    Effective_Date = (DateTime)c.effective_date
-
+                                    Effective_Date = (DateTime)c.effective_date,
+                                    AuditBy =c.posted_by,
+                                    Audit_Date = (DateTime)c.posted_date,
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
@@ -120,7 +121,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     Password = c.password,
                                     From_Address = c.from_address,
                                     Mobile_Service = c.mobile_service,
-                                    Effective_Date = (DateTime)c.effective_date
+                                    Effective_Date = (DateTime)c.effective_date,
+                                    AuditBy = c.posted_by,
+                                    Audit_Date = (DateTime)c.posted_date,
                                 }).FirstOrDefault();
                 if (edetails != null)
                     return edetails;

@@ -48,12 +48,43 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var validation = (from c in context.sms_text
-                                  where (c.sms_text1 == mail)
+                                  where ((!string.IsNullOrEmpty(c.sms_text1)) && (c.sms_text1.ToLower().Equals(mail.ToLower())))
                                   select c);
-                if (validation.Count() > 0)
+                return validation != null ? validation.Count() > 0 : true;
+                
+                /*if (validation.Count() > 0)
                     return true;
                 else
-                    return false;
+                    return false;*/
+            }
+        }
+
+        public bool ValidateFlowId(string flowId)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.sms_text where (!string.IsNullOrEmpty(c.flow_id) && c.flow_id == flowId) select c);
+                return validation != null ? validation.Count() > 0 : true;
+            }
+        }
+
+        public bool ValidateFlowIdDuplicate(string flowId,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.sms_text where ((!string.IsNullOrEmpty(c.flow_id) && c.flow_id == flowId) && (c.sno != sno)) select c);
+                return validation != null ? validation.Count() > 0 : true;
+            }
+        }
+
+        public bool ValidateSMS(string mail,long sno)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                var validation = (from c in context.sms_text
+                                  where ((c.sms_text1.ToLower().Equals(mail.ToLower())) && c.sno != sno)
+                                  select c);
+                return validation != null && validation.Count() > 0;
             }
         }
         public List<SMS_TEXT> GetSMS()
@@ -69,7 +100,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     SMS_Subject = c.sms_sub,
                                     SMS_Local = c.sms_sub_local,
                                     SMS_Other = c.sms_text_other,
-                                    Effective_Date = (DateTime)c.effective_date
+                                    Effective_Date = (DateTime)c.effective_date,
+                                    AuditBy = c.posted_by,
+                                    Audit_Date = (DateTime) c.posted_date
                                 }).ToList();
                 if (adetails != null && adetails.Count > 0)
                     return adetails;
@@ -124,10 +157,19 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 
                                 select new SMS_TEXT
                                 {
+                                    /*SNO = c.sno,
+                                    Flow_Id = c.flow_id,
+                                    SMS_Text = c.sms_text1,
+                                    Effective_Date = (DateTime)c.effective_date*/
                                     SNO = c.sno,
                                     Flow_Id = c.flow_id,
                                     SMS_Text = c.sms_text1,
-                                    Effective_Date = (DateTime)c.effective_date
+                                    SMS_Subject = c.sms_sub,
+                                    SMS_Local = c.sms_sub_local,
+                                    SMS_Other = c.sms_text_other,
+                                    Effective_Date = (DateTime)c.effective_date,
+                                    AuditBy = c.posted_by,
+                                    Audit_Date = (DateTime)c.posted_date,
                                 }).FirstOrDefault();
                 if (edetails != null)
                     return edetails;
@@ -142,14 +184,12 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 var noteDetails = (from n in context.sms_text
                                    where n.sno == no
                                    select n).First();
-
                 if (noteDetails != null)
                 {
                     //context.DeleteObject(noteDetails);
                     context.sms_text.Remove(noteDetails);
                     context.SaveChanges();
                 }
-
             }
 
         }

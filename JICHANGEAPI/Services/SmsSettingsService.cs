@@ -43,7 +43,11 @@ namespace JichangeApi.Services
             SMS_SETTING smtp = new SMS_SETTING();
             smtp.From_Address = addSmtpModel.from_address;
             smtp.USER_Name = addSmtpModel.smtp_uname;
-            smtp.Password = Utilites.GetEncryptedData(addSmtpModel.smtp_pwd);
+            //smtp.Password = Utilites.GetEncryptedData(addSmtpModel.smtp_pwd);
+            if ((long) addSmtpModel.sno == 0)
+            {
+                smtp.Password = Utilites.GetEncryptedData(addSmtpModel.smtp_pwd);
+            }
             smtp.Mobile_Service = addSmtpModel.smtp_mob;
             smtp.AuditBy = addSmtpModel.userid.ToString();
             smtp.SNO = addSmtpModel.sno;

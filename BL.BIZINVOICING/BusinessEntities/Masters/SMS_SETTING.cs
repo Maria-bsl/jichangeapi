@@ -161,7 +161,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (UpdateContactInfo != null)
                 {
                     UpdateContactInfo.username = sc.USER_Name;
-                    UpdateContactInfo.password = sc.Password;
+                    //UpdateContactInfo.password = sc.Password;
+                    if (!string.IsNullOrEmpty(sc.Password))
+                    {
+                        UpdateContactInfo.password = sc.Password;
+                    }
                     UpdateContactInfo.from_address = sc.From_Address;
                     UpdateContactInfo.mobile_service = sc.Mobile_Service;
                     UpdateContactInfo.effective_date = DateTime.Now;

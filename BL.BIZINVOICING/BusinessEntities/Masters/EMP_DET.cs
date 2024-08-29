@@ -302,9 +302,10 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                var validation = (from c in context.emp_detail
+                /*var validation = (from c in context.emp_detail
                                   where (c.username.ToLower().Equals(username.ToLower()) && c.sno != sno)
-                                  select c);
+                                  select c);*/
+                var validation = (from c in context.emp_detail where (((!string.IsNullOrEmpty(c.username)) && (c.username.ToLower().Equals(username.ToLower()))) && (c.emp_detail_id != sno)) select c);
                 return validation.Count() > 0;
             }
         }

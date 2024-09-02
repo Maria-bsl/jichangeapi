@@ -105,7 +105,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     var det = (from v in context.audit_log
                                join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
                                where v.table_name == tn && v.posted_date >= frm && v.posted_date <= to
-                               && v.audit_type == v.audit_type
+                               && v.audit_type == ac
                                select new Auditlog
                                {
                                    Audit_Sno = v.audit_sno,

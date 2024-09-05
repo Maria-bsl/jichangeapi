@@ -115,7 +115,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public void AddInvoiceDetails(INVOICE sc)
+        public long AddInvoiceDetails(INVOICE sc)
         {
                 using (BIZINVOICEEntities context = new BIZINVOICEEntities())
                 {
@@ -136,6 +136,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     };
                     context.invoice_details.Add(pc);
                     context.SaveChanges();
+                    return pc.inv_det_sno;
                 }
            
         }

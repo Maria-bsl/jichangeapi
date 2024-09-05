@@ -6,7 +6,7 @@ using System.Web;
 
 namespace JichangeApi.Models.form.setup.insert
 {
-    public class AddBranchForm
+    public class AddBranchForm 
     {
         [Required(ErrorMessage = "Missing name", AllowEmptyStrings = false)]
         public string Name { get; set; }

@@ -402,6 +402,14 @@ public HttpResponseMessage GetApp()
                     return FindCompany(companyBankAddModel.compsno);
                 }
             }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
             catch (Exception ex)
             {
                 pay.Message = ex.ToString();

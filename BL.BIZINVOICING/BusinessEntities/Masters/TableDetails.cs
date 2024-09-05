@@ -23,7 +23,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var adetails = (from mr in context.table_details
-                                where mr.table_name == tab
+                                where !string.IsNullOrEmpty(mr.table_name) && mr.table_name.ToLower().Equals(tab.ToLower()) 
                                 select new TableDetails
                                 {
                                     tab_name = mr.table_name,

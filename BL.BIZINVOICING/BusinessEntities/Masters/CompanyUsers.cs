@@ -94,8 +94,8 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                     expiry_date = sc.ExpiryDate,
                     email_address = sc.Email,
                     mobile_no = sc.Mobile,
-                    posted_date = sc.PostedDate
-
+                    posted_date = sc.PostedDate,
+                    posted_by = sc.PostedBy
                 };
                 context.company_users.Add(pc);
                 context.SaveChanges();

@@ -123,7 +123,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
                 var length = (from v in context.audit_log
-                             join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                             //join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
                              join tracks in (
                                  from t in context.track_details
                                  group t by t.posted_by into g
@@ -152,7 +152,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 if (!string.IsNullOrEmpty(endDate)) toDate = DateTime.Parse(endDate);
 
                 var results = (from v in context.audit_log
-                               join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
+                               //join dets in context.emp_detail on v.posted_by equals dets.emp_detail_id.ToString()
                                join tracks in (
                                    from t in context.track_details
                                    group t by t.posted_by into g
@@ -173,9 +173,9 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                    NewValues = v.new_value,
                                    AuditBy = v.posted_by,
                                    Audit_Date = (DateTime)v.posted_time,
-                                   AuditorName = dets.full_name,
+                                   AuditorName = track.full_name,
                                    ipAddress = track != null ? track.ipadd : null 
-                               }).ToList();
+                               }).OrderByDescending(z => z.Audit_Date).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
                 return results ?? new List<CustomAuditReport>();
             }
         }

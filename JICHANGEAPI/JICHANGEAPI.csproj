@@ -286,7 +286,9 @@
     <Compile Include="Services\Reports\RepCompInvoiceService.cs" />
     <Compile Include="Services\Reports\RepCustomerService.cs" />
     <Compile Include="Services\RoleService.cs" />
+    <Compile Include="Services\setup\BranchService.cs" />
     <Compile Include="Services\setup\EmailTextService.cs" />
+    <Compile Include="Services\setup\SuspenseAService.cs" />
     <Compile Include="Services\SmsService.cs" />
     <Compile Include="Models\AddCompanyBankL.cs" />
     <Compile Include="Models\AuthLog.cs" />
@@ -479,6 +481,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
+  <PropertyGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

@@ -18,26 +18,55 @@ namespace JichangeApi.Services.Companies
     public class CompanyBankService
     {
         Payment pay = new Payment();
-        private static readonly List<string> TABLE_COLUMNS = new List<string> { "comp_mas_sno", "company_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno", "tin_no","vat_no","director_name","email_address","telephone_no","fax_no","mobile_no", "posted_by", "posted_date" };
+        private readonly RoleService roleService = new RoleService();
+
+        private static readonly List<string> TABLE_COLUMNS = new List<string> { "comp_mas_sno", "company_name", "pobox_no", "physical_address", "region_id", "district_sno", "ward_sno", "tin_no", "vat_no", "director_name", "email_address", "telephone_no", "fax_no", "mobile_no", "posted_by", "posted_date" };
         private static readonly string TABLE_NAME = "Company";
-        private void AppendInsertAuditTrail(long compsno, CompanyBankMaster companyBankMaster, long userid)
+
+        private static readonly string COMPANY_BANK = "Company_Bank_Details";
+        private static readonly List<string> COMPANY_BANK_COLUMNS = new List<string> { "comp_bank_det_sno", "comp_mas_sno",
+            "bank_name", "bank_branch", "account_no", "swift_code" };
+
+        private static readonly string LOCALIZATION_COMPANY = "Localization_Company";
+        private static readonly List<string> LOCALIZATION_COMPANY_COLUMNS = new List<string> { "loc_sno", "loc_eng", "loc_other", "comp_mas_sno",
+            "dyn_eng", "dyn_other", "table_name", "column_name", "posted_by", "posted_date", "updated_by", "updated_date" };
+
+        private void AppendInsertLocalizationCompanyAuditTrail(long sno, langcompany lang, long userid)
+        {
+            var values = new List<string> { sno.ToString(), lang?.Loc_Eng, lang?.Loc_Oth, lang?.comp_no.ToString(), "", lang?.Dyn_Swa, 
+                lang?.Table_name, lang?.Col_name, userid.ToString(), DateTime.Now.ToString(), userid.ToString(), DateTime.Now.ToString()};
+            Auditlog.InsertAuditTrail(values,userid,LOCALIZATION_COMPANY,LOCALIZATION_COMPANY_COLUMNS);
+        }
+
+        private void AppendInsertCompanyBankDetailAuditTrail(long sno, CompanyBankMaster bank,long userid)
+        {
+            var values = new List<string> { sno.ToString(), bank?.CompSno.ToString(), bank?.CompName, bank?.Branch_Sno.ToString(), 
+                bank?.AccountNo, bank?.Swiftcode };
+            Auditlog.InsertAuditTrail(values, userid, COMPANY_BANK, COMPANY_BANK_COLUMNS);
+        }
+
+        private void AppendCompanyBankDetailDeleteAuditTrail(long sno, CompanyBankMaster bank, long userid)
+        {
+            var values = new List<string> { sno.ToString(), bank?.CompSno.ToString(), bank?.CompName, bank?.Branch_Sno.ToString(),
+                bank?.AccountNo, bank?.Swiftcode };
+            Auditlog.deleteAuditTrail(values, userid, COMPANY_BANK, COMPANY_BANK_COLUMNS);
+        }
+
+        public static void AppendInsertAuditTrail(long compsno, CompanyBankMaster companyBankMaster, long userid)
         {
             try
             {
-                List<string> values = new List<string> { compsno.ToString(), companyBankMaster.CompName, companyBankMaster.PostBox, companyBankMaster.Address, companyBankMaster.RegId.ToString(), companyBankMaster.DistSno.ToString(), companyBankMaster.WardSno.ToString(), companyBankMaster.TinNo, companyBankMaster.VatNo, companyBankMaster.DirectorName, companyBankMaster.Email, companyBankMaster.TelNo, companyBankMaster.FaxNo, companyBankMaster.MobNo, "1", DateTime.Now.ToString() };
+                List<string> values = new List<string> { compsno.ToString(), companyBankMaster.CompName, companyBankMaster.PostBox, companyBankMaster.Address, companyBankMaster.RegId.ToString(), companyBankMaster.DistSno.ToString(), companyBankMaster.WardSno.ToString(), companyBankMaster.TinNo, companyBankMaster.VatNo, companyBankMaster.DirectorName, companyBankMaster.Email, companyBankMaster.TelNo, companyBankMaster.FaxNo, companyBankMaster.MobNo, userid.ToString(), DateTime.Now.ToString() };
                 Auditlog.InsertAuditTrail(values, userid, TABLE_NAME, TABLE_COLUMNS);
             }
             catch (Exception ex)
             {
-                pay.Message = ex.ToString();
-                pay.AddErrorLogs(pay);
-
                 throw new Exception(ex.Message);
             }
         }
 
      
-        private void AppendUpdateAuditTrail(long compsno, CompanyBankMaster oldCompany, CompanyBankMaster newCompany, long userid)
+        public static void AppendUpdateAuditTrail(long compsno, CompanyBankMaster oldCompany, CompanyBankMaster newCompany, long userid)
         {
             List<string> old = new List<string> { oldCompany.CompSno.ToString(), oldCompany.CompName,oldCompany.PostBox, oldCompany.Address, oldCompany.RegId.ToString(),oldCompany.DistSno.ToString(),oldCompany.WardSno.ToString(),oldCompany.TinNo,oldCompany.VatNo,oldCompany.DirectorName,
                                        oldCompany.Email,oldCompany.TelNo,oldCompany.FaxNo,oldCompany.MobNo, string.Empty, oldCompany.Posteddate.ToString() };
@@ -45,7 +74,7 @@ namespace JichangeApi.Services.Companies
 
             Auditlog.UpdateAuditTrail(old, update, userid, TABLE_NAME, TABLE_COLUMNS);
         }
-        private langcompany AddCompanyLang(long companySno)
+        private langcompany AddCompanyLang(long companySno,long userid)
         {
             try
             {
@@ -59,7 +88,8 @@ namespace JichangeApi.Services.Companies
                     langCompany.Col_name = li.Col_name;
                     langCompany.Loc_Oth1 = li.Dyn_Swa;
                     langCompany.comp_no = companySno;
-                    langCompany.AddLang(langCompany);
+                    var addedSno = langCompany.AddLang(langCompany);
+                    AppendInsertLocalizationCompanyAuditTrail(addedSno, langCompany, userid);
                 }
                 return langCompany;
             }
@@ -71,7 +101,7 @@ namespace JichangeApi.Services.Companies
                 throw new Exception(ex.Message);
             }
         }
-        private CompanyUsers AddCompanyUser(CompanyBankMaster companyBankMaster, long companySno)
+        private CompanyUsers AddCompanyUser(CompanyBankMaster companyBankMaster, long companySno,long userid)
         {
             CompanyUsers companyUsers = new CompanyUsers();
             try
@@ -87,7 +117,11 @@ namespace JichangeApi.Services.Companies
                 companyUsers.CreatedDate = DateTime.Now;
                 companyUsers.PostedDate = DateTime.Now;
                 companyUsers.ExpiryDate = System.DateTime.Now.AddMonths(3);
+                companyUsers.PostedBy = userid.ToString();
+                companyUsers.Userpos = roleService.GetRoleList().Find(e => e.Description.ToLower().Equals("admin")).Sno.ToString();
                 long addedCompSno = companyUsers.AddCompanyUsers1(companyUsers);
+                companyUsers.CompuserSno = addedCompSno;
+                CompanyUsersService.AppendInsertAuditTrail(addedCompSno, companyUsers, userid);
                 return companyUsers;
             }
             catch (Exception ex)
@@ -212,6 +246,7 @@ namespace JichangeApi.Services.Companies
                         companyBankMaster.CompSno = compsno;
                         companyBankMaster.AccountNo = companyBankAddModel.details[i].AccountNo;
                         long detsno = companyBankMaster.AddBank(companyBankMaster);
+                        AppendInsertCompanyBankDetailAuditTrail(detsno, companyBankMaster,(long) companyBankAddModel.userid);
                     }
                 }
             }
@@ -264,14 +299,15 @@ namespace JichangeApi.Services.Companies
                 List<string> errors = CheckCompanyBankErrors(companyBankMaster);
                 if (errors.Count > 0) { throw new Exception(errors[0]); }
                 long compsno = companyBankMaster.AddCompany(companyBankMaster);
+                AppendInsertAuditTrail(compsno, companyBankMaster, (long)addCompanyBankL.userid);
                 if (compsno > 0)
                 {
-                    langcompany lang = AddCompanyLang(compsno);
-                    CompanyUsers companyUsers = AddCompanyUser(companyBankMaster, compsno);
+                    langcompany lang = AddCompanyLang(compsno,(long) addCompanyBankL.userid);
+                    CompanyUsers companyUsers = AddCompanyUser(companyBankMaster, compsno, (long) addCompanyBankL.userid);
                     companyBankMaster.CompSno = compsno;
                     companyBankMaster.AccountNo = addCompanyBankL.accno;
                     long detsno = companyBankMaster.AddBank(companyBankMaster);
-                    AppendInsertAuditTrail(compsno, companyBankMaster, (long)addCompanyBankL.userid);
+                    AppendInsertCompanyBankDetailAuditTrail(detsno, companyBankMaster, (long)addCompanyBankL.userid);
 
                     new SmsService().SendSuccessSmsToNewUser(addCompanyBankL.mob, addCompanyBankL.mob);
                     EmailUtils.SendSuccessEmail(companyBankMaster.Email, companyBankMaster.CompName);
@@ -302,9 +338,16 @@ namespace JichangeApi.Services.Companies
                 CompanyBankMaster getcom = companyBankMaster.EditCompany(addCompanyBankL.compsno);
                 companyBankMaster.AccountNo = addCompanyBankL.accno;
                 long detsno = companyBankMaster.AddBank(companyBankMaster);
-                AppendUpdateAuditTrail(addCompanyBankL.compsno, getcom, companyBankMaster, (long)addCompanyBankL.userid);
                 companyBankMaster.UpdateCompany(companyBankMaster);
-                companyBankMaster.DeleteBank(companyBankMaster);
+                AppendUpdateAuditTrail(addCompanyBankL.compsno, getcom, companyBankMaster, (long)addCompanyBankL.userid);
+                var banks = companyBankMaster.EditBank(addCompanyBankL.compsno);
+                if (banks != null && banks.Count() > 0)
+                {
+                    //AppendCompanyBankDetailDeleteAuditTrail(addCompanyBankL.compsno, companyBankMaster, (long)addCompanyBankL.userid);
+                    banks.ForEach(bank => AppendCompanyBankDetailDeleteAuditTrail(bank.CompSno, bank, (long)addCompanyBankL.userid));
+                    companyBankMaster.DeleteBank(companyBankMaster);
+                }
+                //companyBankMaster.DeleteBank(companyBankMaster);
             }
             catch (Exception ex)
             {
@@ -320,14 +363,14 @@ namespace JichangeApi.Services.Companies
             {
                 CompanyBankMaster companyBankMaster = CreateCompanyBank(companyBankAddModel);
                 List<string> errors = CheckCompanyBankErrors(companyBankMaster);
-                if (errors.Count > 0) { throw new Exception(errors[0]); }
+                if (errors.Count > 0) { throw new ArgumentException(errors[0]); }
                 long addedCompany = companyBankMaster.AddCompany(companyBankMaster);
+                AppendInsertAuditTrail(addedCompany, companyBankMaster, (long)companyBankAddModel.userid);
                 if (addedCompany > 0)
                 {
-                    langcompany lang = AddCompanyLang(addedCompany);
-                    CompanyUsers companyUsers = AddCompanyUser(companyBankMaster, addedCompany);
+                    langcompany lang = AddCompanyLang(addedCompany, (long) companyBankAddModel.userid);
+                    CompanyUsers companyUsers = AddCompanyUser(companyBankMaster, addedCompany, (long) companyBankAddModel.userid);
                     AddCompanyBankDetails(addedCompany, companyBankMaster, companyBankAddModel);
-                    AppendInsertAuditTrail(addedCompany, companyBankMaster, (long)companyBankAddModel.userid);
 
                     new SmsService().SendSuccessSmsToNewUser(companyBankAddModel.mob, companyBankAddModel.mob);
                     EmailUtils.SendSuccessEmail(companyBankMaster.Email, companyBankMaster.CompName);
@@ -338,6 +381,10 @@ namespace JichangeApi.Services.Companies
                 {
                     throw new Exception("Failed to create company");
                 }
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.ToString());
             }
             catch (Exception ex)
             {
@@ -355,9 +402,16 @@ namespace JichangeApi.Services.Companies
                 List<string> errors = IsValidUpdateCompanyBank(companyBankMaster);
                 if (errors.Count > 0) { throw new Exception(errors[0]); }
                 CompanyBankMaster getcom = companyBankMaster.EditCompany(companyBankAddModel.compsno);
-                AppendUpdateAuditTrail(companyBankAddModel.compsno, getcom, companyBankMaster, (long)companyBankAddModel.userid);
+                if (getcom == null) { throw new ArgumentException(SetupBaseController.NOT_FOUND_MESSAGE); }
                 companyBankMaster.UpdateCompany(companyBankMaster);
-                companyBankMaster.DeleteBank(companyBankMaster);
+                AppendUpdateAuditTrail(companyBankAddModel.compsno, getcom, companyBankMaster, (long)companyBankAddModel.userid);
+                var banks = companyBankMaster.EditBank(companyBankAddModel.compsno);
+                if (banks != null && banks.Count() > 0)
+                {
+                    banks.ForEach(bank => AppendCompanyBankDetailDeleteAuditTrail(bank.CompSno, bank, (long)companyBankAddModel.userid));
+                    companyBankMaster.DeleteBank(companyBankMaster);
+                }
+                
                 AddCompanyBankDetails(companyBankMaster.CompSno, companyBankMaster, companyBankAddModel);
                 if (!getcom.Email.ToLower().Equals(companyBankAddModel.email))
                 {
@@ -367,6 +421,10 @@ namespace JichangeApi.Services.Companies
                 {
                     new SmsService().SendSuccessSmsToNewUser(companyBankAddModel.mob, companyBankAddModel.mob);
                 }
+            }
+            catch(ArgumentException ex)
+            {
+                throw new ArgumentException(ex.ToString());
             }
             catch (Exception ex)
             {

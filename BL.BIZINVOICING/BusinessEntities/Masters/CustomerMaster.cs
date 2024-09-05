@@ -858,7 +858,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 var found = context.customer_master.Find(sno);
                 CustomerMaster customerMaster = new CustomerMaster();
                 customerMaster.Cust_Sno = found.cust_mas_sno;
-                customerMaster.Cust_Sno = found.cust_mas_sno;
                 customerMaster.Cust_Name = found.customer_name;
                 customerMaster.PostboxNo = found.pobox_no;
                 customerMaster.Address = found.physical_address;

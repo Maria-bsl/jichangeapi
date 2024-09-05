@@ -65,7 +65,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         #endregion Properties
         #region methods
 
-        public void AddCancel(InvoiceC sc)
+        public long AddCancel(InvoiceC sc)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -82,7 +82,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 };
                 context.invoice_cancellation.Add(ps);
                 context.SaveChanges();
-
+                return ps.inv_can_sno;
             }
 
         }
@@ -149,7 +149,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
-        public void AddAmmend(InvoiceC sc)
+        public long AddAmmend(InvoiceC sc)
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
@@ -170,7 +170,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                 };
                 context.invoice_ammendment.Add(ps);
                 context.SaveChanges();
-
+                return ps.inv_amm_sno;
             }
 
         }

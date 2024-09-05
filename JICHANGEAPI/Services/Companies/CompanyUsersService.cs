@@ -21,21 +21,21 @@ namespace JichangeApi.Services.Companies
         private static readonly List<string> TABLE_COLUMNS = new List<string> { "comp_users_sno", "comp_mas_sno", "username",  "user_type", "created_date", "expiry_date",
              "posted_by", "posted_date"};
         public static readonly string TABLE_NAME = "Companyusers";
-        private void AppendInsertAuditTrail(long sno, CompanyUsers user, long userid)
+        public static void AppendInsertAuditTrail(long sno, CompanyUsers user, long userid)
         {
             List<string> values = new List<string> { sno.ToString(), user.Compmassno.ToString(), user.Username, user.Usertype, System.DateTime.Now.ToString(), System.DateTime.Now.AddMonths(3).ToString(),userid.ToString(), DateTime.Now.ToString() };
-            Auditlog.InsertAuditTrail(values, userid, CompanyUsersService.TABLE_NAME,CompanyUsersService.TABLE_COLUMNS);
+            Auditlog.InsertAuditTrail(values, userid, CompanyUsersService.TABLE_NAME,CompanyUsersService.TABLE_COLUMNS,user.Compmassno);
         }
-        private void AppendUpdateAuditTrail(long sno, CompanyUsers oldUser, CompanyUsers newUser, long userid)
+        public static void AppendUpdateAuditTrail(long sno, CompanyUsers oldUser, CompanyUsers newUser, long userid)
         {
             List<string> oldUserValues = new List<string> { sno.ToString(), oldUser.Compmassno.ToString(), oldUser.Username, oldUser.Usertype, oldUser.CreatedDate.ToString(), oldUser.ExpiryDate.ToString(),userid.ToString(), oldUser.PostedDate.ToString() };
             List<string> newUserValues = new List<string> { sno.ToString(), newUser.Compmassno.ToString(), newUser.Username, newUser.Usertype, System.DateTime.Now.ToString(), System.DateTime.Now.AddMonths(3).ToString(),userid.ToString(), DateTime.Now.ToString() };
-            Auditlog.UpdateAuditTrail(oldUserValues, newUserValues, userid, CompanyUsersService.TABLE_NAME, CompanyUsersService.TABLE_COLUMNS);
+            Auditlog.UpdateAuditTrail(oldUserValues, newUserValues, userid, CompanyUsersService.TABLE_NAME, CompanyUsersService.TABLE_COLUMNS, newUser.Compmassno);
         }
-        private void AppendDeleteAuditTrail(long sno, CompanyUsers user, long userid)
+        public static void AppendDeleteAuditTrail(long sno, CompanyUsers user, long userid)
         {
             List<string> values = new List<string> { sno.ToString(), user.Compmassno.ToString(), user.Username, user.Usertype, user.CreatedDate.ToString(), user.ExpiryDate.ToString(), user.PostedBy, user.PostedDate.ToString() };
-            Auditlog.deleteAuditTrail(values, userid, CompanyUsersService.TABLE_NAME, CompanyUsersService.TABLE_COLUMNS);
+            Auditlog.deleteAuditTrail(values, userid, CompanyUsersService.TABLE_NAME, CompanyUsersService.TABLE_COLUMNS, user.Compmassno);
         }
 
         private CompanyUsers CreateCompanyUser(AddCompanyUserForm addCompanyUserForm)

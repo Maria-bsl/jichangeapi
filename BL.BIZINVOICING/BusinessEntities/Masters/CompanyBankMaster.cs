@@ -8,28 +8,6 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
 {
     public class CompanyBankMaster
     {
-        private CompanyBankMaster CreateCompanyMaster(company_master found)
-        {
-            CompanyBankMaster company = new CompanyBankMaster();
-            company.CompSno = found.comp_mas_sno;
-            company.CompanySno = found.comp_mas_sno;
-            company.CompName = found.company_name;
-            company.PostBox = found.pobox_no;
-            company.Address = found.physical_address;
-            company.RegId = (long)found.region_id;
-            company.DistSno = (long)found.district_sno;
-            company.WardSno = (long)found.ward_sno;
-            company.TinNo = found.tin_no;
-            company.VatNo = found.vat_no;
-            company.DirectorName = found.director_name;
-            company.Email = found.email_address;
-            company.TelNo = found.telephone_no;
-            company.FaxNo = found.fax_no;
-            company.MobNo = found.mobile_no;
-            company.Branch_Sno = found.branch_sno != null ? found.branch_sno : 0;
-            company.Checker = found.checker;
-            return company;
-        }
         #region Properties
         public long CompSno { set; get; }
         public long Sus_Ac_SNo { set; get; }
@@ -1058,6 +1036,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  Checker = c.checker,
                                  AccountNo = d.account_no,
                                  Status = c.status,
+                                 Postedby = c.posted_by
                              }).FirstOrDefault();
                 return found ?? null;
             }
@@ -1310,8 +1289,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         {
             using (BIZINVOICEEntities context = new BIZINVOICEEntities())
             {
-                context.company_bank_details.RemoveRange(context.company_bank_details.Where
-               (c => c.comp_mas_sno== M.CompSno));
+                context.company_bank_details.RemoveRange(context.company_bank_details.Where(c => c.comp_mas_sno== M.CompSno));
                 context.SaveChanges();
             }
         }

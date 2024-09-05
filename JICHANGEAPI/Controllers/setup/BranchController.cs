@@ -2,6 +2,8 @@
 using JichangeApi.Models;
 using JichangeApi.Models.form;
 using JichangeApi.Models.form.setup.insert;
+using JichangeApi.Models.form.setup.remove;
+using JichangeApi.Services.setup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,65 +17,16 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class BranchController : SetupBaseController
     {
+        private readonly BranchService branchService = new BranchService();
         Payment pay = new Payment();
         [AllowAnonymous]
         [HttpPost]
         public HttpResponseMessage GetBranchLists()
         {
-            var branch = new BranchM();
             try
             {
-                var results = branch.GetBranches();
-                return this.GetList<List<BranchM>, BranchM>(results);
-            }
-            catch (Exception ex)
-            {
-                pay.Message = ex.ToString();
-                pay.AddErrorLogs(pay);
-
-                return this.GetServerErrorResponse(ex.Message);
-            }
-        }
-
-        private BranchM createBranchM(AddBranchForm addBranchForm)
-        {
-            BranchM branchM = new BranchM();
-            branchM.Sno = addBranchForm.Branch_Sno;
-            branchM.Name = addBranchForm.Name;
-            branchM.Location = addBranchForm.Location;
-            branchM.Status = addBranchForm.Status;
-            branchM.AuditBy = addBranchForm.AuditBy;
-            return branchM;
-        }
-
-        private HttpResponseMessage InsertBranch(BranchM branchM)
-        {
-            try
-            {
-                bool existsBranch = branchM.ValidateBranch(branchM.Name);
-                if (existsBranch) return this.GetAlreadyExistsErrorResponse();
-                long addedBranch = branchM.AddBranch(branchM);
-                return this.FindBranch(addedBranch);
-            }
-            catch(Exception ex)
-            {
-                pay.Message = ex.ToString();
-                pay.AddErrorLogs(pay);
-
-                return this.GetServerErrorResponse(ex.Message);
-            }
-        }
-
-        private HttpResponseMessage UpdateBranch(BranchM branchM)
-        {
-            try
-            {
-                bool exitsBranch = branchM.isExistBranch(branchM.Sno);
-                if (!exitsBranch) return this.GetNotFoundResponse();
-                bool isDuplicatedName = branchM.IsDuplicatedName(branchM.Name, branchM.Sno);
-                if (isDuplicatedName) return this.GetAlreadyExistsErrorResponse();
-                long updatedBranch = branchM.UpdateBranch(branchM);
-                return this.FindBranch(updatedBranch);
+                var results = branchService.GetBranchLists();
+                return GetSuccessResponse(results);
             }
             catch (Exception ex)
             {
@@ -89,9 +42,34 @@ namespace JichangeApi.Controllers.setup
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
-            BranchM branchM = createBranchM(addBranchForm);
-            if (addBranchForm.Branch_Sno == 0) { return InsertBranch(branchM); }
-            else { return UpdateBranch(branchM); }
+            try
+            {
+                if (addBranchForm.Branch_Sno == 0)
+                {
+                    var result = branchService.InsertBranch(addBranchForm);
+                    return GetSuccessResponse(result);
+                }
+                else
+                {
+                    var result = branchService.UpdateBranch(addBranchForm);
+                    return GetSuccessResponse(result);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                return this.GetServerErrorResponse(ex.Message);
+            }
         }
 
         [HttpGet]
@@ -99,11 +77,16 @@ namespace JichangeApi.Controllers.setup
         {
             try
             {
-                BranchM branchM = new BranchM();
-                bool exitsBranch = branchM.isExistBranch(sno);
-                if (!exitsBranch) return this.GetNotFoundResponse();
-                BranchM found = branchM.EditBranch(sno);
-                return this.GetSuccessResponse(found);
+                var result = branchService.FindBranchById(sno);
+                return GetSuccessResponse(result);
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
@@ -115,17 +98,22 @@ namespace JichangeApi.Controllers.setup
         }
 
         [HttpPost]
-        public HttpResponseMessage DeleteBranch(string Sno)
+        public HttpResponseMessage DeleteBranch(DeleteDesignationForm form)
         {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                List<string> modelStateErrors = this.ModelStateErrors();
-                if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
-                var branchM = new BranchM();
-                var exitsBranch = branchM.isExistBranch(long.Parse(Sno));
-                if (!exitsBranch) return this.GetNotFoundResponse();
-                branchM.DeleteBranch(long.Parse(Sno));
-                return this.GetSuccessResponse(long.Parse(Sno));
+                var branchId = branchService.DeleteBranch((long) form.sno, (long) form.userid);
+                return GetSuccessResponse(branchId);
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {

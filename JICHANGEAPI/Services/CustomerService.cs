@@ -24,7 +24,7 @@ namespace JichangeApi.Services
         {
             var values = new List<string> { sno.ToString(), customerMaster.Cust_Name, customerMaster.PostboxNo, customerMaster.Address, customerMaster.Region_SNO.ToString(), customerMaster.DistSno.ToString(), customerMaster.WardSno.ToString(),
                                     customerMaster.TinNo, customerMaster.VatNo, customerMaster.ConPerson, customerMaster.Email, customerMaster.Phone, userid.ToString(), DateTime.Now.ToString(),(customerMaster.CompanySno).ToString() };
-            Auditlog.InsertAuditTrail(values, userid, CustomerService.tableName, CustomerService.tableColumns);
+            Auditlog.InsertAuditTrail(values, userid, CustomerService.tableName, CustomerService.tableColumns,customerMaster.CompanySno);
         }
 
         private void AppendUpdateAuditTrail(long sno, CustomerMaster oldCustomer, CustomerMaster newCustomer, long userid)
@@ -34,14 +34,14 @@ namespace JichangeApi.Services
 
             var newValues = new List<string> { sno.ToString(), newCustomer.Cust_Name, newCustomer.PostboxNo, newCustomer.Address, newCustomer.Region_SNO.ToString(), newCustomer.DistSno.ToString(), newCustomer.WardSno.ToString(),
                                         newCustomer.TinNo, newCustomer.VatNo,newCustomer.ConPerson,newCustomer.Email,newCustomer.Phone, userid.ToString(),  DateTime.Now.ToString(),newCustomer.CompanySno.ToString() };
-            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, CustomerService.tableName, CustomerService.tableColumns);
+            Auditlog.UpdateAuditTrail(oldValues, newValues, userid, CustomerService.tableName, CustomerService.tableColumns, newCustomer.CompanySno);
         }
 
         private void AppendDeleteAuditTrail(long sno, CustomerMaster customerMaster, long userid)
         {
             var values = new List<string> { sno.ToString(), customerMaster.Cust_Name, customerMaster.PostboxNo, customerMaster.Address, customerMaster.Region_SNO.ToString(), customerMaster.DistSno.ToString(), customerMaster.WardSno.ToString(),
                                     customerMaster.TinNo, customerMaster.VatNo, customerMaster.ConPerson, customerMaster.Email, customerMaster.Phone, userid.ToString(), DateTime.Now.ToString(),(customerMaster.CompanySno).ToString() };
-            Auditlog.deleteAuditTrail(values, userid, CustomerService.tableName, CustomerService.tableColumns);
+            Auditlog.deleteAuditTrail(values, userid, CustomerService.tableName, CustomerService.tableColumns, customerMaster.CompanySno);
         }
         public CustomerMaster FindCustomer(long compid,long custid)
         {
@@ -75,7 +75,7 @@ namespace JichangeApi.Services
                 Cust_Name = customersForm.CName,
                 PostboxNo = customersForm.PostboxNo,
                 Address = customersForm.Address,
-                CompanySno = long.Parse((customersForm.compid).ToString())
+                CompanySno = (long) customersForm.compid
             };
             if (customersForm.regid > 0) { customer.Region_SNO = customersForm.regid; }
             if (customersForm.distsno > 0) { customer.DistSno = customersForm.distsno; }

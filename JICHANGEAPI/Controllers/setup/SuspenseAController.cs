@@ -2,6 +2,7 @@
 using JichangeApi.Models.form;
 using JichangeApi.Models.form.setup.insert;
 using JichangeApi.Models.form.setup.remove;
+using JichangeApi.Services.setup;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +16,15 @@ namespace JichangeApi.Controllers.setup
     [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SuspenseAController : SetupBaseController
     {
+        private readonly SuspenseAService suspenseAService = new SuspenseAService();
         Payment pay = new Payment();
         [HttpPost]
         public HttpResponseMessage GetAccount()
         {
-            S_Account suspenseAccount = new S_Account();
             try
             {
-                var results = suspenseAccount.GetAccounts();
-                return this.GetList<List<S_Account>, S_Account>(results);
+                var results = suspenseAService.GetAccounts();
+                return GetSuccessResponse(results);
             }
             catch (Exception ex)
             {
@@ -40,8 +41,8 @@ namespace JichangeApi.Controllers.setup
             S_Account suspenseAccount = new S_Account();
             try
             {
-                var results = suspenseAccount.GetAccounts_Active();
-                return this.GetList<List<S_Account>, S_Account>(results);
+                var results = suspenseAService.GetActiveAccounts();
+                return GetSuccessResponse(results);
             }
             catch (Exception ex)
             {
@@ -52,7 +53,7 @@ namespace JichangeApi.Controllers.setup
             }
         }
 
-        private S_Account CreateSuspenseAccount(AddSuspenseAccountForm addSuspenseAccountForm)
+        /*private S_Account CreateSuspenseAccount(AddSuspenseAccountForm addSuspenseAccountForm)
         {
             S_Account suspenseAccount = new S_Account();
             suspenseAccount.Sus_Acc_No = addSuspenseAccountForm.account;
@@ -60,9 +61,9 @@ namespace JichangeApi.Controllers.setup
             suspenseAccount.AuditBy = addSuspenseAccountForm.userid.ToString();
             suspenseAccount.Sus_Acc_Sno = (long)addSuspenseAccountForm.sno;
             return suspenseAccount;
-        }
+        }*/
 
-        private HttpResponseMessage InsertSuspenseAccount(S_Account suspenseAccount,AddSuspenseAccountForm addSuspenseAccountForm)
+        /*private HttpResponseMessage InsertSuspenseAccount(S_Account suspenseAccount,AddSuspenseAccountForm addSuspenseAccountForm)
         {
             try
             {
@@ -98,7 +99,7 @@ namespace JichangeApi.Controllers.setup
 
                 return this.GetServerErrorResponse(ex.Message);
             }
-        }
+        }*/
 
         [HttpPost]
         public HttpResponseMessage AddAccount(AddSuspenseAccountForm addSuspenseAccountForm)
@@ -107,9 +108,23 @@ namespace JichangeApi.Controllers.setup
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
             try
             {
-                S_Account suspenseAccount = CreateSuspenseAccount(addSuspenseAccountForm);
-                if ((long) addSuspenseAccountForm.sno == 0) { return InsertSuspenseAccount(suspenseAccount,addSuspenseAccountForm);  }
-                else { return UpdateSuspenseAccount(suspenseAccount,addSuspenseAccountForm); }
+                //S_Account suspenseAccount = CreateSuspenseAccount(addSuspenseAccountForm);
+                if ((long) addSuspenseAccountForm.sno == 0) { 
+                    var result = suspenseAService.InsertSuspenseAccount(addSuspenseAccountForm);
+                    return GetSuccessResponse(result);
+                }
+                else {
+                    var result = suspenseAService.UpdateSuspenseAccount(addSuspenseAccountForm);
+                    return GetSuccessResponse(result);
+                }
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
@@ -125,11 +140,16 @@ namespace JichangeApi.Controllers.setup
         {
             try
             {
-                S_Account suspenseAccount = new S_Account();
-                bool isExist = suspenseAccount.isExistSuspenseAccount(sno);
-                if (!isExist) return this.GetNotFoundResponse();
-                S_Account found = suspenseAccount.EditAccount(sno);
-                return this.GetSuccessResponse(found);
+                var result = suspenseAService.FindSuspenseAccount(sno);
+                return GetSuccessResponse(result);
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {
@@ -145,13 +165,18 @@ namespace JichangeApi.Controllers.setup
         {
             List<string> modelStateErrors = this.ModelStateErrors();
             if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
-            S_Account suspenseAccount = new S_Account();
             try
             {
-                var isExist = suspenseAccount.isExistSuspenseAccount(deleteSuspenseAccountForm.sno);
-                if (!isExist) return this.GetNotFoundResponse();
-                suspenseAccount.DeleteAccount((long) deleteSuspenseAccountForm.sno);
-                return this.GetSuccessResponse((long) deleteSuspenseAccountForm.sno);
+                var result = suspenseAService.DeleteSuspenseAccount((long)deleteSuspenseAccountForm.sno, (long)deleteSuspenseAccountForm.userid);
+                return GetSuccessResponse(result);
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
             }
             catch (Exception ex)
             {

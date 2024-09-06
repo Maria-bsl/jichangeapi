@@ -88,5 +88,32 @@ namespace JichangeApi.Controllers
                 return GetServerErrorResponse(Ex.Message);
             }
         }
+
+        [HttpPost]
+        public HttpResponseMessage GetReport(AuditTrailForm auditTrailForm)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                var results = auditTrailService.GetAuditTrailsVendorReport(auditTrailForm);
+                return SuccessJsonResponse(results);
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception Ex)
+            {
+                pay.Message = Ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                return GetServerErrorResponse(Ex.Message);
+            }
+        }
     }
 }

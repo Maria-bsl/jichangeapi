@@ -1,0 +1,536 @@
+{
+  "defaults": {
+    "yes": "Ndiyo",
+    "no": "Apana",
+    "search": "Tafutiza",
+    "action": "Vitendo",
+    "status": "Hali",
+    "active": "Amilifu",
+    "inActive": "Siamilifu",
+    "viewAll": "Tazama Yote",
+    "failed": "Imeshindwa",
+    "columns": "Safuwima",
+    "warning": "Onyo",
+    "any": "Yoyote",
+    "confirm": "Thibitisha",
+    "close": "Funga",
+    "success": "Mafanikio",
+    "cancel": "Katisha",
+    "all": "Yote",
+    "optional": "Hiari",
+    "pleaseFill": "Tafadhali jaza",
+    "send": "Tuma"
+  },
+  "forms": {
+    "from": "Kutoka",
+    "to": "Hadi",
+    "branch": "Tawi",
+    "vendor": "Muuzaji",
+    "customer": "Muteja",
+    "invoiceNumber": "Nambari ya Ankara",
+    "errors": {
+      "branch": "Tafadhali chagua tawi",
+      "vendor": "Tafadhali chagua muuzaji",
+      "customer": "Tafadhali chagua muteja",
+      "invoiceNumber": "Tafadhali chagua nambari ya ankara",
+      "startDate": "Chagua tarehe ya kuanza",
+      "endDate": "Chagua tarehe ya mwisho"
+    },
+    "placeholders": {
+      "invoiceNumber": "Ingiza nambari ya ankara"
+    }
+  },
+  "actions": {
+    "submit": "Wasilisha",
+    "close": "Funga",
+    "ok": "Sawa",
+    "reset": "Weka upya",
+    "download": "Pakua",
+    "saveChanges": "Save changes?",
+    "view": "Tazama",
+    "edit": "Hariri",
+    "delete": "Futa",
+    "refund": "Refund"
+  },
+  "errors": {
+    "errorOccured": "Kosa limetokea",
+    "verifyConnection": "Tafadhali thibitisha uhusiano wako au jaribu tena.",
+    "noInternet": "Wewe ni nje ya mtandao",
+    "connected": "Nyuma ya mtandaoni",
+    "noDataFound": "Hakuna taarifa iliyopatikana",
+    "notFound": "Kipengee hakijapatikana.",
+    "alreadyExists": "{} tayari ipo.",
+    "validDate": "Tafadhali chagua tarehe halali",
+    "contactSupport": "Kosa lisilotarajiwa lilitokea, tafadhali jaribu tena au msaada wa mawasiliano.",
+    "timeoutError": "Ombi limepitwa na wakati. Tafadhali thibitisha muunganisho wako au jaribu tena.",
+    "invalidForm": "Fomu batili",
+    "noFilterItemFound": "Hakuna data iliyopatikana inayolingana na kichujio.",
+    "unAuthorizedUser": "Unahitaji kuingia ndani ili kuendelea.",
+    "accessDenied": "Ufikiaji Umekataliwa",
+    "missingUserIdMessage": "Ombi batili. Tafadhali wasiliana na msaada.",
+    "serverError": "Kosa lilitokea kwenye seva."
+  },
+  "dialogs": {
+    "sureSaveChanges": "Je, una uhakika unataka kuokoa mabadiliko?"
+  },
+  "bankRoutes": {
+    "home": "Nyumbani",
+    "profile": "Umbo",
+    "company": {
+      "summary": "Orodha ya Wauuzaji",
+      "inbox": "Idhini za Muuzaji"
+    },
+    "setup": {
+      "country": "Nchi",
+      "region": "Mkoa(s)",
+      "district": "Wilaya(s)",
+      "ward": "Kata(s)",
+      "currencies": "Sarafu",
+      "designation": "Uteuzi wa Kazi(s)",
+      "branch": "Tawi",
+      "smtp": "SMTP",
+      "email": "Barua pepe",
+      "bankUser": "Mtumiaji wa Benki(s)",
+      "suspense": "Akaunti ya Kusubiri",
+      "deposit": "akaunti ya muuzaji",
+      "smsSettings": "Mipangilio ya SMS",
+      "smsText": "Matini ya SMS"
+    },
+    "reports": {
+      "overview": "Ripoti",
+      "invoice": "Muswada",
+      "userLog": "Majedwali ya Watumiaji",
+      "vendor": "Muteja",
+      "audit": "Uchunguzi",
+      "details": "Maelezo",
+      "payments": "Ripoti ya maelezo ya malipo iliyokamilishwa",
+      "amendment": "Mabadiliko",
+      "transaction": "Malipo",
+      "vendorReport": "Ripoti ya Vendor",
+      "invoiceConsolidated": "Ankara iliyojumuishwa",
+      "paymentConsolidated": "Malipo ya Kuunganishwa",
+      "cancelled": "Ankara iliyokatishwa"
+    }
+  },
+  "vendorRoutes": {
+    "home": "Nyumbani",
+    "profile": "Umbo",
+    "customer": "Wateja",
+    "detail": "Maelezo",
+    "viewCustomerTransactions": "Miamala(s)",
+    "users": "Watumiaji",
+    "amendment": "Marekebisho",
+    "cancelled": "Imekatishwa",
+    "invoice": "Ankara",
+    "created": "Ankara zilizoundwa",
+    "overview": "Maelezo",
+    "transactionsReport": "Ripoti ya Malipo",
+    "invoiceReport": "Ripoti ya ankara",
+    "paymentReport": "Ripoti ya maelezo ya malipo iliyokamilishwa",
+    "amendmentReport": "Ripoti ya Marekebisho",
+    "customerReport": "Ripoti ya Wateja",
+    "addInvoice": "Ongeza ankra"
+  },
+  "roles": {
+    "role": "Jukumu",
+    "bank": "Benki",
+    "vendor": "Muuzaji",
+    "logout": "Ondoka",
+    "profile": "Umbo"
+  },
+  "vendorHeaders": [
+    {
+      "name": "Wateja",
+      "access": ["Admin", "Manager"],
+      "dropdowns": []
+    },
+    {
+      "name": "Watumiaji wa muuzaji",
+      "access": ["Admin", "Manager"],
+      "dropdowns": []
+    },
+    {
+      "name": "Makaratasi ya malipo",
+      "access": ["Admin", "Manager"],
+      "dropdowns": [
+        {
+          "label": "Created",
+          "routerLink": "/vendor/invoice/list",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Generated",
+          "routerLink": "/vendor/invoice/generated",
+          "access": ["Admin", "Manager"]
+        }
+      ]
+    },
+    {
+      "name": "Ripoti",
+      "access": ["Admin", "Manager"],
+      "dropdowns": [
+        {
+          "label": "Muonekano",
+          "routerLink": "/vendor/reports/overview",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Maelezo ya Malipo",
+          "routerLink": "/vendor/reports/transactions",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Maelezo ya Makaratasi ya Malipo",
+          "routerLink": "/vendor/reports/invoice",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Malipo Yaliyokamilika",
+          "routerLink": "/vendor/reports/payments",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Maelezo ya Marekebisho",
+          "routerLink": "/vendor/reports/amendment",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Makaratasi ya Malipo Yaliyofutwa",
+          "routerLink": "/vendor/reports/cancelled",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Njia za Ukaguzi",
+          "routerLink": "/vendor/reports/audit",
+          "access": ["Admin"]
+        }
+      ]
+    }
+  ],
+  "bankHeaders": [
+    {
+      "name": "Muuzaji",
+      "access": [
+        "Administrator",
+        "Recruitment Manager",
+        "Customer Support",
+        "Business Management"
+      ],
+      "dropdowns": [
+        {
+          "label": "Muhtasari",
+          "routerLink": "/main/company/summary",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Idhini",
+          "routerLink": "/main/company/inbox",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Mazingira",
+      "access": [
+        "Administrator",
+        "Recruitment Manager",
+        "Customer Support",
+        "Business Management"
+      ],
+      "dropdowns": [
+        {
+          "label": "Nchi",
+          "routerLink": "/main/setup/country",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Mkoa",
+          "routerLink": "/main/setup/region",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Wilaya",
+          "routerLink": "/main/setup/district",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Kata",
+          "routerLink": "/main/setup/ward",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Sarafu",
+          "routerLink": "/main/setup/currency",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Cheo",
+          "routerLink": "/main/setup/designation",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Tawi",
+          "routerLink": "/main/setup/branch",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "SMTP",
+          "routerLink": "/main/setup/smtp",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Barua Pepe",
+          "routerLink": "/main/setup/email",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Mtumiaji wa Benki",
+          "routerLink": "/main/setup/user",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Akaunti ya Kusubiri",
+          "routerLink": "/main/setup/suspense",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Mipangilio ya SMS",
+          "routerLink": "/main/setup/sms-settings",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Matini ya SMS",
+          "routerLink": "/main/setup/sms-text",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Ripoti",
+      "access": [
+        "Administrator",
+        "Recruitment Manager",
+        "Customer Support",
+        "Business Management"
+      ],
+      "dropdowns": [
+        {
+          "label": "Muhtasari",
+          "routerLink": "/main/reports/overview",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Maelezo ya Malipo",
+          "routerLink": "/main/reports/transactions",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "malipo kamili",
+          "routerLink": "/main/reports/payment",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Maelezo ya Anuani",
+          "routerLink": "/main/reports/invoice",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Ankara iliyokatishwa",
+          "routerLink": "/main/reports/cancelled",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Maelezo ya Marekebisho",
+          "routerLink": "/main/reports/amendment",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Ripoti ya Wateja",
+          "routerLink": "/main/reports/customer",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Ripoti ya Wauzaji",
+          "routerLink": "/main/reports/vendors",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Anuani Zilizojumuishwa",
+          "routerLink": "/main/reports/invoice-consolidated",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Malipo Yaliyojumuishwa",
+          "routerLink": "/main/reports/payment-consolidated",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Ripoti ya Matumizi ya Mtumiaji",
+          "routerLink": "/main/reports/userlog",
+          "access": ["Administrator"]
+        },
+        {
+          "label": "Mafunzo ya Ukaguzi",
+          "routerLink": "/main/reports/audit",
+          "access": ["Administrator"]
+        }
+      ]
+    }
+  ],
+  "tableData": {
+    "itemsPerPage": "Vipengee kwa kila ukurasa",
+    "filterDates": ["Mwezi uliopita", "Mwaka jana", "Tarehe ya desturi"]
+  },
+  "utilities": {
+    "today": "Leo",
+    "yesterday": "Jana",
+    "months": [
+      { "name": "Januari", "abbreviation": "Jan" },
+      { "name": "Februari", "abbreviation": "Feb" },
+      { "name": "Machi", "abbreviation": "Mac" },
+      { "name": "Aprili", "abbreviation": "Apr" },
+      { "name": "Mei", "abbreviation": "Mei" },
+      { "name": "Juni", "abbreviation": "Jun" },
+      { "name": "Julai", "abbreviation": "Jul" },
+      { "name": "Agosti", "abbreviation": "Ago" },
+      { "name": "Septemba", "abbreviation": "Sep" },
+      { "name": "Oktoba", "abbreviation": "Okt" },
+      { "name": "Novemba", "abbreviation": "Nov" },
+      { "name": "Desemba", "abbreviation": "Des" }
+    ],
+    "daysOfWeek": [
+      { "name": "Jumatatu", "abbreviation": "Jat" },
+      { "name": "Jumanne", "abbreviation": "Jnn" },
+      { "name": "Jumatano", "abbreviation": "Jtn" },
+      { "name": "Alhamisi", "abbreviation": "Alh" },
+      { "name": "Ijumaa", "abbreviation": "Ijm" },
+      { "name": "Jumamosi", "abbreviation": "Jmi" },
+      { "name": "Jumapili", "abbreviation": "Jpl" }
+    ]
+  }
+}

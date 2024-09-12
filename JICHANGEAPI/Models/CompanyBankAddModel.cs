@@ -49,6 +49,6 @@ namespace JichangeApi.Models
         public long branch  {get; set;} 
         public string check_status  {get; set;}
 
-
+        //public string occupation { get; set; }
     }
 }

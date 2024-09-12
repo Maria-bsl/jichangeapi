@@ -1,0 +1,94 @@
+{
+  "companyUsers": "Vendor users",
+  "noUsersFound": "There were no users found.",
+  "addCompanyButton": "Add vendor users",
+  "failedToRetrieveCompanyUser": "Failed to retrieve vendor user.",
+  "searchBy": "Search by username, full name or email",
+  "resend": "Resend credentials",
+  "companyTable": [
+    {
+      "label": "No.",
+      "value": "No.",
+      "desc": ""
+    },
+    {
+      "label": "User name",
+      "value": "Username",
+      "desc": ""
+    },
+    {
+      "label": "Role",
+      "value": "Userpos",
+      "desc": ""
+    },
+    {
+      "label": "Full name",
+      "value": "Fullname",
+      "desc": ""
+    },
+    {
+      "label": "Email Address",
+      "value": "Email",
+      "desc": ""
+    },
+    {
+      "label": "Mobile Number",
+      "value": "Mobile",
+      "desc": ""
+    },
+    {
+      "label": "Action(s)",
+      "value": "Action",
+      "desc": ""
+    }
+  ],
+  "companyUsersForm": {
+    "role": "Role",
+    "username": "User name",
+    "fullName": "Full name",
+    "mobileNo": "Mobile No",
+    "emailId": "Email ID",
+    "userPosition": "User position",
+    "successMessage": "User added successfully!",
+    "modified": "User modified successfully!",
+    "resend": {
+      "email": "Email",
+      "mobile": "Telephone",
+      "message": "Choose email or mobile to receive reissued credentials.",
+      "sureResendEmail": "An email of the user's credentials will be sent to the user.",
+      "sureResendMobile": "An SMS text of the user's credentials will be sent to the user.",
+      "sentSuccessfully": "Credentials sent successfully!",
+      "failedToResendCredential": "Failed to resend user credentials. Verify email and mobile number and try again."
+    },
+    "placeholder": {
+      "role": "Select role",
+      "username": "Enter User name",
+      "fullName": "Enter Full name",
+      "mobileNo": "(0) 255",
+      "emailId": "Enter email address",
+      "userPosition": "Enter User position"
+    },
+    "errors": {
+      "role": "Please select role",
+      "username": "Please enter a User name",
+      "mobileNo": "Please enter a valid phone number",
+      "emailId": "Please enter email address",
+      "userPosition": "Please enter user position",
+      "fullName": "Please enter a Full name",
+      "dialog": {
+        "invalidForm": "Invalid form",
+        "role": "You must select a role",
+        "username": "You must enter a User name",
+        "mobileNo": "You must enter a valid phone number",
+        "emailId": "You must enter a valid email address",
+        "userPosition": "Please select a position.",
+        "fullName": "You must enter a Full name",
+        "noRoleActFound": "No Roles found for this institution.",
+        "FailedToAddCompany": "Failed to add a vendor",
+        "existsEmail": "The email address provided is already in use.",
+        "existsUsername": "The username you have entered is already in use.",
+        "existsMobile": "The mobile number you have entered is already in use."
+      }
+    }
+  }
+}

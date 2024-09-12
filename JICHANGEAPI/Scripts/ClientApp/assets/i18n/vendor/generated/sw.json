@@ -1,0 +1,131 @@
+{
+  "generatedInvoice": "Bili iliyotengenezwa",
+  "addInvoice": "Ongeza Bili",
+  "contorolNumber": "Nambari ya kudhibiti",
+  "remarks": "Maelezo",
+  "generatedInvoicesTable": [
+    {
+      "label": "Na.",
+      "value": "",
+      "desc": ""
+    },
+    {
+      "label": "Tarehe ya Ankara",
+      "value": "Invoice_Date",
+      "desc": "Panga kwa Tarehe ya ankara"
+    },
+    {
+      "label": "Jina la mteja",
+      "value": "Chus_Name",
+      "desc": "Panga kwa Jina la mteja"
+    },
+    {
+      "label": "Nambari ya Ankara",
+      "value": "Invoice_No",
+      "desc": "Panga kwa Nambari ya ankara"
+    },
+    {
+      "label": "Nambari ya kudhibiti",
+      "value": "Control_No",
+      "desc": "Sort by Control number"
+    },
+    {
+      "label": "Aina ya Malipo",
+      "value": "Payment_Type",
+      "desc": "Panga kwa Aina ya malipo"
+    },
+    {
+      "label": "Hali ya utoaji",
+      "value": "delivery_status",
+      "desc": ""
+    },
+    {
+      "label": "Hali",
+      "value": "Status",
+      "desc": ""
+    },
+    {
+      "label": "Jumla ya Kiasi",
+      "value": "Total",
+      "desc": "Panga kwa Jumla ya kiasi"
+    },
+    {
+      "label": "Tarehe ya Kulipwa",
+      "value": "Due_Date",
+      "desc": ""
+    },
+    {
+      "label": "Tarehe ya Kukamilisha",
+      "value": "Invoice_Expired_Date",
+      "desc": ""
+    },
+    {
+      "label": "Kitendo",
+      "value": "Action",
+      "desc": ""
+    }
+  ],
+  "failedToRetrieveAmendedInvoice": "Imeshindwa kurekebisha ankara.",
+  "amend": "Amend",
+  "deliver": {
+    "deliver": "Kutoa",
+    "markDeliver": "Fanya utoaji",
+    "sureDeliver": "Una hakika unataka kutoa vipengee vya ankara {}?",
+    "deliveryCodeSentSuccessfully": "Nambari ya uwasilishaji imetumwa kwa mteja.",
+    "failedToSendDeliveryCode": "Imeshindwa kutuma msimbo wa uwasilishaji.",
+    "pendingDeliveryMessage": "Utoaji wa Kusubiri"
+  },
+  "amendInvoice": "Rekebisha ankara",
+  "invoiceAmendedSuccessfully": "Ankara iliyorekebishwa kwa mafanikio!",
+  "failedToRetrieveInvoice": "Imeshindwa kurejesha ankara iliyozalishwa.",
+  "addedInvoiceSuccessfully": "Ankara iliyoongezwa kwa mafanikio!",
+  "noItemsFound": "Hakuna vipengee vilivyopatikana kwa ankara {}",
+  "generateInvoiceView": {
+    "viewTable": ["Maelezo", "Kiasi", "Bei", "Jumla"]
+  },
+  "noCustomersFound": "Hakuna Wateja waliopatikana!",
+  "noCurrenciesFound": "Hakuna sarafu zilizopatikana!",
+  "form": {
+    "reason": "Sababu",
+    "placeholders": {
+      "reason": "Weka sababu",
+      "searchGeneratedInvoiceTable": "Tafuta kwa jina au ankara"
+    },
+    "errors": {
+      "reason": "Tafadhali weka sababu"
+    },
+    "dialog": {
+      "invoiceNumber": "Tafadhali toa nambari ya ankara.",
+      "invoiceDate": "Tafadhali toa tarehe ya ankara.",
+      "expiryDate": "Tafadhali toa tarehe ya mwisho.",
+      "dueDate": "Tafadhali toa tarehe ya kulipwa.",
+      "paymentType": "Tafadhali toa aina ya malipo.",
+      "details": "Tafadhali ongeza angalau kipengee kimoja cha ankara.",
+      "reason": "Tafadhali toa sababu.",
+      "modifyItems": "Tafadhali rekebisha vipengee vya ankara ili kurekebisha ankara."
+    }
+  },
+  "errors": {
+    "noCustomersFound": "Hakuna wateja waliopatikana.",
+    "failedToDownload": "Imeshindwa kupakua ankara."
+  },
+  "cancelInvoice": "Una uhakika unataka kufuta ankara hii?",
+  "generateChart": {
+    "generateChart": "Jenga grafu",
+    "chartType": "Aina ya Grafu",
+    "form": {
+      "placeholders": {
+        "chartType": "Chagua aina ya grafu"
+      },
+      "dialog": {
+        "specifyGraphType": "Taja aina ya grafu",
+        "specifyGraphTypeMsg": "Lazima utaje aina ya grafu. (Mstari, mstari, mduara)",
+        "missingAxis": "Mhimili haupo",
+        "noXAxisFound": "Tafadhali, chagua safu ya Mhimili wa X ili uendelee",
+        "noYAxisFound": "Tafadhali, chagua safu ya Mhimili wa Y ili uendelee"
+      }
+    },
+    "xAxis": "Mhimili wa X",
+    "yAxis": "Mhimili wa Y"
+  }
+}

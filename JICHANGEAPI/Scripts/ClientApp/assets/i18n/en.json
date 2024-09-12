@@ -1,0 +1,539 @@
+{
+  "defaults": {
+    "yes": "Yes",
+    "no": "No",
+    "search": "Search",
+    "action": "Action",
+    "status": "Status",
+    "active": "Active",
+    "inActive": "InActive",
+    "cancelled": "Cancelled",
+    "viewAll": "View All",
+    "failed": "Failed",
+    "columns": "Columns",
+    "warning": "Warning",
+    "any": "Any",
+    "confirm": "Confirm",
+    "close": "Close",
+    "success": "Success",
+    "cancel": "Cancel",
+    "all": "All",
+    "optional": "Optional",
+    "pleaseFill": "Please fill",
+    "send": "Send"
+  },
+  "forms": {
+    "from": "From",
+    "to": "To",
+    "branch": "Branch",
+    "vendor": "Vendor",
+    "customer": "Customer",
+    "invoiceNumber": "Invoice number",
+    "errors": {
+      "branch": "Please select a branch",
+      "vendor": "Please select a vendor",
+      "customer": "Please select a customer",
+      "invoiceNumber": "Please select an invoice number",
+      "startDate": "Pick a start date",
+      "endDate": "Pick an end date"
+    },
+    "placeholders": {
+      "invoiceNumber": "Enter invoice number"
+    }
+  },
+  "actions": {
+    "submit": "Submit",
+    "close": "Close",
+    "ok": "Ok",
+    "reset": "Reset",
+    "download": "Download",
+    "saveChanges": "Save changes?",
+    "view": "View",
+    "edit": "Edit",
+    "delete": "Delete",
+    "refund": "Refund"
+  },
+  "errors": {
+    "errorOccured": "Error occured",
+    "verifyConnection": "Please, verify your connection or try again.",
+    "noInternet": "You are offline",
+    "connected": "Back online",
+    "noDataFound": "No data found",
+    "notFound": "Item not found.",
+    "alreadyExists": "{} already exists.",
+    "validDate": "Please select a valid date",
+    "contactSupport": "An unexpected error occurred, please try again or contact support.",
+    "timeoutError": "Request timed out. Please verify your connection or try again.",
+    "invalidForm": "Invalid form",
+    "noFilterItemFound": "No data found matching the filter.",
+    "unAuthorizedUser": "You need to log in to continue.",
+    "accessDenied": "Access Denied",
+    "missingUserIdMessage": "Invalid request. Please contact support.",
+    "serverError": "An error occured on the server."
+  },
+  "dialogs": {
+    "sureSaveChanges": "Are you sure you want to save changes?"
+  },
+  "bankHeaders": [
+    {
+      "name": "Vendor",
+      "access": [
+        "Administrator",
+        "Recruitment Manager",
+        "Customer Support",
+        "Business Management"
+      ],
+      "dropdowns": [
+        {
+          "label": "Summary",
+          "routerLink": "/main/company/summary",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Approvals",
+          "routerLink": "/main/company/inbox",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Setup",
+      "access": [
+        "Administrator",
+        "Recruitment Manager",
+        "Customer Support",
+        "Business Management"
+      ],
+      "dropdowns": [
+        {
+          "label": "country",
+          "routerLink": "/main/setup/country",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "region",
+          "routerLink": "/main/setup/region",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "district",
+          "routerLink": "/main/setup/district",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "ward",
+          "routerLink": "/main/setup/ward",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "currency",
+          "routerLink": "/main/setup/currency",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "designation",
+          "routerLink": "/main/setup/designation",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "branch",
+          "routerLink": "/main/setup/branch",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "SMTP",
+          "routerLink": "/main/setup/smtp",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Email Text",
+          "routerLink": "/main/setup/email",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Bank User",
+          "routerLink": "/main/setup/user",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Suspense account",
+          "routerLink": "/main/setup/suspense",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "SMS Settings",
+          "routerLink": "/main/setup/sms-settings",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "SMS Text",
+          "routerLink": "/main/setup/sms-text",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "access": [
+        "Administrator",
+        "Recruitment Manager",
+        "Customer Support",
+        "Business Management"
+      ],
+      "dropdowns": [
+        {
+          "label": "Overview",
+          "routerLink": "/main/reports/overview",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Payment Details",
+          "routerLink": "/main/reports/transactions",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Completed Payments",
+          "routerLink": "/main/reports/payment",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Invoice Details",
+          "routerLink": "/main/reports/invoice",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Cancelled Invoice",
+          "routerLink": "/main/reports/cancelled",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Amendments Details",
+          "routerLink": "/main/reports/amendment",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Customers Report",
+          "routerLink": "/main/reports/customer",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Vendors Report",
+          "routerLink": "/main/reports/vendors",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Invoice Consolidated",
+          "routerLink": "/main/reports/invoice-consolidated",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "Payment Consolidated",
+          "routerLink": "/main/reports/payment-consolidated",
+          "access": [
+            "Administrator",
+            "Recruitment Manager",
+            "Customer Support",
+            "Business Management"
+          ]
+        },
+        {
+          "label": "User Log Report",
+          "routerLink": "/main/reports/userlog",
+          "access": ["Administrator"]
+        },
+        {
+          "label": "Audit Trails",
+          "routerLink": "/main/reports/audit",
+          "access": ["Administrator"]
+        }
+      ]
+    }
+  ],
+  "vendorHeaders": [
+    {
+      "name": "Customers",
+      "access": ["Admin", "Manager"],
+      "dropdowns": []
+    },
+    {
+      "name": "Vendor users",
+      "access": ["Admin", "Manager"],
+      "dropdowns": []
+    },
+    {
+      "name": "Invoices",
+      "access": ["Admin", "Manager"],
+      "dropdowns": [
+        {
+          "label": "Created",
+          "routerLink": "/vendor/invoice/list",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Generated",
+          "routerLink": "/vendor/invoice/generated",
+          "access": ["Admin", "Manager"]
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "access": ["Admin", "Manager"],
+      "dropdowns": [
+        {
+          "label": "Overview",
+          "routerLink": "/vendor/reports/overview",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Payment Details",
+          "routerLink": "/vendor/reports/transactions",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Invoice Details",
+          "routerLink": "/vendor/reports/invoice",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Completed Payments",
+          "routerLink": "/vendor/reports/payments",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Amendments Details",
+          "routerLink": "/vendor/reports/amendment",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Cancelled invoice",
+          "routerLink": "/vendor/reports/cancelled",
+          "access": ["Admin", "Manager"]
+        },
+        {
+          "label": "Audit Trails",
+          "routerLink": "/vendor/reports/audit",
+          "access": ["Admin"]
+        }
+      ]
+    }
+  ],
+  "bankRoutes": {
+    "home": "Home",
+    "profile": "Profile",
+    "company": {
+      "summary": "Vendors list",
+      "inbox": "Vendor approvals"
+    },
+    "setup": {
+      "country": "Country",
+      "region": "Region(s)",
+      "district": "District(s)",
+      "ward": "Ward(s)",
+      "currencies": "Currencies",
+      "designation": "Designation(s)",
+      "branch": "Branch",
+      "question": "Question(s)",
+      "smtp": "SMTP",
+      "email": "Email",
+      "bankUser": "Bank user(s)",
+      "language": "Language(s)",
+      "suspense": "Suspense account",
+      "deposit": "Vendor account",
+      "smsSettings": "SMS Settings",
+      "smsText": "SMS Text"
+    },
+    "reports": {
+      "overview": "Report(s)",
+      "invoice": "Invoice(s)",
+      "userLog": "User Logs",
+      "vendor": "Customer(s)",
+      "audit": "Audit",
+      "details": "Detail(s)",
+      "payments": "Completed Payments Details",
+      "amendment": "Amendment(s)",
+      "transaction": "Payment(s)",
+      "vendorReport": "Vendor report",
+      "invoiceConsolidated": "Invoice Consolidated",
+      "paymentConsolidated": "Payment Consolidated",
+      "cancelled": "Cancelled Invoice(s)"
+    }
+  },
+  "vendorRoutes": {
+    "home": "Home",
+    "profile": "Profile",
+    "customer": "Customer(s)",
+    "detail": "Detail(s)",
+    "viewCustomerTransactions": "Transaction(s)",
+    "users": "User(s)",
+    "amendment": "Amendment(s)",
+    "cancelled": "Cancelled",
+    "invoice": "Invoice(s)",
+    "created": "Created Invoice(s)",
+    "overview": "Overview",
+    "transactionsReport": "Payment Report",
+    "invoiceReport": "Invoice Report",
+    "paymentReport": "Completed Payments Report",
+    "amendmentReport": "Amendment Report",
+    "customerReport": "Customer Report",
+    "addInvoice": "Add Invoice"
+  },
+  "roles": {
+    "role": "Role",
+    "bank": "Bank",
+    "vendor": "Vendor",
+    "logout": "Logout",
+    "profile": "Profile"
+  },
+  "tableData": {
+    "itemsPerPage": "Showing",
+    "filterDates": ["Last 30 days", "Last year", "Custom date"]
+  },
+  "utilities": {
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "months": [
+      { "name": "January", "abbreviation": "Jan" },
+      { "name": "February", "abbreviation": "Feb" },
+      { "name": "March", "abbreviation": "Mar" },
+      { "name": "April", "abbreviation": "Apr" },
+      { "name": "May", "abbreviation": "May" },
+      { "name": "June", "abbreviation": "Jun" },
+      { "name": "July", "abbreviation": "Jul" },
+      { "name": "August", "abbreviation": "Aug" },
+      { "name": "September", "abbreviation": "Sep" },
+      { "name": "October", "abbreviation": "Oct" },
+      { "name": "November", "abbreviation": "Nov" },
+      { "name": "December", "abbreviation": "Dec" }
+    ],
+    "daysOfWeek": [
+      { "name": "Monday", "abbreviation": "Mon" },
+      { "name": "Tuesday", "abbreviation": "Tue" },
+      { "name": "Wednesday", "abbreviation": "Wed" },
+      { "name": "Thursday", "abbreviation": "Thu" },
+      { "name": "Friday", "abbreviation": "Fri" },
+      { "name": "Saturday", "abbreviation": "Sat" },
+      { "name": "Sunday", "abbreviation": "Sun" }
+    ]
+  }
+}

@@ -1,0 +1,131 @@
+{
+  "generatedInvoice": "Generated Invoice",
+  "addInvoice": "Add Invoice",
+  "contorolNumber": "Control number",
+  "remarks": "Remarks",
+  "generatedInvoicesTable": [
+    {
+      "label": "No.",
+      "value": "No.",
+      "desc": ""
+    },
+    {
+      "label": "Invoice Date",
+      "value": "Invoice_Date",
+      "desc": "Sort by Invoice date"
+    },
+    {
+      "label": "Customer name",
+      "value": "Chus_Name",
+      "desc": "Sort by Customer name"
+    },
+    {
+      "label": "Invoice N°",
+      "value": "Invoice_No",
+      "desc": "Sort by Invoice number"
+    },
+    {
+      "label": "Control N°",
+      "value": "Control_No",
+      "desc": "Sort by Control number"
+    },
+    {
+      "label": "Payment type",
+      "value": "Payment_Type",
+      "desc": "Sort by Payment type"
+    },
+    {
+      "label": "Delivery Status",
+      "value": "delivery_status",
+      "desc": ""
+    },
+    {
+      "label": "Status",
+      "value": "Status",
+      "desc": ""
+    },
+    {
+      "label": "Total Amount",
+      "value": "Total",
+      "desc": "Sort by Total Amount"
+    },
+    {
+      "label": "Due Date",
+      "value": "Due_Date",
+      "desc": ""
+    },
+    {
+      "label": "Expiry Date",
+      "value": "Invoice_Expired_Date",
+      "desc": ""
+    },
+    {
+      "label": "Action(s)",
+      "value": "Action",
+      "desc": ""
+    }
+  ],
+  "failedToRetrieveAmendedInvoice": "Failed to amend invoice.",
+  "amend": "Amend",
+  "deliver": {
+    "deliver": "Deliver",
+    "markDeliver": "Make delivery",
+    "sureDeliver": "Are you sure you want to deliver items for invoice {}?",
+    "deliveryCodeSentSuccessfully": "A delivery Code has been sent to the customer.",
+    "failedToSendDeliveryCode": "Failed to send delivery code.",
+    "pendingDeliveryMessage": "Pending Delivery"
+  },
+  "amendInvoice": "Amend Invoice",
+  "invoiceAmendedSuccessfully": "Amended invoice successfully!",
+  "failedToRetrieveInvoice": "Failed to retrieve generated invoice.",
+  "addedInvoiceSuccessfully": "Added invoice successfully!",
+  "noItemsFound": "No items found for invoice {}",
+  "generateInvoiceView": {
+    "viewTable": ["Description", "Quantity", "Unit Price", "Subtotal"]
+  },
+  "noCustomersFound": "No Customers found!",
+  "noCurrenciesFound": "No currencies found!",
+  "form": {
+    "reason": "Reason",
+    "placeholders": {
+      "reason": "Enter reason",
+      "searchGeneratedInvoiceTable": "Search by name or invoice"
+    },
+    "errors": {
+      "reason": "Please enter reason"
+    },
+    "dialog": {
+      "invoiceNumber": "Please provide the invoice number.",
+      "invoiceDate": "Please provide an invoice date.",
+      "expiryDate": "Please provide an expiry date.",
+      "dueDate": "Please provide a due date.",
+      "paymentType": "Please provide a payment type.",
+      "details": "Please add at least one invoice item.",
+      "reason": "Please provide a reason.",
+      "modifyItems": "Please modify invoice items to amend invoice."
+    }
+  },
+  "errors": {
+    "noCustomersFound": "No customers found.",
+    "failedToDownload": "Failed to download invoice."
+  },
+  "cancelInvoice": "Are you sure you want to cancel this invoice.",
+  "generateChart": {
+    "generateChart": "Generate graph",
+    "chartType": "Chart type",
+    "form": {
+      "placeholders": {
+        "chartType": "Select chart type"
+      },
+      "dialog": {
+        "specifyGraphType": "Specify graph type",
+        "specifyGraphTypeMsg": "You must specify the graph type. (Line, bar, pie)",
+        "missingAxis": "Missing axis",
+        "noXAxisFound": "Please, select the X-Axis column to continue",
+        "noYAxisFound": "Please, select the Y-Axis column to continue"
+      }
+    },
+    "xAxis": "X-Axis",
+    "yAxis": "Y-Axis"
+  }
+}

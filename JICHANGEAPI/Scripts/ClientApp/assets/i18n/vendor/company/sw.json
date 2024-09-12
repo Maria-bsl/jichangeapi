@@ -1,0 +1,94 @@
+{
+  "companyUsers": "Watumiaji wa muuzaji",
+  "noUsersFound": "Hakuna watumiaji waliopatikana.",
+  "addCompanyButton": "Ongeza watumiaji wa muuzaji",
+  "failedToRetrieveCompanyUser": "Imeshindwa kupata mtumiaji wa muuzaji.",
+  "searchBy": "Tafuta kwa jina la mtumiaji, jina kamili au barua pepe",
+  "resend": "Tuma upya hati za utambulisho",
+  "companyTable": [
+    {
+      "label": "Nambari",
+      "value": "No.",
+      "desc": ""
+    },
+    {
+      "label": "Jina la Mtumiaji",
+      "value": "Username",
+      "desc": ""
+    },
+    {
+      "label": "Jukumu",
+      "value": "Usertype",
+      "desc": ""
+    },
+    {
+      "label": "Jina Kamili",
+      "value": "Fullname",
+      "desc": ""
+    },
+    {
+      "label": "Barua pepe",
+      "value": "Email",
+      "desc": ""
+    },
+    {
+      "label": "Namba ya Simu",
+      "value": "Mobile",
+      "desc": ""
+    },
+    {
+      "label": "Vitendo",
+      "value": "Action",
+      "desc": ""
+    }
+  ],
+  "companyUsersForm": {
+    "role": "Jukumu",
+    "username": "Jina la mtumiaji",
+    "fullName": "Jina kamili",
+    "mobileNo": "Namba ya simu",
+    "emailId": "Barua pepe",
+    "userPosition": "Nafasi ya mtumiaji",
+    "successMessage": "Muuzaji imeongezwa kwa mafanikio!",
+    "modified": "Muuzaji amebadilishiwa kwa mafanikio!",
+    "resend": {
+      "email": "Barua pepe",
+      "mobile": "Simu",
+      "message": "Chagua barua pepe au simu ya mkononi ili kupokea hati za utambulisho zilizorejeshwa.",
+      "sureResendEmail": "Barua pepe ya hati za utambulisho wa mtumiaji itatumwa kwa mtumiaji.",
+      "sureResendMobile": "Nakala ya SMS ya hati za mtumiaji itatumwa kwa mtumiaji.",
+      "sentSuccessfully": "Hati za utambulisho zimetumwa kwa mafanikio!",
+      "failedToResendCredential": "Imeshindwa kutuma upya hati za utambulisho za mtumiaji. Thibitisha barua pepe na nambari ya simu na jaribu tena."
+    },
+    "placeholder": {
+      "role": "Chagua jukumu",
+      "username": "Ingiza jina la mtumiaji",
+      "fullName": "Ingiza jina kamili",
+      "mobileNo": "(0) 255",
+      "emailId": "Ingiza anwani ya barua pepe",
+      "userPosition": "Ingiza nafasi ya mtumiaji"
+    },
+    "errors": {
+      "role": "Tafadhali chagua jukumu",
+      "username": "Tafadhali ingiza jina la mtumiaji",
+      "mobileNo": "Tafadhali ingiza namba ya simu sahihi",
+      "emailId": "Tafadhali ingiza anwani ya barua pepe",
+      "userPosition": "Tafadhali ingiza nafasi ya mtumiaji",
+      "fullName": "Tafadhali ingiza jina kamili",
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "role": "Lazima uchague jukumu",
+        "username": "Lazima uingize jina la mtumiaji",
+        "mobileNo": "Lazima uingize namba ya simu sahihi",
+        "emailId": "Lazima uingize anwani ya barua pepe",
+        "userPosition": "Tafadhali chagua nafasi.",
+        "fullName": "Lazima uingize jina kamili",
+        "noRoleActFound": "Hakuna majukumu yaliyopatikana kwenye taasisi yako.",
+        "FailedToAddCompany": "Kushindwa kuongeza muuzaji.",
+        "existsEmail": "Anwani ya barua pepe iliyotolewa tayari inatumika.",
+        "existsUsername": "Jina la mtumiaji uliloingiza tayari linatumika.",
+        "existsMobile": "Nambari ya rununu uliyoingiza tayari inatumika."
+      }
+    }
+  }
+}

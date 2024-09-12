@@ -1,0 +1,300 @@
+{
+  "sessionManagement": {
+    "userLogedOut": "Mtumiaji ametoka nje",
+    "timedOut": {
+      "timedOutTitle": "Muda Umekwisha",
+      "timeOutMessage": "Kipindi chako kimekwisha na unahitaji kuingia tena!",
+      "timeOutInXSeconds": "Utaisha baada ya sekunde {}!"
+    }
+  },
+  "noRoleActsFound": "Hakuna vitendo vya jukumu vilivyopatikana.",
+  "loginForm": {
+    "welcomeMessage": "Ingia kwenye akaunti yako",
+    "signInMessage": "Ingiza barua pepe yako na nenosiri kuingia",
+    "username": "Anwani ya barua pepe",
+    "password": "Nywila",
+    "placeholders": {
+      "username": "Ingiza anwani ya barua pepe",
+      "password": "Ingiza nywila"
+    },
+    "errors": {
+      "usernameError": "Tafadhali ingiza barua pepe halali",
+      "passwordError": "Tafadhali ingiza nywila yako",
+      "dialogs": {
+        "invalidFormError": "Fomu batili",
+        "missingUsername": "Tafadhali toa jina la mtumiaji",
+        "missingPassword": "Tafadhali toa nywila",
+        "usernamePasswordIncorrect": "Jina la mtumiaji au nenosiri si sahihi",
+        "loginFailed": "Kuingia Imeshindwa"
+      }
+    },
+    "forgotPassword": "Umesahau nywila?",
+    "rememberMe": "Nikumbuke",
+    "actions": {
+      "signIn": "Ingia ndani",
+      "controlNumberDetails": "Una control number?",
+      "register": "Finyanga apa!"
+    }
+  },
+  "vendorRegistration": {
+    "title": "Usajili wa Vendor",
+    "failedToRetrieveBranchList": "Imeshindwa kupata orodha ya tawi.",
+    "failedToAddVendor": "Usajili umeshindwa, tafadhali jaribu tena.",
+    "form": {
+      "vendorName": "Jina la Vendor",
+      "mobileNo": "Nambari ya Simu ya Mkononi",
+      "branch": "Tawi",
+      "accountNo": "Nambari ya Akaunti",
+      "makerCheckerApproval": "Checker kwa idhini ya ankara?",
+      "email": "Barua pepe",
+      "makerOptions": {
+        "yes": "Ndio",
+        "no": "Apana"
+      },
+      "placeholders": {
+        "vendorName": "Ingiza jina ya muuzaji",
+        "branch": "Chagua maelezo ya Tawi",
+        "accountNo": "Ingiza nambari ya Akaunti",
+        "email": "Ingiza barua pepe"
+      },
+      "errors": {
+        "vendorName": "Tafadhali taja jina",
+        "mobileNo": "Tafadhali ongeza nambari halali ya simu",
+        "branch": "Tafadhali bainisha",
+        "accountNo": "Ingiza namba halali ya akaunti",
+        "invalidAccountNo": "Nambari ya akaunti si sahihi. Lazima ianze na 015, 012, au 01J na iwe na vibambo 13.",
+        "email": "Tafadhali ingiza barua pepe",
+        "dialogs": {
+          "invalidFormError": "Fomu batili",
+          "missingEmail": "Tafadhali toa anwani halali ya barua pepe.",
+          "missingVendorName": "Tafadhali toa jina la muuzaji.",
+          "missingPhoneNo": "Tafadhali toa nambari halali ya simu.",
+          "missingBranchName": "Tafadhali toa jina la Tawi.",
+          "missingAccountNo": "Tafadhali ingiza nambari yako ya kudhibiti.",
+          "makerChecker": "Tafadhali, taja hitaji la idhini ya ombi lako.",
+          "invalidAccounntNo": "Nambari ya akaunti uliyoingiza tayari inatumika.",
+          "mobileNumberExists": "Nambari ya simu uliyoweka tayari ipo.",
+          "vendorExists": "Jina la mchuuzi ambalo umeingiza tayari lipo.",
+          "vendorNameExists": "Jina la muuzaji uliloingiza tayari lipo.",
+          "tinNumberExists": "Nambari ya TIN uliyoingiza tayari ipo.",
+          "mobileExists": "Nambari ya simu ipo.",
+          "emailExists": "Anwani ya barua pepe uliyoingiza tayari ipo."
+        }
+      },
+      "success": {
+        "vendorAddedSuccessfully": "Vendor aliongeza kwa mafanikio!"
+      }
+    }
+  },
+  "controlNumberDetails": {
+    "title": "Maelezo ya Nambari ya Kudhibiti",
+    "controlNumberFound": "Nambari ya kudhibiti imepatikana.",
+    "controlFound": {
+      "controlNo": "Namba ya Udhibiti",
+      "customerName": "Jina la Mteja",
+      "paymentType": "Aina ya Malipo",
+      "itemTotalAmount": "Jumla ya Bidhaa",
+      "balance": "Salio",
+      "currencyCode": "Msimbo wa sarafu"
+    },
+    "form": {
+      "controlName": "Nambari ya kudhibiti",
+      "placeholders": {
+        "controlName": "Ingiza nambari ya kudhibiti"
+      },
+      "errors": {
+        "controlName": "Tafadhali ingiza nambari ya kudhibiti",
+        "dialogs": {
+          "invalidFormError": "Fomu batili",
+          "missingAccountNo": "Tafadhali toa namba ya akaunti",
+          "notFound": "Haipatikani",
+          "notFoundMessage": "Nambari ya kudhibiti {} haikupatikana."
+        }
+      }
+    }
+  },
+  "forgotPassword": {
+    "welcomeMessage": "Imesahau Nywila",
+    "forgotPasswordMessage": "Ingiza nambari yako ya simu na maagizo yatatumwa kwako.",
+    "resetPasswordSuccessfull": "Barua pepe ya kuweka upya nenosiri imetumwa kwa mafanikio!",
+    "resetPasswordFailed": "Imeshindwa kutuma barua pepe ya kuweka upya nenosiri",
+    "sendResetPasswordLink": "Tuma kiungo cha nenosiri la kuweka upya",
+    "form": {
+      "email": "Namba ya simu",
+      "placeholders": {
+        "email": "Ingiza namba ya simu"
+      },
+      "errors": {
+        "email": "Tafadhali ingiza namba ya simu",
+        "invalidPhone": "Namba ya simu ni batili.",
+        "dialogs": {
+          "invalidFormError": "Fomu batili",
+          "missingEmail": "Tafadhali toa anwani halali ya barua pepe"
+        }
+      },
+      "links": {
+        "backToLogin": "Nenda kwenye kuingia"
+      }
+    }
+  },
+  "otp": {
+    "verifyAccount": "Thibitisha akaunti",
+    "verifyAccountMessage": "Msimbo umetumwa kwa nambari ya simu {}, tafadhali ingiza msimbo hapa chini ili kuendelea",
+    "resendCodeIn": "Tuma tena msimbo baada ya sekunde {}",
+    "resendCode": "Tuma tena msimbo",
+    "noSessionFound": "Imeshindwa kurejesha msimbo. Tafadhali ingiza tena nambari yako ya simu na ujaribu tena.",
+    "invalidCode": "Msimbo ulioingiza ni batili. Tafadhali jaribu tena.",
+    "form": {
+      "code": "Msimbo",
+      "placeholders": {
+        "code": "Ingiza msimbo wa tarakimu 6"
+      },
+      "errors": {
+        "code": "Tafadhali jaza"
+      }
+    }
+  },
+  "changePassword": {
+    "changePassword": "Badilisha nywila",
+    "completeForm": "Jaza fomu hapa chini ili uendelee",
+    "isEmpty": "Tafadhali jaza",
+    "passwordsDoNotMatch": "Nywila hazilingani.",
+    "passowordChangedSuccessfully": "Nywila imebadilishwa kwa mafanikio",
+    "failedToUpdatePassword": "Imeshindwa kusasisha nenosiri lililoshindwa.",
+    "form": {
+      "mobileNumber": "Nambari ya simu",
+      "password": "Nenosiri",
+      "confirmPassword": "Thibitisha nenosiri",
+      "placeholders": {
+        "mobileNumber": "Ingiza nambari ya simu",
+        "password": "Ingiza nenosiri",
+        "confirmPassword": "Thibitisha nenosiri"
+      },
+      "errors": {
+        "mobileNumber": "Tafadhali ingiza nambari ya simu",
+        "password": "Tafadhali jaza",
+        "confirmPassword": "Tafadhali jaza"
+      }
+    }
+  },
+  "profile": {
+    "settings": "Wasifu wangu",
+    "saveChanges": "Hifadhi Mabadiliko",
+    "passowordChangedSuccessfully": "Nywila imebadilishwa kwa mafanikio",
+    "failedToUpdatePassword": "Imeshindwa kusasisha nywila.",
+    "selectTheme": "Teua mandhari",
+    "default": "Kaida",
+    "failedToFetchUser": "Imeshindwa kupata mtumiaji.",
+    "general": {
+      "personalInformation": "Taarifa Binafsi",
+      "firstName": "Jina la Kwanza",
+      "lastName": "Jina la Mwisho",
+      "email": "Anuani ya Barua Pepe",
+      "phone": "Simu",
+      "role": "Nafasi",
+      "username": "Jina la Mtumiaji",
+      "fullName": "Jina Kamili",
+      "branch": "Tawi"
+    },
+    "security": {
+      "changePassword": "Badilisha Nenosiri",
+      "sureChangePassword": "Una uhakika unataka kusasisha nywila yako?",
+      "form": {
+        "currentPassword": "Nenosiri la Sasa",
+        "newPassword": "Nenosiri Jipya",
+        "confirmPassword": "Thibitisha Nenosiri",
+        "placeholders": {
+          "currentPassword": "Ingiza nenosiri la sasa",
+          "newPassword": "Ingiza nenosiri jipya",
+          "confirmPassword": "Thibitisha nenosiri jipya"
+        },
+        "errors": {
+          "isEmpty": "Tafadhali jaza",
+          "passwordsDoNotMatch": "Manenosiri hayalingani.",
+          "pleaseFill": "Tafadhali jaza"
+        }
+      }
+    },
+    "language": {
+      "label": "Lugha",
+      "changeLanguage": "Badilisha Lugha",
+      "sureLanguage": "Una uhakika unataka kubadilisha lugha kuwa {}",
+      "form": {
+        "language": "Chahua Lugha",
+        "placeholders": {
+          "language": "Lugha yako"
+        }
+      }
+    },
+    "activeTabs": [
+      {
+        "label": "Jumla",
+        "description": "Badilisha mapendeleo yako na taarifa za akaunti kwa urahisi katika sehemu yetu ya Mipangilio ya Jumla, ikihakikisha uzoefu wa kibinafsi na wa kirafiki kwenye tovuti yetu.",
+        "form": {
+          "firstName": "Jina la Kwanza",
+          "lastName": "Jina la Mwisho",
+          "branch": "Tawi",
+          "mobile": "Namba ya Simu",
+          "role": "Jukumu la Mtumiaji",
+          "placeholders": {
+            "firstName": "Ingiza jina la kwanza",
+            "lastName": "Ingiza jina la mwisho",
+            "branch": "Ingiza Tawi",
+            "role": "Chagua jukumu la mtumiaji"
+          },
+          "errors": {
+            "firstName": "Haiwezi kuwa tupu",
+            "lastName": "Haiwezi kuwa tupu"
+          }
+        }
+      },
+      {
+        "label": "Usalama",
+        "description": "Tia nguvu usalama wako wa mtandaoni kwa urahisi katika sehemu yetu maalum ya Mipangilio ya Usalama, ambapo unaweza kusasisha barua pepe yako na nenosiri kwa urahisi na uhakika.",
+        "form": {
+          "currentPassword": "Nenosiri la Sasa",
+          "newPassword": "Nenosiri Jipya",
+          "confirmPassword": "Thibitisha Nenosiri",
+          "placeholders": {
+            "currentPassword": "Ingiza nenosiri la sasa",
+            "newPassword": "Ingiza nenosiri jipya",
+            "confirmPassword": "Thibitisha nenosiri jipya"
+          },
+          "errors": {
+            "isEmpty": "Tafadhali jaza",
+            "passwordsDoNotMatch": "Nywila hazilingani."
+          }
+        }
+      },
+      {
+        "label": "Lugha",
+        "description": "Gundua fursa za kimataifa katika sehemu yetu ya Mipangilio ya Lugha, ambapo unaweza kubadilisha lugha kwa urahisi kwa uzoefu wa kipekee na unaolingana.",
+        "changeLanguage": "Badilisha Lugha",
+        "sureLanguage": "Una uhakika unataka kubadilisha lugha kuwa {}",
+        "form": {
+          "language": "Lugha",
+          "placeholders": {
+            "language": "Chagua lugha"
+          }
+        }
+      }
+    ]
+  },
+  "deliveryCode": {
+    "confirmDelivery": "Thibitisha utoaji",
+    "deliveryCodeMessage": "Msimbo wa utoaji umetumwa kwa {}, tafadhali ingiza msimbo hapa chini ili kuendelea",
+    "failedToFindDelivery": "Imeshindwa kupata utoaji, kikao kinaweza kuwa kimeisha.",
+    "failedToConfirmDeliveryCode": "Imeshindwa kuthibitisha msimbo wa utoaji.",
+    "confirmedSuccessfully": "Imethibitishwa kwa mafanikio!",
+    "form": {
+      "code": "Msimbo",
+      "placeholders": {
+        "code": "Ingiza msimbo wa tarakimu 6"
+      },
+      "errors": {
+        "code": "Tafadhali jaza",
+        "minMaxLength": "Msimbo lazima uwe na tarakimu 6 kwa muda mrefu"
+      }
+    }
+  }
+}

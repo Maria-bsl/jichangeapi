@@ -1,0 +1,280 @@
+{
+  "invoiceDetails": "Invoice cancelled",
+  "noInvoices": "You have not yet created an invoice.",
+  "noGeneratedInvoicesFound": "There were no invoices found.",
+  "noInvoicesFound": "No invoice found for {}",
+  "addInvoice": "Add Invoice",
+  "createInvoice": "Create Invoice",
+  "editInvoice": "Edit invoice",
+  "exportToExcel": "Export to excel",
+  "exportToPdf": "Export to pdf",
+  "approve": "Approve",
+  "form": {
+    "itemDetailsTableHeaders": [
+      "Description",
+      "Quantity",
+      "Unit price",
+      "Total price"
+    ],
+    "details": "Invoice details",
+    "invoiceNo": "Invoice number",
+    "invoiceDate": "Invoice date",
+    "dueDate": "Invoice due date",
+    "invoiceExpire": "Invoice expiry date",
+    "customer": "Customer",
+    "paymentType": "Payment type",
+    "itemDetails": "Item details",
+    "description": "Description",
+    "quantity": "Quantity",
+    "unitPrice": "Unit price",
+    "totalPrice": "Total price",
+    "remarks": "Remarks",
+    "status": "Status",
+    "currency": "Currency",
+    "addNewCustomer": "Add new customer",
+    "company": "Company",
+    "invoiceRemark": "Invoice remark",
+    "actions": {
+      "sureToAddCustomer": "Are you sure you want to add this customer?",
+      "addInvoiceAsWell": "Would you also want to attach an invoice to this customer?",
+      "confirm": "Confirm",
+      "areYouSureYouWantToAddANewCustomer": "Are you sure you want to add a new customer?"
+    },
+    "placeholders": {
+      "invoiceNo": "Enter invoice number",
+      "invoiceDate": "Enter invoice date",
+      "dueDate": "Enter invoice due date",
+      "invoiceExpire": "enter the invoice's expiry date",
+      "customer": "Enter customer name",
+      "paymentType": "Select a payment type",
+      "status": "Select a status",
+      "currency": "Select a currency",
+      "company": "Select a company",
+      "invoiceRemark": "Enter invoice remark"
+    },
+    "errors": {
+      "invoiceNo": "Please enter invoice number",
+      "invoiceDate": "Please specify invoice date",
+      "dueDate": "Please specify the invoice's due date",
+      "invoiceExpire": "Please specify the invoice expiry date",
+      "customer": "Please select a customer",
+      "paymentType": "Please select a payment type",
+      "status": "Please select a status",
+      "currency": "Please select a currency",
+      "company": "Please select a company",
+      "invoiceRemark": "Please enter invoice remark",
+      "itemDetails": {
+        "missingDescription": "Please fill",
+        "missingQuantity": "Specify",
+        "noQuantity": "Cannot be 0",
+        "missingUnitPrice": "Specify",
+        "noUnitPrice": "Cannot be 0"
+      }
+    },
+    "dialog": {
+      "invalidForm": "Invalid form",
+      "invoiceNo": "Missing invoice number",
+      "invoiceDate": "Please specify the invoice date",
+      "dueDate": "Please specify the invoice due date",
+      "invoiceExpire": "Please specify the invoice expiry date",
+      "customer": "Please pick a customer",
+      "paymentType": "Please specify a payment type",
+      "maximumItemDetails": "Maximum number of items {} reached.",
+      "missingItemDetails": "Invoice must have at least one item.",
+      "status": "You must specify a status.",
+      "currency": "You must specify a currency.",
+      "company": "You must specify a company.",
+      "total": "You must at least add one item to add an invoice.",
+      "invoiceRemark": "You must specify an invoice remark",
+      "invoiceExists": "Failed to add invoice because it already exists.",
+      "addedInvoiceSuccessfully": "Added invoice successfully!",
+      "modifiedSuccessfully": "Invoice modified successfully!",
+      "failedToApproveInvoice": "Failed to approve invoice",
+      "invoiceApprovedSuccessfully": "Invoice successfully approved",
+      "failedToCreateInvoice": "Failed to create invoice.",
+      "invoiceNumberExists": "Invoice number already exists.",
+      "controlNumberExists": "Control number already exists."
+    }
+  },
+  "cancelledInvoiceTable": [
+    {
+      "label": "No.",
+      "value": "No.",
+      "desc": ""
+    },
+    {
+      "label": "Posted",
+      "value": "p_date",
+      "desc": ""
+    },
+    {
+      "label": "Invoice N°",
+      "value": "Invoice_No",
+      "desc": ""
+    },
+    {
+      "label": "Customer name",
+      "value": "Customer_Name",
+      "desc": ""
+    },
+    {
+      "label": "Payment type",
+      "value": "Payment_Type",
+      "desc": ""
+    },
+    {
+      "label": "Total Amount",
+      "value": "Invoice_Amount",
+      "desc": ""
+    },
+    {
+      "label": "Control N°",
+      "value": "Control_No",
+      "desc": ""
+    },
+    {
+      "label": "Reason",
+      "value": "Reason",
+      "desc": ""
+    }
+  ],
+  "amendments": {
+    "amendments": "Amendments"
+  },
+  "invoiceDetailsForm": {
+    "invoiceDetails": "Invoice details",
+    "noCustomersFound": "No customers found for vendor.",
+    "noInvoicesFound": "No invoice found.",
+    "form": {
+      "company": "Vendor",
+      "customer": "Customer",
+      "startDate": "Start date",
+      "endDate": "End date",
+      "invoiceNo": "Invoice number",
+      "placeholders": {
+        "all": "All",
+        "any": "Any"
+      },
+      "errors": {
+        "company": "Please select a company",
+        "customer": "Please select a customer",
+        "startDate": "Please select a start date",
+        "endDate": "Please select an end date",
+        "invoiceNo": "Please select an invoice number",
+        "dialog": {
+          "invalidForm": "Invalid form",
+          "company": "You must select a company",
+          "customer": "You must select a customer",
+          "startDate": "You must select a start date",
+          "endDate": "You must select an end date",
+          "invoiceNo": "You must select an invoice number"
+        }
+      }
+    },
+    "invoiceDetailsTable": [
+      "Invoice No",
+      "Date",
+      "Customer",
+      "Total",
+      "With VAT",
+      "Without VAT"
+    ]
+  },
+  "createdInvoice": {
+    "createdInvoice": "Created Invoice(s)",
+    "searchTableBy": "Search by name or invoice",
+    "noCustomersFoundAddCustomer": "No customers found. At least one customer needed to add an invoice. Would you like to add one now?",
+    "createdInvoiceTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Customer name",
+        "value": "Chus_Name",
+        "desc": ""
+      },
+      {
+        "label": "Invoice N°",
+        "value": "Invoice_No",
+        "desc": ""
+      },
+      {
+        "label": "Invoice Date",
+        "value": "Invoice_Date",
+        "desc": ""
+      },
+      {
+        "label": "Approve",
+        "value": "Approve Invoice",
+        "desc": ""
+      },
+      {
+        "label": "Payment type",
+        "value": "Payment_Type",
+        "desc": ""
+      },
+      {
+        "label": "Status",
+        "value": "Status",
+        "desc": ""
+      },
+      {
+        "label": "Total",
+        "value": "Total",
+        "desc": ""
+      },
+      {
+        "label": "Due Date",
+        "value": "Due_Date",
+        "desc": ""
+      },
+      {
+        "label": "Expiry Date",
+        "value": "Invoice_Expired_Date",
+        "desc": ""
+      },
+      {
+        "label": "Action(s)",
+        "value": "Action",
+        "desc": ""
+      }
+    ],
+    "failedToDownloadInvoice": "Failed to download invoice.",
+    "sureCancelInvoice": "Are you sure you want to cancel invoice {}",
+    "sureApproveInvoice": "Are you sure you want to approve invoice {}?",
+    "cancelInvoice": {
+      "label": "Cancel Invoice",
+      "cautionMessage": "Once cancelled, changes can not be undone. Please proceed with caution.",
+      "cancelledSuccessfully": "Cancelled invoice successfully!",
+      "cannotCancelInvoice": "You cannot cancel an already paid invoice.",
+      "sureCancel": "Are you sure you want to cancel invoice '{}'?",
+      "form": {
+        "reason": "Reason",
+        "placeholders": {
+          "reason": "Enter reason"
+        },
+        "errors": {
+          "reason": "Please fill"
+        },
+        "dialog": {
+          "reason": "Please provide a reason for the invoice being cancelled.",
+          "failedToCancelInvoice": "Failed to cancel invoice."
+        }
+      }
+    }
+  },
+  "refund": {
+    "refundPayment": "Refund Payment",
+    "form": {
+      "fullRefund": "Full refund",
+      "fullRefundDescription": "Refund the full amount {}",
+      "partialRefund": "Partial refund",
+      "partialRefundDescription": "Refund a partial amount",
+      "refundAmount": "Refund amount",
+      "enterRefundAmount": "Enter refund amount",
+      "refundMessage": "Refunds take 5 to 10 days to appear on your customer's statement."
+    }
+  }
+}

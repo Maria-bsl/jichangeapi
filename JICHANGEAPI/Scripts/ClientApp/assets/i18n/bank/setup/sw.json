@@ -1,0 +1,897 @@
+{
+  "countryDialog": {
+    "country": "Nchi",
+    "searchBy": "Utafutaji kwa nchi",
+    "addCountry": "Ongeza Nchi",
+    "countryExists": "Nchi tayari ipo.",
+    "failedToAddCountry": "Imeshindwa kuongeza nchi.",
+    "failedToDeleteCountry": "Imeshindwa kufuta nchi.",
+    "form": {
+      "placeholders": {
+        "name": "Ingiza nchi"
+      },
+      "errors": {
+        "missingCountry": "Tafadhali jaza"
+      },
+      "dialog": {
+        "missingCountry": "Tafadhali toa jina la nchi",
+        "invalidForm": "Fomu Batili",
+        "removeCountry": "Ondoa nchi",
+        "sureDelete": "Je, una uhakika unataka kufuta hii?",
+        "removedSuccessfully": "Nchi imefutwa kwa mafanikio!",
+        "addedSuccessfully": "Nchi imeongezwa kwa mafanikio!",
+        "modifiedSuccessfully": "Nchi iliyobadilishwa kwa mafanikio!"
+      }
+    },
+    "countriesTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Nchi",
+        "value": "Country_Name",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "regionDialog": {
+    "addRegion": "Ongeza mkoa",
+    "searchBy": "Tafuta kwa nchi au mkoa",
+    "region": "Mkoa",
+    "removeRegion": "Ondoa eneo",
+    "sureRemoveRegion": "Una uhakika unataka kuondoa eneo hili?",
+    "removeRegionSuccessfully": "Mkoa ulioondolewa kwa mafanikio!",
+    "addedRegionSuccessfully": "Mkoa ulioongezwa kwa mafanikio!",
+    "modifiedReginSuccessfully": "Mkoa limebadilishiwa kwa mafanikio!",
+    "failedToDeleteRegion": "Imeshindwa kufuta eneo.",
+    "form": {
+      "placeholders": {
+        "name": "Ingiza mkoa",
+        "country": "Chagua nchi"
+      },
+      "errors": {
+        "selectCountry": "Tafadhali chagua counry",
+        "missingRegion": "Tafadhali jaza"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "missingCountry": "Tafadhali chagua nchi",
+        "missingRegion": "Tafadhali toa jina la mkoa",
+        "missingStatus": "Tafadhali chagua hali"
+      }
+    },
+    "regionsTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Nchi",
+        "value": "Country_Name",
+        "desc": ""
+      },
+      {
+        "label": "Eneo",
+        "value": "Region_Name",
+        "desc": ""
+      },
+      {
+        "label": "Hali",
+        "value": "Region_Status",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "districtDialog": {
+    "addDistrict": "Ongeza Wilaya",
+    "searchBy": "Tafuta kwa wilaya au mkoa",
+    "district": "Wilaya",
+    "removeDistrict": "Ondoa Wilaya",
+    "sureRemoveDistrict": "Je, una uhakika unataka kuondoa wilaya hii",
+    "deletedDistrictSuccessfully": "Wilaya ilifanikiwa kufutwa.",
+    "addedDistrictSuccessfully": "Wilaya imeongezwa kwa mafanikio!",
+    "modifiedDistrictSuccessfully": "Wilaya imebadilishwa kwa mafanikio!",
+    "failedToAddDistrict": "Imeshindwa kuongeza wilaya.",
+    "failedToRemoveDistrict": "Imeshindwa kutoa wilaya.",
+    "form": {
+      "placeholders": {
+        "name": "Wilaya ya Ingiza",
+        "region": "Teua mkoa"
+      },
+      "errors": {
+        "selectRegion": "Tafadhali chagua mkoa",
+        "missingDistrict": "Tafadhali jaza",
+        "missingStatus": "Tafadhali chagua hali"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "missingRegion": "Tafadhali chagua mkoa",
+        "missingDistrict": "Tafadhali toa jina la wilaya",
+        "missingStatus": "Tafadhali chagua hali"
+      }
+    },
+    "districtsTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Eneo",
+        "value": "Region_Name",
+        "desc": ""
+      },
+      {
+        "label": "Wilaya",
+        "value": "District_Name",
+        "desc": ""
+      },
+      {
+        "label": "Hali",
+        "value": "District_Status",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "wardDialog": {
+    "addWard": "Ongeza Kata",
+    "ward": "Kata",
+    "searchBy": "Tafuta kwa kata au wilaya",
+    "removeWard": "Ondoa kata",
+    "sureRemoveWard": "Je, una uhakika unataka kuondoa kata",
+    "deletedWardSuccessfully": "Kata imeondolewa kwa mafanikio!",
+    "addedWardSuccessfully": "Kata imeongezwa kwa mafanikio!",
+    "modifiedWardSuccessfully": "Kata imebadilishwa kwa mafanikio!",
+    "failedToAddWard": "Imeshindwa kuongeza kata.",
+    "failedToDeleteWard": "Imeshindwa kukatiza kata.",
+    "form": {
+      "placeholders": {
+        "name": "Ingiza kata",
+        "district": "Wilaya ya Chagua"
+      },
+      "errors": {
+        "selectDistrict": "Tafadhali chagua wilaya",
+        "missingWard": "Tafadhali jaza",
+        "missingStatus": "Tafadhali chagua hali"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "missingDistrict": "Tafadhali chagua wilaya",
+        "missingWard": "Tafadhali toa jina la kata",
+        "missingStatus": "Tafadhali chagua hali"
+      }
+    },
+    "wardsTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Wilaya",
+        "value": "District_Name",
+        "desc": ""
+      },
+      {
+        "label": "Kata",
+        "value": "Ward_Name",
+        "desc": ""
+      },
+      {
+        "label": "Hali",
+        "value": "Ward_Status",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "currency": {
+    "addCurrency": "Ongeza Fedha",
+    "searchBy": "Tafuta kwa msimbo wa sarafu au jina",
+    "currency": "Fedha",
+    "currencyName": "Fedha",
+    "code": "Msimbo",
+    "removeCurrency": "Ondoa sarafu",
+    "sureRemoveCurrency": "Una uhakika unataka kuondoa sarafu hii?",
+    "currencyRemovedSuccessfully": "Sarafu imeondolewa kwa mafanikio!",
+    "createdCurrencySuccessfully": "Added currency successfully!",
+    "modifiedCurrencySuccessfully": "Sarafu imebadilishwa kwa mafanikio!",
+    "form": {
+      "placeholders": {
+        "code": "Ingiza msimbo wa sarafu",
+        "name": "Ingiza jina la sarafu"
+      },
+      "errors": {
+        "code": "Tafadhali jaza",
+        "name": "Tafadhali jaza"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "missingCode": "Tafadhali toa msimbo wa sarafu",
+        "missingName": "Tafadhali toa jina la fedha",
+        "failedToAddCurrency": "Imeshindwa kuongeza sarafu.",
+        "failedToModifyCurrency": "Imeshindwa kubadilisha sarafu.",
+        "failedToRemoveCurrency": "Imeshindwa kuondoa sarafu."
+      }
+    },
+    "currenciesTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Msimbo",
+        "value": "Currency_Code",
+        "desc": ""
+      },
+      {
+        "label": "Jina",
+        "value": "Currency_Name",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "designation": {
+    "addDesignation": "Ongeza Uteuzi",
+    "searchBy": "Tafuta kwa jina",
+    "designation": "Uteuzi",
+    "form": {
+      "placeholders": {
+        "name": "Ingiza majina"
+      },
+      "errors": {
+        "name": "Tafadhali jaza"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "failed": "Imeshindwa",
+        "missingDesignation": "Tafadhali toa jina la jina",
+        "removeDesignation": "Ondoa cheo",
+        "sureDelete": "Una uhakika unataka kufuta jina la '{}'?",
+        "removedSuccessfully": "Nchi imefutwa kwa mafanikio!",
+        "addedSuccessfully": "Nchi imeongezwa kwa mafanikio!",
+        "modifiedSuccessfully": "Nchi imebadilishwa kwa mafanikio!"
+      }
+    },
+    "designationsTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Kazi",
+        "value": "Desg_Name",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "branch": {
+    "addBranch": "Ongeza tawi",
+    "searchBy": "Tafuta kwa tawi au mahali",
+    "branch": "Tawi",
+    "location": "Mahali",
+    "exists": "Jina la tawi {} tayari linatumika.",
+    "failedToDeleteBranch": "Imeshindwa kufuta tawi.",
+    "form": {
+      "placeholders": {
+        "branch": "Ingiza jina la tawi",
+        "location": "Ingiza mahali"
+      },
+      "errors": {
+        "branch": "Tafadhali jaza",
+        "location": "Tafadhali jaza",
+        "missingStatus": "Tafadhali chagua hali"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "missingBranch": "Tafadhali toa jina la tawi",
+        "missingLocation": "Tafadhali toa mahali",
+        "missingStatus": "Tafadhali chagua hali",
+        "failedToAddBranch": "Imeshindwa kuongeza tawi jipya",
+        "addedSuccessfully": "Tawi limeongezwa kwa mafanikio!",
+        "updated": "Tawi limebadilishwa kwa mafanikio!",
+        "retrieveBranchError": "Imeshindwa kurejesha orodha ya tawi",
+        "removeBranch": "Ondoa tawi",
+        "sureDelete": "Una uhakika unataka kufuta hii?",
+        "removedSuccessfully": "Tawi lilifutwa kwa mafanikio!"
+      }
+    },
+    "branchesTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Tawi",
+        "value": "Name",
+        "desc": ""
+      },
+      {
+        "label": "Eneo",
+        "value": "Location",
+        "desc": ""
+      },
+      {
+        "label": "Hali",
+        "value": "Status",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "questionName": {
+    "addQuestionName": "Ongeza swali",
+    "questionName": "Swali",
+    "addedQuestionSuccessfully": "Swali limeongezwa kwa mafanikio!",
+    "form": {
+      "placeholders": {
+        "questionName": "Ingiza jina la swali"
+      },
+      "errors": {
+        "questionName": "Tafadhali jaza",
+        "missingStatus": "Tafadhali chagua hali"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "missingQuestionName": "Tafadhali toa jina la swali",
+        "missingStatus": "Tafadhali chagua hali",
+        "removeQuestion": "Ondoa Swali",
+        "sureRemoveQuestion": "Je, una uhakika unataka kufuta hii?",
+        "failedToAddQuestion": "Swali imeshindwa ku ongezewa."
+      }
+    },
+    "questionNamesTable": ["Jina la swali", "Hali"]
+  },
+  "smtp": {
+    "addSmtp": "Ongeza Smtp",
+    "searchBy": "Tafuta kwa bandari au jina la mtumiaji",
+    "smtp": "Itifaki ya Uhamisho wa Barua Rahisi",
+    "removeSmtp": "Ondoa SMTP",
+    "sureRemoveSmtp": "Je, una uhakika unataka kuondoa SMTP hii?",
+    "addedSmtp": "SMTP mpya imeongezwa kwa mafanikio",
+    "modifiedSmtp": "SMTP imebadilishwa kwa mafanikio",
+    "deletedSmtp": "SMTP imeondolewa kwa mafanikio",
+    "failedToRemoveSmtp": "Imeshindikana kuondoa SMTP",
+    "failedToAddSmtp": "Imeshindwa kuongeza smtp.",
+    "form": {
+      "fromAddress": "Kutoka kwa Anwani",
+      "address": "Anwani",
+      "portNumber": "Namba ya bandari",
+      "username": "Jina la mtumiaji",
+      "password": "Nywila",
+      "sslEnable": "Wezesha SSL",
+      "enabled": "Kuwezeshwa",
+      "disabled": "Walemavu",
+      "placeholders": {
+        "fromAddress": "Ingiza barua pepe ya mtumaji",
+        "address": "Ingiza anwani",
+        "portNumber": "Ingiza namba ya bandari",
+        "username": "Ingiza jina la mtumiaji",
+        "password": "Ingiza nywila"
+      },
+      "errors": {
+        "fromAddress": "Tafadhali ingiza anwani halali ya barua pepe",
+        "address": "Tafadhali jaza",
+        "portNumber": "Tafadhali jaza",
+        "username": "Tafadhali jaza",
+        "password": "Tafadhali jaza",
+        "sslEnable": "Tafadhali chagua hali ya ssl"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "fromAddress": "Tafadhali toa barua pepe ya mtumaji",
+        "address": "Tafadhali toa anwani",
+        "portNumber": "Tafadhali toa namba ya bandari",
+        "username": "Tafadhali toa jina la mtumiaji",
+        "password": "Tafadhali toa nywila",
+        "sslEnable": "Lazima uchague Njia ya SSL"
+      }
+    },
+    "smtpTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Kutoka Anuani",
+        "value": "From_Address",
+        "desc": ""
+      },
+      {
+        "label": "Imeundwa",
+        "value": "Effective_Date",
+        "desc": ""
+      },
+      {
+        "label": "Anuani",
+        "value": "SMTP_Address",
+        "desc": ""
+      },
+      {
+        "label": "Nambari ya Bandari",
+        "value": "SMTP_Port",
+        "desc": ""
+      },
+      {
+        "label": "Jina la Mtumiaji",
+        "value": "SMTP_UName",
+        "desc": ""
+      },
+      {
+        "label": "Wezesha SSL",
+        "value": "SSL_Enable",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "emailText": {
+    "addEmailText": "Ongeza maandishi ya barua pepe",
+    "searchBy": "Tafuta kwa mada",
+    "emailText": "Matini ya Barua pepe",
+    "removeEmailText": "Ondoa barua pepe",
+    "sureRemoveEmailText": "Una uhakika unataka kuondoa barua pepe hii?",
+    "deletedEmailText": "Nakala ya barua pepe iliyofutwa kwa mafanikio!",
+    "failedToAddEmailText": "Imeshindwa kuongeza maandishi ya barua pepe",
+    "addedEmailText": "Barua pepe iliyoongezwa kwa mafanikio!",
+    "modifiedEmailText": "Barua pepe limebadilishiwa kwa mafanikio!",
+    "failedEmailText": "Imeshindwa kuongeza barua pepe.",
+    "flowIdExists": "Mtiririko wa Id uliotolewa tayari unatumika.",
+    "failedToDeleteEmailText": "Imeshindwa kufuta maandishi ya barua pepe.",
+    "form": {
+      "flowId": "Id ya Mtiririko",
+      "subjectEnglish": "Kiingereza cha somo",
+      "subjectSwahili": "Mada ya Kiswahili",
+      "emailText": "Matini ya Barua pepe",
+      "emailSwahili": "Barua pepe Maandishi ya Kiswahili",
+      "placeholders": {
+        "flowId": "Chagua mtiririko wa Id",
+        "subjectEnglish": "Ingiza mada kwa Kiingereza",
+        "subjectSwahili": "Ingiza somo kwa Kiswahili",
+        "emailText": "Ingiza maandishi yako ya barua pepe katika enlish",
+        "emailSwahili": "Ingiza barua pepe yako kwa Kiswahili"
+      },
+      "errors": {
+        "flowId": "Tafadhali chagua kitambulisho cha mtiririko",
+        "subjectEnglish": "Tafadhali, ingiza mada ya barua pepe kwa Kiingereza",
+        "subjectSwahili": "Tafadhali, ingiza mada ya barua pepe kwa Kiswahili",
+        "emailText": "Tafadhali, ingiza maandishi yako ya barua pepe kwa kiingereza",
+        "emailSwahili": "Tafadhali, ingiza maandishi yako ya barua pepe kwa Kiswahili"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "flowId": "Tafadhali chagua kitambulisho cha mtiririko",
+        "subjectEnglish": "Tafadhali, toa mada ya barua pepe kwa Kiingereza",
+        "subjectSwahili": "Tafadhali, toa somo la barua pepe kwa Kiswahili",
+        "emailText": "Tafadhali, ingiza maandishi yako ya barua pepe katika enlish",
+        "emailSwahili": "Tafadhali, ingiza maandishi yako ya barua pepe kwa Kiswahili"
+      }
+    },
+    "emailTextsTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Id ya Mtiririko",
+        "value": "Flow_Id",
+        "desc": ""
+      },
+      {
+        "label": "Imeundwa",
+        "value": "Effective_Date",
+        "desc": ""
+      },
+      {
+        "label": "Mada Kiingereza",
+        "value": "Subject",
+        "desc": ""
+      },
+      {
+        "label": "Mada Kiswahili",
+        "value": "Local_subject",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "bankUser": {
+    "userDetails": "Maelezo ya mtumiaji",
+    "searchBy": "Tafuta kwa jina au jina",
+    "addBankUser": "Ongeza Mtumiaji",
+    "bankUser": "Mtumiaji wa benki",
+    "addedBankUserSuccessfully": "Mteja ameongezwa kwa mafanikio!",
+    "modifiedBankUserSuccessfully": "Mteja amebadilishwa kwa mafanikio!",
+    "failedToAddUser": "Kushindwa kuongeza mteja",
+    "failedToModifyUser": "Kushindwa kubadilisha mteja",
+    "removedBankUserSucessfully": "Mtumiaji wa benki aliyefutwa kwa mafanikio!",
+    "failedToDeleteBankUser": "Imeshindwa kufuta mtumiaji wa benki.",
+    "form": {
+      "employeeId": "Id ya Mfanyakazi",
+      "firstName": "Jina la kwanza",
+      "middleName": "Jina la kati",
+      "lastName": "Jina la mwisho",
+      "username": "Jina la mtumiaji",
+      "designation": "Uteuzi",
+      "branch": "Tawi",
+      "emailId": "Barua pepe",
+      "mobileNo": "Nambari ya simu",
+      "placeholders": {
+        "employeeId": "Ingiza mfanyakazi",
+        "firstName": "Ingiza jina la kwanza",
+        "middleName": "Ingiza jina la kati",
+        "lastName": "Ingiza jina la mwisho",
+        "username": "Ingiza jina la mtumiaji",
+        "designation": "Chagua uteuzi",
+        "branch": "Chagua tawi",
+        "emailId": "Ingiza barua pepe",
+        "mobileNo": "+255"
+      },
+      "errors": {
+        "employeeId": "Tafadhali, ingiza mfanyakazi",
+        "firstName": "Tafadhali jaza",
+        "middleName": "Tafadhali jaza",
+        "lastName": "Tafadhali jaza",
+        "username": "Tafadhali jaza",
+        "designation": "Tafadhali chagua jina",
+        "branch": "Chagua Tawi",
+        "emailId": "Tafadhali toa barua pepe halali",
+        "mobileNo": "Tafadhali toa nambari ya simu"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "employeeId": "Tafadhali, toa mfanyakazi",
+        "firstName": "Tafadhali toa jina la kwanza",
+        "middleName": "Tafadhali toa jina la kati",
+        "lastName": "Tafadhali toa jina la mwisho",
+        "username": "Tafadhali toa jina la mtumiaji",
+        "designation": "Tafadhali toa jina",
+        "branch": "Tafadhali toa tawi",
+        "emailId": "Tafadhali tuma barua pepe",
+        "mobileNo": "Tafadhali toa nambari ya simu",
+        "status": "Tafadhali bainisha hali",
+        "usernameExists": "Jina la mtumiaji ulilotoa tayari lipo.",
+        "employeeIdExists": "Kitambulisho cha mfanyakazi ulichotoa tayari kipo."
+      }
+    },
+    "bankUserTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Jina Kamili",
+        "value": "Full_Name",
+        "desc": ""
+      },
+      {
+        "label": "Cheo",
+        "value": "Desg_name",
+        "desc": ""
+      },
+      {
+        "label": "Anwani ya Barua Pepe",
+        "value": "Email_Address",
+        "desc": ""
+      },
+      {
+        "label": "Nambari ya Simu ya Mkononi",
+        "value": "Mobile_No",
+        "desc": ""
+      },
+      {
+        "label": "Hali",
+        "value": "Emp_Status",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "language": {
+    "language": "Lugha",
+    "form": {
+      "language": "Lugha",
+      "placeholders": {
+        "language": "Chagua lugha"
+      }
+    }
+  },
+  "suspenseAccount": {
+    "addSuspenseAccount": "Ongeza",
+    "searchBy": "Tafuta kwa akaunti",
+    "suspenseAccount": "Akaunti ya Suspense",
+    "addedSuspenseAccountSuccessfully": "Akaunti ya mashaka iliyoongezwa kwa mafanikio!",
+    "modifiedSuspenseAccountSuccessfully": "Akaunti ya mashaka iliyobadilishwa kwa mafanikio!",
+    "failedToDeleteSuspenseAccount": "Imeshindwa kufuta akaunti ya mashaka!",
+    "deletedAccountSuccessully": "Futa akaunti ya mashaka kwa mafanikio!",
+    "form": {
+      "placeholders": {
+        "suspenseAccount": "Ingiza akaunti ya mashaka"
+      },
+      "errors": {
+        "suspenseAccount": "Tafadhali ingiza nambari ya akaunti ya mashaka"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili.",
+        "failed": "Imeshindwa.",
+        "suspenseAccount": "Lazima utoe nambari ya akaunti ya mashaka.",
+        "missingStatus": "Tafadhali chagua hali.",
+        "failedToAddSuspenseAccount": "Imeshindwa kuongeza akaunti ya mashaka.",
+        "exists": "Namba ya akaunti tayari inatumika."
+      }
+    },
+    "suspenseAccountsTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Akaunti ya Kusitisha",
+        "value": "Sus_Acc_No",
+        "desc": ""
+      },
+      {
+        "label": "Hali",
+        "value": "Status",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "depositAccount": {
+    "addDepositAccount": "Ongeza",
+    "searchBy": "Tafuta kwa kampuni au akaunti",
+    "depositAccount": "akaunti ya muuzaji",
+    "addedDepositSuccessfully": "Akaunti ya amana limeongezwa kwa mafanikio!",
+    "modifiedDepositSuccessfully": "Akaunti ya amana limebadilishwa kwa mafanikio!",
+    "failedToUpdateDeposit": "Imeshindwa ku ongezwa Akaunti ya amana.",
+    "form": {
+      "vendor": "Muuzaji",
+      "account": "Akaunti",
+      "reason": "Sababu",
+      "placeholders": {
+        "vendor": "Chagua muuzaji",
+        "account": "Teua akaunti",
+        "reason": "Ingiza sababu"
+      },
+      "errors": {
+        "vendor": "Tafadhali chagua muuzaji",
+        "account": "Tafadhali chagua akaunti",
+        "reason": "Tafadhali jaza"
+      },
+      "dialog": {
+        "invalidForm": "Fomu batili",
+        "vendor": "Lazima ubainishe muuzaji",
+        "account": "Lazima ubainishe akaunti",
+        "reason": "Tafadhali toa sababu",
+        "removeAccount": "Ondoa Akaunti",
+        "sureRemoveAccount": "Je, una uhakika unataka kufuta akaunti hii?"
+      }
+    },
+    "depositAccountTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Muuzaji",
+        "value": "Company",
+        "desc": ""
+      },
+      {
+        "label": "Akaunti",
+        "value": "Deposit_Acc_No",
+        "desc": ""
+      },
+      {
+        "label": "Sababu",
+        "value": "Reason",
+        "desc": ""
+      },
+      {
+        "label": "Kitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "smsSettings": {
+    "title": "Mipangilio ya SMS",
+    "addSmsSettings": "Ongeza Mpangilio wa SMS",
+    "modifySmsSettings": "Badilisha Mpangilio wa SMS",
+    "sureAddSmsSetting": "Je, unashtaki wewe wan kuongeza usanidi huu?",
+    "flowIdExists": "Id ya mtiririko uliyochagua, tayari ipo.",
+    "failedToModifySmsSettings": "Failed to configure new SMS Setting.",
+    "successfullyAddedSmsSetting": "Imefanikiwa kuongeza mipangilio mpya ya SMS.",
+    "successfullyModifiedSmsSetting": "Mpangilio wa SMS uliobadilishwa kwa mafanikio",
+    "failedToFetchSmsSetting": "Imeshindwa kupata Mpangilio wa SMS.",
+    "removeSmsSetting": "Ondoa Mpangilio wa SMS",
+    "sureRemove": "Una uhakika unataka kuondoa mpangilio huu?",
+    "failedToRemoveSmsSetting": "Imeshindwa kuondoa Mpangilio wa SMS.",
+    "successfullyRemovedSmsSetting": "Imeondolewa kwa ufanisi Mipangilio ya SMS.",
+    "form": {
+      "username": "Jina la mtumiaji",
+      "fromAddress": "Anwani ya Mtumaji",
+      "phone": "Nambari ya simu",
+      "password": "Nenosiri",
+      "confirmPassword": "Thibitisha nenosiri",
+      "placeholders": {
+        "username": "Ingiza jina la mtumiaji",
+        "fromAddress": "Ingiza anwani ya mtumaji",
+        "phone": "Ingiza nambari ya simu",
+        "password": "Tengeneza nenosiri",
+        "confirmPassword": "Thibitisha nenosiri"
+      },
+      "errors": {
+        "username": "Tafadhali ingiza jina la mtumiaji",
+        "fromAddress": "Tafadhali toa anwani kutoka kwa anwani",
+        "password": "Haiwezi kuwa tupu"
+      }
+    },
+    "tableData": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Jina la mtumiaji",
+        "value": "USER_Name",
+        "desc": ""
+      },
+      {
+        "label": "Kutoka kwa Anwani",
+        "value": "From_Address",
+        "desc": ""
+      },
+      {
+        "label": "Huduma ya Simu ya Mkononi",
+        "value": "Mobile_Service",
+        "desc": ""
+      },
+      {
+        "label": "Tarehe ya ufanisi",
+        "value": "Effective_Date",
+        "desc": ""
+      },
+      {
+        "label": "Action",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  },
+  "smsText": {
+    "title": "Maandishi ya SMS",
+    "addSmsText": "Ongeza Maandishi ya SMS",
+    "failedToFetchSmsText": "Imeshindwa kupakua Maandishi ya SMS",
+    "addedSmsTextSuccessully": "Imefanikiwa kuongeza Maandishi ya SMS",
+    "failedToAddSmsText": "Imeshindwa kuongeza Maandishi ya SMS",
+    "modifiedSmsTextSuccessfully": "Imefanikiwa kubadilisha Maandishi ya SMS",
+    "failedToModifySmsText": "Imeshindwa kubadilisha Maandishi ya SMS",
+    "removeSmsText": "Ondoa Maandishi ya SMS",
+    "sureRemove": "Je, una uhakika unataka kuondoa maandishi ya SMS '{}'",
+    "removedSmsTextSuccessfully": "Maandishi ya SMS yameondolewa kwa mafanikio!",
+    "form": {
+      "flowId": "Id ya Mchakato",
+      "subjectEnglish": "Kichwa Kiingereza",
+      "subjectSwahili": "Kichwa Kiswahili",
+      "smsText": "Maandishi ya SMS",
+      "smsSwahili": "Maandishi ya SMS Kiswahili",
+      "placeholders": {
+        "flowId": "Chagua Id ya Mchakato",
+        "subjectEnglish": "Ingiza kichwa kwa kiingereza",
+        "subjectSwahili": "Ingiza kichwa kwa kiswahili",
+        "smsText": "Ingiza maandishi yako ya SMS kwa kiingereza",
+        "smsSwahili": "Ingiza maandishi yako ya SMS kwa kiswahili"
+      },
+      "errors": {
+        "flowId": "Tafadhali, chagua Id ya Mchakato",
+        "subjectEnglish": "Tafadhali, ingiza kichwa cha SMS kwa kiingereza",
+        "subjectSwahili": "Tafadhali, ingiza kichwa cha SMS kwa kiswahili",
+        "smsText": "Tafadhali, ingiza maandishi yako ya SMS kwa kiingereza",
+        "smsSwahili": "Tafadhali, ingiza maandishi yako ya SMS kwa kiswahili"
+      },
+      "dialog": {
+        "invalidForm": "Fomu isiyo sahihi",
+        "flowId": "Tafadhali chagua Id ya Mchakato",
+        "subjectEnglish": "Tafadhali, toa kichwa cha SMS kwa kiingereza",
+        "subjectSwahili": "Tafadhali, toa kichwa cha SMS kwa kiswahili",
+        "smsText": "Tafadhali, ingiza maandishi yako ya SMS kwa kiingereza",
+        "smsSwahili": "Tafadhali, ingiza maandishi yako ya SMS kwa kiswahili"
+      }
+    },
+    "tableData": [
+      {
+        "label": "Na.",
+        "value": "Na.",
+        "desc": ""
+      },
+      {
+        "label": "Mchakato",
+        "value": "Flow_Id",
+        "desc": ""
+      },
+      {
+        "label": "Kichwa",
+        "value": "SMS_Subject",
+        "desc": ""
+      },
+      {
+        "label": "Maandishi",
+        "value": "SMS_Text",
+        "desc": ""
+      },
+      {
+        "label": "Tarehe ya Kutumika",
+        "value": "Effective_Date",
+        "desc": ""
+      },
+      {
+        "label": "Hatua",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  }
+}

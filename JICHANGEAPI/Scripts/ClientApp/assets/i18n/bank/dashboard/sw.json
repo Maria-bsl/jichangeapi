@@ -1,0 +1,85 @@
+{
+  "dashboard": {
+    "searchBy": "Tafuta kwa jina au nambari ya TIN",
+    "overview": {
+      "name": "Maelezo",
+      "transaction": "Shughuli",
+      "pendingApproval": "Inasubiri",
+      "customers": "Wateja",
+      "users": "Watumiaji",
+      "viewMore": "Tazama zaidi",
+      "statisticsData": {
+        "transaction": "Mkataba",
+        "vendor": "Muuzaji",
+        "users": "Watumiaji",
+        "pendings": "Inasubiri",
+        "customers": "Wateja"
+      }
+    },
+    "inboxApproval": {
+      "name": "Za Kusubiri Liidhinishwa",
+      "approve": "Kuidhinisha",
+      "allOperations": "Uendeshaji wote",
+      "pending": "Inasubiri",
+      "errors": {
+        "emptyInbox": "Hakuna kitu kwenye kikasha chako"
+      }
+    },
+    "transaction": {
+      "name": "Shughuli",
+      "recent": "Miamala ya hivi karibuni",
+      "errors": {
+        "noDataFound": "Hakuna data ya manunuzi iliyopatikana"
+      }
+    },
+    "onboardCustomers": {
+      "name": "Mchuuzi wa hivi karibuni aliyeongezwa",
+      "errors": {
+        "noDataFound": "Hakuna data iliyopatikana"
+      },
+      "companySummary": [
+        {
+          "label": "Nambari",
+          "value": "No.",
+          "desc": ""
+        },
+        {
+          "label": "Jina",
+          "value": "CompName",
+          "desc": ""
+        },
+        {
+          "label": "Anwani ya Barua Pepe",
+          "value": "Email",
+          "desc": ""
+        },
+        {
+          "label": "Nambari ya TIN",
+          "value": "TinNo",
+          "desc": ""
+        },
+        {
+          "label": "Nambari ya Simu",
+          "value": "MobNo",
+          "desc": ""
+        },
+        {
+          "label": "Hali",
+          "value": "Status",
+          "desc": ""
+        }
+      ]
+    },
+    "invoiceData": {
+      "message": "Imeshindwa kupata data ya ankara."
+    },
+    "vendorsTable": [
+      "Sno",
+      "Jina",
+      "Anwani",
+      "Barua pepe",
+      "Nambari ya Simu",
+      "Hali"
+    ]
+  }
+}

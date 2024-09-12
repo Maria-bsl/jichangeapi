@@ -1,0 +1,125 @@
+{
+  "customer": "Customer(s)",
+  "addCustomer": "Add Customer",
+  "addInvoice": "Add invoice",
+  "noCustomersFound": "There were no customers found.",
+  "searchBy": "Search by name or email",
+  "customersTable": [
+    {
+      "label": "No.",
+      "value": "No.",
+      "desc": ""
+    },
+    {
+      "label": "Customer name",
+      "value": "Cust_Name",
+      "desc": ""
+    },
+    {
+      "label": "Email Address",
+      "value": "Email",
+      "desc": ""
+    },
+    {
+      "label": "Mobile Number",
+      "value": "Phone",
+      "desc": ""
+    },
+    {
+      "label": "Action(s)",
+      "value": "Action",
+      "desc": ""
+    }
+  ],
+  "addedCustomerSuccessfully": "Added customer successfully!",
+  "modifiedCustomerSuccessfully": "Modified customer successfully!",
+  "removedCustomerSuccessfully": "Removed customer successfully!",
+  "failedToRemoveCustomer": "Failed to remove customer.",
+
+  "form": {
+    "customerName": "Customer name",
+    "mobileNo": "Mobile No",
+    "emailId": "Email Id",
+    "addNewCustomer": "Add new customer",
+    "actions": {
+      "modifyCustomer": "Modify customer",
+      "addCustomerMessage": "Are you sure you want to add this customer? Would you also like to attach an invoice to this customer?",
+      "modifyCustomerMessage": "Are you sure you want to modify this customer?",
+      "confirm": "Confirm",
+      "areYouSureYouWantToAddANewCustomer": "Are you sure you want to add a new customer?",
+      "attachInvoice": "Yes, attach invoice",
+      "addCustomer": "Add Customer"
+    },
+    "placeholders": {
+      "customerName": "Enter customer name",
+      "mobileNo": "+255",
+      "emailId": "Enter email address"
+    },
+    "errors": {
+      "customerName": "Please enter customer name",
+      "mobileNo": "Please enter mobile number",
+      "emailId": "Please enter a valid email address"
+    },
+    "dialog": {
+      "invalidForm": "Invalid form",
+      "customerName": "Please provide a customer name",
+      "mobileNo": "Please provide a mobile number",
+      "emailId": "Please provide a valid email Id",
+      "failedToAddCustomer": "Failed to add customer.",
+      "addFailedCustomerMappedToInvoice": "Failed to delete customer: active invoices found.",
+      "existsName": "Customer {} already exists.",
+      "existsMobileNumber": "The mobile number you have entered already in use.",
+      "existsTin": "The Tin number you have entered is already in use.",
+      "existsEmail": "The email address you have entered is already in use."
+    }
+  },
+  "customerView": {
+    "searchBy": "Invoice No.",
+    "noInvoicesFound": "There were no invoice found for {}.",
+    "customerProfileTransaction": "Customer Profile & Transactions",
+    "customerDetails": {
+      "customerDetails": "Customer details",
+      "name": "Name",
+      "email": "Email",
+      "mobile": "Mobile"
+    },
+    "customerViewTableTitle": "Transactions",
+    "customerInvoicesTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Created",
+        "value": "Invoice_Date",
+        "desc": ""
+      },
+      {
+        "label": "Invoice N°",
+        "value": "Invoice_No",
+        "desc": ""
+      },
+      {
+        "label": "Control N°",
+        "value": "Control_No",
+        "desc": ""
+      },
+      {
+        "label": "Amount",
+        "value": "Total",
+        "desc": ""
+      },
+      {
+        "label": "status",
+        "value": "goods_status",
+        "desc": ""
+      },
+      {
+        "label": "Action(s)",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  }
+}

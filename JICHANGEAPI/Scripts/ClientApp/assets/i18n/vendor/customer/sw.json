@@ -1,0 +1,124 @@
+{
+  "customer": "Mteja(s)",
+  "addCustomer": "Ongeza Mteja",
+  "addInvoice": "Ongeza Ankara",
+  "noCustomersFound": "Hakuna wateja waliopatikana.",
+  "searchBy": "Tafuta kwa jina au barua pepe",
+  "customersTable": [
+    {
+      "label": "Nambari",
+      "value": "No.",
+      "desc": ""
+    },
+    {
+      "label": "Jina la Mteja",
+      "value": "Cust_Name",
+      "desc": ""
+    },
+    {
+      "label": "Barua pepe",
+      "value": "Email",
+      "desc": ""
+    },
+    {
+      "label": "Namba ya Simu",
+      "value": "Phone",
+      "desc": ""
+    },
+    {
+      "label": "Vitendo",
+      "value": "Action",
+      "desc": ""
+    }
+  ],
+  "addedCustomerSuccessfully": "Aliongeza wateja kwa mafanikio!",
+  "modifiedCustomerSuccessfully": "Wateja waliobadilishwa kwa mafanikio!",
+  "removedCustomerSuccessfully": "Kuondolewa kwa wateja kwa mafanikio!",
+  "failedToRemoveCustomer": "Imeshindwa kuondoa wateja.",
+  "form": {
+    "customerName": "Jina la Mteja",
+    "mobileNo": "Nambari ya Simu",
+    "emailId": "Barua pepe",
+    "addNewCustomer": "Ongeza mteja mpya",
+    "actions": {
+      "modifyCustomer": "Rekebisha mteja",
+      "addCustomerMessage": "Una uhakika unataka kuongeza mteja huyu? Je, ungependa pia kuambatanisha ankara kwa hiyo?",
+      "modifyCustomerMessage": "Je, una uhakika unataka kurekebisha mteja huyu?",
+      "confirm": "Thibitisha",
+      "areYouSureYouWantToAddANewCustomer": "Una uhakika unataka kuongeza mteja mpya?",
+      "attachInvoice": "Ndio, ambatanisha ankara",
+      "addCustomer": "Hapana, ongeza Mteja tu"
+    },
+    "placeholders": {
+      "customerName": "Ingiza jina la mteja",
+      "mobileNo": "+255",
+      "emailId": "Ingiza anwani ya barua pepe"
+    },
+    "errors": {
+      "customerName": "Tafadhali ingiza jina la mteja",
+      "mobileNo": "Tafadhali ingiza nambari ya simu",
+      "emailId": "Tafadhali ingiza anwani ya barua pepe sahihi"
+    },
+    "dialog": {
+      "invalidForm": "Fomu batili",
+      "customerName": "Tafadhali toa jina la mteja",
+      "mobileNo": "Tafadhali toa nambari ya simu sahihi",
+      "emailId": "Tafadhali toa anwani sahihi ya barua pepe",
+      "failedToAddCustomer": "Imeshindwa kuongeza mteja.",
+      "addFailedCustomerMappedToInvoice": "Imeshindwa kufuta mteja: ankara amilifu zilizopatikana.",
+      "existsName": "Mteja {} tayari yupo.",
+      "existsMobileNumber": "Namba ya simu uliyoingiza tayari inatumika.",
+      "existsTin": "Nambari ya Tin uliyoingiza tayari inatumika.",
+      "existsEmail": "Anwani ya barua pepe uliyoingiza tayari inatumika."
+    }
+  },
+  "customerView": {
+    "searchBy": "Nambari ya Ankara",
+    "noInvoicesFound": "Hakukuwa na ankara iliyopatikana kwa {}.",
+    "customerProfileTransaction": "Maelezo ya Mteja na Miamala",
+    "customerDetails": {
+      "customerDetails": "Maelezo ya Mteja",
+      "name": "Jina",
+      "email": "Barua pepe",
+      "mobile": "Nambari ya Simu"
+    },
+    "customerViewTableTitle": "Miamala",
+    "customerInvoicesTable": [
+      {
+        "label": "No.",
+        "value": "No.",
+        "desc": ""
+      },
+      {
+        "label": "Iliundwa",
+        "value": "Invoice_Date",
+        "desc": ""
+      },
+      {
+        "label": "Nambari ya Ankara",
+        "value": "Invoice_No",
+        "desc": ""
+      },
+      {
+        "label": "Nambari ya Kudhibiti",
+        "value": "Control_No",
+        "desc": ""
+      },
+      {
+        "label": "Kiasi",
+        "value": "Total",
+        "desc": ""
+      },
+      {
+        "label": "hali",
+        "value": "goods_status",
+        "desc": ""
+      },
+      {
+        "label": "Vitendo",
+        "value": "Action",
+        "desc": ""
+      }
+    ]
+  }
+}

@@ -155,6 +155,7 @@ namespace JichangeApi.Services.Companies
                 companyBankMaster.Checker = companyBankAddModel.check_status;
                 companyBankMaster.Status = "Pending";
                 companyBankMaster.Postedby = companyBankAddModel.userid.ToString();
+                //companyBankMaster.occupation = companyBankAddModel.occupation;
                 return companyBankMaster;
             }
             catch (Exception ex)
@@ -377,10 +378,7 @@ namespace JichangeApi.Services.Companies
 
                     return addedCompany;
                 }
-                else
-                {
-                    throw new Exception("Failed to create company");
-                }
+                throw new Exception("Failed to create company");
             }
             catch (ArgumentException ex)
             {

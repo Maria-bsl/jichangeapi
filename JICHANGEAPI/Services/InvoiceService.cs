@@ -941,7 +941,7 @@ namespace JichangeApi.Services
             {
                 INVOICE invoice = new INVOICE();
                 var results = invoice.GetINVOICEMas((long) singletonComp.compid).Where(x => x.approval_status != "2" && x.approval_status != "Cancel");
-                return results != null ? results.ToList() : new List<INVOICE>();
+                return results.ToList(); //results != null ? results.ToList() : new List<INVOICE>();
             }
             catch (Exception ex)
             {

@@ -147,10 +147,10 @@ namespace JichangeApi.Services.Companies
             {
                 CompanyUsers user = CreateCompanyUser(addCompanyUserForm);
                 CompanyUsers found = EditCompanyUser((long)addCompanyUserForm.sno);
-                AppendUpdateAuditTrail((long) addCompanyUserForm.sno,found,user,(long) addCompanyUserForm.userid);
                 user.UpdateCompanyUsers(user);
+                AppendUpdateAuditTrail((long)addCompanyUserForm.sno, found, user, (long)addCompanyUserForm.userid);
 
-                if(!String.IsNullOrEmpty(user.Email) && user.Email != found.Email)
+                if (!String.IsNullOrEmpty(user.Email) && user.Email != found.Email)
                 {
                     EmailUtils.SendActivationEmail(user.Email, user.Fullname, PasswordGeneratorUtil.DecodeFrom64(found.Password), user.Username);
                 }
@@ -175,6 +175,33 @@ namespace JichangeApi.Services.Companies
                 pay.Message = ex.ToString();
                 pay.AddErrorLogs(pay);
 
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public CompanyUsers ResendUserCredentials(string method,long companyUserId)
+        {
+            try
+            {
+                CompanyUsers found = EditCompanyUser(companyUserId);
+                if (method.ToLower().Equals("email"))
+                {
+                    EmailUtils.SendActivationEmail(found.Email, found.Fullname, PasswordGeneratorUtil.DecodeFrom64(found.Password), found.Username);
+                }
+                else if (method.ToLower().Equals("mobile"))
+                {
+                    SmsService sms = new SmsService();
+                    sms.SendWelcomeSmsToNewUser(found.Username, PasswordGeneratorUtil.DecodeFrom64(found.Password), found.Mobile);
+                }
+                else { }
+                return found;
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(ex.Message);
+            }
+            catch (Exception ex)
+            {
                 throw new Exception(ex.Message);
             }
         }

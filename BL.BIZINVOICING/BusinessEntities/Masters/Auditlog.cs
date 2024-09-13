@@ -139,6 +139,79 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
             }
         }
 
+        public long GetAuditTrailsVendorReportCount(string startDate, string endDate, string tableName, string action, string auditBy)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(startDate)) fromDate = DateTime.Parse(startDate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(endDate)) toDate = DateTime.Parse(endDate);
+
+                var results = (from v in context.audit_log
+                               join tracks in (
+                                   from t in context.track_details
+                                   group t by t.posted_by into g
+                                   select g.FirstOrDefault()
+                               ) on v.posted_by equals tracks.posted_by into trackGroup
+                               from track in trackGroup.DefaultIfEmpty()
+                               where v.comp_mas_sno != 0
+                               where string.IsNullOrEmpty(action) || v.audit_type == action
+                               where string.IsNullOrEmpty(tableName) || v.table_name == tableName
+                               where ((!fromDate.HasValue || v.posted_time >= fromDate) && (!toDate.HasValue || v.posted_time <= toDate))
+                               select new CustomAuditReport
+                               {
+                                   Audit_Sno = v.audit_sno,
+                                   Audit_Type = v.audit_type,
+                                   Table_Name = v.table_name,
+                                   ColumnsName = v.column_name,
+                                   OldValues = v.old_value,
+                                   NewValues = v.new_value,
+                                   AuditBy = v.posted_by,
+                                   Audit_Date = (DateTime)v.posted_time,
+                                   AuditorName = track.full_name,
+                                   ipAddress = track != null ? track.ipadd : null
+                               }).Count();
+                return results;
+            }
+        }
+
+        public List<CustomAuditReport> GetAuditTrailsVendorReport(string startDate, string endDate, string tableName, string action, string auditBy, int pageNumber, int pageSize)
+        {
+            using (BIZINVOICEEntities context = new BIZINVOICEEntities())
+            {
+                DateTime? fromDate = null;
+                if (!string.IsNullOrEmpty(startDate)) fromDate = DateTime.Parse(startDate);
+                DateTime? toDate = null;
+                if (!string.IsNullOrEmpty(endDate)) toDate = DateTime.Parse(endDate);
+
+                var results = (from v in context.audit_log
+                               join tracks in (
+                                   from t in context.track_details
+                                   group t by t.posted_by into g
+                                   select g.FirstOrDefault()
+                               ) on v.posted_by equals tracks.posted_by into trackGroup
+                               from track in trackGroup.DefaultIfEmpty()
+                               where v.comp_mas_sno != 0
+                               where string.IsNullOrEmpty(action) || v.audit_type == action
+                               where string.IsNullOrEmpty(tableName) || v.table_name == tableName
+                               where ((!fromDate.HasValue || v.posted_time >= fromDate) && (!toDate.HasValue || v.posted_time <= toDate))
+                               select new CustomAuditReport
+                               {
+                                   Audit_Sno = v.audit_sno,
+                                   Audit_Type = v.audit_type,
+                                   Table_Name = v.table_name,
+                                   ColumnsName = v.column_name,
+                                   OldValues = v.old_value,
+                                   NewValues = v.new_value,
+                                   AuditBy = v.posted_by,
+                                   Audit_Date = (DateTime)v.posted_time,
+                                   AuditorName = track.full_name,
+                                   ipAddress = track != null ? track.ipadd : null
+                               }).OrderByDescending(z => z.Audit_Date).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToList();
+                return results ?? new List<CustomAuditReport>();
+            }
+        }
 
         public List<CustomAuditReport> GetAuditReport(string startDate,string endDate,string tableName,string action,string auditBy,int pageNumber,int pageSize)
         {

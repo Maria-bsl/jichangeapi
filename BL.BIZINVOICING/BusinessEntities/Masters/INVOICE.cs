@@ -1411,7 +1411,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                     grand_count = (int)c.grand_count,
                                     daily_count = (int)c.daily_count,
                                     approval_status = c.approval_status,
-                                    approval_date = approval_date,
+                                    approval_date = (DateTime) c.approval_date,
                                     //Status = GetInvoiceStatus(c.delivery_status,c.due_date,c.invoice_expired) //c.due_date >= DateTime.Today ? "On Time" : "Overdue"
                                     Status = c.delivery_status.ToLower() == "delivered" ? "Completed" :
                                                        c.due_date < DateTime.Today && c.invoice_expired < DateTime.Today ? "Expired" :
@@ -1420,10 +1420,11 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                 }).ToList();
 
 
-                if (adetails != null && adetails.Count > 0)
+                /*if (adetails != null && adetails.Count > 0)
                     return adetails;
                 else
-                    return null;
+                    return null;*/
+                return adetails != null ? adetails : new List<INVOICE>();
             }
         }
 

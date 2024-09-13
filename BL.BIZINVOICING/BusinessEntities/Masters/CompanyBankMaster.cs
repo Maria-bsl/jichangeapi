@@ -41,6 +41,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
         public string AccountNo { set; get; }
         public string Swiftcode { set; get; }
         public string Checker { set; get; }
+        public string occupation { set; get; }
         #endregion  properties
         #region method
         public long AddCompany(CompanyBankMaster T)
@@ -1036,7 +1037,7 @@ namespace BL.BIZINVOICING.BusinessEntities.Masters
                                  Checker = c.checker,
                                  AccountNo = d.account_no,
                                  Status = c.status,
-                                 Postedby = c.posted_by
+                                 Postedby = c.posted_by,
                              }).FirstOrDefault();
                 return found ?? null;
             }

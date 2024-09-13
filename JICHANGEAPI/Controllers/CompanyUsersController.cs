@@ -62,6 +62,33 @@ namespace JichangeApi.Controllers
         }
 
         [HttpPost]
+        public HttpResponseMessage ResendCredentials(ResendUserCredentialsForm form)
+        {
+            List<string> modelStateErrors = this.ModelStateErrors();
+            if (modelStateErrors.Count() > 0) { return this.GetCustomErrorMessageResponse(modelStateErrors); }
+            try
+            {
+                var found = companyUsersService.ResendUserCredentials(form.resendCredentials, (long)form.companyUserId);
+                return GetSuccessResponse(found);
+            }
+            catch (ArgumentException ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                List<string> messages = new List<string> { ex.Message };
+                return this.GetCustomErrorMessageResponse(messages);
+            }
+            catch (Exception ex)
+            {
+                pay.Message = ex.ToString();
+                pay.AddErrorLogs(pay);
+
+                return GetServerErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost]
         public HttpResponseMessage AddCompanyUser(AddCompanyUserForm addCompanyUserForm)
         {
             List<string> modelStateErrors = this.ModelStateErrors();
